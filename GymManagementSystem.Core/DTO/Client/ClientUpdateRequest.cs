@@ -6,9 +6,6 @@ public class ClientUpdateRequest
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    //public bool IsStudent { get; set; }
-    //public bool IsSenior { get; set; }
     public string Street { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
-
 }

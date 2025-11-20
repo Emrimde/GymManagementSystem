@@ -2,7 +2,6 @@
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.ServiceContracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;

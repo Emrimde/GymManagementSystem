@@ -1,8 +1,4 @@
-﻿
-using GymManagementSystem.Core.DTO.ClientMembership;
-using GymManagementSystem.Core.DTO.Membership;
-
-namespace GymManagementSystem.Core.DTO.Client;
+﻿namespace GymManagementSystem.Core.DTO.Client;
 
 public class ClientResponse
 {
@@ -12,8 +8,6 @@ public class ClientResponse
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    //public bool IsStudent { get; set; }
-    //public bool IsSenior { get; set; }
     public string Street { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public bool CanClientAddMembership { get; set; }

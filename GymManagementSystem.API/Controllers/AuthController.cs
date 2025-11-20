@@ -1,7 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Auth;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -25,8 +24,6 @@ public class AuthController : ControllerBase
         {
             return Problem(detail: result.ErrorMessage, statusCode: (int)result.StatusCode);
         }
-
-
         return Ok();
     }
 
