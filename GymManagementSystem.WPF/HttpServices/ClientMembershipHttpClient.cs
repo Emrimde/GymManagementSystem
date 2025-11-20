@@ -1,0 +1,75 @@
+﻿using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.DTO.Termination;
+using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.Result;
+using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Windows;
+
+namespace GymManagementSystem.WPF.HttpServices;
+
+public class ClientMembershipHttpClient : BaseHttpClientService
+{
+    public ClientMembershipHttpClient(HttpClient httpClient) : base(httpClient)
+    {
+
+    }
+
+    public async Task<ObservableCollection<ClientMembershipResponse>> GetClientMembershipsAsync()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync("");
+        if (response.IsSuccessStatusCode)
+        {
+            ObservableCollection<ClientMembershipResponse>? clientMemberships = await response.Content.ReadFromJsonAsync<ObservableCollection<ClientMembershipResponse>>();
+
+            return clientMemberships ?? new ObservableCollection<ClientMembershipResponse>();
+        }
+        else
+        {
+            MessageBox.Show("Failed to load", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return new ObservableCollection<ClientMembershipResponse>();
+        }
+    }
+
+    public async Task<Result<ClientMembershipInfoResponse>> PostClientMembershipAsync(ClientMembershipAddRequest request)
+    {
+        request.StartDate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc);
+        request.EndDate = request.EndDate.HasValue
+                          ? DateTime.SpecifyKind(request.EndDate.Value, DateTimeKind.Utc)
+                          : null;
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            ClientMembershipInfoResponse? clientMembership = JsonSerializer.Deserialize<ClientMembershipInfoResponse>(responseBody, options);
+            return Result<ClientMembershipInfoResponse>.Success(clientMembership!);
+        }
+        else
+        {
+            string errorMessage = responseBody; // fallback na cały responseBody
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ClientMembershipInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                }
+            }
+            catch (JsonException)
+            {
+                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+            }
+
+            return Result<ClientMembershipInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+        }
+    }
+}

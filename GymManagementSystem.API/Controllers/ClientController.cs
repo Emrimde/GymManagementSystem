@@ -1,0 +1,31 @@
+﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GymManagementSystem.API.Controllers;
+
+public class ClientController : BaseController
+{
+    private readonly IClientService _clientService;
+    public ClientController(IClientService clientService)
+    {
+        _clientService = clientService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ClientResponse>>> GetAll(CancellationToken cancellationToken)
+        => HandleListedResult(await _clientService.GetAllAsync(cancellationToken));
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly,  CancellationToken cancellationToken)
+        => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly, cancellationToken));
+
+    [HttpPost]
+    public async Task<ActionResult<ClientResponse>> Create([FromBody] ClientAddRequest entity, CancellationToken cancellationToken)
+        => HandleResult(await _clientService.CreateAsync(entity, cancellationToken));
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<ClientResponse>> Update(Guid id, ClientUpdateRequest entity, CancellationToken cancellationToken)
+        => HandleResult(await _clientService.UpdateAsync(id, entity, cancellationToken));
+}

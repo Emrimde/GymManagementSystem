@@ -1,0 +1,130 @@
+﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
+using GymManagementSystem.WPF.Core;
+using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.Services;
+using GymManagementSystem.WPF.ViewModels;
+using GymManagementSystem.WPF.ViewModels.Client;
+using GymManagementSystem.WPF.ViewModels.ClientMembership;
+using GymManagementSystem.WPF.ViewModels.Contract;
+using GymManagementSystem.WPF.ViewModels.GymClass;
+using GymManagementSystem.WPF.ViewModels.Membership;
+using GymManagementSystem.WPF.ViewModels.Settings;
+using GymManagementSystem.WPF.ViewModels.Termination;
+using GymManagementSystem.WPF.ViewModels.Trainer;
+using GymManagementSystem.WPF.Views.Trainer;
+using Microsoft.Extensions.DependencyInjection;
+using QuestPDF.Infrastructure;
+using System.Windows;
+using System.Windows.Media;
+
+namespace GymManagementSystem.WPF
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        private readonly IServiceProvider _serviceProvider;
+        public App()
+        {
+            IServiceCollection services = new ServiceCollection();  
+            services.AddSingleton(provider => new MainWindow
+            {
+                DataContext = provider.GetRequiredService<MainWindowViewModel>()
+            });
+
+            QuestPDF.Settings.License = LicenseType.Community;
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<RegisterViewModel>();
+            services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<ClientMembershipViewModel>();
+            services.AddSingleton<SidebarViewModel>();
+            services.AddTransient<ClientAddViewModel>();
+            services.AddTransient<ClientMembershipAddViewModel>();
+            services.AddTransient<ClientViewModel>();
+            services.AddTransient<TerminationAddViewModel>();
+            services.AddTransient<ContractDetailsViewModel>();
+            services.AddTransient<TerminationViewModel>();
+            services.AddTransient<MembershipViewModel>();
+            services.AddTransient<ClientDetailsViewModel>();
+            services.AddTransient<GeneralSettingsViewModel>();
+            services.AddTransient<ContractViewModel>();
+            services.AddTransient<MembershipAddViewModel>();
+            services.AddTransient<MembershipEditViewModel>();
+            services.AddTransient<ClientUpdateViewModel>();
+            services.AddSingleton<LoginViewModel>();
+            services.AddTransient<TrainerViewModel>();
+            services.AddTransient<TrainerAddViewModel>();
+            services.AddTransient<GymClassAddViewModel>();
+            services.AddTransient<GymClassViewModel>();
+
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
+
+            services.AddHttpClient<AuthHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/auth/");
+                options.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<GymClassHtppClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/gymClass/");
+                options.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<GeneralGymDetailsHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/generalGymDetail/");
+                options.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<ContractHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/contract/");
+                options.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<MembershipHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/membership/");
+                options.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<ClientHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/client/");
+            });
+            services.AddHttpClient<TerminationHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/termination/");
+            });
+            services.AddHttpClient<ClientMembershipHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/clientMemberships/");
+            });
+            services.AddHttpClient<TrainerHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/trainer/");
+            });
+
+            _serviceProvider = services.BuildServiceProvider();
+        }
+        protected async override void OnStartup(StartupEventArgs e)
+        {
+            GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
+            GeneralGymUpdateRequest gymDetails =  await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
+            Application.Current.Resources["GymName"] = gymDetails.GymName;
+            Application.Current.Resources["Address"] = gymDetails.Address;
+            Application.Current.Resources["ContactNumber"] = gymDetails.ContactNumber;
+            Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.PrimaryColor)!;
+            Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.SecondColor)!;
+            Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.BackgroundColor)!;
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+            base.OnStartup(e);
+        }
+    }
+
+}

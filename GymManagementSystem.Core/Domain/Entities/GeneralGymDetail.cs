@@ -1,0 +1,12 @@
+﻿namespace GymManagementSystem.Core.Domain.Entities;
+
+public class GeneralGymDetail
+{
+    public Guid Id { get; set; }
+    public string GymName { get; set; } = default!;
+    public string Address { get; set; } = default!;
+    public string ContactNumber { get; set; } = default!;
+    public string PrimaryColor { get; set; } = default!;
+    public string BackgroundColor { get; set; } = default!;
+    public string SecondColor { get; set; } = default!;
+}
