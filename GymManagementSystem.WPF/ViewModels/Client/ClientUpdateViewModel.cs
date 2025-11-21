@@ -42,7 +42,7 @@ public class ClientUpdateViewModel : ViewModel , IParameterReceiver
 
     private async Task UpdateClientAsync(object arg)
     {
-        Result<ClientResponse> result = await _httpClient.PutClientAsync(ClientUpdateRequest, ClientId);
+        Result<ClientInfoResponse> result = await _httpClient.PutClientAsync(ClientUpdateRequest, ClientId);
         if (result.IsSuccess)
         {
             MessageBox.Show($"Client {result.Value!.FirstName} {result.Value.LastName} is already edited!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

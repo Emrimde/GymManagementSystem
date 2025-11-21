@@ -80,14 +80,15 @@ public class ClientAddViewModel : ViewModel
 
     private async Task AddClientAsync(object arg)
     {  
-        Result<ClientResponse> result = await _httpClient.PostClientAsync(ClientAddRequest);
+        Result<ClientInfoResponse> result = await _httpClient.PostClientAsync(ClientAddRequest);
         if (result.IsSuccess)
         {
             string firstName = result.Value!.FirstName;
             string lastName = result.Value!.LastName;
-            MessageBox.Show($"Success, client {firstName} {lastName} is already created",null,MessageBoxButton.OK);
+            MessageBox.Show($"Success, client {firstName} {lastName} is already created","Success",MessageBoxButton.OK, MessageBoxImage.Information);
             Navigation.NavigateTo<ClientViewModel>();
         }
+
         else
         {
             MessageBox.Show($"{result.ErrorMessage}");

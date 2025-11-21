@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Membership;
+﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
@@ -57,7 +56,7 @@ public class MembershipAddViewModel : ViewModel
         SidebarView = sidebarView;
         Navigation = navigation;
         MembershipAddRequest = new MembershipAddRequest();
-        // Zmień inicjalizację MembershipTypes, aby uniknąć możliwego przekazania null
+
         MembershipTypes = new ObservableCollection<MembershipTypeEnum>(
             Enum.GetValues(typeof(MembershipTypeEnum)).Cast<MembershipTypeEnum>()
         );
@@ -73,7 +72,7 @@ public class MembershipAddViewModel : ViewModel
         {
             string name = result.Value!.Name;
 
-            MessageBox.Show($"Success, membership {name} is already created", null, MessageBoxButton.OK);
+            MessageBox.Show($"Success, membership {name} is already created", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Navigation.NavigateTo<MembershipViewModel>();
         }
         else

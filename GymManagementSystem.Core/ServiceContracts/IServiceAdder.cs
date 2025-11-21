@@ -1,9 +1,7 @@
 ﻿using GymManagementSystem.Core.Result;
 
-namespace GymManagementSystem.Core.ServiceContracts
+namespace GymManagementSystem.Core.ServiceContracts;
+public interface IServiceAdder<TResponse, TRequest>
 {
-    public interface IServiceAdder<TResponse, TRequest>
-    {
-        Task<Result<TResponse>> CreateAsync(TRequest entity, CancellationToken cancellationToken);
-    }
+    Task<Result<TResponse>> CreateAsync(TRequest entity, CancellationToken cancellationToken);
 }

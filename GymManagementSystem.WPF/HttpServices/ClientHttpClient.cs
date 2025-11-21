@@ -33,7 +33,7 @@ public class ClientHttpClient : BaseHttpClientService
     }
 
     //zwracam result bo umozliwia mi to  elastyczne zwracanie w   przypadku sukcesu obiektu a w przeciwnym razie bledy z api
-    public async Task<Result<ClientResponse>> PostClientAsync(ClientAddRequest request)
+    public async Task<Result<ClientInfoResponse>> PostClientAsync(ClientAddRequest request)
     {
         request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth,DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
         string json = JsonSerializer.Serialize(request);
@@ -49,8 +49,8 @@ public class ClientHttpClient : BaseHttpClientService
             {
                 PropertyNameCaseInsensitive = true
             };
-            ClientResponse? client = JsonSerializer.Deserialize<ClientResponse>(responseBody,options);
-            return Result<ClientResponse>.Success(client!);
+            ClientInfoResponse? client = JsonSerializer.Deserialize<ClientInfoResponse>(responseBody,options);
+            return Result<ClientInfoResponse>.Success(client!);
         }
         else
         {
@@ -63,19 +63,19 @@ public class ClientHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ClientResponse>.Failure(errorMessage);
+                    return Result<ClientInfoResponse>.Failure(errorMessage);
                 }
             }
             catch (Exception ex)
             {
-                return Result<ClientResponse>.Failure($"Fatal error {ex.Message}");
+                return Result<ClientInfoResponse>.Failure($"Fatal error {ex.Message}");
             }
 
-            return Result<ClientResponse>.Failure(errorMessage);
+            return Result<ClientInfoResponse>.Failure(errorMessage);
         }
     }
 
-    public async Task<Result<ClientResponse>> PutClientAsync(ClientUpdateRequest request, Guid id)
+    public async Task<Result<ClientInfoResponse>> PutClientAsync(ClientUpdateRequest request, Guid id)
     {
         request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
         string json = JsonSerializer.Serialize(request);
@@ -91,8 +91,8 @@ public class ClientHttpClient : BaseHttpClientService
             {
                 PropertyNameCaseInsensitive = true
             };
-            ClientResponse? client = JsonSerializer.Deserialize<ClientResponse>(responseBody, options);
-            return Result<ClientResponse>.Success(client!);
+            ClientInfoResponse? client = JsonSerializer.Deserialize<ClientInfoResponse>(responseBody, options);
+            return Result<ClientInfoResponse>.Success(client!);
         }
 
         else
@@ -105,15 +105,15 @@ public class ClientHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ClientResponse>.Failure(errorMessage);
+                    return Result<ClientInfoResponse>.Failure(errorMessage);
                 }
             }
             catch (Exception ex)
             {
-                return Result<ClientResponse>.Failure($"Fatal error {ex.Message}");
+                return Result<ClientInfoResponse>.Failure($"Fatal error {ex.Message}");
             }
 
-            return Result<ClientResponse>.Failure(errorMessage);
+            return Result<ClientInfoResponse>.Failure(errorMessage);
         }
     }
 

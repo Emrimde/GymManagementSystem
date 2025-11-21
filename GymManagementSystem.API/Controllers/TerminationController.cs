@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
 
-
 public class TerminationController : BaseController
 {
     private readonly IServiceAdder<TerminationResponse, TerminationAddRequest> _serviceAdder;

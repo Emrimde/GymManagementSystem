@@ -51,6 +51,15 @@ public static class ClientMapper
         };
     }
 
+    public static ClientInfoResponse ToClientInfoResponse(this Client client)
+    {
+        return new ClientInfoResponse
+        {
+            FirstName = client.FirstName,
+            LastName = client.LastName,
+        };
+    }
+
     public static void ModifyClient(this Client client, Client modifiedClient)
     {
 
