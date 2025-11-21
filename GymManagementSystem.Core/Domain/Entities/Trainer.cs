@@ -16,5 +16,5 @@ public class Trainer
     //public Guid? UpdatedById { get; set; }
 
     // Nawigacje
-    //public ICollection<Classes> Classes{ get; set; } // zajęcia, które prowadzi
+    //public ICollection<Classes> Classes{ get; set; }
 }

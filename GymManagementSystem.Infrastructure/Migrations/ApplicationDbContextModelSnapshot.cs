@@ -198,7 +198,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("be81bc89-7246-4e5a-9ccc-7f4f7f4125a7"),
+                            Id = new Guid("8031af64-4051-422e-a2f1-24715e9668f0"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             ContactNumber = "123456789",

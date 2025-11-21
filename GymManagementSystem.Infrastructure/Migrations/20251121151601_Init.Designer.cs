@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251120180103_DeleteCanBeTerminated")]
-    partial class DeleteCanBeTerminated
+    [Migration("20251121151601_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,39 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ClassBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ScheduledClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ScheduledClassId");
+
+                    b.ToTable("ClassBookings");
+                });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Client", b =>
                 {
@@ -168,7 +201,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("eca1cb7a-3e97-4d19-bf8a-5036db822a93"),
+                            Id = new Guid("8031af64-4051-422e-a2f1-24715e9668f0"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             ContactNumber = "123456789",
@@ -244,6 +277,46 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Memberships");
+                });
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("GymClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("MaxPeople")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeSpan>("StartFrom")
+                        .HasColumnType("interval");
+
+                    b.Property<TimeSpan>("StartTo")
+                        .HasColumnType("interval");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GymClassId");
+
+                    b.ToTable("ScheduledClasses");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Termination", b =>
@@ -510,6 +583,25 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ClassBooking", b =>
+                {
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.ScheduledClass", "ScheduledClass")
+                        .WithMany()
+                        .HasForeignKey("ScheduledClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("ScheduledClass");
+                });
+
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ClientMembership", b =>
                 {
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.Client", "Client")
@@ -549,6 +641,17 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Trainer");
+                });
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>
+                {
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.GymClass", "GymClass")
+                        .WithMany()
+                        .HasForeignKey("GymClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GymClass");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Termination", b =>

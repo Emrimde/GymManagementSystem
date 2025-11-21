@@ -19,7 +19,5 @@ public class GymClass
     //public Guid? CreatedById { get; set; }
    // public Guid? UpdatedById { get; set; }
 
-    // Nawigacje
-    //public ICollection<ZajeciaTermin> Terminy { get; set; }
-    //public ICollection<ZajeciaRezerwacja> Rezerwacje { get; set; }
+
 }

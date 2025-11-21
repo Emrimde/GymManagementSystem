@@ -10,6 +10,5 @@ public class ClassBooking
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CancelledAt { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
-    //public Guid? CreatedById { get; set; }
-    //public Guid? CancelledById { get; set; }
+
 }

@@ -52,6 +52,24 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StreetAddress = table.Column<string>(type: "text", nullable: false),
+                    City = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GeneralGymDetails",
                 columns: table => new
                 {
@@ -76,12 +94,30 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     IsTrainerOnly = table.Column<bool>(type: "boolean", nullable: false),
-                    MembershipType = table.Column<int>(type: "integer", nullable: false),
-                    CanBeTerminated = table.Column<bool>(type: "boolean", nullable: false)
+                    MembershipType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Memberships", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Trainers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trainers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,30 +227,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    StreetAddress = table.Column<string>(type: "text", nullable: false),
-                    City = table.Column<string>(type: "text", nullable: false),
-                    MembershipId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Clients_Memberships_MembershipId",
-                        column: x => x.MembershipId,
-                        principalTable: "Memberships",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClientMemberships",
                 columns: table => new
                 {
@@ -246,6 +258,33 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GymClasses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    TrainerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DaysOfWeek = table.Column<int>(type: "integer", nullable: false),
+                    StartHour = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    MaxPeople = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GymClasses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GymClasses_Trainers_TrainerId",
+                        column: x => x.TrainerId,
+                        principalTable: "Trainers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contracts",
                 columns: table => new
                 {
@@ -253,7 +292,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     ClientMembershipId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsSigned = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ContractStatus = table.Column<int>(type: "integer", nullable: false)
+                    ContractStatus = table.Column<int>(type: "integer", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,6 +302,32 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         name: "FK_Contracts_ClientMemberships_ClientMembershipId",
                         column: x => x.ClientMembershipId,
                         principalTable: "ClientMemberships",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScheduledClasses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    GymClassId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartFrom = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    StartTo = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    MaxPeople = table.Column<int>(type: "integer", nullable: false),
+                    IsCancelled = table.Column<bool>(type: "boolean", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScheduledClasses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScheduledClasses_GymClasses_GymClassId",
+                        column: x => x.GymClassId,
+                        principalTable: "GymClasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -294,10 +360,39 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ClassBookings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScheduledClassId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CancelledAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassBookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassBookings_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassBookings_ScheduledClasses_ScheduledClassId",
+                        column: x => x.ScheduledClassId,
+                        principalTable: "ScheduledClasses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "GeneralGymDetails",
                 columns: new[] { "Id", "Address", "BackgroundColor", "ContactNumber", "GymName", "PrimaryColor", "SecondColor" },
-                values: new object[] { new Guid("3929f5e3-76a7-428d-b150-6453f31150f4"), "123 Fitness St, Muscle City", "#363740", "123456789", "NextLevelGym", "#EEEEEE", "#9AAD00" });
+                values: new object[] { new Guid("8031af64-4051-422e-a2f1-24715e9668f0"), "123 Fitness St, Muscle City", "#363740", "123456789", "NextLevelGym", "#EEEEEE", "#9AAD00" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -337,6 +432,16 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassBookings_ClientId",
+                table: "ClassBookings",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassBookings_ScheduledClassId",
+                table: "ClassBookings",
+                column: "ScheduledClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientMemberships_ClientId",
                 table: "ClientMemberships",
                 column: "ClientId");
@@ -347,14 +452,20 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 column: "MembershipId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_MembershipId",
-                table: "Clients",
-                column: "MembershipId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Contracts_ClientMembershipId",
                 table: "Contracts",
-                column: "ClientMembershipId");
+                column: "ClientMembershipId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GymClasses_TrainerId",
+                table: "GymClasses",
+                column: "TrainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduledClasses_GymClassId",
+                table: "ScheduledClasses",
+                column: "GymClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Terminations_ClientId",
@@ -386,6 +497,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ClassBookings");
+
+            migrationBuilder.DropTable(
                 name: "GeneralGymDetails");
 
             migrationBuilder.DropTable(
@@ -398,10 +512,19 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "ScheduledClasses");
+
+            migrationBuilder.DropTable(
                 name: "Contracts");
 
             migrationBuilder.DropTable(
+                name: "GymClasses");
+
+            migrationBuilder.DropTable(
                 name: "ClientMemberships");
+
+            migrationBuilder.DropTable(
+                name: "Trainers");
 
             migrationBuilder.DropTable(
                 name: "Clients");
