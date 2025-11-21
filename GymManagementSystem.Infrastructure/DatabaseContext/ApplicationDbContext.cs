@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<Trainer> Trainers { get; set; }
     public DbSet<GymClass> GymClasses { get; set; }
     public DbSet<ScheduledClass> ScheduledClasses { get; set; }
+    public DbSet<ClassBooking> ClassBookings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
