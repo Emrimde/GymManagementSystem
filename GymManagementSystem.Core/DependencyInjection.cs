@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers;
 using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Contract;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.ServiceContracts;
@@ -24,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<ITerminationValidator, TerminationValidatorService>();
         services.AddScoped<ITrainerService, TrainerService>();
         services.AddScoped<IGymClassService, GymClassService>();
+        services.AddScoped<IScheduledClassService, ScheduledClassService>();
         return services;
     }
 }

@@ -18,6 +18,8 @@
                     xmlns:trainerview="clr-namespace:GymManagementSystem.WPF.Views.Trainer"
                     xmlns:gymclassvm="clr-namespace:GymManagementSystem.WPF.ViewModels.GymClass"
                     xmlns:gymclassview="clr-namespace:GymManagementSystem.WPF.Views.GymClass"
+                    xmlns:scheduledclassvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ScheduledClass"
+                    xmlns:scheduledclassview="clr-namespace:GymManagementSystem.WPF.Views.ScheduledClass"
                     
                      xmlns:clientMembershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClientMembership"
  xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
@@ -88,5 +90,8 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type gymclassvm:GymClassAddViewModel}">
                         <gymclassview:GymClassAddView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type scheduledclassvm:ScheduledClassViewModel}">
+                        <scheduledclassview:ScheduledClassView/>
                     </DataTemplate>
 </ResourceDictionary>

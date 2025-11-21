@@ -4,6 +4,7 @@ using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
+using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
@@ -28,6 +29,7 @@ namespace GymManagementSystem.WPF.ViewModels
         public ICommand OpenClientMembershipView { get;  }
         public ICommand OpenTrainersView { get;  }
         public ICommand OpenGymClassesView { get;  }
+        public ICommand OpenScheduledClassesView { get;  }
 
         private INavigationService _navigation;
         public INavigationService Navigation
@@ -52,6 +54,7 @@ namespace GymManagementSystem.WPF.ViewModels
             OpenClientMembershipView = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(), item => true);
             OpenTrainersView = new RelayCommand(item => Navigation.NavigateTo<TrainerViewModel>(), item => true);
             OpenGymClassesView = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
+            OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
         }
     }
 }

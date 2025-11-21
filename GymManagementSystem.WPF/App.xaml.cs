@@ -9,10 +9,10 @@ using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
+using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
-using GymManagementSystem.WPF.Views.Trainer;
 using Microsoft.Extensions.DependencyInjection;
 using QuestPDF.Infrastructure;
 using System.Windows;
@@ -58,6 +58,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<TrainerAddViewModel>();
             services.AddTransient<GymClassAddViewModel>();
             services.AddTransient<GymClassViewModel>();
+            services.AddTransient<ScheduledClassViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
@@ -107,6 +108,10 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<TrainerHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/trainer/");
+            });
+            services.AddHttpClient<ScheduledClassHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/scheduledClass/");
             });
 
             _serviceProvider = services.BuildServiceProvider();
