@@ -8,6 +8,4 @@ public class Membership
     public decimal Price { get; set; }
     public bool IsTrainerOnly { get; set; }
     public MembershipTypeEnum MembershipType { get; set; }
-    public bool CanBeTerminated { get; set; } = false;
-    public ICollection<Client> Clients { get; set; } = new List<Client>();
 }

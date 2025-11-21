@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
-using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -39,7 +38,7 @@ public class GeneralGymDetailsHttpClient : BaseHttpClientService
         }
         else
         {
-            return Result<GeneralGymResponse>.Failure("Failed to update settings.", StatusCodeEnum.InternalServerError);
+            return Result<GeneralGymResponse>.Failure("Failed to update settings.");
         }
     }
 }

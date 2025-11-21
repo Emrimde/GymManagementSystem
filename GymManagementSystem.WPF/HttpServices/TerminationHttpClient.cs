@@ -1,6 +1,4 @@
-﻿using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.DTO.Termination;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -48,7 +46,7 @@ public class TerminationHttpClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -56,46 +54,15 @@ public class TerminationHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                      errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<TerminationResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<TerminationResponse>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<TerminationResponse>.Failure($"Fatal error: {ex.Message}");
             }
 
-            return Result<TerminationResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
-        }
-    }
-
-    public async Task<Result<bool>> CanCreateTerminationAsync(Guid clientId)
-    {
-        HttpResponseMessage response = await _httpClient.GetAsync($"{clientId}/can-create-termination");
-
-        if (response.IsSuccessStatusCode)
-        {
-            return Result<bool>.Success(true);
-        }
-        else
-        {
-            string responseBody = await response.Content.ReadAsStringAsync();
-            string errorMessage = responseBody; // fallback na cały responseBody
-
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<bool>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
-                }
-            }
-            catch (JsonException)
-            {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
-            }
-
-            return Result<bool>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<TerminationResponse>.Failure(errorMessage);
         }
     }
 }

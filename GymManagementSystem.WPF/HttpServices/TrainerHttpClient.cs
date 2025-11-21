@@ -1,7 +1,4 @@
-﻿using GymManagementSystem.Core.DTO.Contract;
-using GymManagementSystem.Core.DTO.Termination;
-using GymManagementSystem.Core.DTO.Trainer;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -30,7 +27,7 @@ public class TrainerHttpClient : BaseHttpClientService
         else
         {
 
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody; 
 
             try
             {
@@ -38,15 +35,15 @@ public class TrainerHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ObservableCollection<TrainerResponse>>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<ObservableCollection<TrainerResponse>>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<ObservableCollection<TrainerResponse>>.Failure($"Fatal error {ex.Message}");
             }
 
-            return Result<ObservableCollection<TrainerResponse>>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ObservableCollection<TrainerResponse>>.Failure(errorMessage);
         }
     }
 
@@ -66,7 +63,7 @@ public class TrainerHttpClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -74,15 +71,15 @@ public class TrainerHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<TrainerInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<TrainerInfoResponse>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<TrainerInfoResponse>.Failure($"Fatal error {ex.Message}");
             }
 
-            return Result<TrainerInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<TrainerInfoResponse>.Failure(errorMessage);
         }
     }
 }

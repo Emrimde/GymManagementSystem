@@ -46,8 +46,8 @@
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding Contracts}" x:Name="datagrid" CanUserAddRows="False"
 AutoGenerateColumns="false">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="First Name" Binding="{Binding ClientMembership.Client.FirstName}"/>
-                        <DataGridTextColumn Header="Last Name" Binding="{Binding ClientMembership.Client.LastName}"/>
+                        <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
                         <DataGridTextColumn Header="Contract status" Binding="{Binding ContractStatus}"/>
                         <DataGridTextColumn Header="Created at" Binding="{Binding CreatedAt }"/>
                         <DataGridTemplateColumn Header="Details" Width="150">

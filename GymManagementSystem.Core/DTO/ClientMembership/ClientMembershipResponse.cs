@@ -1,13 +1,14 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Membership;
-
-namespace GymManagementSystem.Core.DTO.ClientMembership;
+﻿namespace GymManagementSystem.Core.DTO.ClientMembership;
 
 public class ClientMembershipResponse
 {
     public Guid Id { get; set; }
-    public ClientResponse? Client { get; set; }
-    public MembershipResponse? Membership { get; set; }
+    public string FirstName { get; set; } = default!;
+    public string LastName { get; set; } = default!;
+    public string Email { get; set; } = default!;
+    public string PhoneNumber { get; set; } = default!;
+    public string Name { get; set; } = default!;
+    public string MembershipType { get; set; } = default!;
     public bool IsActive { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }

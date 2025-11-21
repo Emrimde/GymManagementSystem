@@ -1,6 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.GymClass;
-using GymManagementSystem.Core.DTO.Trainer;
-using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -25,12 +23,12 @@ public class GymClassHtppClient : BaseHttpClientService
                 PropertyNameCaseInsensitive = true,
             };
             ObservableCollection<GymClassResponse>? gymClasses = JsonSerializer.Deserialize<ObservableCollection<GymClassResponse>>(responseBody, jsonSerializerOptions);
-            return Result<ObservableCollection<GymClassResponse>>.Success(gymClasses) ?? Result<ObservableCollection<GymClassResponse>>.Failure("");
+            return Result<ObservableCollection<GymClassResponse>>.Success(gymClasses) ?? Result<ObservableCollection<GymClassResponse>>.Failure("Unexpected error during load gym classes");
         }
         else
         {
 
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -38,15 +36,15 @@ public class GymClassHtppClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ObservableCollection<GymClassResponse>>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<ObservableCollection<GymClassResponse>>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<ObservableCollection<GymClassResponse>>.Failure($"Fatal error: {ex.Message}");
             }
 
-            return Result<ObservableCollection<GymClassResponse>>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ObservableCollection<GymClassResponse>>.Failure(errorMessage);
         }
     }
 
@@ -66,7 +64,7 @@ public class GymClassHtppClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -74,15 +72,15 @@ public class GymClassHtppClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<GymClassInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<GymClassInfoResponse>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<GymClassInfoResponse>.Failure($"Fatal error {ex.Message}");
             }
 
-            return Result<GymClassInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<GymClassInfoResponse>.Failure(errorMessage);
         }
     }
 }

@@ -9,5 +9,4 @@ public class MembershipResponse
     public decimal Price { get; set; }
     public bool IsTrainerOnly { get; set; }
     public MembershipTypeEnum MembershipType { get; set; }
-    public bool CanBeTerminated { get; set; }
 }

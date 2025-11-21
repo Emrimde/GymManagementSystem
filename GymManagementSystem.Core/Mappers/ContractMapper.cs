@@ -10,7 +10,9 @@ public static class ContractMapper
     {
         return new ContractResponse()
         {
-            ClientMembership = contract.ClientMembership != null ? contract.ClientMembership.ToClientMembershipResponse() : null,
+           // ClientMembership = contract.ClientMembership != null ? contract.ClientMembership.ToClientMembershipResponse() : null,
+            FirstName = contract.ClientMembership?.Client?.FirstName ?? string.Empty,
+            LastName = contract.ClientMembership?.Client?.LastName ?? string.Empty,
             CreatedAt = contract.CreatedAt.ToString("dd:MM:yyyy"),
             Id = contract.Id,
             ContractStatus = contract.ContractStatus

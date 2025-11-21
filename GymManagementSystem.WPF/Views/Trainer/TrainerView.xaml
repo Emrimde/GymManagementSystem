@@ -63,8 +63,8 @@
                                 <DataTemplate>
 
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-Command="{Binding DataContext.OpenClientDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-CommandParameter="{Binding Id}">
+                                        Command="{Binding DataContext.OpenClientDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding Id}">
                                     </Button>
 
 
@@ -72,14 +72,7 @@ CommandParameter="{Binding Id}">
 
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-
-
-
-
-
-
-
+                        
                         <DataGridTemplateColumn Header="Edit/Delete" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -92,7 +85,7 @@ CommandParameter="{Binding Id}">
                                    Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}"
                                      >
-                                      
+
                                         </Button>
 
                                         <Button
@@ -102,7 +95,7 @@ CommandParameter="{Binding Id}">
                                     Foreground="White"
                                     Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}" >
-                                           
+
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>

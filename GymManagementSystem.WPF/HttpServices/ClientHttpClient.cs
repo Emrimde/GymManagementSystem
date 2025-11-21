@@ -1,6 +1,4 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -34,7 +32,7 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    //zwracam result bo umozliwia mi to  elastyczne zwracanie w przypadku sukcesu obiektu a w przeciwnym razie bledy z api
+    //zwracam result bo umozliwia mi to  elastyczne zwracanie w   przypadku sukcesu obiektu a w przeciwnym razie bledy z api
     public async Task<Result<ClientResponse>> PostClientAsync(ClientAddRequest request)
     {
         request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth,DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
@@ -56,35 +54,30 @@ public class ClientHttpClient : BaseHttpClientService
         }
         else
         {
+
             string errorMessage = responseBody;
+
             try
             {
-                using var doc = JsonDocument.Parse(responseBody);
-
-                if (doc.RootElement.TryGetProperty("errors", out JsonElement errorsElement)) // w errors są wszystkie błędy a nie jak się wydaje że w detail - detail nie istnieje
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
-                    var messages = new List<string>();
-                    foreach (var prop in errorsElement.EnumerateObject())
-                    {
-                        foreach (var msg in prop.Value.EnumerateArray())
-                        {
-                            messages.Add($"{prop.Name}: {msg.GetString()}");
-                        }
-                    }
-                    errorMessage = string.Join(Environment.NewLine, messages);
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ClientResponse>.Failure(errorMessage);
                 }
-
-            
             }
-            catch (JsonException ex) { return Result<ClientResponse>.Failure(ex.Message, StatusCodeEnum.InternalServerError); } // obsluguje sytuacje wyjatku w parsowaniu
+            catch (Exception ex)
+            {
+                return Result<ClientResponse>.Failure($"Fatal error {ex.Message}");
+            }
 
-            return Result<ClientResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ClientResponse>.Failure(errorMessage);
         }
     }
 
     public async Task<Result<ClientResponse>> PutClientAsync(ClientUpdateRequest request, Guid id)
     {
-        request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
+        request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
         string json = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -101,45 +94,59 @@ public class ClientHttpClient : BaseHttpClientService
             ClientResponse? client = JsonSerializer.Deserialize<ClientResponse>(responseBody, options);
             return Result<ClientResponse>.Success(client!);
         }
+
         else
         {
             string errorMessage = responseBody;
+
             try
             {
-                using var doc = JsonDocument.Parse(responseBody);
-
-                if (doc.RootElement.TryGetProperty("errors", out JsonElement errorsElement)) // w errors są wszystkie błędy a nie jak się wydaje że w detail - detail nie istnieje
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
-                    var messages = new List<string>();
-                    foreach (var prop in errorsElement.EnumerateObject())
-                    {
-                        foreach (var msg in prop.Value.EnumerateArray())
-                        {
-                            messages.Add($"{prop.Name}: {msg.GetString()}");
-                        }
-                    }
-                    errorMessage = string.Join(Environment.NewLine, messages);
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ClientResponse>.Failure(errorMessage);
                 }
-
-
             }
-            catch (JsonException ex) { return Result<ClientResponse>.Failure(ex.Message, StatusCodeEnum.InternalServerError); } // obsluguje sytuacje wyjatku w parsowaniu
+            catch (Exception ex)
+            {
+                return Result<ClientResponse>.Failure($"Fatal error {ex.Message}");
+            }
 
-            return Result<ClientResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ClientResponse>.Failure(errorMessage);
         }
     }
 
     public async Task<Result<ClientDetailsResponse>> GetClientById(Guid id, bool isActiveOnly = true)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"{id}?isActiveOnly={isActiveOnly}");
+        string responseBody = await response.Content.ReadAsStringAsync();
+
         if (response.IsSuccessStatusCode)
         {
            ClientDetailsResponse? client = await response.Content.ReadFromJsonAsync<ClientDetailsResponse>();
            return Result<ClientDetailsResponse>.Success(client!) ?? Result<ClientDetailsResponse>.Failure("Client details not found");
         }
+
         else
         {
-            return Result<ClientDetailsResponse>.Failure("Client details not found");
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ClientDetailsResponse>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<ClientDetailsResponse>.Failure($"Fatal rror {ex.Message}");
+            }
+
+            return Result<ClientDetailsResponse>.Failure(errorMessage);
         }
     }
 }

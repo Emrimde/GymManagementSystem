@@ -1,6 +1,4 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -53,29 +51,24 @@ public class MembershipHttpClient : BaseHttpClientService
         }
         else
         {
+
             string errorMessage = responseBody;
+
             try
             {
-                using var doc = JsonDocument.Parse(responseBody);
-
-                if (doc.RootElement.TryGetProperty("errors", out JsonElement errorsElement)) // w errors są wszystkie błędy a nie jak się wydaje że w detail - detail nie istnieje
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
-                    var messages = new List<string>();
-                    foreach (var prop in errorsElement.EnumerateObject())
-                    {
-                        foreach (var msg in prop.Value.EnumerateArray())
-                        {
-                            messages.Add($"{prop.Name}: {msg.GetString()}");
-                        }
-                    }
-                    errorMessage = string.Join(Environment.NewLine, messages);
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<MembershipResponse>.Failure(errorMessage);
                 }
-
-
             }
-            catch (JsonException ex) { return Result<MembershipResponse>.Failure(ex.Message, StatusCodeEnum.InternalServerError); } // obsluguje sytuacje wyjatku w parsowaniu
+            catch (Exception ex)
+            {
+                return Result<MembershipResponse>.Failure($"Fatal error: {ex.Message}");
+            }
 
-            return Result<MembershipResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<MembershipResponse>.Failure(errorMessage);
         }
     }
 
@@ -99,29 +92,24 @@ public class MembershipHttpClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody;
+
+            string errorMessage = responseBody; 
+
             try
             {
-                using var doc = JsonDocument.Parse(responseBody);
-
-                if (doc.RootElement.TryGetProperty("errors", out JsonElement errorsElement)) // w errors są wszystkie błędy a nie jak się wydaje że w detail - detail nie istnieje
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
-                    var messages = new List<string>();
-                    foreach (var prop in errorsElement.EnumerateObject())
-                    {
-                        foreach (var msg in prop.Value.EnumerateArray())
-                        {
-                            messages.Add($"{prop.Name}: {msg.GetString()}");
-                        }
-                    }
-                    errorMessage = string.Join(Environment.NewLine, messages);
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<MembershipResponse>.Failure(errorMessage);
                 }
-
-
             }
-            catch (JsonException ex) { return Result<MembershipResponse>.Failure(ex.Message, StatusCodeEnum.InternalServerError); } // obsluguje sytuacje wyjatku w parsowaniu
+            catch (Exception ex)
+            {
+                return Result<MembershipResponse>.Failure($"Fatal error: {ex.Message}");
+            }
 
-            return Result<MembershipResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<MembershipResponse>.Failure(errorMessage);
         }
     }
 }

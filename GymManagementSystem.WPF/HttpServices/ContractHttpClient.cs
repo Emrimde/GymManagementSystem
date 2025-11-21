@@ -1,12 +1,8 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Contract;
-using GymManagementSystem.Core.DTO.Termination;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.Contract;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using System.Windows;
 
@@ -51,28 +47,23 @@ public class ContractHttpClient : BaseHttpClientService
         else
         {
             string errorMessage = responseBody;
+
             try
             {
-                using var doc = JsonDocument.Parse(responseBody);
-
-                if (doc.RootElement.TryGetProperty("errors", out JsonElement errorsElement)) // w errors są wszystkie błędy a nie jak się wydaje że w detail - detail 
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
-                    var messages = new List<string>();
-                    foreach (var prop in errorsElement.EnumerateObject())
-                    {
-                        foreach (var msg in prop.Value.EnumerateArray())
-                        {
-                            messages.Add($"{prop.Name}: {msg.GetString()}");
-                        }
-                    }
-                    errorMessage = string.Join(Environment.NewLine, messages);
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ContractResponse>.Failure(errorMessage);
                 }
-
-
             }
-            catch (JsonException ex) { return Result<ContractResponse>.Failure(ex.Message, StatusCodeEnum.InternalServerError); } // obsluguje sytuacje wyjatku w parsowaniu
 
-            return Result<ContractResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            catch (Exception ex) 
+            {
+                return Result<ContractResponse>.Failure($"Error {ex.Message}");
+            } 
+
+            return Result<ContractResponse>.Failure(errorMessage);
         }
     }
 
@@ -92,7 +83,7 @@ public class ContractHttpClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -100,15 +91,15 @@ public class ContractHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ContractDetailsResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<ContractDetailsResponse>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<ContractDetailsResponse>.Failure($"{ex.Message}");
             }
 
-            return Result<ContractDetailsResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ContractDetailsResponse>.Failure(errorMessage);
         }
     }
 }

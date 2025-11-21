@@ -20,7 +20,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit" />
+            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit membership" />
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

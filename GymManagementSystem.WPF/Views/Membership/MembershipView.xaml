@@ -51,7 +51,6 @@ AutoGenerateColumns="false">
                         <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
                         <DataGridTextColumn Header="IsTrainerOnly" Binding="{Binding IsTrainerOnly}"/>
                         <DataGridTextColumn Header="MembershipType" Binding="{Binding MembershipType}"/>
-                        <DataGridTextColumn Header="CanBeTerminated" Binding="{Binding CanBeTerminated}"/>
 
                         <DataGridTemplateColumn Header="Edit/Delete" Width="150">
                             <DataGridTemplateColumn.CellTemplate>

@@ -15,4 +15,3 @@ public class ClientMembership
     public DateTime? UpdatedAt { get; set; }
     public Contract? Contract { get; set; }
 }
-    // contract bedzie mial ClientMembershipId  kilka umow bo co jesli bedzie chcial zmienic

@@ -42,39 +42,34 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Start Date:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-     <Run Text="{Binding Contract.StartDate}"/>
-
+                        <Run Text="{Binding Contract.StartDate}"/>
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="End Date:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-     <Run Text="{Binding Contract.EndDate}"/>
-
+                        <Run Text="{Binding Contract.EndDate}"/>
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="PDF"
-Width="70"
-Height="35"
-Background="#4CAF50"
-Foreground="White"
-FontSize="10"
-Command="{Binding GeneratePdfContractCommand}" Visibility="{Binding ContractStatus, Converter={StaticResource ContractStatusVisibilityConverter}}"
-/>
+                        Width="70"
+                        Height="35"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontSize="10"
+                        Command="{Binding GeneratePdfContractCommand}" Visibility="{Binding ContractStatus, Converter={StaticResource ContractStatusVisibilityConverter}}"
+                        />
                     <Button Content="Set"
-Width="70"
-Height="35"
-Background="#4CAF50"
-Foreground="White"
-FontSize="10"
-Command="{Binding SetToSignedCommand}" Visibility="{Binding ContractStatus, Converter={StaticResource  ContractStatusVisibilitySetSigned}}"
-/>
-                </StackPanel>            
+                        Width="70"
+                        Height="35"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontSize="10"
+                        Command="{Binding SetToSignedCommand}" Visibility="{Binding ContractStatus, Converter={StaticResource               ContractStatusVisibilitySetSigned}}"
+                        />
+                </StackPanel>
             </StackPanel>
-            
-           
         </Grid>
-
     </Grid>
 </UserControl>

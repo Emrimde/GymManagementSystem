@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.ClientMembership;
-using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
@@ -53,7 +52,7 @@ public class ClientMembershipHttpClient : BaseHttpClientService
         }
         else
         {
-            string errorMessage = responseBody; // fallback na cały responseBody
+            string errorMessage = responseBody;
 
             try
             {
@@ -61,15 +60,15 @@ public class ClientMembershipHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ClientMembershipInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+                    return Result<ClientMembershipInfoResponse>.Failure(errorMessage);
                 }
             }
-            catch (JsonException)
+            catch (Exception ex)
             {
-                // jeśli nie uda się zdeserializować JSON, zostaje cały responseBody
+                return Result<ClientMembershipInfoResponse>.Failure($"Error {ex.Message}");
             }
 
-            return Result<ClientMembershipInfoResponse>.Failure(errorMessage, StatusCodeEnum.InternalServerError);
+            return Result<ClientMembershipInfoResponse>.Failure(errorMessage);
         }
     }
 }

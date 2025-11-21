@@ -14,7 +14,6 @@ public static class MembershipMapper
             Price = membership.Price,
             IsTrainerOnly = membership.IsTrainerOnly,
             MembershipType = membership.MembershipType,
-            CanBeTerminated = membership.CanBeTerminated,
         };
     }
     public static Membership ToMembership(this MembershipAddRequest membership)
@@ -25,7 +24,6 @@ public static class MembershipMapper
             Price = membership.Price,
             IsTrainerOnly = membership.IsTrainerOnly,
             MembershipType = membership.MembershipType,
-            CanBeTerminated = membership.CanBeTerminated,
         };
     }
 
@@ -36,8 +34,7 @@ public static class MembershipMapper
             Name = membership.Name,
             Price = membership.Price,
             IsTrainerOnly = membership.IsTrainerOnly,
-            MembershipType = membership.MembershipType ,
-            CanBeTerminated = membership.CanBeTerminated,
+            MembershipType = membership.MembershipType,
         };
     }
 }
