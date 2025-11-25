@@ -13,11 +13,12 @@ public static class ClassBookingMapper
             Name = classBooking.ScheduledClass?.GymClass?.Name ?? string.Empty,
             FirstName = classBooking.Client?.FirstName ?? string.Empty,
             LastName = classBooking.Client?.FirstName ?? string.Empty,
+            StartFrom = classBooking.ScheduledClass?.StartFrom.ToString() ?? string.Empty,
+            StartTo = classBooking.ScheduledClass?.StartTo.ToString() ?? string.Empty,
             PhoneNumber = classBooking.Client?.PhoneNumber ?? string.Empty,
             Date = classBooking.ScheduledClass?.Date.ToString("dd.MM.yyyy") ?? string.Empty,
             CreatedAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
-            UpdatedAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
-            CancelledAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
+            UpdatedAt = classBooking.UpdatedAt.ToString("dd.MM.yyyy"),
         };
     }
 

@@ -30,6 +30,7 @@ public class TrainerViewModel : ViewModel
     }
 
     public ICommand OpenAddTrainerCommand { get; }
+    public ICommand OpenTrainerDetailsCommand { get;  }
 
 
     public TrainerViewModel(TrainerHttpClient httpClient, SidebarViewModel sidebarView, INavigationService navigation)
@@ -40,6 +41,7 @@ public class TrainerViewModel : ViewModel
         Trainers = new ObservableCollection<TrainerResponse>();
         _ = LoadTrainers();
         OpenAddTrainerCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerAddViewModel>(), item => true);
+        OpenTrainerDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerDetailsViewModel>(item), item => true);
     }
 
     private async Task LoadTrainers()

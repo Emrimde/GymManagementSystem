@@ -86,6 +86,9 @@
                     <DataTemplate DataType="{x:Type trainervm:TrainerAddViewModel}">
                         <trainerview:TrainerAddView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type trainervm:TrainerDetailsViewModel}">
+                        <trainerview:TrainerDetailsView/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
                         <gymclassview:GymClassView/>
                     </DataTemplate>
@@ -100,5 +103,8 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type classbookingvm:ClassBookingAddViewModel}">
                         <classbookingview:ClassBookingAddView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type classbookingvm:ClassBookingViewModel}">
+                        <classbookingview:ClassBookingView/>
                     </DataTemplate>
 </ResourceDictionary>

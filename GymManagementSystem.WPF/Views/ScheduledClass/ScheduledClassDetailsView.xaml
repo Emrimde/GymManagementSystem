@@ -34,7 +34,13 @@
                     
                 </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Max people"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Available:"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}">
+                        <Run Text="{Binding AttendeesCount}"  />
+                        <Run Text="/"  />
+                        <Run Text="{Binding MaxPeople}"  />
+                    </TextBlock>
+                        
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.MaxPeople}"/>
                 
                     </StackPanel>

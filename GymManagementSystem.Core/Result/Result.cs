@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.Result;
 
@@ -23,5 +24,10 @@ public class Result<T>
     public static Result<T> Failure(string errorMessage)
     {
         return new Result<T> { IsSuccess = false, ErrorMessage = errorMessage };
+    }
+
+    public static implicit operator Result<T>(Result<IEnumerable<ClassBookingResponse>> v)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -155,8 +155,10 @@ public class ClientHttpClient : BaseHttpClientService
     {
         try
         {
-            var clients = await _httpClient.GetFromJsonAsync<IEnumerable<ClientInfoResponse>>(
-                $"lookup?query={query}?scheduledClassId={scheduledClassId}");
+            var url =
+                $"lookup?query={Uri.EscapeDataString(query)}&scheduledClassId={scheduledClassId}";
+
+            var clients = await _httpClient.GetFromJsonAsync<IEnumerable<ClientInfoResponse>>(url);
 
             return Result<IEnumerable<ClientInfoResponse>>.Success(
                 clients ?? Enumerable.Empty<ClientInfoResponse>());

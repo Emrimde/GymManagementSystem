@@ -28,9 +28,11 @@ public static class ScheduledClassMapper
             CreatedAt = scheduledClass.CreatedAt.ToString("dd.MM.yyyy"),
             UpdatedAt = scheduledClass.UpdatedAt.ToString("dd.MM.yyyy"),
             Date = scheduledClass.Date.ToString("dd.MM.yyyy"),
+            AttendeesCount = scheduledClass.ClassBookings.Count,
             Id = scheduledClass.Id,
             IsCancelled = scheduledClass.IsCancelled,
             MaxPeople = scheduledClass.MaxPeople,
+            CanBook = scheduledClass.MaxPeople > scheduledClass.ClassBookings.Count,
             StartFrom = scheduledClass.StartFrom,
             StartTo = scheduledClass.StartTo,
         };

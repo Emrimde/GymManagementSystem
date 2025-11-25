@@ -24,9 +24,9 @@ public class TrainerRepository : IRepository<Trainer>
        return await _dbContext.Trainers.ToListAsync(cancellationToken); 
     }
 
-    public Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public Task<Trainer?> UpdateAsync(Guid id, Trainer entity, CancellationToken cancellationToken)

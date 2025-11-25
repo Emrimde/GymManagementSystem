@@ -56,12 +56,14 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientUpdateViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<TrainerViewModel>();
+            services.AddTransient<TrainerDetailsViewModel>();
             services.AddTransient<TrainerAddViewModel>();
             services.AddTransient<GymClassAddViewModel>();
             services.AddTransient<GymClassViewModel>();
             services.AddTransient<ScheduledClassViewModel>();
             services.AddTransient<ScheduledClassDetailsViewModel>();
             services.AddTransient<ClassBookingAddViewModel>();
+            services.AddTransient<ClassBookingViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));

@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Trainer;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -80,6 +81,24 @@ public class TrainerHttpClient : BaseHttpClientService
             }
 
             return Result<TrainerInfoResponse>.Failure(errorMessage);
+        }
+    }
+
+    public async Task<Result<TrainerDetailsResponse>> GetTrainer(Guid trainerId)
+    {
+        try
+        {
+            TrainerDetailsResponse? trainer = await _httpClient.GetFromJsonAsync<TrainerDetailsResponse>($"{trainerId}");
+            if(trainer == null)
+            {
+                return Result<TrainerDetailsResponse>.Failure("Unexpected error");
+            }
+            return Result<TrainerDetailsResponse>.Success(trainer);
+            
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<TrainerDetailsResponse>.Failure(ex.Message);
         }
     }
 }

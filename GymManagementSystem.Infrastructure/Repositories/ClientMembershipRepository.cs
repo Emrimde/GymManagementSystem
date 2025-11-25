@@ -18,7 +18,7 @@ public class ClientMembershipRepository : IRepository<ClientMembership>
         entity.IsActive = true;
         entity.CreatedAt = DateTime.UtcNow;
         entity.UpdatedAt = DateTime.UtcNow;
-        _dbContext.Add(entity);
+        _dbContext.ClientMemberships.Add(entity);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return entity;
     }

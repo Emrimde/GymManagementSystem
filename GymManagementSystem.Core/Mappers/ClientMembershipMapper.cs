@@ -29,6 +29,7 @@ public static class ClientMembershipMapper
             PhoneNumber = request.Client != null ? request.Client.PhoneNumber : string.Empty,
             Name = request.Membership != null ? request.Membership.Name : string.Empty,
             MembershipType = request.Membership != null ? request.Membership.MembershipType.ToString() : string.Empty,
+            IsActive = request.IsActive,
             
         };
     }

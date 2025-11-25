@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.Result;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -54,5 +55,19 @@ public class ClassBookingHttpClient : BaseHttpClientService
 
         return Result<ClassBookingInfoResponse>.Failure(response.ReasonPhrase ?? "Unknown error.");
     }
+    public async Task<Result<ObservableCollection<ClassBookingResponse>>> GetClassBookings()
+    {
+        try
+        {
+            var classBookings = await _httpClient.GetFromJsonAsync<ObservableCollection<ClassBookingResponse>>(
+                "");
 
+            return Result<ObservableCollection<ClassBookingResponse>>.Success(
+                classBookings);
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<ObservableCollection<ClassBookingResponse>>.Failure(ex.Message);
+        }
+    }
 }
