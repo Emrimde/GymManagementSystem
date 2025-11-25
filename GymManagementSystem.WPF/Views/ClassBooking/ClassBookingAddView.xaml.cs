@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.WPF.ViewModels.ClassBooking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,36 @@ namespace GymManagementSystem.WPF.Views.ClassBooking
         public ClassBookingAddView()
         {
             InitializeComponent();
+        }
+
+        private void AutoCompleteBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ClassBookingAddViewModel vm &&
+                sender is AutoCompleteBox acb)
+            {
+                // jeśli user edytuje tekst po wybraniu klienta → reset Selected
+                if (vm.SelectedClient != null && acb.Text != vm.SelectedClient.FullName)
+                {
+                    vm.SelectedClient = null;
+                }
+
+                // dopiero wtedy triggerujemy wyszukiwanie
+                vm.SearchQuery = acb.Text;
+            }
+        }
+
+        private void AutoCompleteBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is ClassBookingAddViewModel vm &&
+                sender is AutoCompleteBox acb &&
+                acb.SelectedItem is ClientInfoResponse selected)
+            {
+                // ustawiamy wybranego klienta
+                vm.SelectedClient = selected;
+
+                // po wyborze klienta, wpisujemy jego nazwę i nie szukamy dalej
+                vm.SearchQuery = selected.FullName;
+            }
         }
     }
 }

@@ -83,9 +83,8 @@ public class ClientAddViewModel : ViewModel
         Result<ClientInfoResponse> result = await _httpClient.PostClientAsync(ClientAddRequest);
         if (result.IsSuccess)
         {
-            string firstName = result.Value!.FirstName;
-            string lastName = result.Value!.LastName;
-            MessageBox.Show($"Success, client {firstName} {lastName} is already created","Success",MessageBoxButton.OK, MessageBoxImage.Information);
+            string fullName = result.Value!.FullName;
+            MessageBox.Show($"Success, client {fullName} is already created","Success",MessageBoxButton.OK, MessageBoxImage.Information);
             Navigation.NavigateTo<ClientViewModel>();
         }
 

@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -147,6 +148,22 @@ public class ClientHttpClient : BaseHttpClientService
             }
 
             return Result<ClientDetailsResponse>.Failure(errorMessage);
+        }
+    }
+
+    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClients(string query, Guid scheduledClassId)
+    {
+        try
+        {
+            var clients = await _httpClient.GetFromJsonAsync<IEnumerable<ClientInfoResponse>>(
+                $"lookup?query={query}?scheduledClassId={scheduledClassId}");
+
+            return Result<IEnumerable<ClientInfoResponse>>.Success(
+                clients ?? Enumerable.Empty<ClientInfoResponse>());
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<IEnumerable<ClientInfoResponse>>.Failure(ex.Message);
         }
     }
 }

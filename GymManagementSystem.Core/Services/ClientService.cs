@@ -10,8 +10,8 @@ namespace GymManagementSystem.Core.Services;
 
 public class ClientService<Entity> : IClientService
 {
-    private readonly IRepository<Client> _repository;
-    public ClientService(IRepository<Client> repository)
+    private readonly IClientRepository _repository;
+    public ClientService(IClientRepository repository)
     {
         _repository = repository;
     }
@@ -69,5 +69,11 @@ public class ClientService<Entity> : IClientService
         ClientDetailsResponse clientResponse = client.ToClientDetailsResponse();
 
         return Result<ClientDetailsResponse>.Success(clientResponse, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid scheduledClassId)
+    {
+      IEnumerable<Client> searchedClients = await _repository.LookUpClientsAsync(query, scheduledClassId);
+      return Result<IEnumerable<ClientInfoResponse>>.Success(searchedClients.Select(item => item.ToClientInfoResponse()));
     }
 }

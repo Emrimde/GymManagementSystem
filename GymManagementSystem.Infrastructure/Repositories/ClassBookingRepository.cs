@@ -21,7 +21,7 @@ public class ClassBookingRepository : IRepository<ClassBooking>
 
     public async Task<IEnumerable<ClassBooking>> GetAllAsync(CancellationToken cancellationToken)
     {
-       return await _dbContext.ClassBookings.ToListAsync(cancellationToken);
+       return await _dbContext.ClassBookings.Include(item => item.Client).Include(item => item.ScheduledClass).ThenInclude(item => item.GymClass).ToListAsync(cancellationToken);
     }
 
     public async Task<ClassBooking?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

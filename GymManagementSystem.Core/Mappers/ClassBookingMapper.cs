@@ -5,7 +5,7 @@ namespace GymManagementSystem.Core.Mappers;
 
 public static class ClassBookingMapper
 {
-    public static ClassBookingResponse ToGymBookingResponse(this ClassBooking classBooking)
+    public static ClassBookingResponse ToClassBookingResponse(this ClassBooking classBooking)
     {
         return new ClassBookingResponse()
         {
@@ -13,13 +13,15 @@ public static class ClassBookingMapper
             Name = classBooking.ScheduledClass?.GymClass?.Name ?? string.Empty,
             FirstName = classBooking.Client?.FirstName ?? string.Empty,
             LastName = classBooking.Client?.FirstName ?? string.Empty,
+            PhoneNumber = classBooking.Client?.PhoneNumber ?? string.Empty,
+            Date = classBooking.ScheduledClass?.Date.ToString("dd.MM.yyyy") ?? string.Empty,
             CreatedAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
             UpdatedAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
             CancelledAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
         };
     }
 
-    public static ClassBooking ToGymClassBooking(this ClassBookingAddRequest request) 
+    public static ClassBooking ToClassBooking(this ClassBookingAddRequest request) 
     {
         return new ClassBooking()
         {
@@ -28,7 +30,7 @@ public static class ClassBookingMapper
         };
     }
 
-    public static ClassBookingInfoResponse ToGymClassBooking(this ClassBooking classBooking)
+    public static ClassBookingInfoResponse ToClassBookingInfo(this ClassBooking classBooking)
     {
         return new ClassBookingInfoResponse()
         {

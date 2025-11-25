@@ -28,4 +28,7 @@ public class ClientController : BaseController
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ClientInfoResponse>> Update(Guid id, ClientUpdateRequest entity, CancellationToken cancellationToken)
         => HandleResult(await _clientService.UpdateAsync(id, entity, cancellationToken));
+
+    [HttpGet("lookup")]
+    public async Task<ActionResult<IEnumerable<ClientInfoResponse>>> LookUpClients([FromQuery] string query, [FromQuery] Guid scheduledClassId) => HandleResult(await _clientService.LookUpClientsAsync(query, scheduledClassId));
 }

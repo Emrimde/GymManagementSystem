@@ -1,11 +1,19 @@
-﻿using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
+using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.ClassBooking;
 
 public class ClassBookingAddViewModel : ViewModel, IParameterReceiver
 {
+    private readonly ClientHttpClient _clientHttpClient;
+    private readonly ClassBookingHttpClient _classBookingHttpClient;
     private INavigationService _navigation;
 
     public INavigationService Navigation
@@ -14,13 +22,8 @@ public class ClassBookingAddViewModel : ViewModel, IParameterReceiver
         set { _navigation = value; OnPropertyChanged(); }
     }
 
-    private ObservableCollection<ClientInfoResponse> _clientSuggestions;
-    public ObservableCollection<ClientInfoResponse> ClientSuggestions
-    { get { return _clientSuggestions; } set
-        {
-            _clientSuggestions = value; OnPropertyChanged();
-        }
-    }
+    
+    public ObservableCollection<ClientInfoResponse> ClientSuggestions { get; set; }
 
     private ClientInfoResponse _selectedClient;
 
@@ -29,6 +32,7 @@ public class ClassBookingAddViewModel : ViewModel, IParameterReceiver
         get { return _selectedClient; }
         set { _selectedClient = value; OnPropertyChanged(); }
     }
+    private ClassBookingAddRequest _request;
 
     private string _searchQuery;
 
@@ -48,7 +52,6 @@ public class ClassBookingAddViewModel : ViewModel, IParameterReceiver
 
         try
         {
-            // czekaj aż użytkownik przestanie pisać
             await Task.Delay(350, token);
 
             if (string.IsNullOrWhiteSpace(query))
@@ -57,26 +60,52 @@ public class ClassBookingAddViewModel : ViewModel, IParameterReceiver
                 return;
             }
 
-            var results = await FetchClientsAsync(query);
+            var results = await _clientHttpClient.LookUpClients(query, ScheduledClassId);
 
             ClientSuggestions.Clear();
-            foreach (var r in results)
+            foreach (var r in results.Value!)
                 ClientSuggestions.Add(r);
         }
         catch (TaskCanceledException)
         {
-            // ignorujemy – normalne przy debounce
         }
     }
 
-
     public SidebarViewModel SidebarView { get; set; }
     public Guid ScheduledClassId { private get; set; }
+    public ICommand AddClassBookingCommand { get; }
     public void ReceiveParameter(object parameter)
     {
         if(parameter is Guid id)
         {
             ScheduledClassId = id;
+            _request.ScheduledClassId = id;
         }
+    }
+
+    public ClassBookingAddViewModel(
+       SidebarViewModel sidebar,
+       ClientHttpClient clientHttpClient,
+       INavigationService nav,
+       ClassBookingHttpClient classBookingHttpClient)
+    {
+        SidebarView = sidebar;
+        _clientHttpClient = clientHttpClient;
+        Navigation = nav;
+        ClientSuggestions = new ObservableCollection<ClientInfoResponse>();
+        AddClassBookingCommand = new AsyncRelayCommand(item => AddClassBooking(), item => true);
+        _classBookingHttpClient = classBookingHttpClient;
+        _request = new ClassBookingAddRequest();
+    }
+
+    private async Task AddClassBooking()
+    {
+        _request.ClientId = SelectedClient.Id;
+        Result<ClassBookingInfoResponse> result = await _classBookingHttpClient.PostClassBookingAsync(_request);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"Error: {result.ErrorMessage}");
+        }
+        Navigation.NavigateTo<ScheduledClassViewModel>();
     }
 }

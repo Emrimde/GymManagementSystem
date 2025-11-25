@@ -56,8 +56,7 @@ public static class ClientMapper
         return new ClientInfoResponse
         {
             Id = client.Id,
-            FirstName = client.FirstName,
-            LastName = client.LastName,
+            FullName = client.FirstName + " " + client.LastName,
         };
     }
 

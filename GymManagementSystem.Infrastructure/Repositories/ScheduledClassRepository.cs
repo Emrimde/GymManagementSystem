@@ -25,7 +25,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClass>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.ScheduledClasses.ToListAsync(cancellationToken);
+        return await _dbContext.ScheduledClasses.Include(item => item.GymClass).ToListAsync(cancellationToken);
     }
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

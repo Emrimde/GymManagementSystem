@@ -11,41 +11,48 @@ public class ClassBookingHttpClient : BaseHttpClientService
     {
     }
 
-    public async Task<Result<ClassBookingInfoResponse>> PostClientAsync(ClassBookingAddRequest request)
+    public async Task<Result<ClassBookingInfoResponse>> PostClassBookingAsync(ClassBookingAddRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);
 
-        string responseBody = await response.Content.ReadAsStringAsync();
+        var responseBody = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
         {
-            var options = new JsonSerializerOptions 
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            ClassBookingInfoResponse? classBooking = JsonSerializer.Deserialize<ClassBookingInfoResponse>(responseBody, options);
-            return Result<ClassBookingInfoResponse>.Success(classBooking!);
+            var booking = await response.Content.ReadFromJsonAsync<ClassBookingInfoResponse>();
+            if (booking == null)
+                return Result<ClassBookingInfoResponse>.Failure("Empty response from server.");
+
+            return Result<ClassBookingInfoResponse>.Success(booking);
         }
-        else
+
+       
+        try
         {
+            var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
 
-            string errorMessage = responseBody;
-
-            try
+            if (errorDict != null)
             {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                if (errorDict.TryGetValue("detail", out var detail))
+                    return Result<ClassBookingInfoResponse>.Failure(detail.GetString() ?? "Unknown error.");
+
+                // Obsługa błędów walidacji
+                if (errorDict.TryGetValue("errors", out var errorsElement))
                 {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ClassBookingInfoResponse>.Failure(errorMessage);
+                    var errors = errorsElement.EnumerateObject()
+                        .SelectMany(e => e.Value.EnumerateArray().Select(item => item.GetString()))
+                        .Where(item => !string.IsNullOrEmpty(item));
+
+                    return Result<ClassBookingInfoResponse>.Failure(string.Join("\n", errors));
                 }
             }
-            catch (Exception ex)
-            {
-                return Result<ClassBookingInfoResponse>.Failure($"Fatal error {ex.Message}");
-            }
-
-            return Result<ClassBookingInfoResponse>.Failure(errorMessage);
         }
+        catch
+        {
+            // ignorujemy parsing error
+        }
+
+        return Result<ClassBookingInfoResponse>.Failure(response.ReasonPhrase ?? "Unknown error.");
     }
+
 }

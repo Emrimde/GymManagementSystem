@@ -3,6 +3,7 @@ public class ScheduledClassResponse
 {
     public Guid Id { get; set; }
     public string Date { get; set; } = default!;
+    public string Name { get; set; } = default!;
     public TimeSpan StartFrom { get; set; }
     public TimeSpan StartTo { get; set; }
     public int MaxPeople { get; set; }

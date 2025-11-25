@@ -12,6 +12,7 @@ public static class ScheduledClassMapper
             CreatedAt = scheduledClass.CreatedAt.ToString("dd.MM.yyyy"),
             UpdatedAt = scheduledClass.UpdatedAt.ToString("dd.MM.yyyy"),
             Date = scheduledClass.Date.ToString("dd.MM.yyyy"),
+            Name = scheduledClass.GymClass?.Name ?? string.Empty,
             Id = scheduledClass.Id,
             IsCancelled = scheduledClass.IsCancelled,
             MaxPeople = scheduledClass.MaxPeople,

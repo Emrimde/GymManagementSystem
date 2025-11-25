@@ -29,16 +29,18 @@
                     <TextBlock FontSize="30" Text="Client:" Foreground="{DynamicResource PrimaryColor}"/>
                     <input:AutoCompleteBox
     Width="250"
-    Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+    MinimumPrefixLength="1"
     ItemsSource="{Binding ClientSuggestions}"
     SelectedItem="{Binding SelectedClient}"
     ValueMemberPath="FullName"
-    FilterMode="None" />
+    FilterMode="None"
+    VerticalContentAlignment="Center" FontSize="20"
+    TextChanged="AutoCompleteBox_TextChanged" SelectionChanged="AutoCompleteBox_SelectionChanged" />
 
                 </StackPanel>
             </StackPanel>
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Book class" Command="{Binding AddClientCommand }"/>
+                <Button Content="Book class" Command="{Binding AddClassBookingCommand }"/>
                 <Button Content="Cancel"/>
             </StackPanel>
         </Grid>

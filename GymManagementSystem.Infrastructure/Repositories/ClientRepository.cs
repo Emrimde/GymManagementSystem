@@ -7,10 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 
-public class ClientRepository : IRepository<Client>
+public class ClientRepository : IClientRepository
 {
     private readonly ApplicationDbContext _dbContext;
-
     public ClientRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -32,18 +31,18 @@ public class ClientRepository : IRepository<Client>
     {
         return await _dbContext.Clients
     .Include(c => c.ClientMemberships)
-        .ThenInclude(cm => cm.Membership)   
-    .Include(c => c.ClientMemberships)    
+        .ThenInclude(cm => cm.Membership)
+    .Include(c => c.ClientMemberships)
         .ThenInclude(cm => cm.Contract)
     .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
     public async Task<Client?> UpdateAsync(Guid id, Client entity, CancellationToken cancellationToken)
     {
-        Client? client = await _dbContext.Clients.FirstOrDefaultAsync(item => item.Id == id,cancellationToken);
+        Client? client = await _dbContext.Clients.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
 
         if (client == null)
-        { 
+        {
             return null;
         }
 
@@ -51,4 +50,22 @@ public class ClientRepository : IRepository<Client>
         await _dbContext.SaveChangesAsync(cancellationToken);
         return client;
     }
+
+    public async Task<IEnumerable<Client>> LookUpClientsAsync(string query, Guid scheduledClassId)
+    {
+        return await _dbContext.Clients
+            .Include(item => item.ClassBookings)
+            .Include(item => item.ClientMemberships)
+            .AsNoTracking()
+            .Where(item =>
+                (EF.Functions.Like(item.FirstName, $"%{query}%")
+                || EF.Functions.Like(item.LastName, $"%{query}%"))
+                && !item.ClassBookings.Any(item => item.ScheduledClassId == scheduledClassId) &&
+                item.ClientMemberships.Any(item => item.IsActive == true))
+            .OrderBy(item => item.LastName)
+            .ThenBy(item => item.FirstName)
+            .Take(10)
+            .ToListAsync();
+    }
+
 }
