@@ -11,14 +11,12 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Client;
-
 public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 {
     public string ActiveMembershipName =>
     Client?.CanClientAddMembership ?? false
         ? "No membership"
         : $"{Client?.ClientMembership?.Membership?.Name} {Client?.ClientMembership?.Membership?.MembershipType}";
-
 
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
@@ -127,7 +125,6 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
             ClientId = id;
             _ = LoadClient();
             TerminationAddRequest.ClientId = ClientId;
-            //TerminationAddRequest.ContractId = Client?.ClientMembership?.ContractId ?? Guid.Empty;
         }
     }
 

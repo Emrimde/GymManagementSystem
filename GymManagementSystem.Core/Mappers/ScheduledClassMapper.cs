@@ -19,4 +19,19 @@ public static class ScheduledClassMapper
             StartTo = scheduledClass.StartTo,
         };
     }
+
+    public static ScheduledClassDetailsResponse ToScheduledClassDetailsResponse(this ScheduledClass scheduledClass)
+    {
+        return new ScheduledClassDetailsResponse()
+        {
+            CreatedAt = scheduledClass.CreatedAt.ToString("dd.MM.yyyy"),
+            UpdatedAt = scheduledClass.UpdatedAt.ToString("dd.MM.yyyy"),
+            Date = scheduledClass.Date.ToString("dd.MM.yyyy"),
+            Id = scheduledClass.Id,
+            IsCancelled = scheduledClass.IsCancelled,
+            MaxPeople = scheduledClass.MaxPeople,
+            StartFrom = scheduledClass.StartFrom,
+            StartTo = scheduledClass.StartTo,
+        };
+    }
 }

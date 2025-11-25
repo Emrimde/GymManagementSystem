@@ -5,6 +5,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ScheduledClass;
 public class ScheduledClassViewModel : ViewModel
@@ -30,6 +31,7 @@ public class ScheduledClassViewModel : ViewModel
         get { return _scheduledClasses; }
         set { _scheduledClasses = value; OnPropertyChanged(); }
     }
+    public ICommand OpenScheduledClassDetails { get; }
 
     public ScheduledClassViewModel(ScheduledClassHttpClient scheduledClassHttpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {
@@ -37,6 +39,7 @@ public class ScheduledClassViewModel : ViewModel
         _scheduledClassHttpClient = scheduledClassHttpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
+        OpenScheduledClassDetails = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassDetailsViewModel>(item), item => true);
         _ = LoadScheduledClasses();
     }
 

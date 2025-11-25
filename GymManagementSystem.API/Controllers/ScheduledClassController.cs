@@ -17,4 +17,7 @@ public class ScheduledClassController : BaseController
     public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll(CancellationToken cancellationToken)
         => HandleListedResult(await _scheduledClassService.GetAllAsync(cancellationToken));
 
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ScheduledClassDetailsResponse>> GetById([FromRoute] Guid id, CancellationToken cancellationToken) => HandleResult(await _scheduledClassService.GetByIdAsync(id, cancellationToken));
+
 }

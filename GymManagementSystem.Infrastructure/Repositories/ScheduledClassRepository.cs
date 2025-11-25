@@ -28,9 +28,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         return await _dbContext.ScheduledClasses.ToListAsync(cancellationToken);
     }
 
-    public Task<ScheduledClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ScheduledClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _dbContext.ScheduledClasses.FirstOrDefaultAsync(item => item.Id == id ,cancellationToken);
     }
 
     public Task<ScheduledClass?> UpdateAsync(Guid id, ScheduledClass entity, CancellationToken cancellationToken)

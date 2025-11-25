@@ -12,6 +12,7 @@ public class ScheduledClass
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public ICollection<ClassBooking> ClassBookings { get; set; } = new List<ClassBooking>();
 
     //public Guid? UpdatedById { get; set; }
 }

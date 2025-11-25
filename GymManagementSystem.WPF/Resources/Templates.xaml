@@ -20,9 +20,10 @@
                     xmlns:gymclassview="clr-namespace:GymManagementSystem.WPF.Views.GymClass"
                     xmlns:scheduledclassvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ScheduledClass"
                     xmlns:scheduledclassview="clr-namespace:GymManagementSystem.WPF.Views.ScheduledClass"
-                    
-                     xmlns:clientMembershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClientMembership"
- xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
+                    xmlns:classbookingvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClassBooking"
+                    xmlns:classbookingview="clr-namespace:GymManagementSystem.WPF.Views.ClassBooking"
+                    xmlns:clientMembershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClientMembership"
+                    xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -93,5 +94,11 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type scheduledclassvm:ScheduledClassViewModel}">
                         <scheduledclassview:ScheduledClassView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type scheduledclassvm:ScheduledClassDetailsViewModel}">
+                        <scheduledclassview:ScheduledClassDetailsView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type classbookingvm:ClassBookingAddViewModel}">
+                        <classbookingview:ClassBookingAddView/>
                     </DataTemplate>
 </ResourceDictionary>

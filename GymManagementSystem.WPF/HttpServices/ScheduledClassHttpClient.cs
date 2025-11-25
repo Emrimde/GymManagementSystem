@@ -45,4 +45,47 @@ public class ScheduledClassHttpClient : BaseHttpClientService
             return Result<ObservableCollection<ScheduledClassResponse>>.Failure(errorMessage);
         }
     }
+
+    public async Task<Result<ScheduledClassDetailsResponse>> GetScheduledClassById(Guid id)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"{id}");
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+
+            };
+            ScheduledClassDetailsResponse? scheduledClass = JsonSerializer.Deserialize<ScheduledClassDetailsResponse>(responseBody, options);
+
+            if (scheduledClass != null)
+            {
+                return Result<ScheduledClassDetailsResponse>.Success(scheduledClass);
+            }
+            else
+            {
+                return Result<ScheduledClassDetailsResponse>.Failure("Unexpected error during loading scheduled class details");
+            }
+        }
+        else
+        {
+            string errorMessage = responseBody;
+            try
+            {
+
+                Dictionary<string, JsonElement>? errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ScheduledClassDetailsResponse>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<ScheduledClassDetailsResponse>.Failure($"Fatal error: {ex.Message}");
+            }
+            return Result<ScheduledClassDetailsResponse>.Failure(errorMessage);
+        }
+    }
 }

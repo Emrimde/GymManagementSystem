@@ -12,4 +12,5 @@ public class Client
     public string City { get; set; } = string.Empty;
     public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
     public ICollection<ClientMembership> ClientMemberships { get; set; } = new List<ClientMembership>();
+    public ICollection<ClassBooking> ClassBookings { get; set; } = new List<ClassBooking>();
 }
