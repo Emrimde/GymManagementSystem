@@ -1,5 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Trainer;
+﻿using GymManagementSystem.Core.DTO.Trainer;
+using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -101,4 +101,52 @@ public class TrainerHttpClient : BaseHttpClientService
             return Result<TrainerDetailsResponse>.Failure(ex.Message);
         }
     }
+
+    public async Task<Result<TrainerAvailabilityInfoResponse>> PostTrainerAvailabilityAsync(
+     TrainerAvailabilityAddRequest request)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("availability-template", request);
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        if (response.IsSuccessStatusCode)
+        {
+            var data = JsonSerializer.Deserialize<TrainerAvailabilityInfoResponse>(responseBody, options);
+            return Result<TrainerAvailabilityInfoResponse>.Success(data!);
+        }
+
+        // Obsługa ProblemDetails (detail)
+        try
+        {
+            var problem = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody, options);
+
+            if (problem != null)
+            {
+                // Błędy walidacyjne (.NET standard 422)
+                if (problem.TryGetValue("errors", out var errorsElement))
+                {
+                    var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), options);
+                    var errorMessages = errors?
+                        .SelectMany(e => e.Value)
+                        .ToList();
+
+                    return Result<TrainerAvailabilityInfoResponse>.Failure(string.Join("\n", errorMessages!));
+                }
+
+                // Standard `ProblemDetails.detail`
+                if (problem.TryGetValue("detail", out var detailElement))
+                {
+                    return Result<TrainerAvailabilityInfoResponse>.Failure(detailElement.GetString()!);
+                }
+            }
+        }
+        catch { }
+
+        return Result<TrainerAvailabilityInfoResponse>.Failure($"HTTP Error {response.StatusCode}: {responseBody}");
+    }
+
 }

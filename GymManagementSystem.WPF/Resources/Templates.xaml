@@ -24,6 +24,8 @@
                     xmlns:classbookingview="clr-namespace:GymManagementSystem.WPF.Views.ClassBooking"
                     xmlns:clientMembershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClientMembership"
                     xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
+                    xmlns:traineravailabilityvm="clr-namespace:GymManagementSystem.WPF.ViewModels.TrainerAvailability"
+                    xmlns:traineravailabilityview="clr-namespace:GymManagementSystem.WPF.Views.TrainerAvailability"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -88,6 +90,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type trainervm:TrainerDetailsViewModel}">
                         <trainerview:TrainerDetailsView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type traineravailabilityvm:TrainerAvailabilityAddViewModel}">
+                        <traineravailabilityview:TrainerAvailabilityAddView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
                         <gymclassview:GymClassView/>

@@ -11,6 +11,7 @@ public class Trainer
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
+    public TrainerAvailabilityTemplate? AvailabilityTemplate { get; set; }
 
    // public Guid? CreatedById { get; set; }
     //public Guid? UpdatedById { get; set; }

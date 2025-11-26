@@ -3,8 +3,9 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Threading.Tasks;
+using GymManagementSystem.WPF.ViewModels.TrainerAvailability;
 using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Trainer;
 
@@ -22,20 +23,14 @@ public class TrainerDetailsViewModel : ViewModel, IParameterReceiver
 
     private TrainerDetailsResponse _trainer;
 
-    public TrainerDetailsViewModel(TrainerHttpClient trainerHttpClient, SidebarViewModel sidebarView, INavigationService navigation )
-    {
-        _trainerHttpClient = trainerHttpClient;
-        SidebarView = sidebarView;
-        Navigation = navigation;
-        Trainer = new TrainerDetailsResponse();
-        
-    }
 
     public TrainerDetailsResponse Trainer
     {
         get { return _trainer; }
         set { _trainer = value; OnPropertyChanged(); }
     }
+
+    public ICommand CreateTrainerAvailability { get; }
 
     public void ReceiveParameter(object parameter)
     {
@@ -56,5 +51,13 @@ public class TrainerDetailsViewModel : ViewModel, IParameterReceiver
         {
             Trainer = result.Value!;
         }
+    }
+    public TrainerDetailsViewModel(TrainerHttpClient trainerHttpClient, SidebarViewModel sidebarView, INavigationService navigation )
+    {
+        _trainerHttpClient = trainerHttpClient;
+        SidebarView = sidebarView;
+        Navigation = navigation;
+        Trainer = new TrainerDetailsResponse();
+        CreateTrainerAvailability = new RelayCommand(item => Navigation.NavigateTo<TrainerAvailabilityAddViewModel>(item), item => true);
     }
 }
