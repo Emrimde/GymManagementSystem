@@ -13,13 +13,13 @@ public class ClientMembershipRepository : IRepository<ClientMembership>
         _dbContext = dbContext;
     }
 
-    public async Task<ClientMembership> CreateAsync(ClientMembership entity, CancellationToken cancellationToken)
+    public async Task<ClientMembership> CreateAsync(ClientMembership entity)
     {
         entity.IsActive = true;
         entity.CreatedAt = DateTime.UtcNow;
         entity.UpdatedAt = DateTime.UtcNow;
         _dbContext.ClientMemberships.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 
@@ -33,9 +33,9 @@ public class ClientMembershipRepository : IRepository<ClientMembership>
         return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<ClientMembership?> UpdateAsync(Guid id, ClientMembership entity, CancellationToken cancellationToken)
+    public async Task<ClientMembership?> UpdateAsync(Guid id, ClientMembership entity)
     {
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 }

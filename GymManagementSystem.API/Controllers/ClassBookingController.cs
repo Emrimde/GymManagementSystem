@@ -20,5 +20,5 @@ public class ClassBookingController : BaseController
     public async Task<ActionResult<ClassBookingDetailsResponse>> GetById([FromRoute] Guid id,CancellationToken cancellationToken) => HandleResult(await _classBookingService.GetByIdAsync(id,cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<ClassBookingInfoResponse>> Create(ClassBookingAddRequest request,CancellationToken cancellationToken) => HandleResult(await _classBookingService.CreateAsync(request,cancellationToken));
+    public async Task<ActionResult<ClassBookingInfoResponse>> Create(ClassBookingAddRequest request) => HandleResult(await _classBookingService.CreateAsync(request));
 }

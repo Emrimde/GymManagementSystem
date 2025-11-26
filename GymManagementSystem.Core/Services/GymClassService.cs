@@ -18,12 +18,11 @@ public class GymClassService : IGymClassService
         _scheduledClassRepo = scheduledClassRepo;
     }
 
-    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
     {
-       
-       GymClass gymClass = await _gymClassRepo.CreateAsync(entity.ToGymClass(),cancellationToken);
+       GymClass gymClass = await _gymClassRepo.CreateAsync(entity.ToGymClass());
        List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(gymClass);
-       await _scheduledClassRepo.AddRangeAsync(scheduledClasses, cancellationToken);
+       await _scheduledClassRepo.AddRangeAsync(scheduledClasses);
        return Result<GymClassInfoResponse>.Success(gymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
     }
 
@@ -39,7 +38,7 @@ public class GymClassService : IGymClassService
         throw new NotImplementedException();
     }
 
-    public Task<Result<GymClassInfoResponse>> UpdateAsync(Guid id, GymClassUpdateRequest entity, CancellationToken cancellationToken)
+    public Task<Result<GymClassInfoResponse>> UpdateAsync(Guid id, GymClassUpdateRequest entity)
     {
         throw new NotImplementedException();
     }

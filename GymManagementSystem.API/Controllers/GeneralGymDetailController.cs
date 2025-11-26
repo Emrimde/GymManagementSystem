@@ -16,6 +16,6 @@ public class GeneralGymDetailController : BaseController
     public async Task<ActionResult<GeneralGymResponse>> GetGeneralGymDetail(CancellationToken cancellationToken) =>  HandleResult(await _generalGymDetailsService.GetSettingsByIdAsync(cancellationToken));
 
     [HttpPut]
-    public async Task<ActionResult<GeneralGymResponse>> UpdateGeneralSettings([FromBody] GeneralGymUpdateRequest request, CancellationToken cancellationToken) => HandleResult(await _generalGymDetailsService.UpdateSettingsAsync(request, cancellationToken));
+    public async Task<ActionResult<GeneralGymResponse>> UpdateGeneralSettings([FromBody] GeneralGymUpdateRequest request) => HandleResult(await _generalGymDetailsService.UpdateSettingsAsync(request));
 
 }

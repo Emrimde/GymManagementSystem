@@ -28,9 +28,9 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
         return Result<GeneralGymResponse>.Success(generalGymDetail.ToGeneralGymResponse());
     }
 
-    public async Task<Result<GeneralGymResponse>> UpdateSettingsAsync(GeneralGymUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<Result<GeneralGymResponse>> UpdateSettingsAsync(GeneralGymUpdateRequest request)
     {
-        GeneralGymDetail? generalGymDetail = await _generalGymRepository.UpdateSettingsAsync(request,cancellationToken);
+        GeneralGymDetail? generalGymDetail = await _generalGymRepository.UpdateSettingsAsync(request);
         if (generalGymDetail == null)
         {
             return Result<GeneralGymResponse>.Failure("Failed to update settings", StatusCodeEnum.InternalServerError);

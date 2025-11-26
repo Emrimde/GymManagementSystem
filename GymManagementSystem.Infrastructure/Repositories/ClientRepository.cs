@@ -15,10 +15,10 @@ public class ClientRepository : IClientRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Client> CreateAsync(Client entity, CancellationToken cancellationToken)
+    public async Task<Client> CreateAsync(Client entity)
     {
         _dbContext.Clients.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 
@@ -37,9 +37,9 @@ public class ClientRepository : IClientRepository
     .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
-    public async Task<Client?> UpdateAsync(Guid id, Client entity, CancellationToken cancellationToken)
+    public async Task<Client?> UpdateAsync(Guid id, Client entity)
     {
-        Client? client = await _dbContext.Clients.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+        Client? client = await _dbContext.Clients.FirstOrDefaultAsync(item => item.Id == id);
 
         if (client == null)
         {
@@ -47,7 +47,7 @@ public class ClientRepository : IClientRepository
         }
 
         client.ModifyClient(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return client;
     }
 

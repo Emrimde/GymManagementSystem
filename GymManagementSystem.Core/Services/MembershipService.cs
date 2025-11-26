@@ -15,11 +15,11 @@ public class MembershipService<Entity> : IService<MembershipResponse, Membership
         _repository = repository;
     }
 
-    public async Task<Result<MembershipResponse>> CreateAsync(MembershipAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<MembershipResponse>> CreateAsync(MembershipAddRequest entity)
     {
         Membership membership = entity.ToMembership();
 
-        Membership response = await _repository.CreateAsync(membership, cancellationToken);
+        Membership response = await _repository.CreateAsync(membership);
        
         return Result<MembershipResponse>.Success(response.ToMembershipResponse());
     }
@@ -41,9 +41,9 @@ public class MembershipService<Entity> : IService<MembershipResponse, Membership
         return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
     }
 
-    public async Task<Result<MembershipResponse>> UpdateAsync(Guid id, MembershipUpdateRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<MembershipResponse>> UpdateAsync(Guid id, MembershipUpdateRequest entity)
     {
-        Membership? membership = await _repository.UpdateAsync(id, entity.ToMembership(), cancellationToken);
+        Membership? membership = await _repository.UpdateAsync(id, entity.ToMembership());
         if (membership == null)
         {
             return Result<MembershipResponse>.Failure($"Membership with id {id} not found");

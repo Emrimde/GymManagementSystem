@@ -12,10 +12,10 @@ public class MembershipRepository : IRepository<Membership>
     {
         _dbContext = dbContext;
     }
-    public async Task<Membership> CreateAsync(Membership entity, CancellationToken cancellationToken)
+    public async Task<Membership> CreateAsync(Membership entity)
     {
         _dbContext.Memberships.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 
@@ -29,9 +29,9 @@ public class MembershipRepository : IRepository<Membership>
        return await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<Membership?> UpdateAsync(Guid id, Membership entity, CancellationToken cancellationToken)
+    public async Task<Membership?> UpdateAsync(Guid id, Membership entity)
     {
-        Membership? membership =  await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+        Membership? membership =  await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id);
 
         if (membership == null)
         {
@@ -41,7 +41,7 @@ public class MembershipRepository : IRepository<Membership>
         membership.Price = entity.Price;
         membership.Name = entity.Name;
         membership.IsTrainerOnly = entity.IsTrainerOnly;
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return membership;
     }
 }

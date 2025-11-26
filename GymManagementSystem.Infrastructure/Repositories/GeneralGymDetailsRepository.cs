@@ -18,9 +18,9 @@ public class GeneralGymDetailsRepository : IGeneralGymRepository
         return await _dbContext.GeneralGymDetails.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<GeneralGymDetail?> UpdateSettingsAsync(GeneralGymUpdateRequest updatedGeneralSettings, CancellationToken cancellationToken)
+    public async Task<GeneralGymDetail?> UpdateSettingsAsync(GeneralGymUpdateRequest updatedGeneralSettings)
     {
-        GeneralGymDetail? generalSettings = await _dbContext.GeneralGymDetails.FirstOrDefaultAsync(cancellationToken);
+        GeneralGymDetail? generalSettings = await _dbContext.GeneralGymDetails.FirstOrDefaultAsync();
 
         if (generalSettings == null)
         {
@@ -33,7 +33,7 @@ public class GeneralGymDetailsRepository : IGeneralGymRepository
         generalSettings.BackgroundColor = updatedGeneralSettings.BackgroundColor;
         generalSettings.PrimaryColor = updatedGeneralSettings.PrimaryColor;
         generalSettings.SecondColor = updatedGeneralSettings.SecondColor;
-        int modified = await _dbContext.SaveChangesAsync(cancellationToken);
+        int modified = await _dbContext.SaveChangesAsync();
 
         if (modified < 0)
         {

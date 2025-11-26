@@ -1,5 +1,7 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Trainer;
+using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,9 +26,13 @@ public class TrainerController : BaseController
 
     [HttpPost]
     public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _trainerService.CreateAsync(entity, cancellationToken));
+        => HandleResult(await _trainerService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _trainerService.UpdateAsync(id, entity, cancellationToken));
+    public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
+        => HandleResult(await _trainerService.UpdateAsync(id, entity));
+
+    [HttpPost("availability-template")]
+    public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerAvailabilityAddRequest entity) => HandleResult(await _trainerService.CreateTrainerAvailabilityAsync(entity));
+
 }

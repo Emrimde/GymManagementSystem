@@ -21,10 +21,10 @@ public class ClientMembershipsController : BaseController
         => HandleResult(await _clientMembershipService.GetByIdAsync(id, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<ClientMembershipInfoResponse>> Create([FromBody] ClientMembershipAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _clientMembershipService.CreateAsync(entity, cancellationToken));
+    public async Task<ActionResult<ClientMembershipInfoResponse>> Create([FromBody] ClientMembershipAddRequest entity)
+        => HandleResult(await _clientMembershipService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<ClientMembershipInfoResponse>> Update(Guid id, ClientMembershipUpdateRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _clientMembershipService.UpdateAsync(id, entity, cancellationToken));
+    public async Task<ActionResult<ClientMembershipInfoResponse>> Update(Guid id, ClientMembershipUpdateRequest entity)
+        => HandleResult(await _clientMembershipService.UpdateAsync(id, entity));
 }

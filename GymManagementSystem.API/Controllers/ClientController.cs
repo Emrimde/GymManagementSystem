@@ -22,12 +22,12 @@ public class ClientController : BaseController
         => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _clientService.CreateAsync(entity, cancellationToken));
+    public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)
+        => HandleResult(await _clientService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<ClientInfoResponse>> Update(Guid id, ClientUpdateRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _clientService.UpdateAsync(id, entity, cancellationToken));
+    public async Task<ActionResult<ClientInfoResponse>> Update(Guid id, ClientUpdateRequest entity)
+        => HandleResult(await _clientService.UpdateAsync(id, entity));
 
     [HttpGet("lookup")]
     public async Task<ActionResult<IEnumerable<ClientInfoResponse>>> LookUpClients([FromQuery] string query, [FromQuery] Guid scheduledClassId) => HandleResult(await _clientService.LookUpClientsAsync(query, scheduledClassId));

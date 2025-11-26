@@ -12,13 +12,13 @@ public class ScheduledClassRepository : IScheduledClassRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddRangeAsync(IEnumerable<ScheduledClass> entities, CancellationToken cancellationToken)
+    public async Task AddRangeAsync(IEnumerable<ScheduledClass> entities)
     {
-        await _dbContext.ScheduledClasses.AddRangeAsync(entities, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.ScheduledClasses.AddRangeAsync(entities);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<ScheduledClass> CreateAsync(ScheduledClass entity, CancellationToken cancellationToken)
+    public Task<ScheduledClass> CreateAsync(ScheduledClass entity)
     {
         throw new NotImplementedException();
     }
@@ -30,10 +30,10 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.ScheduledClasses.FirstOrDefaultAsync(item => item.Id == id ,cancellationToken);
+        return await _dbContext.ScheduledClasses.Include(item => item.ClassBookings).FirstOrDefaultAsync(item => item.Id == id ,cancellationToken);
     }
 
-    public Task<ScheduledClass?> UpdateAsync(Guid id, ScheduledClass entity, CancellationToken cancellationToken)
+    public Task<ScheduledClass?> UpdateAsync(Guid id, ScheduledClass entity)
     {
         throw new NotImplementedException();
     }

@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduledClass"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -34,14 +37,14 @@
                     
                 </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Available:"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Occupied seats: "/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}">
-                        <Run Text="{Binding AttendeesCount}"  />
+                        <Run Text="{Binding ScheduledClass.AttendeesCount}"  />
                         <Run Text="/"  />
-                        <Run Text="{Binding MaxPeople}"  />
+                        <Run Text="{Binding ScheduledClass.MaxPeople}"  />
                     </TextBlock>
                         
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.MaxPeople}"/>
+                    
                 
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
@@ -56,7 +59,7 @@
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Created at"/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.CreatedAt}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ScheduledClass.CanBook, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button Foreground="{DynamicResource PrimaryColor}" Content="Add client to classes" Command="{Binding OpenClassBookingAddView}" CommandParameter="{Binding ScheduledClass.Id}"/>
                     
                 </StackPanel>

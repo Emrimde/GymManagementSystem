@@ -14,9 +14,9 @@ public class ClassBookingService : IClassBookingService
     {
         _classBookingRepo = classBookingRepo;
     }
-    public async Task<Result<ClassBookingInfoResponse>> CreateAsync(ClassBookingAddRequest request, CancellationToken cancellationToken)
+    public async Task<Result<ClassBookingInfoResponse>> CreateAsync(ClassBookingAddRequest request)
     {
-        ClassBooking addedClassBooking = await _classBookingRepo.CreateAsync(request.ToClassBooking(), cancellationToken);
+        ClassBooking addedClassBooking = await _classBookingRepo.CreateAsync(request.ToClassBooking());
         return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
     }
 

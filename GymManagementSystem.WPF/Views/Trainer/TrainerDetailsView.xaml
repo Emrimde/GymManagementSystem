@@ -50,6 +50,9 @@
 
                     </TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Set trainer availability" Command="{Binding CreateTrainerAvailability}"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
 

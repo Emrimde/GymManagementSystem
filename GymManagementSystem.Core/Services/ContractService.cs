@@ -16,7 +16,7 @@ public class ContractService<Entity> : IContractService
         _repository = repository;
     }
 
-    public Task<Result<ContractResponse>> CreateAsync(ContractAddRequest entity, CancellationToken cancellationToken)
+    public Task<Result<ContractResponse>> CreateAsync(ContractAddRequest entity)
     {
         throw new NotImplementedException();
     }
@@ -38,22 +38,13 @@ public class ContractService<Entity> : IContractService
         return Result<ContractDetailsResponse>.Success(contract.ToContractDetails(), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ContractResponse>> UpdateAsync(Guid id, ContractUpdateRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<ContractResponse>> UpdateAsync(Guid id, ContractUpdateRequest entity)
     {
-        Contract? contract = await _repository.GetByIdAsync(id, cancellationToken);
-        if (contract == null)
-        {
-            return Result<ContractResponse>.Failure("Error: Contract not found", StatusCodeEnum.NotFound);
-        }
-        contract.ContractStatus = entity.ContractStatus;
-
-        Contract? response = await _repository.UpdateAsync(id, contract, cancellationToken);
+        Contract? response = await _repository.UpdateAsync(id, entity.ToContract());
         if (response == null)
         {
             return Result<ContractResponse>.Failure("Problem with settings", StatusCodeEnum.InternalServerError);
         }
         return Result<ContractResponse>.Success(response.ToContractResponse(), StatusCodeEnum.Ok);
     }
-
-
 }

@@ -12,10 +12,10 @@ public class GymClassRepository : IRepository<GymClass>
     {
         _dbContext = dbContext;
     }
-    public async Task<GymClass> CreateAsync(GymClass entity, CancellationToken cancellationToken)
+    public async Task<GymClass> CreateAsync(GymClass entity)
     {
         _dbContext.GymClasses.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 
@@ -29,7 +29,7 @@ public class GymClassRepository : IRepository<GymClass>
         throw new NotImplementedException();
     }
 
-    public Task<GymClass?> UpdateAsync(Guid id, GymClass entity, CancellationToken cancellationToken)
+    public Task<GymClass?> UpdateAsync(Guid id, GymClass entity)
     {
         throw new NotImplementedException();
     }

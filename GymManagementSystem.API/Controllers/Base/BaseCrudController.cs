@@ -22,11 +22,11 @@ public class BaseCrudController<Response, Request, UpdateRequest,Entity> : BaseC
         => HandleResult(await _service.GetByIdAsync(id, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<Response>> Create([FromBody ]Request entity, CancellationToken cancellationToken) 
-        => HandleResult(await _service.CreateAsync(entity,cancellationToken));
+    public async Task<ActionResult<Response>> Create([FromBody ]Request entity) 
+        => HandleResult(await _service.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<Response>> Update(Guid id, UpdateRequest entity,CancellationToken cancellationToken)
-        => HandleResult(await _service.UpdateAsync(id, entity,cancellationToken));
+    public async Task<ActionResult<Response>> Update(Guid id, UpdateRequest entity)
+        => HandleResult(await _service.UpdateAsync(id, entity));
 
 }

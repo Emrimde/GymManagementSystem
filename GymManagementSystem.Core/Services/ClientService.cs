@@ -23,7 +23,7 @@ public class ClientService<Entity> : IClientService
         return Result<IEnumerable<ClientResponse>>.Success(clientResponseList, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest request)
     {
         if (id == Guid.Empty)
         {
@@ -31,7 +31,7 @@ public class ClientService<Entity> : IClientService
         }
 
         Client client = request.ToClient();
-        Client? updatedClient = await _repository.UpdateAsync(id, client, cancellationToken);
+        Client? updatedClient = await _repository.UpdateAsync(id, client);
 
         if(updatedClient == null)
         {
@@ -43,10 +43,10 @@ public class ClientService<Entity> : IClientService
         return Result<ClientInfoResponse>.Success(clientResponse,StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientInfoResponse>> CreateAsync(ClientAddRequest request, CancellationToken cancellationToken)
+    public async Task<Result<ClientInfoResponse>> CreateAsync(ClientAddRequest request)
     {
        Client client = request.ToClient();
-       Client createdClient = await _repository.CreateAsync(client, cancellationToken);
+       Client createdClient = await _repository.CreateAsync(client);
 
        ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
        return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);

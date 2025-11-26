@@ -14,7 +14,7 @@ public class TerminationRepository : IRepository<Termination>
         _dbContext = dbContext;
     }
 
-    public async Task<Termination?> CreateAsync(Termination entity, CancellationToken cancellationToken)
+    public async Task<Termination?> CreateAsync(Termination entity)
     {
        _dbContext.Terminations.Add(entity);
         await _dbContext.SaveChangesAsync();
@@ -31,7 +31,7 @@ public class TerminationRepository : IRepository<Termination>
         throw new NotImplementedException();
     }
 
-    public Task<Termination?> UpdateAsync(Guid id, Termination entity, CancellationToken cancellationToken)
+    public Task<Termination?> UpdateAsync(Guid id, Termination entity)
     {
         throw new NotImplementedException();
     }

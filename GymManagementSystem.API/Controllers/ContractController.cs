@@ -25,10 +25,10 @@ public class ContractController : BaseController
 
     [HttpPost]
     public async Task<ActionResult<ContractResponse>> Create([FromBody] ContractAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _contractService.CreateAsync(entity, cancellationToken));
+        => HandleResult(await _contractService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<ContractResponse>> Update(Guid id, ContractUpdateRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _contractService.UpdateAsync(id, entity, cancellationToken));
+    public async Task<ActionResult<ContractResponse>> Update(Guid id, ContractUpdateRequest entity)
+        => HandleResult(await _contractService.UpdateAsync(id, entity));
 
 }

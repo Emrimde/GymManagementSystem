@@ -4,5 +4,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
 public interface IScheduledClassRepository : IRepository<ScheduledClass>
 {
-    Task AddRangeAsync(IEnumerable<ScheduledClass> entities, CancellationToken cancellationToken);
+    Task AddRangeAsync(IEnumerable<ScheduledClass> entities);
 }

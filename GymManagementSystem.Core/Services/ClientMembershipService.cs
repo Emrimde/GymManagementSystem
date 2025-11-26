@@ -17,10 +17,10 @@ public class ClientMembershipService<Entity> : IClientMembershipService
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
     }
-    public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
         ClientMembership clientMembership = entity.ToClientMembership();
-        ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership, cancellationToken);
+        ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
         {
             ClientMembershipId = addedClientMembership.Id,
@@ -28,7 +28,7 @@ public class ClientMembershipService<Entity> : IClientMembershipService
             ContractStatus = ContractStatus.Draft,
             IsActive = true
         };
-        Contract createdContract = await _contractRepo.CreateAsync(contract, cancellationToken);
+        Contract createdContract = await _contractRepo.CreateAsync(contract);
         return Result<ClientMembershipInfoResponse>.Success(addedClientMembership.ToClientMembershipInfoResponse(createdContract.Id));
     }
 
@@ -43,7 +43,7 @@ public class ClientMembershipService<Entity> : IClientMembershipService
         throw new NotImplementedException();
     }
 
-    public Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity, CancellationToken cancellationToken)
+    public Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity)
     {
         throw new NotImplementedException();
     }

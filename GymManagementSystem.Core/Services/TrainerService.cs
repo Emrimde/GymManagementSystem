@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Trainer;
+using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -10,16 +11,23 @@ namespace GymManagementSystem.Core.Services;
 
 public class TrainerService : ITrainerService
 {
-    private readonly IRepository<Trainer> _trainerRepo;
-    public TrainerService(IRepository<Trainer> trainerRepo)
+    private readonly ITrainerRepository _trainerRepo;
+    public TrainerService(ITrainerRepository trainerRepo)
     {
         _trainerRepo = trainerRepo;
     }
 
-    public async Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity)
     {
-        Trainer addedTrainer = await _trainerRepo.CreateAsync(entity.ToTrainer(), cancellationToken);
+        Trainer addedTrainer = await _trainerRepo.CreateAsync(entity.ToTrainer());
         return Result<TrainerInfoResponse>.Success(addedTrainer.ToTrainerInfoResponse(), StatusCodeEnum.Ok);
+    }
+
+
+    public async Task<Result<TrainerAvailabilityInfoResponse>> CreateTrainerAvailabilityAsync(TrainerAvailabilityAddRequest entity)
+    {
+        TrainerAvailabilityTemplate addedTrainerAvailability = await _trainerRepo.CreateTrainerAvailabilityAsync(entity.ToTrainerAvailabilityTemplate());
+        return Result<TrainerAvailabilityInfoResponse>.Success(addedTrainerAvailability.ToTrainerAvailabilityInfoResponse(), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<TrainerResponse>>> GetAllAsync(CancellationToken cancellationToken)
@@ -38,7 +46,7 @@ public class TrainerService : ITrainerService
         return Result<TrainerDetailsResponse>.Success(trainer.ToTrainerDetailsResponse(), StatusCodeEnum.Ok);
     }
 
-    public Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity, CancellationToken cancellationToken)
+    public Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity)
     {
         throw new NotImplementedException();
     }

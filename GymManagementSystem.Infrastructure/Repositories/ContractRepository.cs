@@ -20,10 +20,10 @@ public class ContractRepository : IContractRepository
         return await _dbContext.Contracts.FirstOrDefaultAsync(item => item.ContractStatus == ContractStatus.Draft);
     }
 
-    public async Task<Contract> CreateAsync(Contract entity, CancellationToken cancellationToken)
+    public async Task<Contract> CreateAsync(Contract entity)
     {
         _dbContext.Contracts.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync();
         return entity;
     }
 
@@ -35,15 +35,16 @@ public class ContractRepository : IContractRepository
 
     public async Task<Contract?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-       return await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item=> item.Membership).Include(item => item.ClientMembership!.Client).FirstOrDefaultAsync(item => item.Id == id);
+       return await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item=> item.Membership).Include(item => item.ClientMembership!.Client).FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
     }
 
-    public async Task<Contract?> UpdateAsync(Guid id, Contract entity, CancellationToken cancellationToken)
+    public async Task<Contract?> UpdateAsync(Guid id, Contract entity)
     {
+        Contract contract = new Contract { Id = id, ContractStatus = entity.ContractStatus };
+        _dbContext.Attach(contract);
+        _dbContext.Entry(contract).Property(item => item.ContractStatus).IsModified = true;
 
-       
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return entity;
-
+        await _dbContext.SaveChangesAsync();
+        return contract;
     }
 }

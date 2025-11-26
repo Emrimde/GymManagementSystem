@@ -12,7 +12,7 @@ public class ClassBookingRepository : IRepository<ClassBooking>
         _dbContext = dbContext;
     }
 
-    public async Task<ClassBooking> CreateAsync(ClassBooking entity, CancellationToken cancellationToken)
+    public async Task<ClassBooking> CreateAsync(ClassBooking entity)
     {
         _dbContext.Add(entity);
         await _dbContext.SaveChangesAsync();
@@ -29,7 +29,7 @@ public class ClassBookingRepository : IRepository<ClassBooking>
         return await _dbContext.ClassBookings.FirstOrDefaultAsync(item => item.Id == id,cancellationToken);
     }
 
-    public Task<ClassBooking?> UpdateAsync(Guid id, ClassBooking entity, CancellationToken cancellationToken)
+    public Task<ClassBooking?> UpdateAsync(Guid id, ClassBooking entity)
     {
         throw new NotImplementedException();
     }

@@ -37,12 +37,12 @@ public class TerminationService : IServiceReader<TerminationResponse>, IServiceA
             contract.ClientMembership.IsActive = false;
         }
 
-        await _contractRepo.UpdateAsync(contract.Id,contract,cancellationToken);
+        await _contractRepo.UpdateAsync(contract.Id,contract);
         Termination termination = entity.ToTermination();
         //contract.c = true; // czy to nie powinien robic repo contract?
         //termination.ContractId = contract.Id; // to tez?
 
-        Termination createdTermination = await _terminationRepo.CreateAsync(termination,cancellationToken);
+        Termination createdTermination = await _terminationRepo.CreateAsync(termination);
         
         return Result<TerminationResponse>.Success(createdTermination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }
