@@ -9,4 +9,6 @@ public class GeneralGymDetail
     public string PrimaryColor { get; set; } = default!;
     public string BackgroundColor { get; set; } = default!;
     public string SecondColor { get; set; } = default!;
+    public TimeSpan OpenTime { get; set; }
+    public TimeSpan CloseTime { get; set; }
 }

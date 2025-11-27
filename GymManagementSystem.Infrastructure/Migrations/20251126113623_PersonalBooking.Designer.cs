@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251126113623_PersonalBooking")]
+    partial class PersonalBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,9 +178,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("CloseTime")
-                        .HasColumnType("interval");
-
                     b.Property<string>("ContactNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -185,9 +185,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<string>("GymName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<TimeSpan>("OpenTime")
-                        .HasColumnType("interval");
 
                     b.Property<string>("PrimaryColor")
                         .IsRequired()
@@ -204,13 +201,11 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("87043758-7bda-4dcb-96ae-350b821f08e5"),
+                            Id = new Guid("e48c6670-aeb7-4f60-8f5c-e220c8527fd0"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
-                            CloseTime = new TimeSpan(0, 22, 0, 0, 0),
                             ContactNumber = "123456789",
                             GymName = "NextLevelGym",
-                            OpenTime = new TimeSpan(0, 7, 0, 0, 0),
                             PrimaryColor = "#EEEEEE",
                             SecondColor = "#9AAD00"
                         });
@@ -452,7 +447,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasIndex("TrainerId")
                         .IsUnique();
 
-                    b.ToTable("TrainerAvailabilityTemplate");
+                    b.ToTable("TrainerAvailabilityTemplates");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.TrainerTimeOff", b =>

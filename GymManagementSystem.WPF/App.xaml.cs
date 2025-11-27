@@ -14,10 +14,9 @@ using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
-using GymManagementSystem.WPF.ViewModels.TrainerAvailability;
-using GymManagementSystem.WPF.Views.TrainerAvailability;
 using Microsoft.Extensions.DependencyInjection;
 using QuestPDF.Infrastructure;
+using Syncfusion.Licensing;
 using System.Windows;
 using System.Windows.Media;
 
@@ -31,13 +30,15 @@ namespace GymManagementSystem.WPF
         private readonly IServiceProvider _serviceProvider;
         public App()
         {
+
             IServiceCollection services = new ServiceCollection();  
             services.AddSingleton(provider => new MainWindow
             {
                 DataContext = provider.GetRequiredService<MainWindowViewModel>()
             });
 
-            QuestPDF.Settings.License = LicenseType.Community;
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF1cXGFCf1FpRnxbf1x1ZFFMY11bRnBPMyBoS35Rc0RiW3ledHdURGZYVEx2VEFc");
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<RegisterViewModel>();
             services.AddSingleton<DashboardViewModel>();
@@ -58,9 +59,9 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientUpdateViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<TrainerViewModel>();
+            services.AddTransient<TrainerScheduleViewModel>();
             services.AddTransient<TrainerDetailsViewModel>();
             services.AddTransient<TrainerAddViewModel>();
-            services.AddTransient<TrainerAvailabilityAddViewModel>();
             services.AddTransient<GymClassAddViewModel>();
             services.AddTransient<GymClassViewModel>();
             services.AddTransient<ScheduledClassViewModel>();

@@ -51,7 +51,7 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Set trainer availability" Command="{Binding CreateTrainerAvailability}" CommandParameter="{Binding Trainer.Id}"/>
+                    <Button Content="Show schedule" Width="150"  Command="{Binding OpenTrainerScheduleCommand}" CommandParameter="{Binding Trainer.Id}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

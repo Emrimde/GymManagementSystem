@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.Views.Trainer;
 using System.Windows;
 using System.Windows.Input;
 
@@ -45,8 +44,8 @@ public class TrainerAddViewModel : ViewModel
         Result<TrainerInfoResponse> result = await _httpClient.PostTrainerAsync(TrainerAddRequest);
         if (result.IsSuccess) 
         {
-            MessageBox.Show($"Trainer {result.Value!.FirstName + " " + result.Value.LastName} already created");
-            Navigation.NavigateTo<TrainerViewModel>();
+           
+            Navigation.NavigateTo<TrainerDetailsViewModel>(result.Value!.Id);
         }
         else
         {

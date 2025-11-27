@@ -24,8 +24,6 @@
                     xmlns:classbookingview="clr-namespace:GymManagementSystem.WPF.Views.ClassBooking"
                     xmlns:clientMembershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.ClientMembership"
                     xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
-                    xmlns:traineravailabilityvm="clr-namespace:GymManagementSystem.WPF.ViewModels.TrainerAvailability"
-                    xmlns:traineravailabilityview="clr-namespace:GymManagementSystem.WPF.Views.TrainerAvailability"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -91,10 +89,10 @@
                     <DataTemplate DataType="{x:Type trainervm:TrainerDetailsViewModel}">
                         <trainerview:TrainerDetailsView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type traineravailabilityvm:TrainerAvailabilityAddViewModel}">
-                        <traineravailabilityview:TrainerAvailabilityAddView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
+    <DataTemplate DataType="{x:Type trainervm:TrainerScheduleViewModel}">
+        <trainerview:TrainerScheduleView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
                         <gymclassview:GymClassView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type gymclassvm:GymClassAddViewModel}">
@@ -112,4 +110,32 @@
                     <DataTemplate DataType="{x:Type classbookingvm:ClassBookingViewModel}">
                         <classbookingview:ClassBookingView/>
                     </DataTemplate>
+
+
+
+    <DataTemplate x:Key="viewHeaderTemplate">
+        <StackPanel Background="{DynamicResource SecondColor}"  
+        Width="2000"
+        VerticalAlignment="Stretch" 
+        HorizontalAlignment="Stretch"
+        Orientation="Vertical">
+            <TextBlock 
+        HorizontalAlignment="Left" 
+        Margin="20,0,0,0" 
+        Foreground="#FFFFFF"
+        FontFamily="Arial"
+        Text="{Binding DateText}"
+        FontSize="25"
+        TextTrimming="CharacterEllipsis"
+        TextWrapping="Wrap" />
+            <TextBlock 
+        HorizontalAlignment="Left"  Margin="20,0,0,0" 
+        Foreground="#FFFFFF"
+        FontFamily="Arial"
+        Text="{Binding DayText}"
+        FontSize="10"
+        TextTrimming="CharacterEllipsis"
+        TextWrapping="Wrap" />
+        </StackPanel>
+    </DataTemplate>
 </ResourceDictionary>

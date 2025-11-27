@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="GymManagementSystem.WPF.Views.Trainer.TrainerScheduleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Trainer"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ContentControl Grid.Column="0" Content="{Binding SidebarView}"/>
+        <syncfusion:SfScheduler Grid.Column="1" x:Name="Schedule" ViewType="Week" AppointmentEditorOpening="Schedule_AppointmentEditorOpening" ItemsSource="{Binding Events}">
+            <syncfusion:SfScheduler.DaysViewSettings>
+                <syncfusion:DaysViewSettings 
+                    StartHour="7"
+                    EndHour="22"  
+                    TimeIntervalSize="40"
+                    TimeRulerSize="55"
+                    ViewHeaderDayFormat="dddd"
+                    CellRightPadding="20"
+                    ViewHeaderTemplate="{StaticResource viewHeaderTemplate}"
+                     
+                    />
+            </syncfusion:SfScheduler.DaysViewSettings>
+        </syncfusion:SfScheduler>
+    </Grid>
+</UserControl>

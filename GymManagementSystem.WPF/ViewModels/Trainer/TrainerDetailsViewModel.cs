@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.TrainerAvailability;
 using System.Windows;
 using System.Windows.Input;
 
@@ -31,6 +30,7 @@ public class TrainerDetailsViewModel : ViewModel, IParameterReceiver
     }
 
     public ICommand CreateTrainerAvailability { get; }
+    public ICommand OpenTrainerScheduleCommand { get; }
 
     public void ReceiveParameter(object parameter)
     {
@@ -58,6 +58,6 @@ public class TrainerDetailsViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         Trainer = new TrainerDetailsResponse();
-        CreateTrainerAvailability = new RelayCommand(item => Navigation.NavigateTo<TrainerAvailabilityAddViewModel>(item), item => true);
+        OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item), item => true);
     }
 }

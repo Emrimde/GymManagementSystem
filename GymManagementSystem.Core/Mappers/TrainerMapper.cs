@@ -60,6 +60,7 @@ public static class TrainerMapper
     {
         return new TrainerInfoResponse()
         {
+            Id = trainer.Id,
             FirstName = trainer.FirstName,
             LastName = trainer.LastName,
         };

@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<IGeneralGymDetailsService, GeneralGymDetailService>();
         services.AddScoped<ITerminationValidator, TerminationValidatorService>();
         services.AddScoped<ITrainerService, TrainerService>();
+        services.AddScoped<ITrainerScheduleService, TrainerScheduleService>();
         services.AddScoped<IGymClassService, GymClassService>();
         services.AddScoped<IScheduledClassService, ScheduledClassService>();
         services.AddScoped<IClassBookingService, ClassBookingService>();

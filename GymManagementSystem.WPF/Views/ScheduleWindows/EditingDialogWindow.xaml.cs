@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views.TrainerAvailability
+namespace GymManagementSystem.WPF.Views.ScheduleWindows
 {
     /// <summary>
-    /// Logika interakcji dla klasy TrainerAvailabilityAddView.xaml
+    /// Logika interakcji dla klasy EditingDialogWindow.xaml
     /// </summary>
-    public partial class TrainerAvailabilityAddView : UserControl
+    public partial class EditingDialogWindow : Window
     {
-        public TrainerAvailabilityAddView()
+        public EditingDialogWindow()
         {
             InitializeComponent();
         }

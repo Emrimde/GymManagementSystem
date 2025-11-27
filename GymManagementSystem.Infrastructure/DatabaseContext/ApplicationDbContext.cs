@@ -21,7 +21,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<GymClass> GymClasses { get; set; }
     public DbSet<ScheduledClass> ScheduledClasses { get; set; }
     public DbSet<ClassBooking> ClassBookings { get; set; }
-    public DbSet<TrainerAvailabilityTemplate> TrainerAvailabilityTemplates { get; set; }
+    public DbSet<PersonalBooking> PersonalBookings { get; set; }
+    public DbSet<TrainerTimeOff> TrainerTimeOff { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -35,7 +36,9 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 ContactNumber = "123456789",
                 BackgroundColor = "#363740",
                 PrimaryColor = "#EEEEEE",
-                SecondColor = "#9AAD00"
+                SecondColor = "#9AAD00",
+                OpenTime = new TimeSpan(7,0,0),
+                CloseTime = new TimeSpan(22,0,0),
             });
     }
 }

@@ -19,11 +19,21 @@ public class TrainerRepository : ITrainerRepository
        return entity;
     }
 
-    public async Task<TrainerAvailabilityTemplate> CreateTrainerAvailabilityAsync(TrainerAvailabilityTemplate trainerAvailability)
+    public async Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff)
     {
-        _dbContext.TrainerAvailabilityTemplates.Add(trainerAvailability);
+        _dbContext.TrainerTimeOff.Add(trainerTimeOff);
         await _dbContext.SaveChangesAsync();
-        return trainerAvailability;
+        return trainerTimeOff;
+    }
+
+    public Task<bool> AnyOverlapAsync(Guid trainerId, DateTime start, DateTime end)
+    {
+        return _dbContext.TrainerTimeOff
+            .AnyAsync(item =>
+                item.TrainerId == trainerId &&
+                item.Start < end &&
+                item.End > start
+            );
     }
 
     public async Task<IEnumerable<Trainer>> GetAllAsync(CancellationToken cancellationToken)
@@ -33,7 +43,13 @@ public class TrainerRepository : ITrainerRepository
 
     public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
+        return await _dbContext.Trainers.Include(item => item.AvailabilityTemplate).FirstOrDefaultAsync(item => item.Id == id);
+    }
+
+    public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)
+    {
+        IEnumerable<TrainerTimeOff> list = await _dbContext.TrainerTimeOff.ToListAsync();
+        return list;
     }
 
     public Task<Trainer?> UpdateAsync(Guid id, Trainer entity)
