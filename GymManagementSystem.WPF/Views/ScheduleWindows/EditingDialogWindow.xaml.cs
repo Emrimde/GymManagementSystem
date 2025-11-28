@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,17 @@ namespace GymManagementSystem.WPF.Views.ScheduleWindows
         public EditingDialogWindow()
         {
             InitializeComponent();
+            Loaded += (s, e) =>
+            {
+                if (DataContext is EditingDialogWindowViewModel vm)
+                {
+                    vm.CloseRequested += result =>
+                    {
+                        DialogResult = result;
+                        Close();
+                    };
+                }
+            };
         }
     }
 }

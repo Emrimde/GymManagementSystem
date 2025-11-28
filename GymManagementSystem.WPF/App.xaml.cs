@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -125,6 +126,10 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<ClassBookingHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/classBooking/");
+            });
+            services.AddHttpClient<PersonalBookingHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/personalBooking/");
             });
 
             _serviceProvider = services.BuildServiceProvider();

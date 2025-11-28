@@ -1,14 +1,18 @@
-﻿using GymManagementSystem.Core.DTO.Trainer;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
 using Microsoft.Extensions.Logging;
 using Syncfusion.UI.Xaml.Scheduler;
+using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading;
 using System.Windows.Media;
+using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.WPF.HttpServices;
 public class TrainerHttpClient : BaseHttpClientService
@@ -152,7 +156,7 @@ public class TrainerHttpClient : BaseHttpClientService
 
         return Result<TrainerAvailabilityInfoResponse>.Failure($"HTTP Error {response.StatusCode}: {responseBody}");
     }
-    public async Task<Result<TrainerTimeOffInfoResponse>> PostTrainerTimeOff(
+    public async Task<Result<TrainerTimeOff>> PostTrainerTimeOff(
      TrainerTimeOffAddRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("timeoff", request);
@@ -165,8 +169,8 @@ public class TrainerHttpClient : BaseHttpClientService
 
         if (response.IsSuccessStatusCode)
         {
-            var data = JsonSerializer.Deserialize<TrainerTimeOffInfoResponse>(responseBody, options);
-            return Result<TrainerTimeOffInfoResponse>.Success(data!);
+            var data = JsonSerializer.Deserialize<TrainerTimeOff>(responseBody, options);
+            return Result<TrainerTimeOff>.Success(data!);
         }
 
         // Obsługa ProblemDetails (detail)
@@ -184,19 +188,19 @@ public class TrainerHttpClient : BaseHttpClientService
                         .SelectMany(e => e.Value)
                         .ToList();
 
-                    return Result<TrainerTimeOffInfoResponse>.Failure(string.Join("\n", errorMessages!));
+                    return Result<TrainerTimeOff>.Failure(string.Join("\n", errorMessages!));
                 }
 
                 // Standard `ProblemDetails.detail`
                 if (problem.TryGetValue("detail", out var detailElement))
                 {
-                    return Result<TrainerTimeOffInfoResponse>.Failure(detailElement.GetString()!);
+                    return Result<TrainerTimeOff>.Failure(detailElement.GetString()!);
                 }
             }
         }
         catch { }
 
-        return Result<TrainerTimeOffInfoResponse>.Failure($"HTTP Error {response.StatusCode}: {responseBody}");
+        return Result<TrainerTimeOff>.Failure($"HTTP Error {response.StatusCode}: {responseBody}");
     }
 
     public async Task<TrainerScheduleResponse> GetSchedule(Guid trainerId, int days = 30)
@@ -210,5 +214,33 @@ public class TrainerHttpClient : BaseHttpClientService
         return await response.Content.ReadFromJsonAsync<TrainerScheduleResponse>();
     }
 
+    // NOWE
+    public async Task<Result<TrainerTimeOff>> UpdateAsync(Guid id, TrainerTimeOffUpdateRequest dto)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"trainer-timeoff/{id}", dto);
+        
+        string body = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+            return Result<TrainerTimeOff>.Failure(body);
+
+        var data = JsonSerializer.Deserialize<TrainerTimeOff>(body, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        return Result<TrainerTimeOff>.Success(data!);
+    }
+
+    public async Task<Result<bool>> DeleteAsync(Guid id)
+    {
+        var response = await _httpClient.DeleteAsync($"{id}");
+        string body = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+            return Result<bool>.Failure(body);
+
+        return Result<bool>.Success(true);
+    }
 
 }

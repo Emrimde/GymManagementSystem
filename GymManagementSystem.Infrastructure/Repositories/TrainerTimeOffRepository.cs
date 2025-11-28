@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,5 +50,20 @@ public class TrainerTimeOffRepository : ITrainerTimeOffRepository
         _db.TrainerTimeOff.Remove(off);
         await _db.SaveChangesAsync(ct);
         return true;
+    }
+
+    public async Task<TrainerTimeOff> UpdateTrainerOffAsync(Guid id, TrainerTimeOff dto)
+    {
+        var entity = await _db.TrainerTimeOff.FindAsync(id);
+
+        if (entity == null)
+            throw new Exception("Trainer time off not found");
+
+        entity.Start = dto.Start;
+        entity.End = dto.End;
+        entity.Reason = dto.Reason;
+
+        await _db.SaveChangesAsync();
+        return entity;
     }
 }

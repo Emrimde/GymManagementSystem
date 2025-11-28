@@ -1,9 +1,12 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Trainer;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.DTO.TrainerTimeOff;
+using GymManagementSystem.Core.Mappers;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -92,14 +95,30 @@ public class TrainerScheduleService : ITrainerScheduleService
             foreach (var booking in personalBookings.Where(b => DateOnly.FromDateTime(b.Start) == date))
             {
                 Console.WriteLine($"BOOKING MATCHES DAY: {booking.Start} - {booking.End}");
-                items = Split(items, booking.Start, booking.End, TrainerScheduleItemType.Booked, booking.Client?.FirstName);
+                items = Split(
+     items,
+     booking.Start,
+     booking.End,
+     TrainerScheduleItemType.Booked,
+     clientOrReason: booking.Client?.FirstName,
+     timeOffId: null,
+     bookingId: booking.Id
+ );
             }
 
             // TIME-OFF
             foreach (var off in trainerTimeOffs.Where(t => DateOnly.FromDateTime(t.Start) == date))
             {
                 Console.WriteLine($"TIMEOFF MATCHES DAY: {off.Start} - {off.End}");
-                items = Split(items, off.Start, off.End, TrainerScheduleItemType.TimeOff, off.Reason);
+                items = Split(
+    items,
+    off.Start,
+    off.End,
+    TrainerScheduleItemType.TimeOff,
+    clientOrReason: off.Reason,
+    timeOffId: off.Id,
+    bookingId: null
+);
             }
 
             Console.WriteLine("AFTER SPLIT:");
@@ -116,22 +135,27 @@ public class TrainerScheduleService : ITrainerScheduleService
     }
 
     private static List<TrainerScheduleItem> Split(
-        List<TrainerScheduleItem> items,
-        DateTime cutStart,
-        DateTime cutEnd,
-        TrainerScheduleItemType newType,
-        string? clientName = null)
+     List<TrainerScheduleItem> items,
+     DateTime cutStart,
+     DateTime cutEnd,
+     TrainerScheduleItemType newType,
+     string? clientOrReason = null,
+     Guid? timeOffId = null,
+     Guid? bookingId = null)
     {
         var result = new List<TrainerScheduleItem>();
 
-        foreach (TrainerScheduleItem block in items)
+        foreach (var block in items)
         {
-            if (!(cutStart < block.End && cutEnd > block.Start && block.Type != newType))
+            bool overlap = cutStart < block.End && cutEnd > block.Start;
+
+            if (!overlap)
             {
                 result.Add(block);
                 continue;
             }
 
+            // LEFT
             if (block.Start < cutStart)
             {
                 result.Add(new TrainerScheduleItem
@@ -139,11 +163,13 @@ public class TrainerScheduleService : ITrainerScheduleService
                     Start = block.Start,
                     End = cutStart,
                     Type = block.Type,
-                    ClientName = block.ClientName
-
+                    ClientName = block.ClientName,
+                    TimeOffId = block.Type == TrainerScheduleItemType.TimeOff ? block.TimeOffId : null,
+                    BookingId = block.Type == TrainerScheduleItemType.Booked ? block.BookingId : null
                 });
             }
 
+            // MIDDLE (nowy blok)
             var middleStart = Max(block.Start, cutStart);
             var middleEnd = Min(block.End, cutEnd);
 
@@ -152,9 +178,12 @@ public class TrainerScheduleService : ITrainerScheduleService
                 Start = middleStart,
                 End = middleEnd,
                 Type = newType,
-                ClientName = clientName
+                ClientName = clientOrReason,
+                TimeOffId = newType == TrainerScheduleItemType.TimeOff ? timeOffId : null,
+                BookingId = newType == TrainerScheduleItemType.Booked ? bookingId : null
             });
 
+            // RIGHT
             if (block.End > cutEnd)
             {
                 result.Add(new TrainerScheduleItem
@@ -162,7 +191,9 @@ public class TrainerScheduleService : ITrainerScheduleService
                     Start = cutEnd,
                     End = block.End,
                     Type = block.Type,
-                    ClientName = block.ClientName
+                    ClientName = block.ClientName,
+                    TimeOffId = block.Type == TrainerScheduleItemType.TimeOff ? block.TimeOffId : null,
+                    BookingId = block.Type == TrainerScheduleItemType.Booked ? block.BookingId : null
                 });
             }
         }
@@ -170,6 +201,13 @@ public class TrainerScheduleService : ITrainerScheduleService
         return result;
     }
 
+
     private static DateTime Max(DateTime a, DateTime b) => a > b ? a : b;
     private static DateTime Min(DateTime a, DateTime b) => a < b ? a : b;
+
+    public async Task<Result<TrainerTimeOffInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)
+    {
+       TrainerTimeOff trainerTimeOff = await _trainerTimeOffRepo.UpdateTrainerOffAsync(id, entity.ToTrainerTimeOff());
+        return Result<TrainerTimeOffInfoResponse>.Success(trainerTimeOff.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
+    }
 }

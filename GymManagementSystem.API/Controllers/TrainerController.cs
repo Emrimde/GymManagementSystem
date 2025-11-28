@@ -35,6 +35,13 @@ public class TrainerController : BaseController
     public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
         => HandleResult(await _trainerService.UpdateAsync(id, entity));
 
+
+
+
+    [HttpPut("trainer-timeoff/{id:guid}")]
+    public async Task<ActionResult<TrainerInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)
+        => HandleResult(await _trainerScheduleService.UpdateTrainerOff(id, entity));
+
     //[HttpGet("{id:guid}/calendar")]
     //public async Task<ActionResult<TrainerScheduleResponse>> GetSchedule([FromRoute] Guid id,CancellationToken cancellationToken, [FromQuery] int days = 30) => HandleResult(await _trainerAvailabilityService.GetScheduleAsync(id, days, cancellationToken));
 

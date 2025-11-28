@@ -14,6 +14,8 @@
 
     public class TrainerScheduleItem
     {
+        public Guid? TimeOffId { get; set; }
+        public Guid? BookingId { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
