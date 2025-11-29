@@ -8,6 +8,7 @@ using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 using GymManagementSystem.WPF.Views.ScheduleWindows;
 using Syncfusion.UI.Xaml.Scheduler;
+using Syncfusion.Windows.Controls;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -265,8 +266,13 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
         foreach (var day in schedule.Days)
         {
+            
             foreach (var item in day.Items)
             {
+                if(item.Type == TrainerScheduleItemType.Available)
+                {
+                    continue;
+                }
                 var appt = new ScheduleAppointment
                 {
 

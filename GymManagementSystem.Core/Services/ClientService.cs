@@ -71,7 +71,7 @@ public class ClientService<Entity> : IClientService
         return Result<ClientDetailsResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid scheduledClassId)
+    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null)
     {
       IEnumerable<Client> searchedClients = await _repository.LookUpClientsAsync(query, scheduledClassId);
       return Result<IEnumerable<ClientInfoResponse>>.Success(searchedClients.Select(item => item.ToClientInfoResponse()));

@@ -12,10 +12,10 @@ public class PersonalBookingRepository : IPersonalBookingRepository
         _db = db;
     }
 
-    public async Task<PersonalBooking> AddAsync(PersonalBooking entity, CancellationToken ct)
+    public async Task<PersonalBooking> AddAsync(PersonalBooking entity)
     {
-        await _db.PersonalBookings.AddAsync(entity, ct);
-        await _db.SaveChangesAsync(ct);
+        _db.PersonalBookings.Add(entity);
+        await _db.SaveChangesAsync();
         return entity;
     }
 
@@ -31,6 +31,7 @@ public class PersonalBookingRepository : IPersonalBookingRepository
         await _db.SaveChangesAsync(ct);
         return true;
     }
+
 
     public async Task<IEnumerable<PersonalBooking>> GetForRangeAsync(
     Guid trainerId, DateOnly from, DateOnly to, CancellationToken ct)

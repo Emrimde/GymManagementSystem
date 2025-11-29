@@ -51,8 +51,10 @@ public class ClientRepository : IClientRepository
         return client;
     }
 
-    public async Task<IEnumerable<Client>> LookUpClientsAsync(string query, Guid scheduledClassId)
+    public async Task<IEnumerable<Client>> LookUpClientsAsync(string query, Guid? scheduledClassId = null)
     {
+        if(scheduledClassId != null)
+        {
         return await _dbContext.Clients
             .Include(item => item.ClassBookings)
             .Include(item => item.ClientMemberships)
@@ -66,6 +68,20 @@ public class ClientRepository : IClientRepository
             .ThenBy(item => item.FirstName)
             .Take(10)
             .ToListAsync();
+        }
+        return await _dbContext.Clients
+           .Include(item => item.ClassBookings)
+           .Include(item => item.ClientMemberships)
+           .AsNoTracking()
+           .Where(item =>
+               (EF.Functions.Like(item.FirstName, $"%{query}%")
+               || EF.Functions.Like(item.LastName, $"%{query}%"))
+               &&  
+               item.ClientMemberships.Any(item => item.IsActive == true))
+           .OrderBy(item => item.LastName)
+           .ThenBy(item => item.FirstName)
+           .Take(10)
+           .ToListAsync();
     }
 
 }

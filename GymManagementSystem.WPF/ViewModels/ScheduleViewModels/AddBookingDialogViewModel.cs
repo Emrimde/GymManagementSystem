@@ -1,18 +1,67 @@
-﻿using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
+namespace GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 public class AddBookingDialogViewModel : ViewModel
 {
     private readonly Guid _trainerId;
     private readonly PersonalBookingHttpClient _bookingHttp;
     private readonly ClientHttpClient _clientHttp;
 
-    public ObservableCollection<ClientResponse> Clients { get; set; } = new();
-    public ClientResponse? SelectedClient { get; set; }
+    public ObservableCollection<ClientInfoResponse> Clients { get; set; } = new();
+    private ClientInfoResponse _selectedClient;
+
+    public ClientInfoResponse SelectedClient
+    {
+        get { return _selectedClient; }
+        set { _selectedClient = value; OnPropertyChanged(); }
+    }
+    private ClassBookingAddRequest _request;
+
+    private string _searchQuery;
+
+    public string SearchQuery
+    {
+        get { return _searchQuery; }
+        set { _searchQuery = value; OnPropertyChanged(); _ = DebouncedSearchAsync(_searchQuery); }
+    }
+
+    private CancellationTokenSource _debounceCts;
+
+    private async Task DebouncedSearchAsync(string query)
+    {
+        _debounceCts?.Cancel();
+        _debounceCts = new CancellationTokenSource();
+        var token = _debounceCts.Token;
+
+        try
+        {
+            await Task.Delay(350, token);
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                Clients.Clear();
+                return;
+            }
+
+            var results = await _clientHttp.LookUpClients(query, null);
+
+            Clients.Clear();
+            foreach (var r in results.Value!)
+                Clients.Add(r);
+        }
+        catch (TaskCanceledException)
+        {
+        }
+    }
 
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
@@ -32,22 +81,28 @@ public class AddBookingDialogViewModel : ViewModel
 
         SaveCommand = new RelayCommand(_ => Save(), _ => SelectedClient != null);
 
-        _ = LoadClientsAsync();
+        //_ = LoadClientsAsync();
     }
 
-    private async Task LoadClientsAsync()
-    {
-        var result = await _clientHttp.GetAllClientsAsync();
+    //private async Task LoadClientsAsync()
+    //{
+    //    var result = await _clientHttp.GetAllClientsAsync();
        
         
-            foreach (var c in result)
-                Clients.Add(c);
+    //        foreach (var c in result)
+    //            Clients.Add(c);
         
-    }
+    //}
 
     private async void Save()
     {
-        if (SelectedClient == null) return;
+        if (SelectedClient == null)
+        {
+            MessageBox.Show("SelectedClient is NULL");
+            return;
+        }
+
+        MessageBox.Show($"Client ID being sent: {SelectedClient.Id}");
 
         CloseRequested?.Invoke(true);
     }
@@ -58,8 +113,8 @@ public class AddBookingDialogViewModel : ViewModel
         {
             TrainerId = _trainerId,
             ClientId = SelectedClient!.Id,
-            Start = StartTime.ToUniversalTime(),
-            End = EndTime.ToUniversalTime()
+            Start = DateTime.SpecifyKind(StartTime, DateTimeKind.Utc),
+            End = DateTime.SpecifyKind(EndTime, DateTimeKind.Utc),
         };
     }
 }

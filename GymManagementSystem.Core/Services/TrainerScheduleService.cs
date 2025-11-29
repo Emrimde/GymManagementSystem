@@ -1,12 +1,12 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Trainer;
-using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Mappers;
+using GymManagementSystem.Core.DTO.PersonalBooking;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -15,15 +15,20 @@ public class TrainerScheduleService : ITrainerScheduleService
     private readonly IGeneralGymRepository _gymDetailsRepo;
     private readonly IPersonalBookingRepository _personalBookingRepository;
     private readonly ITrainerTimeOffRepository _trainerTimeOffRepo;
+    private readonly ITrainerRepository _trainerRepo;
 
     public TrainerScheduleService(
         IGeneralGymRepository gymDetailsRepo,
         IPersonalBookingRepository personalBookingRepository,
-        ITrainerTimeOffRepository trainerTimeOffRepo)
+        ITrainerTimeOffRepository trainerTimeOffRepo ,
+        ITrainerRepository trainerRepository
+        
+        )
     {
         _gymDetailsRepo = gymDetailsRepo;
         _personalBookingRepository = personalBookingRepository;
         _trainerTimeOffRepo = trainerTimeOffRepo;
+        _trainerRepo = trainerRepository;
     }
 
     public async Task<Result<TrainerScheduleResponse>> GetTrainerScheduleAsync(
@@ -186,6 +191,7 @@ public class TrainerScheduleService : ITrainerScheduleService
             // RIGHT
             if (block.End > cutEnd)
             {
+
                 result.Add(new TrainerScheduleItem
                 {
                     Start = cutEnd,
@@ -207,7 +213,23 @@ public class TrainerScheduleService : ITrainerScheduleService
 
     public async Task<Result<TrainerTimeOffInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)
     {
-       TrainerTimeOff trainerTimeOff = await _trainerTimeOffRepo.UpdateTrainerOffAsync(id, entity.ToTrainerTimeOff());
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, entity.Start, entity.End);
+        if (isOverlap)
+        {
+            return Result<TrainerTimeOffInfoResponse>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
+        }
+        TrainerTimeOff trainerTimeOff = await _trainerTimeOffRepo.UpdateTrainerOffAsync(id, entity.ToTrainerTimeOff());
         return Result<TrainerTimeOffInfoResponse>.Success(trainerTimeOff.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity)
+    {
+        bool isOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(entity.TrainerId, entity.Start, entity.End);
+        if (isOverlap)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure("The time range overlaps an existing personal booking", StatusCodeEnum.BadRequest);
+        }
+        PersonalBooking personalBooking = await _personalBookingRepository.AddAsync(entity.ToPersonalBooking());
+        return Result<PersonalBookingInfoResponse>.Success(personalBooking.ToPersonalBookingInfoResponse(), StatusCodeEnum.Ok);
     }
 }

@@ -26,9 +26,19 @@ public class TrainerRepository : ITrainerRepository
         return trainerTimeOff;
     }
 
-    public Task<bool> AnyOverlapAsync(Guid trainerId, DateTime start, DateTime end)
+    public Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId, DateTime start, DateTime end)
     {
         return _dbContext.TrainerTimeOff
+            .AnyAsync(item =>
+                item.TrainerId == trainerId &&
+                item.Start < end &&
+                item.End > start
+            );
+    }
+
+    public Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end)
+    {
+        return _dbContext.PersonalBookings
             .AnyAsync(item =>
                 item.TrainerId == trainerId &&
                 item.Start < end &&

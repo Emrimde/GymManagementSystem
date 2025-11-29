@@ -26,7 +26,7 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<TrainerTimeOffInfoResponse>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
-        bool isOverlap = await _trainerRepo.AnyOverlapAsync(entity.TrainerId,entity.Start, entity.End);
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId,entity.Start, entity.End);
         if (isOverlap)
         {
             return Result<TrainerTimeOffInfoResponse>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);

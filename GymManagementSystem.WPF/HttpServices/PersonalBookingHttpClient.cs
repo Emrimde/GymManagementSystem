@@ -12,18 +12,18 @@ public class PersonalBookingHttpClient : BaseHttpClientService
     public PersonalBookingHttpClient(HttpClient httpClient) : base(httpClient)
     {
     }
-    public async Task<Result<PersonalBookingResponse>> CreateAsync(PersonalBookingAddRequest dto)
+    public async Task<Result<PersonalBookingInfoResponse>> CreateAsync(PersonalBookingAddRequest dto)
     {
-        var response = await _httpClient.PostAsJsonAsync("", dto);
+        var response = await _httpClient.PostAsJsonAsync("personal-booking", dto);
         var body = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
         {
-            var result = JsonSerializer.Deserialize<PersonalBookingResponse>(body);
-            return Result<PersonalBookingResponse>.Success(result!);
+            var result = JsonSerializer.Deserialize<PersonalBookingInfoResponse>(body);
+            return Result<PersonalBookingInfoResponse>.Success(result!);
         }
 
-        return Result<PersonalBookingResponse>.Failure(body);
+        return Result<PersonalBookingInfoResponse>.Failure(body);
     }
 
     public async Task<Result<bool>> DeleteAsync(Guid id)

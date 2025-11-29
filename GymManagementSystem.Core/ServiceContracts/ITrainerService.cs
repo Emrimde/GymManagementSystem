@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Trainer;
+﻿using GymManagementSystem.Core.DTO.PersonalBooking;
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
 

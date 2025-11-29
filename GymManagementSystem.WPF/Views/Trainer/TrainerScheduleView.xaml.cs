@@ -26,5 +26,23 @@ namespace GymManagementSystem.WPF.Views.Trainer
                 vm.OpenEditorCommand.Execute(e);
             }
         }
+
+        private void Schedule_AppointmentDropping(object sender, AppointmentDroppingEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+
+
+        private void Schedule_AppointmentDeleting(object sender, AppointmentDeletingEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+
+        private void Schedule_AppointmentDragStarting(object sender, AppointmentDragStartingEventArgs e)
+        {
+            e.Cancel = true;
+        }
     }
 }

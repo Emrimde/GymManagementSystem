@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace GymManagementSystem.WPF.Views.ScheduleWindows
 {
@@ -22,6 +13,47 @@ namespace GymManagementSystem.WPF.Views.ScheduleWindows
         public AddBookingDialog()
         {
             InitializeComponent();
+            Loaded += (s, e) =>
+            {
+                if (DataContext is AddBookingDialogViewModel vm)
+                {
+                    vm.CloseRequested += result =>
+                    {
+                        DialogResult = result;
+                        Close();
+                    };
+                }
+            };
+        }
+
+        private void AutoCompleteBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AddBookingDialogViewModel vm &&
+                sender is AutoCompleteBox acb)
+            {
+                // jeśli user edytuje tekst po wybraniu klienta → reset Selected
+                if (vm.SelectedClient != null && acb.Text != vm.SelectedClient.FullName)
+                {
+                    vm.SelectedClient = null;
+                }
+
+                // dopiero wtedy triggerujemy wyszukiwanie
+                vm.SearchQuery = acb.Text;
+            }
+        }
+
+        private void AutoCompleteBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is AddBookingDialogViewModel vm &&
+                sender is AutoCompleteBox acb &&
+                acb.SelectedItem is ClientInfoResponse selected)
+            {
+                // ustawiamy wybranego klienta
+                vm.SelectedClient = selected;
+
+                // po wyborze klienta, wpisujemy jego nazwę i nie szukamy dalej
+                vm.SearchQuery = selected.FullName;
+            }
         }
     }
 }

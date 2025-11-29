@@ -151,7 +151,7 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClients(string query, Guid scheduledClassId)
+    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClients(string query, Guid? scheduledClassId)
     {
         try
         {

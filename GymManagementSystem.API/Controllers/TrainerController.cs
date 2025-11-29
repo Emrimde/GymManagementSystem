@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
@@ -35,23 +36,20 @@ public class TrainerController : BaseController
     public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
         => HandleResult(await _trainerService.UpdateAsync(id, entity));
 
-
-
-
     [HttpPut("trainer-timeoff/{id:guid}")]
     public async Task<ActionResult<TrainerInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)
         => HandleResult(await _trainerScheduleService.UpdateTrainerOff(id, entity));
-
-    //[HttpGet("{id:guid}/calendar")]
-    //public async Task<ActionResult<TrainerScheduleResponse>> GetSchedule([FromRoute] Guid id,CancellationToken cancellationToken, [FromQuery] int days = 30) => HandleResult(await _trainerAvailabilityService.GetScheduleAsync(id, days, cancellationToken));
-
 
     [HttpGet("schedule/{trainerId:guid}")]
     public async Task<ActionResult<TrainerScheduleResponse>> GetSchedule([FromRoute] Guid trainerId, [FromQuery] int days,  CancellationToken cancellationToken) => HandleResult(await _trainerScheduleService.GetTrainerScheduleAsync(trainerId, days, cancellationToken));
 
      [HttpPost("timeoff")]
-    public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerTimeOffAddRequest entity) => HandleResult(await _trainerService.CreateTrainerTimeOffAsync(entity));
+    public async Task<ActionResult<TrainerInfoResponse>> CreateTrainerTimeOff([FromBody] TrainerTimeOffAddRequest entity) => HandleResult(await _trainerService.CreateTrainerTimeOffAsync(entity));
 
      [HttpGet("timeoffs")]
     public async Task<ActionResult<TrainerInfoResponse>> GetTrainerTimeOffs(CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerTimeOffs(cancellationToken));
+
+
+    [HttpPost("personal-booking")]
+    public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _trainerScheduleService.CreatePersonalBookingAsync(entity));
 }
