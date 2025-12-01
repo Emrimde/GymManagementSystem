@@ -10,15 +10,17 @@ using GymManagementSystem.WPF.Views.ScheduleWindows;
 using Syncfusion.UI.Xaml.Scheduler;
 using Syncfusion.Windows.Controls;
 using System;
+
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GymManagementSystem.WPF.ViewModels.Trainer;
 public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 {
     public ScheduleAppointmentCollection Events { get; set; } = new();
     public ICommand OpenEditorCommand { get; }
-
+    public SidebarViewModel SidebarView { get; set; }
     private readonly PersonalBookingHttpClient _bookingHttpClient;
     private readonly ClientHttpClient _clientHttpClient;
     private readonly TrainerHttpClient _trainerHttpClient;
@@ -28,9 +30,10 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     public TrainerScheduleViewModel(
         TrainerHttpClient trainerHttpClient,
         ClientHttpClient clientHttpClient,
-        
+        SidebarViewModel sidebarView,
         PersonalBookingHttpClient bookingHttpClient)
     {
+        SidebarView = sidebarView;
         _trainerHttpClient = trainerHttpClient;
         _bookingHttpClient = bookingHttpClient;
         _clientHttpClient = clientHttpClient;
@@ -138,10 +141,11 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         var start = ResolveStartFromEvent(e);
         var end = start.AddHours(1);
 
-        var vm = new AddingDialogWindowViewModel(_trainerId, _trainerHttpClient);
-        vm.StartTime = start;
-        vm.EndTime = end;
-
+        var vm = new AddingDialogWindowViewModel(
+    _trainerId,
+    _trainerHttpClient,
+    start,
+    end);
         var dialog = new AddingDialogWindow { DataContext = vm };
         if (dialog.ShowDialog() == true)
         {
@@ -244,7 +248,16 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
             await LoadAppointmentsAsync();
         }
     }
+    private readonly Random _rng = new();
 
+    private Color GeneratePastel()
+    {
+        byte r = (byte)_rng.Next(128, 256);
+        byte g = (byte)_rng.Next(128, 256);
+        byte b = (byte)_rng.Next(128, 256);
+
+        return Color.FromArgb(204, r, g, b); // 80% opacity (204)
+    }
     // ---------------------------------------
     private string GetTypeFromAppointment(ScheduleAppointment appt)
     {
@@ -290,9 +303,19 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                         TrainerScheduleItemType.TimeOff => item.TimeOffId,
                         TrainerScheduleItemType.Booked => item.BookingId,
                         _ => Guid.NewGuid()
-                    }
-
+                    },
+                    
+                    
                 };
+                if (item.Type == TrainerScheduleItemType.TimeOff)
+                {
+                    appt.AppointmentBackground =
+                        new SolidColorBrush(System.Windows.Media.Color.FromArgb(204, 0, 180, 0)); // zielony 80%
+                }
+                else if (item.Type == TrainerScheduleItemType.Booked)
+                {
+                    appt.AppointmentBackground = new SolidColorBrush(GeneratePastel());
+                }
 
                 appointments.Add(appt);
             }

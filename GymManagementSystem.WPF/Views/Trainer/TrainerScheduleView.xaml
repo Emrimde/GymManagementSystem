@@ -13,7 +13,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ContentControl Grid.Column="0" Content="{Binding SidebarView}"/>
-        <syncfusion:SfScheduler Grid.Column="1" x:Name="Schedule" ViewType="Week" AppointmentEditorOpening="Schedule_AppointmentEditorOpening" ItemsSource="{Binding Events}"
+        <syncfusion:SfScheduler Grid.Column="1" x:Name="Schedule" ViewType="Week" AppointmentEditorOpening="Schedule_AppointmentEditorOpening" ItemsSource="{Binding Events}" 
             AppointmentEditFlag="Add,Edit"  ShowDatePickerButton="True" 
 >
             <syncfusion:SfScheduler.DaysViewSettings>
