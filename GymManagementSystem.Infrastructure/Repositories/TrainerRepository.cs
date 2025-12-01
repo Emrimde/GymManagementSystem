@@ -53,7 +53,7 @@ public class TrainerRepository : ITrainerRepository
 
     public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Trainers.Include(item => item.AvailabilityTemplate).FirstOrDefaultAsync(item => item.Id == id);
+        return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)

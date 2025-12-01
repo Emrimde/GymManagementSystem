@@ -1,0 +1,24 @@
+﻿
+using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.Employee;
+using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GymManagementSystem.API.Controllers;
+
+public class EmployeeController : BaseController
+{
+    private readonly IEmployeeService _employeeService;
+    public EmployeeController(IEmployeeService employeeService)
+    {
+        _employeeService = employeeService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetAllEmployees(CancellationToken cancellationToken) => HandleListedResult(await _employeeService.GetAllEmployeesAsync(cancellationToken));
+
+    [HttpPost]
+    public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
+    
+}
+

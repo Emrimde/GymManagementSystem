@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IRepository<ClassBooking>, ClassBookingRepository>();
         services.AddScoped<ITrainerTimeOffRepository, TrainerTimeOffRepository>();
         services.AddScoped<IPersonalBookingRepository, PersonalBookingRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         return services;
     }
 }

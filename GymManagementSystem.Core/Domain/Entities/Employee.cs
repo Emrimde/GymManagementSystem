@@ -1,20 +1,18 @@
-﻿namespace GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Enum;
 
-public class Trainer
+namespace GymManagementSystem.Core.Domain.Entities;
+
+public class Employee
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
+    public EmployeeRole EmployeeRole { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
-    public ICollection<PersonalBooking> PersonalBookings { get; set; } = new List<PersonalBooking>();
-    // public Guid? CreatedById { get; set; }
-    //public Guid? UpdatedById { get; set; }
-
-    // Nawigacje
-    //public ICollection<Classes> Classes{ get; set; }
+    public TrainerProfile? TrainerProfile { get; set; }
 }
