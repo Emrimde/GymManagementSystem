@@ -26,6 +26,8 @@
                     xmlns:clientMembershipview="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
                     xmlns:employeevm="clr-namespace:GymManagementSystem.WPF.ViewModels.Employee"
                     xmlns:employeeview="clr-namespace:GymManagementSystem.WPF.Views.Employee"
+                    xmlns:employmenttemplatevm="clr-namespace:GymManagementSystem.WPF.ViewModels.EmploymentTemplate"
+                    xmlns:employmenttemplateview="clr-namespace:GymManagementSystem.WPF.Views.EmploymentTemplate"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -117,6 +119,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type classbookingvm:ClassBookingViewModel}">
                         <classbookingview:ClassBookingView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type employmenttemplatevm:EmploymentTemplateViewModel}">
+                        <employmenttemplateview:EmploymentTemplateView/>
                     </DataTemplate>
 
 
