@@ -9,6 +9,7 @@ using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.Client;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
+using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
@@ -69,6 +70,8 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ScheduledClassDetailsViewModel>();
             services.AddTransient<ClassBookingAddViewModel>();
             services.AddTransient<ClassBookingViewModel>();
+            services.AddTransient<EmployeeViewModel>();
+            services.AddTransient<EmployeeAddViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
@@ -130,6 +133,10 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<PersonalBookingHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/trainer/");
+            });
+            services.AddHttpClient<EmployeeHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/employee/");
             });
 
             _serviceProvider = services.BuildServiceProvider();

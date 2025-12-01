@@ -41,7 +41,7 @@
     Content="Add Employee"
     Width="150"
     Height="30"
-    HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
+    HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddEmployeeViewCommand}" />
             </Grid>
             <Border Grid.Row="1" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding Employees}" x:Name="datagrid" CanUserAddRows="False"
@@ -54,15 +54,13 @@
                         <DataGridTextColumn Header="Last name" Binding="{Binding LastName}"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                         <DataGridTextColumn Header="PhoneNumber" Binding="{Binding PhoneNumber}"/>
-                        <DataGridTextColumn Header="DateOfBirth" Binding="{Binding DateOfBirth}"/>
-                        <DataGridTextColumn Header="Street" Binding="{Binding Street}"/>
-                        <DataGridTextColumn Header="City" Binding="{Binding City}"/>
+                        <DataGridTextColumn Header="EmployeeRole" Binding="{Binding EmployeeRole}"/>
 
                         <DataGridTemplateColumn Header="Details" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-                                    Command="{Binding DataContext.      OpenClientDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
+                                    Command="{Binding DataContext.OpenClientDetailsCommand,RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
                                     CommandParameter="{Binding Id}">
                                     </Button>
                                 </DataTemplate>

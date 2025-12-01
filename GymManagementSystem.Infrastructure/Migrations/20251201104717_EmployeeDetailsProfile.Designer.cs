@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201104717_EmployeeDetailsProfile")]
+    partial class EmployeeDetailsProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,11 +183,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<int>("EmployeeRole")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("EmploymentTemplate")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("EmploymentTemplateId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("EmploymentType")
+                        .HasColumnType("integer");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -206,15 +206,19 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmploymentTemplateId");
-
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", b =>
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentDetailsProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("EffectiveFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EmployeeId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("EmploymentType")
@@ -229,12 +233,12 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<decimal?>("NetRate")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.ToTable("EmploymentTemplates");
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("EmploymentDetailsProfile");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GeneralGymDetail", b =>
@@ -280,7 +284,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3ffdb55d-d0ce-4357-beb3-4e6737c04d17"),
+                            Id = new Guid("7c4b9d8b-b4f7-4fe5-b873-a8c271c585ef"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -790,11 +794,13 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("ClientMembership");
                 });
 
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentDetailsProfile", b =>
                 {
-                    b.HasOne("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("EmploymentTemplateId");
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Employee", null)
+                        .WithOne("EmployeeDetailsProfile")
+                        .HasForeignKey("GymManagementSystem.Core.Domain.Entities.EmploymentDetailsProfile", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GymClass", b =>
@@ -950,12 +956,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Employee", b =>
                 {
-                    b.Navigation("TrainerProfile");
-                });
+                    b.Navigation("EmployeeDetailsProfile");
 
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", b =>
-                {
-                    b.Navigation("Employees");
+                    b.Navigation("TrainerProfile");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>

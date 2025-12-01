@@ -9,4 +9,5 @@ public class EmployeeAddRequest
     public string Email { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
     public EmployeeRole EmployeeRole { get; set; }
+    public EmploymentType EmploymentType { get; set; }
 }

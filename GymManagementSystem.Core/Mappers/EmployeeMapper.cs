@@ -11,8 +11,8 @@ public static class EmployeeMapper
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            EmployeeRole = request.EmployeeRole,
             PhoneNumber = request.PhoneNumber,
+            EmployeeRole = request.EmployeeRole,
         };
     }
 
@@ -31,9 +31,9 @@ public static class EmployeeMapper
             Id = employee.Id,
             FirstName = employee.FirstName,
             LastName = employee.LastName,
-            EmployeeRole = employee.EmployeeRole,
             PhoneNumber = employee.PhoneNumber,
             Email = employee.Email,
+            EmployeeRole = employee.EmployeeRole,
         };
     }
 }

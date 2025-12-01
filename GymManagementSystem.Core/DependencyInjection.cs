@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<IScheduledClassService, ScheduledClassService>();
         services.AddScoped<IClassBookingService, ClassBookingService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<IEmploymentTemplateService, EmploymentTemplateService>();
         return services;
     }
 }

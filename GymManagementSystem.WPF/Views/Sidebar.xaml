@@ -17,6 +17,7 @@
         <Button Content="Gym Classes" Command="{Binding OpenGymClassesView}" Margin="5"/>
         <Button Content="Scheduled Classes" Command="{Binding OpenScheduledClassesView}" Margin="5"/>
         <Button Content="Class Bookings" Command="{Binding OpenClassBookingsView}" Margin="5"/>
+        <Button Content="Employees" Command="{Binding OpenEmployeesView}" Margin="5"/>
         <Button Content="Settings" Command="{Binding OpenSettingsView}" Margin="5"/>
     </StackPanel>
 </UserControl>
