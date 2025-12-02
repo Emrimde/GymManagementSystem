@@ -18,13 +18,9 @@ public class EmployeeService : IEmployeeService
     public async Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request)
     {
         Employee employee = request.ToEmployee();
-        if(employee.EmployeeRole == EmployeeRole.Trainer)
-        {
-            employee.TrainerProfile = new TrainerProfile();
-        }
 
         EmployeeInfoResponse response = await _employeeRepo.CreateEmployeeAsync(employee);
-        return Result<EmployeeInfoResponse>.Success(response,StatusCodeEnum.Ok);
+        return Result<EmployeeInfoResponse>.Success(response, StatusCodeEnum.Ok);
 
     }
 
@@ -32,5 +28,17 @@ public class EmployeeService : IEmployeeService
     {
         IEnumerable<Employee> employees = await _employeeRepo.GetAllEmployeesAsync(cancellationToken);
         return Result<IEnumerable<EmployeeResponse>>.Success(employees.Select(item => item.ToEmployeeResponse()), StatusCodeEnum.Ok);
+    }
+
+    public Result<bool> ValidateEmployee(EmployeeAddRequest request)
+    {
+        if (request.ContractTypeEnum == ContractTypeEnum.Probation)
+        {
+            if (request.ValidFrom > request.ValidTo)
+            {
+                return Result<bool>.Failure("Valid from is newer date than valid to field", StatusCodeEnum.BadRequest);
+            }
+        }
+        return Result<bool>.Success(true);
     }
 }

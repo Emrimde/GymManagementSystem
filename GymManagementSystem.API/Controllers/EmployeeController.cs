@@ -20,5 +20,8 @@ public class EmployeeController : BaseController
     [HttpPost]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
     
+    [HttpPost("validate")]
+    public ActionResult<bool> ValidateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(_employeeService.ValidateEmployee(request));
+    
 }
 

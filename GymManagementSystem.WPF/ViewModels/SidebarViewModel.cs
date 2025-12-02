@@ -4,7 +4,6 @@ using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.Employee;
-using GymManagementSystem.WPF.ViewModels.EmploymentTemplate;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
@@ -58,7 +57,6 @@ public class SidebarViewModel : ViewModel
         OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
         OpenClassBookingsView = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(), item => true);
         OpenEmployeesView = new RelayCommand(item => Navigation.NavigateTo<EmployeeViewModel>(), item => true);
-        OpenEmploymentTemplatesViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmploymentTemplateViewModel>(), item => true);
         
     }
 }

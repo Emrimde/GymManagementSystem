@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views.EmploymentTemplate
+namespace GymManagementSystem.WPF.Views.Employee
 {
     /// <summary>
-    /// Logika interakcji dla klasy EmploymentTemplateView.xaml
+    /// Logika interakcji dla klasy EmployeeDecisionView.xaml
     /// </summary>
-    public partial class EmploymentTemplateView : UserControl
+    public partial class EmployeeDecisionView : UserControl
     {
-        public EmploymentTemplateView()
+        public EmployeeDecisionView()
         {
             InitializeComponent();
         }

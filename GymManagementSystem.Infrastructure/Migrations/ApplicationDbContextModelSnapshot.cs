@@ -167,74 +167,36 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("EmployeeRole")
+                    b.Property<int>("ContractTypeEnum")
                         .HasColumnType("integer");
-
-                    b.Property<Guid>("EmploymentTemplate")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("EmploymentTemplateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmploymentTemplateId");
-
-                    b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
 
                     b.Property<int>("EmploymentType")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("HourlyRate")
+                    b.Property<bool>("IsSigned")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("MonthlySalaryBrutto")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("MonthlySalary")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("NetRate")
-                        .HasColumnType("numeric");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
-                    b.ToTable("EmploymentTemplates");
+                    b.HasIndex("PersonId")
+                        .IsUnique();
+
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GeneralGymDetail", b =>
@@ -280,7 +242,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3ffdb55d-d0ce-4357-beb3-4e6737c04d17"),
+                            Id = new Guid("ace13238-0162-4a93-a696-7d2fa1232879"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -358,6 +320,39 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Memberships");
+                });
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Person", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.PersonalBooking", b =>
@@ -514,9 +509,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
 
                     b.ToTable("TrainerProfiles");
                 });
@@ -792,9 +784,13 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Employee", b =>
                 {
-                    b.HasOne("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("EmploymentTemplateId");
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Person", "Person")
+                        .WithOne("Employee")
+                        .HasForeignKey("GymManagementSystem.Core.Domain.Entities.Employee", "PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GymClass", b =>
@@ -859,15 +855,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Contract");
-                });
-
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.TrainerProfile", b =>
-                {
-                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Employee", null)
-                        .WithOne("TrainerProfile")
-                        .HasForeignKey("GymManagementSystem.Core.Domain.Entities.TrainerProfile", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.TrainerTimeOff", b =>
@@ -948,14 +935,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Person", b =>
                 {
-                    b.Navigation("TrainerProfile");
-                });
-
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.EmploymentTemplate", b =>
-                {
-                    b.Navigation("Employees");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>

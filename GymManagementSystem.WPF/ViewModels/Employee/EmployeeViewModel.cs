@@ -35,7 +35,7 @@ public class EmployeeViewModel : ViewModel
 
     private void OpenAddEmployeeView()
     {
-        Navigation.NavigateTo<EmployeeAddViewModel>();
+        Navigation.NavigateTo<EmployeeDecisionViewModel>();
     }
 
     private async Task LoadEmployees()

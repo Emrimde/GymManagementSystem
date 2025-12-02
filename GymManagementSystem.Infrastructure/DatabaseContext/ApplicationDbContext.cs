@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<PersonalBooking> PersonalBookings { get; set; }
     public DbSet<TrainerTimeOff> TrainerTimeOff { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<EmploymentTemplate> EmploymentTemplates { get; set; }
+    public DbSet<Person> People { get; set; }
     public DbSet<TrainerProfile> TrainerProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -43,5 +43,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 OpenTime = new TimeSpan(7,0,0),
                 CloseTime = new TimeSpan(22,0,0),
             });
+
+
     }
 }

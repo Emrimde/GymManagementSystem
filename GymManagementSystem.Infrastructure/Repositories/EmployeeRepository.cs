@@ -25,8 +25,8 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.Employees
-        .AsNoTracking()
+        return await _dbContext.Employees.AsNoTracking()
+        .Include(item => item.Person)
         .ToListAsync(cancellationToken);
     }
 }

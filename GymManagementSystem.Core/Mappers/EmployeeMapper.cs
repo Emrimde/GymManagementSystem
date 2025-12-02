@@ -8,11 +8,19 @@ public static class EmployeeMapper
     {
         return new Employee()
         {
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            PhoneNumber = request.PhoneNumber,
-            EmployeeRole = request.EmployeeRole,
+            Person = new Person()
+            {
+              FirstName = request.FirstName,
+              LastName = request.LastName,
+              Email = request.Email,
+              PhoneNumber = request.PhoneNumber, 
+            },
+            EmploymentType = request.EmploymentType,
+            Role = request.Role,
+            ContractTypeEnum = request.ContractTypeEnum,
+            MonthlySalaryBrutto = request.MonthlySalaryBrutto,
+            ValidFrom = request.ValidFrom ?? DateTime.UtcNow, 
+            ValidTo = request.ValidTo,
         };
     }
 
@@ -29,11 +37,12 @@ public static class EmployeeMapper
         return new EmployeeResponse()
         {
             Id = employee.Id,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            PhoneNumber = employee.PhoneNumber,
-            Email = employee.Email,
-            EmployeeRole = employee.EmployeeRole,
+            FirstName = employee.Person.FirstName,
+            LastName = employee.Person.LastName,
+            PhoneNumber = employee.Person.PhoneNumber,
+            Email = employee.Person.Email,
+            EmployeeRole = employee.Role,
+            EmploymentType = employee.EmploymentType,
         };
     }
 }

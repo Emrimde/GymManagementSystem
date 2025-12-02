@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class PersonalBookings : Migration
+    public partial class Employee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,12 +14,19 @@ namespace GymManagementSystem.Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "GeneralGymDetails",
                 keyColumn: "Id",
-                keyValue: new Guid("87043758-7bda-4dcb-96ae-350b821f08e5"));
+                keyValue: new Guid("36cc2031-bc9f-46f5-bebb-8842303d66b9"));
+
+            migrationBuilder.AddColumn<int>(
+                name: "ContractTypeEnum",
+                table: "Employees",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.InsertData(
                 table: "GeneralGymDetails",
                 columns: new[] { "Id", "Address", "BackgroundColor", "CloseTime", "ContactNumber", "GymName", "OpenTime", "PrimaryColor", "SecondColor" },
-                values: new object[] { new Guid("50c9c49a-43a3-4a7c-97ea-06c8d98f0916"), "123 Fitness St, Muscle City", "#363740", new TimeSpan(0, 22, 0, 0, 0), "123456789", "NextLevelGym", new TimeSpan(0, 7, 0, 0, 0), "#EEEEEE", "#9AAD00" });
+                values: new object[] { new Guid("bcb48af9-38b2-4577-bc6c-0710129e1a84"), "123 Fitness St, Muscle City", "#363740", new TimeSpan(0, 22, 0, 0, 0), "123456789", "NextLevelGym", new TimeSpan(0, 7, 0, 0, 0), "#EEEEEE", "#9AAD00" });
         }
 
         /// <inheritdoc />
@@ -28,12 +35,16 @@ namespace GymManagementSystem.Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "GeneralGymDetails",
                 keyColumn: "Id",
-                keyValue: new Guid("50c9c49a-43a3-4a7c-97ea-06c8d98f0916"));
+                keyValue: new Guid("bcb48af9-38b2-4577-bc6c-0710129e1a84"));
+
+            migrationBuilder.DropColumn(
+                name: "ContractTypeEnum",
+                table: "Employees");
 
             migrationBuilder.InsertData(
                 table: "GeneralGymDetails",
                 columns: new[] { "Id", "Address", "BackgroundColor", "CloseTime", "ContactNumber", "GymName", "OpenTime", "PrimaryColor", "SecondColor" },
-                values: new object[] { new Guid("87043758-7bda-4dcb-96ae-350b821f08e5"), "123 Fitness St, Muscle City", "#363740", new TimeSpan(0, 22, 0, 0, 0), "123456789", "NextLevelGym", new TimeSpan(0, 7, 0, 0, 0), "#EEEEEE", "#9AAD00" });
+                values: new object[] { new Guid("36cc2031-bc9f-46f5-bebb-8842303d66b9"), "123 Fitness St, Muscle City", "#363740", new TimeSpan(0, 22, 0, 0, 0), "123456789", "NextLevelGym", new TimeSpan(0, 7, 0, 0, 0), "#EEEEEE", "#9AAD00" });
         }
     }
 }
