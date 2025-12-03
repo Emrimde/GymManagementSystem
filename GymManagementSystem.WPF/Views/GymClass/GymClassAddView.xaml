@@ -28,11 +28,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Name" Foreground="White"/>
+                        <TextBlock FontSize="25" Text="Name " Foreground="White"/>
                         <TextBox Text="{Binding GymClassAddRequest.Name}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="150"/>
                     </StackPanel>
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Days Of Week" Foreground="White"/>
+                        <TextBlock FontSize="25" Text="Days Of Week " Foreground="White"/>
                         <ListBox ItemsSource="{Binding DaysOfWeekItems}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -42,27 +42,21 @@
                         </ListBox>
                     </StackPanel>
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Start Hour" Foreground="White"/>
+                        <TextBlock FontSize="25" Text="Start Hour " Foreground="White"/>
                         <TextBox Text="{Binding GymClassAddRequest.StartHour}" VerticalContentAlignment="Center" FontSize="20" Margin="47,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Duration" Foreground="White"/>
-                        <TextBox Text="{Binding GymClassAddRequest.Duration}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="TrainerId" Foreground="White"/>
-                        <TextBox Text="{Binding GymClassAddRequest.TrainerId}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                        <TextBlock FontSize="25" Text="Trainer " Foreground="White"/>
+
+                        <ComboBox Width="150" ItemsSource="{Binding TrainerContracts}" DisplayMemberPath="FullName" SelectedItem="{Binding SelectedTrainerContract}"/>
                     </StackPanel>
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Max People" Foreground="White"/>
+                        <TextBlock FontSize="25" Text="Max People " Foreground="White"/>
                         <TextBox Text="{Binding GymClassAddRequest.MaxPeople}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Price" Foreground="White"/>
-                        <TextBox Text="{Binding GymClassAddRequest.Price}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
-                    </StackPanel>
+
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">

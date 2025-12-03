@@ -6,13 +6,14 @@ public class GymClass
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
-    public Guid TrainerId { get; set; }
+    public Guid? TrainerId { get; set; }
     public Trainer? Trainer { get; set; }
+    public Guid TrainerContractId { get; set; }
+    public TrainerContract? TrainerContract { get; set; }
     public DaysOfWeekFlags DaysOfWeek { get; set; }
     public TimeSpan StartHour { get; set; }
     public TimeSpan Duration { get; set; }
     public int MaxPeople { get; set; }
-    public decimal Price { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

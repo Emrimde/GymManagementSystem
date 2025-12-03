@@ -14,7 +14,6 @@ public static class GymClassMapper
             Duration = gymClass.Duration,
             MaxPeople = gymClass.MaxPeople,
             Name = gymClass.Name,
-            Price = gymClass.Price,
             StartHour = gymClass.StartHour,
             Days = gymClass.DaysOfWeek.ToString()
         };
@@ -32,13 +31,12 @@ public static class GymClassMapper
         return new GymClass()
         {
             Name = gymClass.Name,
-            Duration = gymClass.Duration,
+    
             DaysOfWeek = gymClass.DaysOfWeek,
             StartHour = gymClass.StartHour,
             TrainerId = gymClass.TrainerId,
+            TrainerContractId = gymClass.TrainerContractId,
             MaxPeople = gymClass.MaxPeople,
-            Price = gymClass.Price,
-            
         };
     }
 }

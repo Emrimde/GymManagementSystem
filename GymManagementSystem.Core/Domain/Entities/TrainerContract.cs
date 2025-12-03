@@ -27,4 +27,6 @@ public class TrainerContract
     public Person Person { get; set; } = default!;
     public ICollection<TrainerRate> Rates { get; set; } = new List<TrainerRate>();
     public TrainerProfile? TrainerProfile { get; set; }
+    public ICollection<PersonalBooking> PersonalBookings { get; set; } = new List<PersonalBooking>();
+    public ICollection<GymClass> GymClasses { get; set; } = new List<GymClass>();
 }

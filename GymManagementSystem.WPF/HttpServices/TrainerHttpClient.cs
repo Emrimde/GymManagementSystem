@@ -213,6 +213,21 @@ public class TrainerHttpClient : BaseHttpClientService
         }
     }
 
+    public async Task<Result<ObservableCollection<TrainerContractInfoResponse>>> GetInstructors()
+    {
+        try
+        {
+            ObservableCollection<TrainerContractInfoResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<TrainerContractInfoResponse>>
+            ("instructors");
+            return Result<ObservableCollection<TrainerContractInfoResponse>>.Success(response ?? new ObservableCollection<TrainerContractInfoResponse>());
+
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<ObservableCollection<TrainerContractInfoResponse>>.Failure(ex.Message);
+        }
+    }
+
     public async Task<Result<TrainerContractInfoResponse>> PostTrainerContractAsync(TrainerContractAddRequest request)
     {
         request.ValidFrom = request.ValidFrom?.ToUniversalTime();

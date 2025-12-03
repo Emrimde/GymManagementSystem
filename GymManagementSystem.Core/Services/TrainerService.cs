@@ -139,4 +139,10 @@ public class TrainerService : ITrainerService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllGetAllInstructorsAsync(CancellationToken cancellationToken)
+    {
+       IEnumerable<TrainerContract> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
+       return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractInfoResponse()), StatusCodeEnum.Ok);
+    }
 }

@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203122952_GymClassTrainerCOntractId")]
+    partial class GymClassTrainerCOntractId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +257,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ce4e6fa8-7af3-4038-9e9e-6b9008982d73"),
+                            Id = new Guid("e4a7e3ba-0aa4-4fbe-8499-ee583f6c8ebf"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -294,6 +297,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<TimeSpan>("StartHour")
                         .HasColumnType("interval");
@@ -902,7 +908,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GymClass", b =>
                 {
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.TrainerContract", "TrainerContract")
-                        .WithMany("GymClasses")
+                        .WithMany()
                         .HasForeignKey("TrainerContractId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1100,8 +1106,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.TrainerContract", b =>
                 {
-                    b.Navigation("GymClasses");
-
                     b.Navigation("PersonalBookings");
 
                     b.Navigation("Rates");

@@ -58,6 +58,8 @@ public class TrainerController : BaseController
     public async Task<ActionResult<TrainerContractInfoResponse>> CreateTrainerContract([FromBody] TrainerContractAddRequest entity) => HandleResult(await _trainerService.CreateTrainerContractAsync(entity));
 
     [HttpGet("trainercontracts")]
-    public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllTrainerContracts(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllTrainerContractsAsync(cancellationToken));
+    public async Task<ActionResult<IEnumerable<TrainerContractInfoResponse>>> GetAllTrainerContracts(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllTrainerContractsAsync(cancellationToken));
+    [HttpGet("instructors")]
+    public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllInstructors(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllGetAllInstructorsAsync(cancellationToken));
 
 }

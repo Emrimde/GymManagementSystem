@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.TrainerContract;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -80,5 +81,16 @@ public class TrainerRepository : ITrainerRepository
     public async Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.TrainerContracts.Include(item => item.Person).ToListAsync(cancellationToken);
+    }
+
+
+    public async Task<TrainerContract?> GetTrainerContractAsync(Guid id)
+    {
+        return await _dbContext.TrainerContracts.FirstOrDefaultAsync(item => item.Id == id);
+    }
+
+    public async Task<IEnumerable<TrainerContract>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.TrainerContracts.Where(item => item.TrainerType == TrainerTypeEnum.GroupInstructor).Include(item => item.Person).ToListAsync(cancellationToken);
     }
 }

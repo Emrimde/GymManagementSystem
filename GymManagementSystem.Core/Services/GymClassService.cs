@@ -12,18 +12,45 @@ public class GymClassService : IGymClassService
 {
     private readonly IRepository<GymClass> _gymClassRepo;
     private readonly IScheduledClassRepository _scheduledClassRepo;
-    public GymClassService(IRepository<GymClass> gymClassRepo, IScheduledClassRepository scheduledClassRepo)
+    private readonly ITrainerRepository _trainerRepo;
+    public GymClassService(IRepository<GymClass> gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;
+        _trainerRepo = trainerRepo;
     }
 
-    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
+    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity, CancellationToken cancellationToken)
     {
-       GymClass gymClass = await _gymClassRepo.CreateAsync(entity.ToGymClass());
-       List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(gymClass);
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId);
+        
+
+
+        if(trainerContract == null)
+        {
+            return Result<GymClassInfoResponse>.Failure("Cannot check whether trainer is group instructor", StatusCodeEnum.InternalServerError);
+        }
+
+        if(trainerContract.TrainerType != TrainerTypeEnum.GroupInstructor)
+        {
+            return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved because trainer isn't group instructor", StatusCodeEnum.BadRequest);
+        }
+
+        GymClass gymClass = entity.ToGymClass();
+        gymClass.Duration = new TimeSpan(0, 59, 59);
+        TimeSpan endTime = gymClass.StartHour + gymClass.Duration;
+
+        List<GymClass> gymClasses = (List<GymClass>)await _gymClassRepo.GetAllAsync(cancellationToken);
+
+        if(gymClasses.Any(item => (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 && endTime > item.StartHour && gymClass.StartHour < item.StartHour + item.Duration))
+        {
+            return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
+        }
+
+        GymClass addedGymClass = await _gymClassRepo.CreateAsync(gymClass);
+       List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(addedGymClass);
        await _scheduledClassRepo.AddRangeAsync(scheduledClasses);
-       return Result<GymClassInfoResponse>.Success(gymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
+       return Result<GymClassInfoResponse>.Success(addedGymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
