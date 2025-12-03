@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.TrainerContract;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
@@ -8,4 +9,6 @@ public interface ITrainerRepository : IRepository<Trainer>
     Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff);
     Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken);
     Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end);
+    Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract);
+    Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken);
 }

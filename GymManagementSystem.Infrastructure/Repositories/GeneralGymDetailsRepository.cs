@@ -13,9 +13,9 @@ public class GeneralGymDetailsRepository : IGeneralGymRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<GeneralGymDetail?> GetGeneralGymDetailsAsync(CancellationToken cancellationToken)
+    public async Task<GeneralGymDetail?> GetGeneralGymDetailsAsync()
     {
-        return await _dbContext.GeneralGymDetails.FirstOrDefaultAsync(cancellationToken);
+        return await _dbContext.GeneralGymDetails.FirstOrDefaultAsync();
     }
 
     public async Task<GeneralGymDetail?> UpdateSettingsAsync(GeneralGymUpdateRequest updatedGeneralSettings)

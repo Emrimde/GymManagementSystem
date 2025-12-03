@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203070850_TrAinerContract")]
+    partial class TrAinerContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,9 +223,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("DefaultGroupClassRate")
-                        .HasColumnType("numeric");
-
                     b.Property<decimal>("DefaultRate120")
                         .HasColumnType("numeric");
 
@@ -254,12 +254,11 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("297e9dfd-8843-4d0a-97b6-b031a57bb64a"),
+                            Id = new Guid("03fd7d94-684e-4bce-bc92-e4fcd73254e4"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
                             ContactNumber = "123456789",
-                            DefaultGroupClassRate = 0m,
                             DefaultRate120 = 150m,
                             DefaultRate60 = 100m,
                             DefaultRate90 = 120m,
@@ -551,9 +550,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid?>("TrainerProfileId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TrainerType")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("ValidFrom")
                         .HasColumnType("timestamp with time zone");
 
@@ -590,7 +586,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("DurationInMinutes")
+                    b.Property<int>("DurationInMinutes")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("RatePerSessions")

@@ -67,7 +67,7 @@ public class TrainerScheduleService : ITrainerScheduleService
         // 2) USUWAMY CAŁĄ KONWERSJĘ UTC → LOCAL
 
         // 3) Pobranie godzin otwarcia
-        var details = await _gymDetailsRepo.GetGeneralGymDetailsAsync(cancellationToken);
+        var details = await _gymDetailsRepo.GetGeneralGymDetailsAsync();
         if (details == null)
             return Result<TrainerScheduleResponse>.Failure("Details about gym not found", StatusCodeEnum.NotFound);
 

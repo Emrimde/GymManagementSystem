@@ -26,6 +26,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Person> People { get; set; }
     public DbSet<TrainerProfile> TrainerProfiles { get; set; }
+    public DbSet<TrainerRate> TrainerRates { get; set; }
+    public DbSet<TrainerContract> TrainerContracts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -42,6 +44,9 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 SecondColor = "#9AAD00",
                 OpenTime = new TimeSpan(7,0,0),
                 CloseTime = new TimeSpan(22,0,0),
+                DefaultRate60 = 100m,
+                DefaultRate120 = 150m,
+                DefaultRate90 = 120m
             });
 
 

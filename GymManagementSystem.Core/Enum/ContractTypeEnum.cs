@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace GymManagementSystem.Core.Enum;
-
+// typ umowy do generowania 
 public enum ContractTypeEnum
 {
     [Display(Name = "Probation")]
     Probation,
 
-    [Display(Name = "Czas nieokreślony")]
+    [Display(Name = "Permanent")]
     Permanent,
 
     [Display(Name = "Fixed Term")]

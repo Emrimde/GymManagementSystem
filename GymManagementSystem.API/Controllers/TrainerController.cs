@@ -1,8 +1,8 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
+using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,4 +52,12 @@ public class TrainerController : BaseController
 
     [HttpPost("personal-booking")]
     public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _trainerScheduleService.CreatePersonalBookingAsync(entity));
+
+
+    [HttpPost("trainercontract")]
+    public async Task<ActionResult<TrainerContractInfoResponse>> CreateTrainerContract([FromBody] TrainerContractAddRequest entity) => HandleResult(await _trainerService.CreateTrainerContractAsync(entity));
+
+    [HttpGet("trainercontracts")]
+    public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllTrainerContracts(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllTrainerContractsAsync(cancellationToken));
+
 }

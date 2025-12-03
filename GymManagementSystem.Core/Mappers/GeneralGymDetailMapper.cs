@@ -15,7 +15,12 @@ public static class GeneralGymDetailMapper
             ContactNumber = generalGymDetail.ContactNumber,
             BackgroundColor = generalGymDetail.BackgroundColor,
             PrimaryColor = generalGymDetail.PrimaryColor,
-            SecondColor = generalGymDetail.SecondColor
+            SecondColor = generalGymDetail.SecondColor,
+            DefaultRate90 = generalGymDetail.DefaultRate90,
+            DefaultRate120 = generalGymDetail.DefaultRate120,
+            DefaultRate60 = generalGymDetail.DefaultRate60,
+
+
         };
     }
 
@@ -28,7 +33,10 @@ public static class GeneralGymDetailMapper
             ContactNumber = generalGymUpdateRequest.ContactNumber,
             BackgroundColor = generalGymUpdateRequest.BackgroundColor,
             PrimaryColor = generalGymUpdateRequest.PrimaryColor,
-            SecondColor = generalGymUpdateRequest.SecondColor
+            SecondColor = generalGymUpdateRequest.SecondColor,
+            DefaultRate60 = generalGymUpdateRequest.DefaultRate60,
+            DefaultRate120 = generalGymUpdateRequest.DefaultRate120,
+            DefaultRate90 = generalGymUpdateRequest.DefaultRate90
         };
     }
 }

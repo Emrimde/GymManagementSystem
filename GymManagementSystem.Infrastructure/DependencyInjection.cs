@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<ITrainerTimeOffRepository, TrainerTimeOffRepository>();
         services.AddScoped<IPersonalBookingRepository, PersonalBookingRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<ITrainerRateRepository, TrainerRateRepository>();
        
         return services;
     }

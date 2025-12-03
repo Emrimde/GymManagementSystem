@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203081825_TrainerRates")]
+    partial class TrainerRates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +257,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("297e9dfd-8843-4d0a-97b6-b031a57bb64a"),
+                            Id = new Guid("519bde87-5d22-4d63-9836-d5f128a13636"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -551,9 +554,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid?>("TrainerProfileId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TrainerType")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("ValidFrom")
                         .HasColumnType("timestamp with time zone");
 
@@ -595,6 +595,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<decimal>("RatePerSessions")
                         .HasColumnType("numeric");
+
+                    b.Property<int>("RateType")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("TrainerContractId")
                         .HasColumnType("uuid");

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace GymManagementSystem.Core.DTO.GeneralGymDetail;
 
-namespace GymManagementSystem.Core.DTO.GeneralGymDetail
+public class GeneralGymUpdateRequest
 {
-    public class GeneralGymUpdateRequest
-    {
-        public string GymName { get; set; } = default!;
-        public string Address { get; set; } = default!;
-        public string ContactNumber { get; set; } = default!;
-        public string PrimaryColor { get; set; } = default!;
-        public string BackgroundColor { get; set; } = default!;
-        public string SecondColor { get; set; } = default!;
-    }
+    public string GymName { get; set; } = default!;
+    public string Address { get; set; } = default!;
+    public string ContactNumber { get; set; } = default!;
+    public string PrimaryColor { get; set; } = default!;
+    public string BackgroundColor { get; set; } = default!;
+    public string SecondColor { get; set; } = default!;
+    public decimal DefaultRate60 { get; set; }
+    public decimal DefaultRate90 { get; set; }
+    public decimal DefaultRate120 { get; set; }
 }

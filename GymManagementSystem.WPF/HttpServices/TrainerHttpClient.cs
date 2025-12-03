@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.DTO.Trainer;
-using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
+using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ public class TrainerHttpClient : BaseHttpClientService
         else
         {
 
-            string errorMessage = responseBody; 
+            string errorMessage = responseBody;
 
             try
             {
@@ -97,12 +98,12 @@ public class TrainerHttpClient : BaseHttpClientService
         try
         {
             TrainerDetailsResponse? trainer = await _httpClient.GetFromJsonAsync<TrainerDetailsResponse>($"{trainerId}");
-            if(trainer == null)
+            if (trainer == null)
             {
                 return Result<TrainerDetailsResponse>.Failure("Unexpected error");
             }
             return Result<TrainerDetailsResponse>.Success(trainer);
-            
+
         }
         catch (HttpRequestException ex)
         {
@@ -110,52 +111,6 @@ public class TrainerHttpClient : BaseHttpClientService
         }
     }
 
-    public async Task<Result<TrainerAvailabilityInfoResponse>> PostTrainerAvailabilityAsync(
-     TrainerAvailabilityAddRequest request)
-    {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("availability-template", request);
-        string responseBody = await response.Content.ReadAsStringAsync();
-
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        if (response.IsSuccessStatusCode)
-        {
-            var data = JsonSerializer.Deserialize<TrainerAvailabilityInfoResponse>(responseBody, options);
-            return Result<TrainerAvailabilityInfoResponse>.Success(data!);
-        }
-
-        // Obsługa ProblemDetails (detail)
-        try
-        {
-            var problem = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody, options);
-
-            if (problem != null)
-            {
-                // Błędy walidacyjne (.NET standard 422)
-                if (problem.TryGetValue("errors", out var errorsElement))
-                {
-                    var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), options);
-                    var errorMessages = errors?
-                        .SelectMany(e => e.Value)
-                        .ToList();
-
-                    return Result<TrainerAvailabilityInfoResponse>.Failure(string.Join("\n", errorMessages!));
-                }
-
-                // Standard `ProblemDetails.detail`
-                if (problem.TryGetValue("detail", out var detailElement))
-                {
-                    return Result<TrainerAvailabilityInfoResponse>.Failure(detailElement.GetString()!);
-                }
-            }
-        }
-        catch { }
-
-        return Result<TrainerAvailabilityInfoResponse>.Failure($"HTTP Error {response.StatusCode}: {responseBody}");
-    }
     public async Task<Result<TrainerTimeOff>> PostTrainerTimeOff(
      TrainerTimeOffAddRequest request)
     {
@@ -207,7 +162,7 @@ public class TrainerHttpClient : BaseHttpClientService
     {
         var response = await _httpClient.GetAsync(
             $"schedule/{trainerId}?days={days}");
-        
+
         // możesz mieć swój Result pattern, to przykład:
         //response.EnsureSuccessStatusCode();
 
@@ -218,7 +173,7 @@ public class TrainerHttpClient : BaseHttpClientService
     public async Task<Result<TrainerTimeOff>> UpdateAsync(Guid id, TrainerTimeOffUpdateRequest dto)
     {
         var response = await _httpClient.PutAsJsonAsync($"trainer-timeoff/{id}", dto);
-        
+
         string body = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
@@ -243,4 +198,59 @@ public class TrainerHttpClient : BaseHttpClientService
         return Result<bool>.Success(true);
     }
 
+    public async Task<Result<ObservableCollection<TrainerContractResponse>>> GetTrainerContracts()
+    {
+        try
+        {
+            ObservableCollection<TrainerContractResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<TrainerContractResponse>>
+            ("trainercontracts");
+            return Result<ObservableCollection<TrainerContractResponse>>.Success(response ?? new ObservableCollection<TrainerContractResponse>());
+
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<ObservableCollection<TrainerContractResponse>>.Failure(ex.Message);
+        }
+    }
+
+    public async Task<Result<TrainerContractInfoResponse>> PostTrainerContractAsync(TrainerContractAddRequest request)
+    {
+        request.ValidFrom = request.ValidFrom?.ToUniversalTime();
+        request.ValidTo = request.ValidTo?.ToUniversalTime();
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("trainercontract", request);
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            TrainerContractInfoResponse? employee = JsonSerializer.Deserialize<TrainerContractInfoResponse>(responseBody);
+            if (employee == null)
+            {
+                return Result<TrainerContractInfoResponse>.Failure("Unexpected employee");
+            }
+            return Result<TrainerContractInfoResponse>.Success(employee);
+        }
+
+        Dictionary<string, JsonElement>? errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+        if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+        {
+            string errorMessage = detailElement.ToString();
+            return Result<TrainerContractInfoResponse>.Failure(errorMessage);
+        }
+        if (errorDict != null && errorDict.TryGetValue("errors", out var errorsElement))
+        {
+            List<string> allErrors = new List<string>();
+            foreach (var errorProp in errorsElement.EnumerateObject())
+            {
+                var messages = errorProp.Value.EnumerateArray();
+                foreach (var item in messages)
+                {
+                    string msg = item.ToString();
+                    allErrors.Add(msg);
+                }
+            }
+            return Result<TrainerContractInfoResponse>.Failure(string.Join("\n", allErrors));
+        }
+
+        return Result<TrainerContractInfoResponse>.Failure("Something went wrong.");
+    }
 }

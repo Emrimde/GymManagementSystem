@@ -12,4 +12,5 @@ public class Person
     public DateTime UpdatedAt = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
     public Employee? Employee { get; set; }
+    public TrainerContract? TrainerContract{ get; set; }
 }

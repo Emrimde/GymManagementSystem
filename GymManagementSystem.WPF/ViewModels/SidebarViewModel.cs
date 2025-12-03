@@ -10,6 +10,7 @@ using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
+using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels;
@@ -29,7 +30,7 @@ public class SidebarViewModel : ViewModel
     public ICommand OpenScheduledClassesView { get;  }
     public ICommand OpenClassBookingsView { get;  }
     public ICommand OpenEmployeesView { get; }
-    public ICommand OpenEmploymentTemplatesViewCommand { get; }
+    public ICommand OpenTrainerContractsView { get; }
 
     private INavigationService _navigation;
     public INavigationService Navigation
@@ -57,6 +58,7 @@ public class SidebarViewModel : ViewModel
         OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
         OpenClassBookingsView = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(), item => true);
         OpenEmployeesView = new RelayCommand(item => Navigation.NavigateTo<EmployeeViewModel>(), item => true);
+        OpenTrainerContractsView = new RelayCommand(item => Navigation.NavigateTo<TrainerContractViewModel>(), item => true);
         
     }
 }

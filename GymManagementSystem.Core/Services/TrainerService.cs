@@ -1,27 +1,98 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Trainer;
-using GymManagementSystem.Core.DTO.TrainerAvailabilityTemplate;
+
+using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using System.CodeDom.Compiler;
+using System.Threading.Tasks;
 
 namespace GymManagementSystem.Core.Services;
 
 public class TrainerService : ITrainerService
 {
     private readonly ITrainerRepository _trainerRepo;
-    public TrainerService(ITrainerRepository trainerRepo)
+    private readonly IGeneralGymRepository _generalGymRepo;
+    private readonly ITrainerRateRepository _trainerRateRepo;
+    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo)
     {
         _trainerRepo = trainerRepo;
+        _generalGymRepo = generalGymRepo;
+        _trainerRateRepo = trainerRateRepo;
     }
 
     public async Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity)
     {
         Trainer addedTrainer = await _trainerRepo.CreateAsync(entity.ToTrainer());
         return Result<TrainerInfoResponse>.Success(addedTrainer.ToTrainerInfoResponse(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity)
+    {
+        TrainerContract trainer = entity.ToTrainerContract();
+        var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
+       
+        TrainerContractInfoResponse trainerContract = await _trainerRepo.CreateTrainerContractAsync(entity.ToTrainerContract());
+        await GeneratedTrainerRates(trainer, trainerContract,settings!);
+        return Result<TrainerContractInfoResponse>.Success(trainerContract, StatusCodeEnum.Ok);
+    }
+
+    private async Task GeneratedTrainerRates(TrainerContract trainer, TrainerContractInfoResponse trainerContract,GeneralGymDetail generalGymDetail)
+    {
+        List<TrainerRate> rates = new List<TrainerRate>();
+
+        if (trainer.TrainerType == TrainerTypeEnum.PersonalTrainer)
+        {
+
+            TrainerRate trainerRate60 = new TrainerRate()
+            {
+                TrainerContractId = trainerContract.Id,
+                DurationInMinutes = 60,
+                RatePerSessions = generalGymDetail.DefaultRate60,
+                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
+                ValidTo = trainer?.ValidTo ?? null,
+            };
+            TrainerRate trainerRate90 = new TrainerRate()
+            {
+                TrainerContractId = trainerContract.Id,
+                DurationInMinutes = 90,
+                RatePerSessions = generalGymDetail.DefaultRate60,
+                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
+                ValidTo = trainer?.ValidTo ?? null,
+            };
+            TrainerRate trainerRate120 = new TrainerRate()
+            {
+                TrainerContractId = trainerContract.Id,
+                DurationInMinutes = 120,
+                RatePerSessions = generalGymDetail.DefaultRate60,
+                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
+                ValidTo = trainer?.ValidTo ?? null,
+            };
+
+            rates.Add(trainerRate60);
+            rates.Add(trainerRate90);
+            rates.Add(trainerRate120);
+           
+
+        }
+        else if(trainer.TrainerType == TrainerTypeEnum.GroupInstructor)
+        {
+            TrainerRate trainerRate = new TrainerRate()
+            {
+                TrainerContractId = trainerContract.Id,
+                DurationInMinutes = 60,
+                RatePerSessions = generalGymDetail.DefaultGroupClassRate,
+                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
+                ValidTo = trainer?.ValidTo ?? null,
+            };
+            rates.Add(trainerRate);
+        }
+
+        await _trainerRateRepo.AddRangeAsync(rates);
     }
 
     public async Task<Result<TrainerTimeOffInfoResponse>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
@@ -40,6 +111,12 @@ public class TrainerService : ITrainerService
     {
         IEnumerable<Trainer> trainers = await _trainerRepo.GetAllAsync(cancellationToken);
         return Result<IEnumerable<TrainerResponse>>.Success(trainers.Select(item => item.ToTrainerResponse()), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<TrainerContractResponse>>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
+    {
+        IEnumerable<TrainerContract> trainerContracts = await _trainerRepo.GetAllTrainerContractsAsync(cancellationToken);
+        return Result<IEnumerable<TrainerContractResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractResponse()), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<TrainerDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)

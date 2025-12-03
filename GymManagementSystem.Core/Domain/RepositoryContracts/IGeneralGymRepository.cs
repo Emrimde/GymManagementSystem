@@ -5,6 +5,6 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
 public interface IGeneralGymRepository
 {
-    Task<GeneralGymDetail?> GetGeneralGymDetailsAsync(CancellationToken cancellationToken);
+    Task<GeneralGymDetail?> GetGeneralGymDetailsAsync();
     Task<GeneralGymDetail> UpdateSettingsAsync(GeneralGymUpdateRequest request);
 }

@@ -9,4 +9,7 @@ public class GeneralGymResponse
     public string PrimaryColor { get; set; } = default!;
     public string BackgroundColor { get; set; } = default!;
     public string SecondColor { get; set; } = default!;
+    public decimal DefaultRate60 { get; set; }
+    public decimal DefaultRate90 { get; set; }
+    public decimal DefaultRate120 { get; set; }
 }

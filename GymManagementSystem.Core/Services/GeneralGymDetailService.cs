@@ -19,7 +19,7 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
 
     public async Task<Result<GeneralGymResponse>> GetSettingsByIdAsync(CancellationToken cancellationToken)
     {
-        GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync(cancellationToken);
+        GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
         if(generalGymDetail == null)
         {
             return Result<GeneralGymResponse>.Failure($"General gym detail not found");

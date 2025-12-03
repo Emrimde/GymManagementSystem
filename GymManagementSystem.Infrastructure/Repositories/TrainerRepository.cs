@@ -1,5 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.TrainerContract;
+using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,5 +67,18 @@ public class TrainerRepository : ITrainerRepository
     public Task<Trainer?> UpdateAsync(Guid id, Trainer entity)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract)
+    {
+        _dbContext.TrainerContracts.Add(trainerContract);
+        await _dbContext.SaveChangesAsync();
+        return trainerContract.ToTrainerContractInfoResponse();
+
+    }
+
+    public async Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.TrainerContracts.Include(item => item.Person).ToListAsync(cancellationToken);
     }
 }
