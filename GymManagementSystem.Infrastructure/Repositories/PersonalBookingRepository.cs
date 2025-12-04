@@ -50,7 +50,7 @@ public class PersonalBookingRepository : IPersonalBookingRepository
             .AsNoTracking()
             .Include(p => p.Client)
             .Where(item =>
-                item.TrainerId == trainerId &&
+                item.TrainerContractId == trainerId &&
                 item.Status == BookingStatus.Booked &&
                 item.Start >= start &&
                 item.Start < end)

@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Trainer;
+using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Employee;
@@ -14,7 +15,7 @@ public class EmployeeDecisionViewModel : ViewModel
         Navigation = navigation;
         SidebarView = sidebarView;
         OpenEmployeeAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmployeeAddViewModel>(), item => true);
-        OpenTrainerAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerAddViewModel>(), item => true);
+        OpenTrainerAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerContractAddViewModel>(), item => true);
     }
 
     public INavigationService Navigation

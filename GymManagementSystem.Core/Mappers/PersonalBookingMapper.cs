@@ -13,7 +13,7 @@ public static class PersonalBookingMapper
     {
         return new PersonalBooking()
         {
-            TrainerId = personalBooking.TrainerId,
+            TrainerContractId = personalBooking.TrainerId,
             ClientId = personalBooking.ClientId,
             Start = personalBooking.Start,
             End = personalBooking.End

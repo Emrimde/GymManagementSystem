@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Trainer;
 
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
@@ -8,8 +7,6 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using System.CodeDom.Compiler;
-using System.Threading.Tasks;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -25,11 +22,11 @@ public class TrainerService : ITrainerService
         _trainerRateRepo = trainerRateRepo;
     }
 
-    public async Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity)
-    {
-        Trainer addedTrainer = await _trainerRepo.CreateAsync(entity.ToTrainer());
-        return Result<TrainerInfoResponse>.Success(addedTrainer.ToTrainerInfoResponse(), StatusCodeEnum.Ok);
-    }
+    //public async Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity)
+    //{
+    //    Trainer addedTrainer = await _trainerRepo.CreateAsync(entity.ToTrainer());
+    //    return Result<TrainerInfoResponse>.Success(addedTrainer.ToTrainerInfoResponse(), StatusCodeEnum.Ok);
+    //}
 
     public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity)
     {
@@ -97,7 +94,7 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<TrainerTimeOffInfoResponse>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
-        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId,entity.Start, entity.End);
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null ,entity.Start, entity.End);
         if (isOverlap)
         {
             return Result<TrainerTimeOffInfoResponse>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
@@ -107,11 +104,11 @@ public class TrainerService : ITrainerService
         return Result<TrainerTimeOffInfoResponse>.Success(addedTrainerAvailability.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<TrainerResponse>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        IEnumerable<Trainer> trainers = await _trainerRepo.GetAllAsync(cancellationToken);
-        return Result<IEnumerable<TrainerResponse>>.Success(trainers.Select(item => item.ToTrainerResponse()), StatusCodeEnum.Ok);
-    }
+    //public async Task<Result<IEnumerable<TrainerResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    //{
+    //    IEnumerable<Trainer> trainers = await _trainerRepo.GetAllAsync(cancellationToken);
+    //    return Result<IEnumerable<TrainerResponse>>.Success(trainers.Select(item => item.ToTrainerResponse()), StatusCodeEnum.Ok);
+    //}
 
     public async Task<Result<IEnumerable<TrainerContractResponse>>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
     {
@@ -119,15 +116,15 @@ public class TrainerService : ITrainerService
         return Result<IEnumerable<TrainerContractResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractResponse()), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<TrainerDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        Trainer? trainer = await _trainerRepo.GetByIdAsync(id, cancellationToken);
-        if (trainer == null)
-        {
-            return Result<TrainerDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
-        }
-        return Result<TrainerDetailsResponse>.Success(trainer.ToTrainerDetailsResponse(), StatusCodeEnum.Ok);
-    }
+    //public async Task<Result<TrainerDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    //{
+    //    Trainer? trainer = await _trainerRepo.GetByIdAsync(id, cancellationToken);
+    //    if (trainer == null)
+    //    {
+    //        return Result<TrainerDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
+    //    }
+    //    return Result<TrainerDetailsResponse>.Success(trainer.ToTrainerDetailsResponse(), StatusCodeEnum.Ok);
+    //}
 
     public async Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
@@ -135,10 +132,10 @@ public class TrainerService : ITrainerService
       return Result<IEnumerable<TrainerTimeOffInfoResponse>>.Success(timeOffs.Select(item => item.ToTrainerTimeOffInfoResponse()), StatusCodeEnum.Ok);
     }
 
-    public Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity)
-    {
-        throw new NotImplementedException();
-    }
+    //public Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllGetAllInstructorsAsync(CancellationToken cancellationToken)
     {

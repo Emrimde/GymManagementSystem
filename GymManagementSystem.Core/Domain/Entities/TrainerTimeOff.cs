@@ -6,6 +6,6 @@ public class TrainerTimeOff
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public string? Reason { get; set; }
-    public Trainer? Trainer { get; set; }
+    public TrainerContract? Trainer { get; set; }
 }
 

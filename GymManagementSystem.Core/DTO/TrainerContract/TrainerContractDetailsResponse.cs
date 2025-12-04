@@ -8,9 +8,7 @@ public class TrainerContractDetailsResponse
     public ContractTypeEnum ContractType { get; set; } 
     public TrainerTypeEnum TrainerType { get; set; }
     // Rozliczenia
-    public string ClubCommissionPercent { get; set; }
-    public DateTime ValidFrom { get; set; }
-    public DateTime? ValidTo { get; set; }
+    public string ClubCommissionPercent { get; set; } = default!;
 
     // --- Dane firmy do B2B ---
     public string? CompanyName { get; set; }     // Nazwa działalności
@@ -24,5 +22,5 @@ public class TrainerContractDetailsResponse
     public bool IsB2B { get; set; }
     public string Valid { get; set; } = default!;
     // Podpisy i dokumenty
-    public string IsSigned { get; set; }
+    public string IsSigned { get; set; } = default!;
 }

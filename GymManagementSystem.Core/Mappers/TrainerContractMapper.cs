@@ -64,8 +64,6 @@ public static class TrainerContractMapper
             CompanyName = trainerContract.CompanyName,
             IsSigned = trainerContract.IsSigned ? "Signed" : "Unsigned",
             TaxId = trainerContract.TaxId,
-            ValidFrom = trainerContract.ValidFrom,
-            ValidTo = trainerContract.ValidTo,
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType,
             IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,

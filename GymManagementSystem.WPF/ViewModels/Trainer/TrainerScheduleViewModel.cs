@@ -256,7 +256,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         byte g = (byte)_rng.Next(128, 256);
         byte b = (byte)_rng.Next(128, 256);
 
-        return Color.FromArgb(204, r, g, b); // 80% opacity (204)
+        return Color.FromArgb(255, r, g, b); // 80% opacity (204)
     }
     // ---------------------------------------
     private string GetTypeFromAppointment(ScheduleAppointment appt)

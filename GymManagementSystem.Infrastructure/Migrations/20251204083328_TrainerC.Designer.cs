@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251204083328_TrainerC")]
+    partial class TrainerC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +257,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0d61b5c6-14c5-4262-a3c3-15d5890c2cf3"),
+                            Id = new Guid("07224e4c-062d-471e-af6a-2f2aa47792a3"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -394,6 +397,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("TrainerContractId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("TrainerId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("TrainerProfileId")
                         .HasColumnType("uuid");
 
@@ -402,6 +408,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasIndex("ClientId");
 
                     b.HasIndex("TrainerContractId");
+
+                    b.HasIndex("TrainerId");
 
                     b.HasIndex("TrainerProfileId");
 
@@ -925,11 +933,17 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Trainer", "Trainer")
+                        .WithMany("PersonalBookings")
+                        .HasForeignKey("TrainerId");
+
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.TrainerProfile", null)
                         .WithMany("PersonalBookings")
                         .HasForeignKey("TrainerProfileId");
 
                     b.Navigation("Client");
+
+                    b.Navigation("Trainer");
 
                     b.Navigation("TrainerContract");
                 });
@@ -1080,6 +1094,11 @@ namespace GymManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>
                 {
                     b.Navigation("ClassBookings");
+                });
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Trainer", b =>
+                {
+                    b.Navigation("PersonalBookings");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.TrainerContract", b =>

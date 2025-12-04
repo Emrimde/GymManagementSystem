@@ -20,21 +20,21 @@ public class TrainerController : BaseController
         _trainerScheduleService = trainerScheduleService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TrainerResponse>>> GetAll(CancellationToken cancellationToken)
-       => HandleListedResult(await _trainerService.GetAllAsync(cancellationToken));
+    //[HttpGet]
+    //public async Task<ActionResult<IEnumerable<TrainerResponse>>> GetAll(CancellationToken cancellationToken)
+    //   => HandleListedResult(await _trainerService.GetAllAsync(cancellationToken));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<TrainerDetailsResponse>> GetById(Guid id, [FromQuery] bool isActiveOnly, CancellationToken cancellationToken)
-        => HandleResult(await _trainerService.GetByIdAsync(id, cancellationToken));
+    //[HttpGet("{id:guid}")]
+    //public async Task<ActionResult<TrainerDetailsResponse>> GetById(Guid id, [FromQuery] bool isActiveOnly, CancellationToken cancellationToken)
+    //    => HandleResult(await _trainerService.GetByIdAsync(id, cancellationToken));
 
-    [HttpPost]
-    public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _trainerService.CreateAsync(entity));
+    //[HttpPost]
+    //public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerAddRequest entity, CancellationToken cancellationToken)
+    //    => HandleResult(await _trainerService.CreateAsync(entity));
 
-    [HttpPut("{id:guid}")]
-    public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
-        => HandleResult(await _trainerService.UpdateAsync(id, entity));
+    //[HttpPut("{id:guid}")]
+    //public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
+    //    => HandleResult(await _trainerService.UpdateAsync(id, entity));
 
     [HttpPut("trainer-timeoff/{id:guid}")]
     public async Task<ActionResult<TrainerInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)

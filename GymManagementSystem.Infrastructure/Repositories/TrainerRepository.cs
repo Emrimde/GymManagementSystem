@@ -15,12 +15,12 @@ public class TrainerRepository : ITrainerRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<Trainer> CreateAsync(Trainer entity)
-    {
-       _dbContext.Add(entity);
-       await _dbContext.SaveChangesAsync();
-       return entity;
-    }
+    //public async Task<TrainerContract> CreateAsync(Trainer entity)
+    //{
+    //    _dbContext.Add(entity);
+    //    await _dbContext.SaveChangesAsync();
+    //    return entity;
+    //}
 
     public async Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff)
     {
@@ -29,35 +29,48 @@ public class TrainerRepository : ITrainerRepository
         return trainerTimeOff;
     }
 
-    public Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId, DateTime start, DateTime end)
+    public Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId, Guid? trainerTimeOffId, DateTime start, DateTime end)
     {
-        return _dbContext.TrainerTimeOff
-            .AnyAsync(item =>
-                item.TrainerId == trainerId &&
-                item.Start < end &&
-                item.End > start
-            );
+        if (trainerTimeOffId != null)
+        {
+            return _dbContext.TrainerTimeOff
+                .AnyAsync(item =>
+                    item.TrainerId == trainerId &&
+                    item.Id != trainerTimeOffId &&
+                    item.Start < end &&
+                    item.End > start
+                );
+        }
+        else
+        {
+            return _dbContext.TrainerTimeOff
+               .AnyAsync(item =>
+                   item.TrainerId == trainerId &&
+                   item.Start < end &&
+                   item.End > start
+               );
+        }
     }
 
     public Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end)
     {
         return _dbContext.PersonalBookings
             .AnyAsync(item =>
-                item.TrainerId == trainerId &&
+                item.TrainerContractId == trainerId &&
                 item.Start < end &&
                 item.End > start
             );
     }
 
-    public async Task<IEnumerable<Trainer>> GetAllAsync(CancellationToken cancellationToken)
-    {
-       return await _dbContext.Trainers.ToListAsync(cancellationToken); 
-    }
+    //public async Task<IEnumerable<Trainer>> GetAllAsync(CancellationToken cancellationToken)
+    //{
+    //    return await _dbContext.Trainers.ToListAsync(cancellationToken);
+    //}
 
-    public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
-    }
+    //public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    //{
+    //    return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
+    //}
 
     public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
@@ -65,10 +78,10 @@ public class TrainerRepository : ITrainerRepository
         return list;
     }
 
-    public Task<Trainer?> UpdateAsync(Guid id, Trainer entity)
-    {
-        throw new NotImplementedException();
-    }
+    //public Task<Trainer?> UpdateAsync(Guid id, Trainer entity)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     public async Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract)
     {

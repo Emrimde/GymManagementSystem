@@ -13,12 +13,12 @@
         <Button Command="{Binding OpenContractView}" Content="Contracts" Margin="5"/>
         <Button Content="Terminations" Command="{Binding OpenTerminationView}" Margin="5"/>
         <Button Content="Client Memberships" Command="{Binding OpenClientMembershipView}" Margin="5"/>
-        <Button Content="Trainers" Command="{Binding OpenTrainersView}" Margin="5"/>
+       
         <Button Content="Gym Classes" Command="{Binding OpenGymClassesView}" Margin="5"/>
         <Button Content="Scheduled Classes" Command="{Binding OpenScheduledClassesView}" Margin="5"/>
         <Button Content="Class Bookings" Command="{Binding OpenClassBookingsView}" Margin="5"/>
         <Button Content="Employees" Command="{Binding OpenEmployeesView}" Margin="5"/>
-        <Button Content="TrainerContracts" Command="{Binding OpenTrainerContractsView}" Margin="5"/>
+        <Button Content="Trainers" Command="{Binding OpenTrainerContractsView}" Margin="5"/>
        
         <Button Content="Settings" Command="{Binding OpenSettingsView}" Margin="5"/>
     </StackPanel>

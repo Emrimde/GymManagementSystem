@@ -41,7 +41,7 @@ namespace GymManagementSystem.WPF
             });
 
             QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
-            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF1cXGFCf1FpRnxbf1x1ZFFMY11bRnBPMyBoS35Rc0RiW3ledHdURGZYVEx2VEFc");
+            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF1cXGZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWH1edHRWRWFdV0J/WEtWYEg=");
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<RegisterViewModel>();
             services.AddSingleton<DashboardViewModel>();
@@ -61,10 +61,9 @@ namespace GymManagementSystem.WPF
             services.AddTransient<MembershipEditViewModel>();
             services.AddTransient<ClientUpdateViewModel>();
             services.AddSingleton<LoginViewModel>();
-            services.AddTransient<TrainerViewModel>();
+            
             services.AddTransient<TrainerScheduleViewModel>();
-            services.AddTransient<TrainerDetailsViewModel>();
-            services.AddTransient<TrainerAddViewModel>();
+
             services.AddTransient<GymClassAddViewModel>();
             services.AddTransient<GymClassViewModel>();
             services.AddTransient<ScheduledClassViewModel>();

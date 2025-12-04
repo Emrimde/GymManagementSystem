@@ -85,15 +85,6 @@
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipAddViewModel}">
                         <clientMembershipview:ClientMembershipAddView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type trainervm:TrainerViewModel}">
-                        <trainerview:TrainerView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type trainervm:TrainerAddViewModel}">
-                        <trainerview:TrainerAddView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type trainervm:TrainerDetailsViewModel}">
-                        <trainerview:TrainerDetailsView/>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type employeevm:EmployeeViewModel}">
                         <employeeview:EmployeeView/>
                     </DataTemplate>

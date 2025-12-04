@@ -34,7 +34,6 @@ public static class GymClassMapper
     
             DaysOfWeek = gymClass.DaysOfWeek,
             StartHour = gymClass.StartHour,
-            TrainerId = gymClass.TrainerId,
             TrainerContractId = gymClass.TrainerContractId,
             MaxPeople = gymClass.MaxPeople,
         };
