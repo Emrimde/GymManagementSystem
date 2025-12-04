@@ -14,7 +14,7 @@ public class PersonalBookingHttpClient : BaseHttpClientService
     }
     public async Task<Result<PersonalBookingInfoResponse>> CreateAsync(PersonalBookingAddRequest dto)
     {
-        var response = await _httpClient.PostAsJsonAsync("personal-booking", dto);
+        var response = await _httpClient.PostAsJsonAsync("", dto);
         var body = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
@@ -28,7 +28,7 @@ public class PersonalBookingHttpClient : BaseHttpClientService
 
     public async Task<Result<bool>> DeleteAsync(Guid id)
     {
-        var response = await _httpClient.DeleteAsync($"{id}");
+        var response = await _httpClient.GetAsync($"cancel/{id}");
 
         if (response.IsSuccessStatusCode)
             return Result<bool>.Success(true);
@@ -36,6 +36,22 @@ public class PersonalBookingHttpClient : BaseHttpClientService
         var body = await response.Content.ReadAsStringAsync();
         return Result<bool>.Failure(body);
     }
+
+    public async Task<Result<PersonalBookingInfoResponse>> GetPersonalBookingAsync(Guid id)
+    {
+        try
+        {
+
+            var response = await _httpClient.GetFromJsonAsync<PersonalBookingInfoResponse>($"{id}");
+            return Result<PersonalBookingInfoResponse>.Success(response!);
+        }
+
+        catch (HttpRequestException ex)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure($"{ex.Message}");
+        }
+    }
+
 
     public async Task<Result<PersonalBookingResponse>> UpdateAsync(Guid id, PersonalBookingUpdateRequest dto)
     {
@@ -50,5 +66,24 @@ public class PersonalBookingHttpClient : BaseHttpClientService
 
         return Result<PersonalBookingResponse>.Failure(body);
     }
+
+    public async Task<Result<PersonalBookingInfoResponse>> SetStatusToPaidAsync(Guid id)
+    {
+        var response = await _httpClient.PatchAsJsonAsync(
+            $"pay-client/{id}",  
+            new { }                     
+        );
+
+        var body = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = JsonSerializer.Deserialize<PersonalBookingInfoResponse>(body);
+            return Result<PersonalBookingInfoResponse>.Success(result!);
+        }
+
+        return Result<PersonalBookingInfoResponse>.Failure(body);
+    }
+
 }
 

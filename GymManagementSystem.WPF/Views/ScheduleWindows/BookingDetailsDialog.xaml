@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduleWindows"
         mc:Ignorable="d"
-        Title="BookingDetailsDialog" Height="450" Width="800">
+        Title="BookingDetailsDialog" Height="450" Width="800" >
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConv"/>
+    </Window.Resources>
     <StackPanel Margin="20">
         <TextBlock Text="Client:" />
         <TextBlock Text="{Binding ClientName}" />
@@ -15,10 +18,16 @@
 
         <TextBlock Text="End time:" Margin="0 10 0 0"/>
         <TextBlock Text="{Binding End}"/>
+        
+        <TextBlock Text="Status :" Margin="0 10 0 0"/>
+        <TextBlock Text="{Binding Statuss}"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0">
-            <Button Content="Cancel Booking" Margin="5" Command="{Binding CancelCommand}"/>
-            <Button Content="Close" Margin="5" Command="{Binding CloseCommand}"/>
+            <Button Content="Client didn't come" 
+                      Command="{Binding DeleteCommand}"   Visibility="{Binding IsNotPaid , Converter={StaticResource BooleanToVisibilityConv}}"/>
+            <Button Content="Client paid" Visibility="{Binding IsNotPaid , Converter={StaticResource BooleanToVisibilityConv}}"
+          Command="{Binding SetStatusToPaidCommand}"/>
+            
         </StackPanel>
     </StackPanel>
 </Window>

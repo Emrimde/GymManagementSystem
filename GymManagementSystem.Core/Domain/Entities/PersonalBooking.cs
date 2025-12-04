@@ -2,7 +2,8 @@
 public enum BookingStatus
 {
     Booked,
-    Cancelled
+    Cancelled,
+    PaidByClient
 }
 public class PersonalBooking
 {

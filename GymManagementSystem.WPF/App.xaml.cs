@@ -136,7 +136,7 @@ namespace GymManagementSystem.WPF
             });
             services.AddHttpClient<PersonalBookingHttpClient>(options =>
             {
-                options.BaseAddress = new Uri("http://localhost:5105/api/trainer/");
+                options.BaseAddress = new Uri("http://localhost:5105/api/personalBooking/");
             });
             services.AddHttpClient<EmployeeHttpClient>(options =>
             {

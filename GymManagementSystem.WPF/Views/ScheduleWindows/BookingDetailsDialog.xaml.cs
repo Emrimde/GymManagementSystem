@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace GymManagementSystem.WPF.Views.ScheduleWindows
 {
@@ -22,6 +11,17 @@ namespace GymManagementSystem.WPF.Views.ScheduleWindows
         public BookingDetailsDialog()
         {
             InitializeComponent();
+            Loaded += (s, e) =>
+            {
+                if (DataContext is BookingDetailsViewModel vm)
+                {
+                    vm.CloseRequested += result =>
+                    {
+                        DialogResult = result;
+                        Close();
+                    };
+                }
+            };
         }
     }
 }

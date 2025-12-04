@@ -1,7 +1,10 @@
-﻿using GymManagementSystem.Core.DTO.PersonalBooking;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.PersonalBooking;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using Syncfusion.UI.Xaml.Scheduler;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
@@ -12,14 +15,17 @@ public class BookingDetailsViewModel : ViewModel
 
     public Guid BookingId { get; private set; }
     public bool ShouldDelete { get; private set; } = false;
+    public bool ShouldSetToPaid { get; private set; } = false;
+    public bool IsNotPaid { get; private set; } = true;
 
     public string ClientName { get; set; }
+    public BookingStatus Statuss { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
-    public ICommand CancelCommand { get; }
+    public ICommand SetStatusToPaidCommand { get; }
 
     public event Action<bool>? CloseRequested;
 
@@ -29,24 +35,45 @@ public class BookingDetailsViewModel : ViewModel
 
         SaveCommand = new RelayCommand(_ => Save(), _ => true);
         DeleteCommand = new RelayCommand(_ => Delete(), _ => true);
-        CancelCommand = new RelayCommand(_ => Cancel(), _ => true);
+        SetStatusToPaidCommand = new RelayCommand(_ => SetStatusToPaid(), _ => true);
+       
+    }
+
+    private async Task _LoadPersonalBooking(Guid bookingId)
+    {
+        Result<PersonalBookingInfoResponse> result = await _bookingHttp.GetPersonalBookingAsync(bookingId);
+        if (result.IsSuccess)
+        {
+            Statuss = result.Value!.Status;
+            if(result.Value.Status == BookingStatus.PaidByClient)
+            {
+                IsNotPaid = false;
+            }
+            else
+            {
+                IsNotPaid = true;
+            }
+        }
     }
 
     // ---------------------------
     //   ZAŁADOWANIE Z APPOINTMENT
     // ---------------------------
-    public void LoadFromAppointment(ScheduleAppointment appt)
+    public async void LoadFromAppointment(ScheduleAppointment appt)
     {
-        // BookingId MUSI być ustawiony w appointment.Id w kalendarzu!
         BookingId = (Guid)appt.Id;
 
         ClientName = appt.Subject;
         Start = appt.StartTime;
         End = appt.EndTime;
 
+        await _LoadPersonalBooking(BookingId); // <-- przeniesione tutaj
+        
         OnPropertyChanged(nameof(ClientName));
         OnPropertyChanged(nameof(Start));
         OnPropertyChanged(nameof(End));
+        OnPropertyChanged(nameof(Statuss));    // <-- konieczne!
+        OnPropertyChanged(nameof(IsNotPaid));    
     }
 
     // ---------------------------
@@ -65,9 +92,12 @@ public class BookingDetailsViewModel : ViewModel
         CloseRequested?.Invoke(true);
     }
 
-    private void Cancel()
+    private void SetStatusToPaid()
     {
-        CloseRequested?.Invoke(false);
+        ShouldSetToPaid = true;
+
+        CloseRequested?.Invoke(true);
+
     }
 
     // ---------------------------

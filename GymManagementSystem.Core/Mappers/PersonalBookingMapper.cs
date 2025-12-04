@@ -6,7 +6,7 @@ public static class PersonalBookingMapper
 {
     public static PersonalBookingInfoResponse ToPersonalBookingInfoResponse(this PersonalBooking personalBooking)
     {
-        return new PersonalBookingInfoResponse() { Id = personalBooking.Id };
+        return new PersonalBookingInfoResponse() { Id = personalBooking.Id, Status = personalBooking.Status};
 
     }
     public static PersonalBooking ToPersonalBooking(this PersonalBookingAddRequest personalBooking)

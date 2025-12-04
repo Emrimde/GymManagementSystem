@@ -32,7 +32,17 @@ public class PersonalBookingRepository : IPersonalBookingRepository
         return true;
     }
 
-
+    public async Task<bool> DeletePersonalBookingAsync(Guid id)
+    {
+        PersonalBooking? personal = await _db.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id);
+        _db.PersonalBookings.Remove(personal);
+        if (personal == null)
+        {
+            return false;
+        }
+        int deleted = _db.SaveChanges();
+        return deleted > 0;
+    }
     public async Task<IEnumerable<PersonalBooking>> GetForRangeAsync(
     Guid trainerId, DateOnly from, DateOnly to, CancellationToken ct)
     {
@@ -51,10 +61,25 @@ public class PersonalBookingRepository : IPersonalBookingRepository
             .Include(p => p.Client)
             .Where(item =>
                 item.TrainerContractId == trainerId &&
-                item.Status == BookingStatus.Booked &&
+                (item.Status == BookingStatus.Booked || item.Status == BookingStatus.PaidByClient) &&
                 item.Start >= start &&
                 item.Start < end)
             .ToListAsync(ct);
     }
+
+    public async Task<PersonalBooking?> GetPersonalBookingAsync(Guid id)
+    {
+       return await _db.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id); 
+    }
+
+
+
+    public async Task<PersonalBooking?> UpdatePersonalBooking(PersonalBooking booking)
+    {
+        _db.PersonalBookings.Update(booking);
+        await _db.SaveChangesAsync();
+        return booking;
+    }
+
 
 }

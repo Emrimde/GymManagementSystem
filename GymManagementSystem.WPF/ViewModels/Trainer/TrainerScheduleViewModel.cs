@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
@@ -211,6 +212,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                     return;
                 }
             }
+           
             else
             {
                 updateResult = await _trainerHttpClient.UpdateAsync(vm.TimeOffId, vm.BuildDto());
@@ -230,9 +232,9 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     private async Task EditBookingAsync(AppointmentEditorOpeningEventArgs e)
     {
         var vm = new BookingDetailsViewModel(_bookingHttpClient);
-        vm.LoadFromAppointment(e.Appointment);
-
         var dialog = new BookingDetailsDialog { DataContext = vm };
+
+        vm.LoadFromAppointment(e.Appointment);
 
         if (dialog.ShowDialog() == true)
         {
@@ -240,10 +242,18 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
             {
                 await _bookingHttpClient.DeleteAsync(vm.BookingId);
             }
-            else
+            else if (vm.ShouldSetToPaid)
             {
-                await _bookingHttpClient.UpdateAsync(vm.BookingId, vm.BuildDto());
+                Result<PersonalBookingInfoResponse> result = await _bookingHttpClient.SetStatusToPaidAsync(vm.BookingId);
+                if (!result.IsSuccess)
+                {
+                    MessageBox.Show($"{result.ErrorMessage}");
+                }
             }
+            //else
+            //{
+            //    await _bookingHttpClient.UpdateAsync(vm.BookingId, vm.BuildDto());
+            //}
 
             await LoadAppointmentsAsync();
         }
@@ -261,12 +271,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     // ---------------------------------------
     private string GetTypeFromAppointment(ScheduleAppointment appt)
     {
-        return appt.Subject switch
-        {
-            "Time Off" => "TimeOff",
-            "Booked" => "Booking",
-            _ => "Available"
-        };
+        return appt.Notes ?? "Available";
     }
 
 
@@ -288,7 +293,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                 }
                 var appt = new ScheduleAppointment
                 {
-
                     StartTime = item.Start,
                     EndTime = item.End,
                     Subject = item.Type switch
@@ -304,9 +308,16 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                         TrainerScheduleItemType.Booked => item.BookingId,
                         _ => Guid.NewGuid()
                     },
-                    
-                    
+
+                    // 🔥 DODAJ TO — NIE RUSZAJ KOLORÓW
+                    Notes = item.Type switch
+                    {
+                        TrainerScheduleItemType.TimeOff => "TimeOff",
+                        TrainerScheduleItemType.Booked => "Booking",
+                        _ => "Available"
+                    }
                 };
+
                 if (item.Type == TrainerScheduleItemType.TimeOff)
                 {
                     appt.AppointmentBackground =

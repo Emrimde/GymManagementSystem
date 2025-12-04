@@ -21,7 +21,8 @@ public class AddBookingDialogViewModel : ViewModel
         set { _selectedClient = value; OnPropertyChanged(); }
     }
     private ClientInfoResponse _selectedClient;
-    private ClassBookingAddRequest _request; private string _searchQuery; 
+    private ClassBookingAddRequest _request; 
+    private string _searchQuery; 
     public string SearchQuery { get { return _searchQuery; } set { _searchQuery = value; OnPropertyChanged(); _ = DebouncedSearchAsync(_searchQuery); } }
     private CancellationTokenSource _debounceCts;
 
