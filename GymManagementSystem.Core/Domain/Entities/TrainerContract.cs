@@ -19,9 +19,9 @@ public class TrainerContract
     public string? CompanyAddress { get; set; }  // Adres firmy
 
     // Podpisy i dokumenty
-    public bool IsSigned { get; set; }
+    public bool IsSigned { get; set; } = true;
     public string? ContractDocumentPath { get; set; }
-    public DateTime? SignedAt { get; set; }
+    public DateTime? SignedAt { get; set; } = DateTime.UtcNow;
 
     // Nawigacje
     public Person Person { get; set; } = default!;

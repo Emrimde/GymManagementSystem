@@ -169,7 +169,6 @@ public class TrainerHttpClient : BaseHttpClientService
         return await response.Content.ReadFromJsonAsync<TrainerScheduleResponse>();
     }
 
-    // NOWE
     public async Task<Result<TrainerTimeOff>> UpdateAsync(Guid id, TrainerTimeOffUpdateRequest dto)
     {
         var response = await _httpClient.PutAsJsonAsync($"trainer-timeoff/{id}", dto);
@@ -267,5 +266,24 @@ public class TrainerHttpClient : BaseHttpClientService
         }
 
         return Result<TrainerContractInfoResponse>.Failure("Something went wrong.");
+    }
+
+    public async Task<Result<TrainerContractDetailsResponse>> GetTrainerContractAsync(Guid trainerContractId, bool includeDetails)
+    {
+        try
+        {
+            TrainerContractDetailsResponse? trainer = await _httpClient.GetFromJsonAsync<TrainerContractDetailsResponse>($"trainercontract/{trainerContractId}?includeDetails={includeDetails}");
+
+            if (trainer == null)
+            {
+                return Result<TrainerContractDetailsResponse>.Failure("Unexpected error");
+            }
+            return Result<TrainerContractDetailsResponse>.Success(trainer);
+
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<TrainerContractDetailsResponse>.Failure(ex.Message);
+        }
     }
 }

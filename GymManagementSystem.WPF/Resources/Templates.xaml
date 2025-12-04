@@ -130,6 +130,10 @@
                     <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractAddViewModel}">
                         <trainercontractsview:TrainerContractAddView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractDetailsViewModel}">
+                        <trainercontractsview:TrainerContractDetailsView/>
+                    </DataTemplate>
+                   
                    
 
 

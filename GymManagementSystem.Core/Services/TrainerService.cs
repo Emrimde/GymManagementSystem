@@ -145,4 +145,14 @@ public class TrainerService : ITrainerService
        IEnumerable<TrainerContract> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
        return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractInfoResponse()), StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<TrainerContractDetailsResponse>> GetTrainerContractAsync(Guid id, bool includeDetails, CancellationToken cancellationToken)
+    {
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(id, cancellationToken,includeDetails);
+        if(trainerContract == null)
+        {
+            return Result<TrainerContractDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
+        }
+            return Result<TrainerContractDetailsResponse>.Success(trainerContract.ToTrainerContractDetailsResponse(), StatusCodeEnum.Ok);
+    }
 }

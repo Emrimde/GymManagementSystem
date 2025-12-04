@@ -12,9 +12,5 @@ public class Trainer
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
     public ICollection<PersonalBooking> PersonalBookings { get; set; } = new List<PersonalBooking>();
-    // public Guid? CreatedById { get; set; }
-    //public Guid? UpdatedById { get; set; }
 
-    // Nawigacje
-    //public ICollection<Classes> Classes{ get; set; }
 }

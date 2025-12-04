@@ -58,7 +58,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-                                    Command="{Binding DataContext.      OpenClientDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
+                                    Command="{Binding DataContext.      OpenTrainerDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
                                     CommandParameter="{Binding Id}">
                                     </Button>
                                 </DataTemplate>

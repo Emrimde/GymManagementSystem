@@ -84,9 +84,16 @@ public class TrainerRepository : ITrainerRepository
     }
 
 
-    public async Task<TrainerContract?> GetTrainerContractAsync(Guid id)
+    public async Task<TrainerContract?> GetTrainerContractAsync(Guid id, CancellationToken cancellationToken, bool includeDetails)
     {
-        return await _dbContext.TrainerContracts.FirstOrDefaultAsync(item => item.Id == id);
+        if (!includeDetails)
+        {
+            return await _dbContext.TrainerContracts.FirstOrDefaultAsync(item => item.Id == id);
+        }
+        else
+        {
+            return await _dbContext.TrainerContracts.Include(item => item.Person).FirstOrDefaultAsync(item => item.Id == id);
+        }
     }
 
     public async Task<IEnumerable<TrainerContract>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken)

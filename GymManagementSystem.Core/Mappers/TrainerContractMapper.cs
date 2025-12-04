@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.TrainerContract;
+using GymManagementSystem.Core.Enum;
 
 
 namespace GymManagementSystem.Core.Mappers;
@@ -47,6 +48,30 @@ public static class TrainerContractMapper
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType
             
+        };
+    }
+    public static TrainerContractDetailsResponse ToTrainerContractDetailsResponse(this TrainerContract trainerContract)
+    {
+        return new TrainerContractDetailsResponse()
+        {
+            ContractType = trainerContract.ContractType,
+            FirstName = trainerContract.Person?.FirstName,
+            LastName= trainerContract.Person?.LastName,
+            PhoneNumber= trainerContract.Person?.PhoneNumber,
+            Email= trainerContract.Person?.Email,
+            ClubCommissionPercent = trainerContract.ClubCommissionPercent.ToString() + "%",
+            CompanyAddress = trainerContract.CompanyAddress,
+            CompanyName = trainerContract.CompanyName,
+            IsSigned = trainerContract.IsSigned ? "Signed" : "Unsigned",
+            TaxId = trainerContract.TaxId,
+            ValidFrom = trainerContract.ValidFrom,
+            ValidTo = trainerContract.ValidTo,
+            Id = trainerContract.Id,
+            TrainerType = trainerContract.TrainerType,
+            IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,
+            IsPersonalTrainer = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? true : false,
+            Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent")
+
         };
     }
 }

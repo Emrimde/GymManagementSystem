@@ -27,6 +27,7 @@ public class TrainerContractViewModel : ViewModel
         SidebarView = sidebarView;
 		TrainerContracts = new ObservableCollection<TrainerContractResponse>();
         OpenAddTrainerViewCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerContractAddViewModel>(), item => true);
+        OpenTrainerDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerContractDetailsViewModel>(item), item => true);
         _ = LoadTrainerContracts();
     }
 
@@ -51,4 +52,5 @@ public class TrainerContractViewModel : ViewModel
 	public ObservableCollection<TrainerContractResponse> TrainerContracts { get; set; }
 
 	public ICommand OpenAddTrainerViewCommand { get;  }
+	public ICommand OpenTrainerDetailsCommand { get;  }
 }

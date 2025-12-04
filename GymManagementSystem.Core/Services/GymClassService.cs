@@ -22,7 +22,7 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity, CancellationToken cancellationToken)
     {
-        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId);
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId,cancellationToken,false);
         
 
 
