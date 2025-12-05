@@ -54,6 +54,10 @@ public class TrainerController : BaseController
     [HttpGet("trainer-rates/{id:guid}")]
     public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id));
 
+
+    [HttpPost("trainer-rate")]
+    public async Task<ActionResult<TrainerRateInfoResponse>> CreateTrainerRate([FromBody] TrainerRateAddRequest request) => HandleResult(await _trainerService.CreateTrainerRateAsync(request));
+
     [HttpGet("trainer-rates-select/{id:guid}")]
     public async Task<ActionResult<IEnumerable<TrainerRateSelectResponse>>> GetTrainerRatesSelect([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetTrainerRatesSelect(id));
 

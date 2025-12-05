@@ -9,4 +9,5 @@ public interface ITrainerRateRepository
     Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid id);
     Task<TrainerRateResponse?> GetTrainerRateByIdAsync(Guid id);
     Task<IEnumerable<TrainerRateSelectResponse>> GetTrainerRatesSelect(Guid id);
+    Task<TrainerRateInfoResponse> AddTrainerRateAsync(TrainerRate trainerRate);
 }

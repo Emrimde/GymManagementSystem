@@ -37,6 +37,13 @@ FontSize="30" FontWeight="Bold" Foreground="#EEEEEE"
 VerticalAlignment="Center"
             Width="200" Margin="40,0,0,0"/>
 
+                <Button 
+Grid.Column="1"
+Content="Add Trainer rate"
+Width="150"
+Height="30"
+HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddTrainerRateView}"  CommandParameter="{Binding TrainerContractId}"/>
+
 
             </Grid>
             <Border Grid.Row="1" Background="#2B2B2B">

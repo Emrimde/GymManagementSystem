@@ -22,4 +22,21 @@ public static class TrainerRateMapper
             DisplayPriceDuration = trainerRate.DurationInMinutes.ToString() + trainerRate.RatePerSessions.ToString()
         };
     }
+    public static TrainerRateInfoResponse ToTrainerRateInfoResponse(this TrainerRate trainerRate)
+    {
+        return new TrainerRateInfoResponse()
+        {
+           Id = trainerRate.Id,
+        };
+    }
+    public static TrainerRate ToTrainerRate(this TrainerRateAddRequest trainerRate)
+    {
+        return new TrainerRate()
+        {
+            DurationInMinutes = trainerRate.DurationInMinutes,
+            RatePerSessions = trainerRate.RatePerSessions,
+            ValidFrom = trainerRate.ValidFrom,
+            TrainerContractId = trainerRate.TrainerContractId,
+        };
+    }
 }

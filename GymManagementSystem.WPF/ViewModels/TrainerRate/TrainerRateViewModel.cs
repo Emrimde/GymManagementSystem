@@ -5,19 +5,21 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.TrainerRate;
 
 public class TrainerRateViewModel : ViewModel, IParameterReceiver
 {
     private INavigationService _navigation;
-
+    public Guid TrainerContractId { get; set; }
     public INavigationService Navigation
     {
         get { return _navigation; }
         set { _navigation = value; OnPropertyChanged(); }
     }
 
+    public ICommand OpenAddTrainerRateView { get;  }
     public ObservableCollection<TrainerRateResponse> TrainerRates { get; set; }
 
     private readonly TrainerHttpClient _trainerHttpClient;
@@ -28,6 +30,7 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
         _trainerHttpClient = trainerHttpClient;
         TrainerRates = new ObservableCollection<TrainerRateResponse>();
         SidebarView = sidebarView;
+        OpenAddTrainerRateView = new RelayCommand(item => Navigation.NavigateTo<TrainerRateAddViewModel>(item), item => true);
     }
 
     public void ReceiveParameter(object parameter)
@@ -35,6 +38,7 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid id)
         {
             _ = LoadTrainerRates(id);
+            TrainerContractId = id;
         }
     }
 
@@ -46,6 +50,7 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
             foreach (var item in result.Value)
             {
                 TrainerRates.Add(item);
+                
             }
         }
     }

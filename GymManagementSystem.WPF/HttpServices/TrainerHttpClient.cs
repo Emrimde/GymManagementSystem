@@ -228,4 +228,45 @@ public class TrainerHttpClient : BaseHttpClientService
             return Result<TrainerContractDetailsResponse>.Failure(ex.Message);
         }
     }
+
+    public async Task<Result<TrainerRateInfoResponse>> AddTrainerRateAsync(TrainerRateAddRequest request)
+    {
+        request.ValidFrom = request.ValidFrom.ToUniversalTime();
+     
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("trainer-rate", request);
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            TrainerRateInfoResponse? employee = JsonSerializer.Deserialize<TrainerRateInfoResponse>(responseBody);
+            if (employee == null)
+            {
+                return Result<TrainerRateInfoResponse>.Failure("Unexpected employee");
+            }
+            return Result<TrainerRateInfoResponse>.Success(employee);
+        }
+
+        Dictionary<string, JsonElement>? errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+        if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+        {
+            string errorMessage = detailElement.ToString();
+            return Result<TrainerRateInfoResponse>.Failure(errorMessage);
+        }
+        if (errorDict != null && errorDict.TryGetValue("errors", out var errorsElement))
+        {
+            List<string> allErrors = new List<string>();
+            foreach (var errorProp in errorsElement.EnumerateObject())
+            {
+                var messages = errorProp.Value.EnumerateArray();
+                foreach (var item in messages)
+                {
+                    string msg = item.ToString();
+                    allErrors.Add(msg);
+                }
+            }
+            return Result<TrainerRateInfoResponse>.Failure(string.Join("\n", allErrors));
+        }
+
+        return Result<TrainerRateInfoResponse>.Failure("Something went wrong.");
+    }
 }

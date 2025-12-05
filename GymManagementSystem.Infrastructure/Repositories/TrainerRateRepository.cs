@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.TrainerRate;
+using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,14 @@ public class TrainerRateRepository : ITrainerRateRepository
       await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<TrainerRateInfoResponse> AddTrainerRateAsync(TrainerRate trainerRate)
+    {
+       _dbContext.TrainerRates.Add(trainerRate);
+        await _dbContext.SaveChangesAsync();
+        return trainerRate.ToTrainerRateInfoResponse();
+    }
+
+    // it's for personal booking add action - we want to assign trainer rate price to personal booking price
     public async Task<TrainerRateResponse?> GetTrainerRateByIdAsync(Guid id)
     {
       return await _dbContext.TrainerRates.Where(item => item.Id == id).Select(item => new TrainerRateResponse()
@@ -32,14 +41,14 @@ public class TrainerRateRepository : ITrainerRateRepository
       }).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid id)
+    public async Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid trainerId)
     {
-      return await _dbContext.TrainerRates.Where(item => item.TrainerContractId == id).ToListAsync();
+      return await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).ToListAsync();
     }
 
-    public async Task<IEnumerable<TrainerRateSelectResponse>> GetTrainerRatesSelect(Guid id)
+    public async Task<IEnumerable<TrainerRateSelectResponse>> GetTrainerRatesSelect(Guid trainerId)
     {
-       IEnumerable<TrainerRateSelectResponse> response = await _dbContext.TrainerRates.Where(item => item.TrainerContractId == id).Select(item => new TrainerRateSelectResponse()
+       IEnumerable<TrainerRateSelectResponse> response = await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).Select(item => new TrainerRateSelectResponse()
         {
            TrainerRateId = item.Id,
            DisplayPriceDuration = item.DurationInMinutes.ToString() + "min / " +  item.RatePerSessions.ToString() + "$",

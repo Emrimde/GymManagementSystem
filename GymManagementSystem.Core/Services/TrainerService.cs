@@ -138,4 +138,23 @@ public class TrainerService : ITrainerService
         IEnumerable<TrainerRateSelectResponse> trainerRates = await _trainerRateRepo.GetTrainerRatesSelect(id);
         return Result<IEnumerable<TrainerRateSelectResponse>>.Success(trainerRates, StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<TrainerRateInfoResponse>> CreateTrainerRateAsync(TrainerRateAddRequest request)
+    {
+        IEnumerable<TrainerRate> trainerRates = await _trainerRateRepo.GetTrainerRates(request.TrainerContractId);
+        TrainerRate trainerRate = new TrainerRate();
+        foreach (var item in trainerRates)
+        {
+            if(item.DurationInMinutes == request.DurationInMinutes)
+            {
+                trainerRate = item;
+                break;
+            }
+        }
+        trainerRate.ValidTo = DateTime.UtcNow;
+        request.ValidFrom = DateTime.UtcNow;
+        TrainerRateInfoResponse response =  await _trainerRateRepo.AddTrainerRateAsync(request.ToTrainerRate());
+
+        return Result<TrainerRateInfoResponse>.Success(response, StatusCodeEnum.Ok);
+    }
 }
