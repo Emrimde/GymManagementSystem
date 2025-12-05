@@ -5,6 +5,7 @@ using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Trainer;
+using GymManagementSystem.WPF.ViewModels.TrainerRate;
 using System.Windows;
 using System.Windows.Input;
 
@@ -47,6 +48,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
     }
 
     public ICommand OpenTrainerScheduleCommand { get; }
+    public ICommand OpenTrainerRatesCommand { get; }
 
     public void ReceiveParameter(object parameter)
     {
@@ -76,6 +78,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         TrainerContract = new TrainerContractDetailsResponse();
         OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item), item => true);
+        OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item), item => true);
 
     }
 }

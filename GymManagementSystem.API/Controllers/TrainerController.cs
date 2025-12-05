@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
+using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
@@ -19,22 +20,6 @@ public class TrainerController : BaseController
         _trainerService = trainerService;
         _trainerScheduleService = trainerScheduleService;
     }
-
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<TrainerResponse>>> GetAll(CancellationToken cancellationToken)
-    //   => HandleListedResult(await _trainerService.GetAllAsync(cancellationToken));
-
-    //[HttpGet("{id:guid}")]
-    //public async Task<ActionResult<TrainerDetailsResponse>> GetById(Guid id, [FromQuery] bool isActiveOnly, CancellationToken cancellationToken)
-    //    => HandleResult(await _trainerService.GetByIdAsync(id, cancellationToken));
-
-    //[HttpPost]
-    //public async Task<ActionResult<TrainerInfoResponse>> Create([FromBody] TrainerAddRequest entity, CancellationToken cancellationToken)
-    //    => HandleResult(await _trainerService.CreateAsync(entity));
-
-    //[HttpPut("{id:guid}")]
-    //public async Task<ActionResult<TrainerInfoResponse>> Update(Guid id, TrainerUpdateRequest entity)
-    //    => HandleResult(await _trainerService.UpdateAsync(id, entity));
 
     [HttpPut("trainer-timeoff/{id:guid}")]
     public async Task<ActionResult<TrainerInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity)
@@ -65,5 +50,11 @@ public class TrainerController : BaseController
 
     [HttpGet("instructors")]
     public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllInstructors(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllGetAllInstructorsAsync(cancellationToken));
+
+    [HttpGet("trainer-rates/{id:guid}")]
+    public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id));
+
+    [HttpGet("trainer-rates-select/{id:guid}")]
+    public async Task<ActionResult<IEnumerable<TrainerRateSelectResponse>>> GetTrainerRatesSelect([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetTrainerRatesSelect(id));
 
 }

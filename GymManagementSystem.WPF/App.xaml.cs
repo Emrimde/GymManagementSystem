@@ -17,6 +17,7 @@ using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
+using GymManagementSystem.WPF.ViewModels.TrainerRate;
 using Microsoft.Extensions.DependencyInjection;
 using QuestPDF.Infrastructure;
 using Syncfusion.Licensing;
@@ -76,6 +77,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<TrainerContractViewModel>();
             services.AddTransient<TrainerContractAddViewModel>();
             services.AddTransient<TrainerContractDetailsViewModel>();
+            services.AddTransient<TrainerRateViewModel>();
             
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));

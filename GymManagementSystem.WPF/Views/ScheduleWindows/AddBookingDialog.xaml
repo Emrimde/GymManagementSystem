@@ -31,12 +31,18 @@ TextChanged="AutoCompleteBox_TextChanged" SelectionChanged="AutoCompleteBox_Sele
         <ComboBox Width="120"
                   ItemsSource="{Binding TimeSlots}"
                   SelectedItem="{Binding SelectedStartSlot, Mode=TwoWay}"/>
+        
+        <TextBlock Text="Start time:" Margin="0 15 0 0"/>
+        <ComboBox Width="120"
+                  ItemsSource="{Binding TrainerRates}"
+                  SelectedItem="{Binding SelectedTrainerRate, Mode=TwoWay}" DisplayMemberPath="DisplayPriceDuration"/>
 
-        <!-- END TIME -->
+        
+        <!-- END TIME 
         <TextBlock Text="End time:" Margin="0 15 0 0"/>
         <ComboBox Width="120"
                   ItemsSource="{Binding TimeSlots}"
-                  SelectedItem="{Binding SelectedEndSlot, Mode=TwoWay}"/>
+                  SelectedItem="{Binding SelectedEndSlot, Mode=TwoWay}"/> -->
 
         <Button Content="Save"
                 Margin="0 20 0 0"

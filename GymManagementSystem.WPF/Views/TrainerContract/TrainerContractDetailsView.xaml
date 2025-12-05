@@ -99,6 +99,10 @@
                     <StackPanel Orientation="Horizontal" >
                         <Button Content="Show schedule " Width="150"  Command="{Binding OpenTrainerScheduleCommand}" CommandParameter="{Binding TrainerContract.Id}" Visibility="{Binding TrainerContract.IsPersonalTrainer , Converter={StaticResource BoolToVisibilityConverter}}"/>
                     </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Show Rates " Width="150"  Command="{Binding OpenTrainerRatesCommand}" CommandParameter="{Binding TrainerContract.Id}"/>
+                    </StackPanel>
 
                     </StackPanel>
 

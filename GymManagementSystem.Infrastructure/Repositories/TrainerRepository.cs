@@ -15,12 +15,6 @@ public class TrainerRepository : ITrainerRepository
     {
         _dbContext = dbContext;
     }
-    //public async Task<TrainerContract> CreateAsync(Trainer entity)
-    //{
-    //    _dbContext.Add(entity);
-    //    await _dbContext.SaveChangesAsync();
-    //    return entity;
-    //}
 
     public async Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff)
     {
@@ -62,15 +56,7 @@ public class TrainerRepository : ITrainerRepository
             );
     }
 
-    //public async Task<IEnumerable<Trainer>> GetAllAsync(CancellationToken cancellationToken)
-    //{
-    //    return await _dbContext.Trainers.ToListAsync(cancellationToken);
-    //}
 
-    //public async Task<Trainer?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    //{
-    //    return await _dbContext.Trainers.FirstOrDefaultAsync(item => item.Id == id);
-    //}
 
     public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
@@ -78,10 +64,7 @@ public class TrainerRepository : ITrainerRepository
         return list;
     }
 
-    //public Task<Trainer?> UpdateAsync(Guid id, Trainer entity)
-    //{
-    //    throw new NotImplementedException();
-    //}
+
 
     public async Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract)
     {

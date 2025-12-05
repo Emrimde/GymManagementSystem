@@ -161,7 +161,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         var start = ResolveStartFromEvent(e);
         var end = start.AddHours(1);
 
-        var vm = new AddBookingDialogViewModel(_trainerId, start, end, _bookingHttpClient, _clientHttpClient);
+        var vm = new AddBookingDialogViewModel(_trainerId, start, end, _bookingHttpClient, _clientHttpClient, _trainerHttpClient);
         var dialog = new AddBookingDialog { DataContext = vm };
         if (dialog.ShowDialog() == true)
         {

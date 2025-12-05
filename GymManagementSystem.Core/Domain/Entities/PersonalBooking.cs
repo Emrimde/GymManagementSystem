@@ -13,6 +13,7 @@ public class PersonalBooking
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public BookingStatus Status { get; set; } = BookingStatus.Booked;
+    public decimal Price { get; set; }
     public TrainerContract? TrainerContract { get; set; }
     public Client? Client { get; set; }
 }

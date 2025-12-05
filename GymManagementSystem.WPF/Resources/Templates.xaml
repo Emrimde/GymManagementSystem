@@ -28,6 +28,8 @@
                     xmlns:employeeview="clr-namespace:GymManagementSystem.WPF.Views.Employee"
                     xmlns:trainercontractsvm="clr-namespace:GymManagementSystem.WPF.ViewModels.TrainerContract"
                     xmlns:trainercontractsview="clr-namespace:GymManagementSystem.WPF.Views.TrainerContract"
+                    xmlns:trainerratevm="clr-namespace:GymManagementSystem.WPF.ViewModels.TrainerRate"
+                    xmlns:trainerrateview="clr-namespace:GymManagementSystem.WPF.Views.TrainerRate"
                    
                     >
     
@@ -123,6 +125,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractDetailsViewModel}">
                         <trainercontractsview:TrainerContractDetailsView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type trainerratevm:TrainerRateViewModel}">
+                        <trainerrateview:TrainerRateView/>
                     </DataTemplate>
                    
                    

@@ -20,6 +20,7 @@ public class BookingDetailsViewModel : ViewModel
 
     public string ClientName { get; set; }
     public BookingStatus Statuss { get; set; }
+    public string Price { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
@@ -45,6 +46,7 @@ public class BookingDetailsViewModel : ViewModel
         if (result.IsSuccess)
         {
             Statuss = result.Value!.Status;
+            Price = result.Value!.Price;
             if(result.Value.Status == BookingStatus.PaidByClient)
             {
                 IsNotPaid = false;
@@ -74,6 +76,7 @@ public class BookingDetailsViewModel : ViewModel
         OnPropertyChanged(nameof(End));
         OnPropertyChanged(nameof(Statuss));    // <-- konieczne!
         OnPropertyChanged(nameof(IsNotPaid));    
+        OnPropertyChanged(nameof(Price));    
     }
 
     // ---------------------------

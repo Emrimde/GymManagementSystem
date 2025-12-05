@@ -72,14 +72,11 @@ public class PersonalBookingRepository : IPersonalBookingRepository
        return await _db.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id); 
     }
 
-
-
     public async Task<PersonalBooking?> UpdatePersonalBooking(PersonalBooking booking)
     {
         _db.PersonalBookings.Update(booking);
         await _db.SaveChangesAsync();
         return booking;
     }
-
 
 }
