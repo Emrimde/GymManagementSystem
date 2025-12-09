@@ -119,7 +119,7 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<TrainerContractDetailsResponse>> GetTrainerContractAsync(Guid id, bool includeDetails, CancellationToken cancellationToken)
     {
-        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(id, cancellationToken,includeDetails);
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(id,includeDetails);
         if(trainerContract == null)
         {
             return Result<TrainerContractDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);

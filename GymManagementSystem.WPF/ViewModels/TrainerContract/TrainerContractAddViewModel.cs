@@ -133,11 +133,6 @@ public class TrainerContractAddViewModel : ViewModel
 
     }
 
-
-
-    // Zakładam, że masz te typy gdzie indziej w projekcie:
-    // TrainerContractAddRequest, ContractTypeEnum, TrainerTypeEnum
-
     public async Task GenerateTrainerContractPdf(TrainerContractAddRequest request)
     {
         if (request == null) throw new ArgumentNullException(nameof(request));

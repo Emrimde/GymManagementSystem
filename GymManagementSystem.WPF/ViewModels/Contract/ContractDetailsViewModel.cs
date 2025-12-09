@@ -52,7 +52,7 @@ public class ContractDetailsViewModel : ViewModel, IParameterReceiver
         _contractHttpClient = contractHttpClient;
         SidebarView = sidebarView;
         Contract = new ContractDetailsResponse();
-        GeneratePdfContractCommand = new RelayCommand(item => GeneratePdf(), item => true);
+        GeneratePdfContractCommand = new AsyncRelayCommand(item => GeneratePdf(), item => true);
         SetToSignedCommand = new AsyncRelayCommand(param => SetToSigned(param), item => true);
 
     }

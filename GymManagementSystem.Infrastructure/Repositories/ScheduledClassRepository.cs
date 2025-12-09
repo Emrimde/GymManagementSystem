@@ -23,9 +23,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<ScheduledClass>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ScheduledClass>> GetAllAsync()
     {
-        return await _dbContext.ScheduledClasses.Include(item => item.GymClass).ToListAsync(cancellationToken);
+        return await _dbContext.ScheduledClasses.Include(item => item.GymClass).ToListAsync();
     }
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

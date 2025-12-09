@@ -221,15 +221,4 @@ public class TrainerScheduleService : ITrainerScheduleService
         TrainerTimeOff trainerTimeOff = await _trainerTimeOffRepo.UpdateTrainerOffAsync(id, entity.ToTrainerTimeOff());
         return Result<TrainerTimeOffInfoResponse>.Success(trainerTimeOff.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
     }
-
-    public async Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity)
-    {
-        bool isOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(entity.TrainerId, entity.Start, entity.End);
-        if (isOverlap)
-        {
-            return Result<PersonalBookingInfoResponse>.Failure("The time range overlaps an existing personal booking", StatusCodeEnum.BadRequest);
-        }
-        PersonalBooking personalBooking = await _personalBookingRepository.AddAsync(entity.ToPersonalBooking());
-        return Result<PersonalBookingInfoResponse>.Success(personalBooking.ToPersonalBookingInfoResponse(), StatusCodeEnum.Ok);
-    }
 }

@@ -18,7 +18,7 @@ public class ScheduledClassService : IScheduledClassService
 
     public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllAsync(cancellationToken);
+        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllAsync();
         return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses.Select(item => item.ToScheduledClassResponse()), StatusCodeEnum.Ok);
     }
 

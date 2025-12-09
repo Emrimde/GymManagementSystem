@@ -22,8 +22,8 @@ public class GymClassController : BaseController
         => HandleResult(await _gymClassService.GetByIdAsync(id, cancellationToken));
 
     [HttpPost]
-    public async Task<ActionResult<GymClassInfoResponse>> Create([FromBody] GymClassAddRequest entity, CancellationToken cancellationToken)
-        => HandleResult(await _gymClassService.CreateAsync(entity, cancellationToken));
+    public async Task<ActionResult<GymClassInfoResponse>> Create([FromBody] GymClassAddRequest entity)
+        => HandleResult(await _gymClassService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<GymClassInfoResponse>> Update(Guid id, GymClassUpdateRequest entity)

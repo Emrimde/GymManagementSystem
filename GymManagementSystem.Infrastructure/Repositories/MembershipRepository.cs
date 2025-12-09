@@ -19,9 +19,9 @@ public class MembershipRepository : IRepository<Membership>
         return entity;
     }
 
-    public async Task<IEnumerable<Membership>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Membership>> GetAllAsync()
     {
-        return await _dbContext.Memberships.ToListAsync(cancellationToken);
+        return await _dbContext.Memberships.ToListAsync();
     }
 
     public async Task<Membership?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

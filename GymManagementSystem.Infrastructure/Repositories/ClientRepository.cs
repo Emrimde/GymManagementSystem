@@ -22,9 +22,9 @@ public class ClientRepository : IClientRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Client>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Client>> GetAllAsync()
     {
-        return await _dbContext.Clients.Include(item => item.ClientMemberships).ToListAsync(cancellationToken);
+        return await _dbContext.Clients.Include(item => item.ClientMemberships).ToListAsync();
     }
 
     public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

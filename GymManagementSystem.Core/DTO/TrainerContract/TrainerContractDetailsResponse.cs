@@ -18,9 +18,10 @@ public class TrainerContractDetailsResponse
     public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
-    public bool IsPersonalTrainer { get; set; }
+    public bool CanShowBooking { get; set; }
     public bool IsB2B { get; set; }
     public string Valid { get; set; } = default!;
     // Podpisy i dokumenty
     public string IsSigned { get; set; } = default!;
-}
+    public Guid PersonId { get; set; }
+    }

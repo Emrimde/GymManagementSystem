@@ -22,7 +22,7 @@ public class ClassBookingService : IClassBookingService
 
     public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<ClassBooking> classBookings = await _classBookingRepo.GetAllAsync(cancellationToken);
+        IEnumerable<ClassBooking> classBookings = await _classBookingRepo.GetAllAsync();
         return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
     }
 

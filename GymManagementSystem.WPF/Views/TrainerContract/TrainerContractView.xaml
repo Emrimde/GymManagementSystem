@@ -29,7 +29,7 @@
 
                 <TextBlock 
     Grid.Column="0"
-    Text="Trainer Contracts" 
+    Text="Trainers" 
     FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
                 HorizontalAlignment="left"
     

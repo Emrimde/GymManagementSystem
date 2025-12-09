@@ -21,9 +21,9 @@ public class TerminationRepository : IRepository<Termination>
         return entity;
     }
 
-    public async Task<IEnumerable<Termination>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Termination>> GetAllAsync()
     {
-        return await _dbContext.Terminations.Include(item => item.Client).ToListAsync(cancellationToken);
+        return await _dbContext.Terminations.Include(item => item.Client).ToListAsync();
     }
 
     public Task<Termination?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

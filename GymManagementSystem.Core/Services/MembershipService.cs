@@ -26,7 +26,7 @@ public class MembershipService<Entity> : IService<MembershipResponse, Membership
 
     public async Task<Result<IEnumerable<MembershipResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-       IEnumerable<Membership> memberships =  await _repository.GetAllAsync(cancellationToken);
+       IEnumerable<Membership> memberships =  await _repository.GetAllAsync();
        IEnumerable<MembershipResponse> response =  memberships.Select(item => item.ToMembershipResponse());
        return Result<IEnumerable<MembershipResponse>>.Success(response);
     }

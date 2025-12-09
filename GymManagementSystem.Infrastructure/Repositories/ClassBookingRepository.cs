@@ -19,9 +19,9 @@ public class ClassBookingRepository : IRepository<ClassBooking>
         return entity;
     }
 
-    public async Task<IEnumerable<ClassBooking>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ClassBooking>> GetAllAsync()
     {
-       return await _dbContext.ClassBookings.Include(item => item.Client).Include(item => item.ScheduledClass).ThenInclude(item => item.GymClass).ToListAsync(cancellationToken);
+       return await _dbContext.ClassBookings.Include(item => item.Client).Include(item => item.ScheduledClass).ThenInclude(item => item.GymClass).ToListAsync();
     }
 
     public async Task<ClassBooking?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

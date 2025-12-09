@@ -49,7 +49,7 @@ public class TerminationService : IServiceReader<TerminationResponse>, IServiceA
 
     public async Task<Result<IEnumerable<TerminationResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<Termination> terminations  = await _terminationRepo.GetAllAsync(cancellationToken);
+        IEnumerable<Termination> terminations  = await _terminationRepo.GetAllAsync();
         IEnumerable<TerminationResponse> terminationsResponse = terminations.Select(item => item.ToTerminationResponse());
         return Result<IEnumerable<TerminationResponse>>.Success(terminationsResponse, StatusCodeEnum.Ok);
     }

@@ -145,6 +145,10 @@ namespace GymManagementSystem.WPF
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/employee/");
             });
+            services.AddHttpClient<EmploymentTerminationHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/employmentTermination/");
+            });
            
             _serviceProvider = services.BuildServiceProvider();
         }

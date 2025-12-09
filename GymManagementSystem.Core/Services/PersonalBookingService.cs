@@ -33,6 +33,17 @@ public class PersonalBookingService : IPersonalBookingService
         {
             return Result<PersonalBookingInfoResponse>.Failure("Cannot find trainer rate", StatusCodeEnum.NotFound);
         }
+        
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerId, false);
+        if(trainerContract?.ValidFrom >= DateTime.UtcNow || trainerContract?.IsSigned == false)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure("Trainer contract is not valid, so you can't add personal training for this trainer", StatusCodeEnum.BadRequest);
+        }
+
+        if(entity.Start <= DateTime.UtcNow)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure("Personal training start time must be in the future", StatusCodeEnum.BadRequest);
+        }
 
         entity.End = entity.Start.AddMinutes(trainerRate.DurationInMinutes);
         entity.Price = trainerRate.RatePerSessions;

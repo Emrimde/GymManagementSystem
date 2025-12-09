@@ -31,6 +31,7 @@ public class SidebarViewModel : ViewModel
     public ICommand OpenClassBookingsView { get;  }
     public ICommand OpenEmployeesView { get; }
     public ICommand OpenTrainerContractsView { get; }
+    public ICommand OpenEmploymentTerminationsViewCommand { get; }
 
     private INavigationService _navigation;
     public INavigationService Navigation
@@ -59,6 +60,7 @@ public class SidebarViewModel : ViewModel
         OpenClassBookingsView = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(), item => true);
         OpenEmployeesView = new RelayCommand(item => Navigation.NavigateTo<EmployeeViewModel>(), item => true);
         OpenTrainerContractsView = new RelayCommand(item => Navigation.NavigateTo<TrainerContractViewModel>(), item => true);
+        //OpenEmploymentTerminationsViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmploymentTerminationViewModel>(), item => true);
         
     }
 }

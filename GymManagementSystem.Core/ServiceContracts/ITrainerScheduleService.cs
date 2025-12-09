@@ -10,5 +10,4 @@ public interface ITrainerScheduleService
 {
     Task<Result<TrainerScheduleResponse>> GetTrainerScheduleAsync(Guid trainerId, int days, CancellationToken cancellationToken);
     Task<Result<TrainerTimeOffInfoResponse>> UpdateTrainerOff(Guid id, TrainerTimeOffUpdateRequest entity);
-    Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity);
 }

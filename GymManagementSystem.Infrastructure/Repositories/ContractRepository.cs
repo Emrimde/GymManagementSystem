@@ -27,9 +27,9 @@ public class ContractRepository : IContractRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Contract>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Contract>> GetAllAsync()
     {
-        IEnumerable<Contract> contracts = await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item => item.Client).ToListAsync(cancellationToken);
+        IEnumerable<Contract> contracts = await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item => item.Client).ToListAsync();
         return contracts;
     }
 

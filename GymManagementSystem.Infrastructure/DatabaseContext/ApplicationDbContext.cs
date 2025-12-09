@@ -17,7 +17,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<GeneralGymDetail> GeneralGymDetails { get; set; }
     public DbSet<Termination> Terminations { get; set; }
     public DbSet<ClientMembership> ClientMemberships { get; set; }
-    //public DbSet<Trainer> Trainers { get; set; }
     public DbSet<GymClass> GymClasses { get; set; }
     public DbSet<ScheduledClass> ScheduledClasses { get; set; }
     public DbSet<ClassBooking> ClassBookings { get; set; }
@@ -28,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<TrainerProfile> TrainerProfiles { get; set; }
     public DbSet<TrainerRate> TrainerRates { get; set; }
     public DbSet<TrainerContract> TrainerContracts { get; set; }
+    public DbSet<EmploymentTermination> EmploymentTerminations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

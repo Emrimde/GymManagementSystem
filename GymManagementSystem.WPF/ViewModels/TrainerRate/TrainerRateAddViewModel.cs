@@ -43,7 +43,7 @@ public class TrainerRateAddViewModel : ViewModel, IParameterReceiver
         Result<TrainerRateInfoResponse> result = await _trainerHttpClient.AddTrainerRateAsync(TrainerRate);
         if (result.IsSuccess)
         {
-            Navigation.NavigateTo<TrainerRateViewModel>();
+            Navigation.NavigateTo<TrainerRateViewModel>(TrainerRate.TrainerContractId);
         }
         // potem np. powrót
     }

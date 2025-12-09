@@ -23,7 +23,7 @@ public class ContractService<Entity> : IContractService
 
     public async Task<Result<IEnumerable<ContractResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<Contract> contracts = await _repository.GetAllAsync(cancellationToken);
+        IEnumerable<Contract> contracts = await _repository.GetAllAsync();
         IEnumerable<ContractResponse> contractsResponse = contracts.Select(item => item.ToContractResponse());
         return Result<IEnumerable<ContractResponse>>.Success(contractsResponse, StatusCodeEnum.Ok);
     }

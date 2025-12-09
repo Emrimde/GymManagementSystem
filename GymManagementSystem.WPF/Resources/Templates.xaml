@@ -31,6 +31,7 @@
                     xmlns:trainerratevm="clr-namespace:GymManagementSystem.WPF.ViewModels.TrainerRate"
                     xmlns:trainerrateview="clr-namespace:GymManagementSystem.WPF.Views.TrainerRate"
                    
+                   
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -132,6 +133,8 @@
                     <DataTemplate DataType="{x:Type trainerratevm:TrainerRateAddViewModel}">
                         <trainerrateview:TrainerRateAddView/>
                     </DataTemplate>
+
+    
                    
                    
 

@@ -55,17 +55,11 @@ public class TrainerRepository : ITrainerRepository
                 item.End > start
             );
     }
-
-
-
     public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
         IEnumerable<TrainerTimeOff> list = await _dbContext.TrainerTimeOff.ToListAsync();
         return list;
     }
-
-
-
     public async Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract)
     {
         _dbContext.TrainerContracts.Add(trainerContract);
@@ -73,14 +67,11 @@ public class TrainerRepository : ITrainerRepository
         return trainerContract.ToTrainerContractInfoResponse();
 
     }
-
     public async Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.TrainerContracts.Include(item => item.Person).ToListAsync(cancellationToken);
     }
-
-
-    public async Task<TrainerContract?> GetTrainerContractAsync(Guid id, CancellationToken cancellationToken, bool includeDetails)
+    public async Task<TrainerContract?> GetTrainerContractAsync(Guid id, bool includeDetails)
     {
         if (!includeDetails)
         {

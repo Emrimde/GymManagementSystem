@@ -18,7 +18,7 @@ public class ClientService<Entity> : IClientService
 
     public async Task<Result<IEnumerable<ClientResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<Client> clients = await _repository.GetAllAsync(cancellationToken);
+        IEnumerable<Client> clients = await _repository.GetAllAsync();
         IEnumerable<ClientResponse> clientResponseList = clients.Select(client => client.ToClientResponse());
         return Result<IEnumerable<ClientResponse>>.Success(clientResponseList, StatusCodeEnum.Ok);
     }

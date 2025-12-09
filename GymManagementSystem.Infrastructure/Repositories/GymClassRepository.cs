@@ -19,9 +19,9 @@ public class GymClassRepository : IRepository<GymClass>
         return entity;
     }
 
-    public async Task<IEnumerable<GymClass>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<GymClass>> GetAllAsync()
     {
-        return await _dbContext.GymClasses.ToListAsync(cancellationToken);  
+        return await _dbContext.GymClasses.ToListAsync();  
     }
 
     public Task<GymClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

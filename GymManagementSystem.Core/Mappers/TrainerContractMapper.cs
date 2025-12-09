@@ -24,6 +24,7 @@ public static class TrainerContractMapper
             },
             ValidFrom = request?.ValidFrom ??  DateTime.UtcNow,
             ValidTo = request?.ValidTo ?? null,
+            TaxId = request?.TaxId
             
         };
     }
@@ -41,6 +42,7 @@ public static class TrainerContractMapper
     {
         return new TrainerContractResponse()
         {
+
             ContractType = trainerContract.ContractType,
             FirstName = trainerContract.Person?.FirstName,
             LastName= trainerContract.Person?.LastName,
@@ -56,9 +58,9 @@ public static class TrainerContractMapper
         {
             ContractType = trainerContract.ContractType,
             FirstName = trainerContract.Person?.FirstName,
-            LastName= trainerContract.Person?.LastName,
-            PhoneNumber= trainerContract.Person?.PhoneNumber,
-            Email= trainerContract.Person?.Email,
+            LastName = trainerContract.Person?.LastName,
+            PhoneNumber = trainerContract.Person?.PhoneNumber,
+            Email = trainerContract.Person?.Email,
             ClubCommissionPercent = trainerContract.ClubCommissionPercent.ToString() + "%",
             CompanyAddress = trainerContract.CompanyAddress,
             CompanyName = trainerContract.CompanyName,
@@ -67,9 +69,9 @@ public static class TrainerContractMapper
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType,
             IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,
-            IsPersonalTrainer = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? true : false,
-            Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent")
-
+            CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && trainerContract.ValidFrom <= DateTime.UtcNow ? true : false,
+            Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent"),
+            PersonId = trainerContract.PersonId
         };
     }
 }

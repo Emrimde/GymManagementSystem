@@ -20,9 +20,9 @@ public class GymClassService : IGymClassService
         _trainerRepo = trainerRepo;
     }
 
-    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
     {
-        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId,cancellationToken,false);
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId,false);
         
 
 
@@ -40,7 +40,7 @@ public class GymClassService : IGymClassService
         gymClass.Duration = new TimeSpan(0, 59, 59);
         TimeSpan endTime = gymClass.StartHour + gymClass.Duration;
 
-        List<GymClass> gymClasses = (List<GymClass>)await _gymClassRepo.GetAllAsync(cancellationToken);
+        List<GymClass> gymClasses = (List<GymClass>)await _gymClassRepo.GetAllAsync();
 
         if(gymClasses.Any(item => (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 && endTime > item.StartHour && gymClass.StartHour < item.StartHour + item.Duration))
         {
@@ -55,7 +55,7 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<GymClass> gymCLasses = await _gymClassRepo.GetAllAsync(cancellationToken);
+        IEnumerable<GymClass> gymCLasses = await _gymClassRepo.GetAllAsync();
 
         return Result<IEnumerable<GymClassResponse>>.Success(gymCLasses.Select(item => item.ToGymResponse()),StatusCodeEnum.Ok);
     }

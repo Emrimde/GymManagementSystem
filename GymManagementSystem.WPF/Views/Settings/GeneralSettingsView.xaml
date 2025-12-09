@@ -95,8 +95,6 @@
                             Margin="20,0,10,0"/>
                         <xctk:ColorPicker SelectedColor="{Binding GeneralGymDetails.SecondColor}" Width="100" />
                     </StackPanel>
-
-
                 </StackPanel>
             </Grid>
 

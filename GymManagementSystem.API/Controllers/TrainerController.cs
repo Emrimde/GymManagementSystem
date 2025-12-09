@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
 
-
 public class TrainerController : BaseController
 {
     private readonly ITrainerService _trainerService;
@@ -35,8 +34,8 @@ public class TrainerController : BaseController
     public async Task<ActionResult<TrainerInfoResponse>> GetTrainerTimeOffs(CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerTimeOffs(cancellationToken));
 
 
-    [HttpPost("personal-booking")]
-    public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _trainerScheduleService.CreatePersonalBookingAsync(entity));
+    //[HttpPost("personal-booking")]
+    //public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _trainerScheduleService.CreatePersonalBookingAsync(entity));
 
 
     [HttpPost("trainercontract")]
