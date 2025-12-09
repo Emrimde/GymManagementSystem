@@ -43,8 +43,6 @@
                         <DataGridTextColumn Header="Phone number" Binding="{Binding PhoneNumber}"/>
                         <DataGridTextColumn Header="Requested date" Binding="{Binding RequestedDate}"/>
                         <DataGridTextColumn Header="Effective date" Binding="{Binding EffectiveDate}"/>
-                        <DataGridTextColumn Header="Street" Binding="{Binding Street}"/>
-                        <DataGridTextColumn Header="City" Binding="{Binding City}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

@@ -24,9 +24,9 @@ public class EmploymentTerminationViewModel : ViewModel
     private async Task LoadEmploymentTerminations()
     {
         Result<ObservableCollection<EmploymentTerminationResponse>> result = await _employmentHttpClient.GetAllEmploymentTerminationsAsync();
-        if(result.IsSuccess)
+        if (result.IsSuccess)
         {
-            foreach(var termination in result.Value!)
+            foreach (var termination in result.Value!)
             {
                 EmploymentTerminations.Add(termination);
             }
