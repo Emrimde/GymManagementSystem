@@ -23,7 +23,7 @@ public class ClientMembershipRepository : IRepository<ClientMembership>
         return entity;
     }
 
-    public async Task<IEnumerable<ClientMembership>> GetAllAsync()
+    public async Task<IEnumerable<ClientMembership>> GetAllAsync(string? searchText = null)
     {
         return await _dbContext.ClientMemberships.Include(item => item.Client).Include(item => item.Membership).ToListAsync();
     }

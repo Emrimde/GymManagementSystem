@@ -27,7 +27,7 @@ public class ContractRepository : IContractRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Contract>> GetAllAsync()
+    public async Task<IEnumerable<Contract>> GetAllAsync(string? searchText = null)
     {
         IEnumerable<Contract> contracts = await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item => item.Client).ToListAsync();
         return contracts;

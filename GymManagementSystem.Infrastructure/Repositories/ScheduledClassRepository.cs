@@ -23,7 +23,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<ScheduledClass>> GetAllAsync()
+    public async Task<IEnumerable<ScheduledClass>> GetAllAsync(string? searchText = null)
     {
         return await _dbContext.ScheduledClasses.Include(item => item.GymClass).ToListAsync();
     }

@@ -19,7 +19,7 @@ public class GymClassRepository : IRepository<GymClass>
         return entity;
     }
 
-    public async Task<IEnumerable<GymClass>> GetAllAsync()
+    public async Task<IEnumerable<GymClass>> GetAllAsync(string? searchText = null)
     {
         return await _dbContext.GymClasses.ToListAsync();  
     }

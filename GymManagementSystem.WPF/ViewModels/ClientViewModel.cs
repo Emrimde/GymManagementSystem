@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -27,6 +28,20 @@ public class ClientViewModel : ViewModel
             _navigation = value; OnPropertyChanged();
         }
     }
+
+    private string _searchText;
+
+    public string SearchText
+    {
+        get { return _searchText; }
+        set
+        {
+            _searchText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand SearchClientsCommand { get; }
 
     private ObservableCollection<ClientResponse> _clients;
 
@@ -59,6 +74,8 @@ public class ClientViewModel : ViewModel
             _navigation.NavigateTo<ClientUpdateViewModel>(client);
     }, item => true);
 
+        SearchClientsCommand = new AsyncRelayCommand(item => SearchClients(), item => true);
+
         OpenClientDetailsCommand = new RelayCommand(item =>
         {
             if (item is Guid id)
@@ -66,13 +83,19 @@ public class ClientViewModel : ViewModel
         }, item => true);
 
         OpenAddClientMembershipViewCommand = new RelayCommand(item =>
-        
 
-        Navigation.NavigateTo<ClientMembershipAddViewModel>(item), item => true); 
+
+        Navigation.NavigateTo<ClientMembershipAddViewModel>(item), item => true);
+    }
+
+    private async Task SearchClients()
+    {
+        ObservableCollection<ClientResponse> result = await _clientHttpClient.GetAllClientsAsync(SearchText);
+        Clients = result;
     }
 
     private async Task LoadClientsAsync()
     {
-        Clients = await _clientHttpClient.GetAllClientsAsync();
+        Clients = await _clientHttpClient.GetAllClientsAsync(null);
     }
 }

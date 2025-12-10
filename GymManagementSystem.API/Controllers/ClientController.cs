@@ -14,8 +14,8 @@ public class ClientController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClientResponse>>> GetAll(CancellationToken cancellationToken)
-        => HandleListedResult(await _clientService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<IEnumerable<ClientResponse>>> GetAll([FromQuery] string? searchText,CancellationToken cancellationToken)
+        => HandleListedResult(await _clientService.GetAllAsync(searchText,cancellationToken));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly,  CancellationToken cancellationToken)

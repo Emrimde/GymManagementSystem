@@ -47,9 +47,10 @@ public class ClientHttpClient : BaseHttpClientService
     }
 
 
-    public async Task<ObservableCollection<ClientResponse>> GetAllClientsAsync()
+    public async Task<ObservableCollection<ClientResponse>> GetAllClientsAsync(string? searchText)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
+        string query = string.IsNullOrWhiteSpace(searchText) ? "" : $"?searchText={Uri.UnescapeDataString(searchText)}";
+        HttpResponseMessage response = await _httpClient.GetAsync(query);
         if (response.IsSuccessStatusCode)
         {
             ObservableCollection<ClientResponse>? clients = await response.Content.ReadFromJsonAsync<ObservableCollection<ClientResponse>>();

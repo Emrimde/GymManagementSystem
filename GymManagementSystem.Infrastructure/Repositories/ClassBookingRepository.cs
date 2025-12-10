@@ -19,7 +19,7 @@ public class ClassBookingRepository : IRepository<ClassBooking>
         return entity;
     }
 
-    public async Task<IEnumerable<ClassBooking>> GetAllAsync()
+    public async Task<IEnumerable<ClassBooking>> GetAllAsync(string? searchText = null)
     {
        return await _dbContext.ClassBookings.Include(item => item.Client).Include(item => item.ScheduledClass).ThenInclude(item => item.GymClass).ToListAsync();
     }

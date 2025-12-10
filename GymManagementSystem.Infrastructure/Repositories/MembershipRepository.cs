@@ -19,7 +19,7 @@ public class MembershipRepository : IRepository<Membership>
         return entity;
     }
 
-    public async Task<IEnumerable<Membership>> GetAllAsync()
+    public async Task<IEnumerable<Membership>> GetAllAsync(string? searchText = null)
     {
         return await _dbContext.Memberships.ToListAsync();
     }

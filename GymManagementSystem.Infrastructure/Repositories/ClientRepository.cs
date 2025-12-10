@@ -22,9 +22,25 @@ public class ClientRepository : IClientRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Client>> GetAllAsync()
+    public async Task<IEnumerable<Client>> GetAllAsync(string? searchText = null)
     {
-        return await _dbContext.Clients.Include(item => item.ClientMemberships).ToListAsync();
+        if(searchText == null)
+        {
+            return await _dbContext.Clients.Include(item => item.ClientMemberships).ToListAsync();
+        }
+        string searchTextlower = searchText.ToLower();
+        string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        IQueryable<Client> query = _dbContext.Clients.Include(item => item.ClientMemberships);
+        foreach (string term in terms)
+        {
+            string pattern = $"%{term}%";
+            query = query.Where(item => item.FirstName.ToLower().Contains(term) ||
+                                            item.LastName.ToLower().Contains(term) ||
+                                                item.PhoneNumber.Contains(term) ||
+                                                    item.Email.ToLower().Contains(term));
+        }
+
+        return await query.ToListAsync();   
     }
 
     public async Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

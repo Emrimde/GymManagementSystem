@@ -21,7 +21,7 @@ public class TerminationRepository : IRepository<Termination>
         return entity;
     }
 
-    public async Task<IEnumerable<Termination>> GetAllAsync()
+    public async Task<IEnumerable<Termination>> GetAllAsync(string? searchText = null)
     {
         return await _dbContext.Terminations.Include(item => item.Client).ToListAsync();
     }
