@@ -5,6 +5,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using System.Reflection.Metadata.Ecma335;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -33,26 +34,34 @@ public class ClientService<Entity> : IClientService
         Client client = request.ToClient();
         Client? updatedClient = await _repository.UpdateAsync(id, client);
 
-        if(updatedClient == null)
+        if (updatedClient == null)
         {
             return Result<ClientInfoResponse>.Failure("Client not found, updation failed", StatusCodeEnum.NotFound);
         }
 
         ClientInfoResponse clientResponse = updatedClient.ToClientInfoResponse();
 
-        return Result<ClientInfoResponse>.Success(clientResponse,StatusCodeEnum.Ok);
+        return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ClientInfoResponse>> CreateAsync(ClientAddRequest request)
     {
-       Client client = request.ToClient();
-       Client createdClient = await _repository.CreateAsync(client);
+        Client client = request.ToClient();
+        DateTime today = DateTime.UtcNow;
+        int age = today.Year - client.DateOfBirth.Year;
+        if (client.DateOfBirth > today.AddYears(-age))
+        {
+            age--;
+        }
 
-       ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
-       return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
+        client.HasParentalConsent = age < 18 ? true : null;
+        Client createdClient = await _repository.CreateAsync(client);
+
+        ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
+        return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id, bool isActiveOnly,CancellationToken cancellationToken)
+    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id, bool isActiveOnly, CancellationToken cancellationToken)
     {
         if (id == Guid.Empty)
         {
@@ -65,7 +74,7 @@ public class ClientService<Entity> : IClientService
         {
             return Result<ClientDetailsResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
         }
-       
+
         ClientDetailsResponse clientResponse = client.ToClientDetailsResponse();
 
         return Result<ClientDetailsResponse>.Success(clientResponse, StatusCodeEnum.Ok);
@@ -73,7 +82,19 @@ public class ClientService<Entity> : IClientService
 
     public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null)
     {
-      IEnumerable<Client> searchedClients = await _repository.LookUpClientsAsync(query, scheduledClassId);
-      return Result<IEnumerable<ClientInfoResponse>>.Success(searchedClients.Select(item => item.ToClientInfoResponse()));
+        IEnumerable<Client> searchedClients = await _repository.LookUpClientsAsync(query, scheduledClassId);
+        return Result<IEnumerable<ClientInfoResponse>>.Success(searchedClients.Select(item => item.ToClientInfoResponse()));
+    }
+
+    public Result<ClientAgeValidationResponse> ValidateClientAgeAsync(ClientAgeValidationRequest entity)
+    {
+        DateTime today = DateTime.UtcNow;
+        int age = today.Year - entity.DateOfBirth.Year;
+        if (entity.DateOfBirth > today.AddYears(-age)) age--;
+        ClientAgeValidationResponse response = new ClientAgeValidationResponse()
+        {
+            Age = age
+        };
+        return Result<ClientAgeValidationResponse>.Success(response, StatusCodeEnum.Ok);
     }
 }

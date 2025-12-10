@@ -124,7 +124,16 @@ public class TrainerService : ITrainerService
         {
             return Result<TrainerContractDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
         }
-            return Result<TrainerContractDetailsResponse>.Success(trainerContract.ToTrainerContractDetailsResponse(), StatusCodeEnum.Ok);
+
+        Console.WriteLine($"Type OK: {trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer}");
+        Console.WriteLine($"ValidFrom: {trainerContract.ValidFrom:o}");
+        Console.WriteLine($"UtcNow:    {DateTime.UtcNow:o}");
+        Console.WriteLine($"validFromOK: {trainerContract.ValidFrom <= DateTime.UtcNow}");
+       
+
+        TrainerContractDetailsResponse response = trainerContract.ToTrainerContractDetailsResponse();
+        Console.WriteLine($"Final CanShowBooking: {response.CanShowBooking}");
+            return Result<TrainerContractDetailsResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id)

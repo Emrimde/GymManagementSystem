@@ -15,6 +15,7 @@ public class Person
     public DateTime? DeletedAt { get; set; }
     public Employee? Employee { get; set; }
     public TrainerContract? TrainerContract{ get; set; }
+    public ICollection<EmploymentTermination> EmploymentTerminations { get; set; }
+    = new List<EmploymentTermination>();
 
-    public ICollection<EmploymentTermination> EmploymentTerminations = new List<EmploymentTermination>();
 }

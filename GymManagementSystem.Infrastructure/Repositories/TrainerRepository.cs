@@ -79,7 +79,10 @@ public class TrainerRepository : ITrainerRepository
         }
         else
         {
-            return await _dbContext.TrainerContracts.Include(item => item.Person).FirstOrDefaultAsync(item => item.Id == id);
+            return await _dbContext.TrainerContracts
+                                        .Include(item => item.Person)
+                                            .ThenInclude(item => item.EmploymentTerminations)
+                                                .FirstOrDefaultAsync(item => item.Id == id);
         }
     }
 

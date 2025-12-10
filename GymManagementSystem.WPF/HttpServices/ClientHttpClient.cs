@@ -17,6 +17,36 @@ public class ClientHttpClient : BaseHttpClientService
         
     }
 
+    public async Task<Result<ClientAgeValidationResponse>> ValidateClientAgeAsync(
+     ClientAgeValidationRequest request)
+    {
+        try
+        {
+            var httpResponse = await _httpClient.PostAsJsonAsync($"validate", request);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return Result<ClientAgeValidationResponse>.Failure(
+                    $"Validation failed with status {httpResponse.StatusCode}");
+            }
+
+            var response = await httpResponse.Content.ReadFromJsonAsync<ClientAgeValidationResponse>();
+
+            if (response is null)
+            {
+                return Result<ClientAgeValidationResponse>.Failure("Empty response from server.");
+            }
+
+            return Result<ClientAgeValidationResponse>.Success(response);
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<ClientAgeValidationResponse>.Failure(
+                $"Error validating client age: {ex.Message}");
+        }
+    }
+
+
     public async Task<ObservableCollection<ClientResponse>> GetAllClientsAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync("");
@@ -40,7 +70,7 @@ public class ClientHttpClient : BaseHttpClientService
         string json = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await _httpClient.PostAsync((string?)null, content);
+        HttpResponseMessage response = await _httpClient.PostAsync("", content);
 
         string responseBody = await response.Content.ReadAsStringAsync();
 

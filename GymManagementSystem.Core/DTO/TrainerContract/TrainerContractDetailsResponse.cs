@@ -19,6 +19,7 @@ public class TrainerContractDetailsResponse
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
     public bool CanShowBooking { get; set; }
+    public bool CanTerminate { get; set; }
     public bool IsB2B { get; set; }
     public string Valid { get; set; } = default!;
     // Podpisy i dokumenty

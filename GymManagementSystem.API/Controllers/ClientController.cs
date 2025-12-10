@@ -25,6 +25,11 @@ public class ClientController : BaseController
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)
         => HandleResult(await _clientService.CreateAsync(entity));
 
+
+    [HttpPost("validate")]
+    public ActionResult<ClientInfoResponse> ValidateClientAge([FromBody] ClientAgeValidationRequest entity)
+        => HandleResult(_clientService.ValidateClientAgeAsync(entity));
+
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ClientInfoResponse>> Update(Guid id, ClientUpdateRequest entity)
         => HandleResult(await _clientService.UpdateAsync(id, entity));
