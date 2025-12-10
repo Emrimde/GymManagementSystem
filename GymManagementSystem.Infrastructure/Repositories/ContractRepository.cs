@@ -1,6 +1,11 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Contract;
 using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.Mappers;
+using GymManagementSystem.Core.Mappers.ClientMapper;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,15 +32,48 @@ public class ContractRepository : IContractRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Contract>> GetAllAsync(string? searchText = null)
+    public async Task<PageResult<ContractResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
     {
-        IEnumerable<Contract> contracts = await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item => item.Client).ToListAsync();
-        return contracts;
+        IQueryable<Contract> query = _dbContext.Contracts;
+
+        if (searchText != null)
+        {
+            string searchTextlower = searchText.ToLower();
+            string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
+            {
+                string pattern = $"%{term}%";
+                query = query.Where(item => item.ClientMembership!.Client!.FirstName.ToLower().Contains(term) ||
+                                               item.ClientMembership!.Client!.LastName.ToLower().Contains(term));
+                                                    
+            }
+        }
+
+
+
+        int totalCount = await query.CountAsync();
+        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        List<ContractResponse> list = await query.OrderBy(item => item.ClientMembership!.Client!.FirstName)
+                                                    .Skip((page - 1) * pageSize)
+                                                        .Take(pageSize)
+                                                            .Select(item => item.ToContractResponse())
+                                                                .ToListAsync();
+
+
+
+        return new PageResult<ContractResponse>()
+        {
+            Items = list,
+            TotalCount = totalCount,
+            PageSize = pageSize,
+            TotalPages = totalPages,
+            CurrentPage = page
+        };
     }
 
-    public async Task<Contract?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Contract?> GetByIdAsync(Guid id)
     {
-       return await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item=> item.Membership).Include(item => item.ClientMembership!.Client).FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
+       return await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item=> item.Membership).Include(item => item.ClientMembership!.Client).FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<Contract?> UpdateAsync(Guid id, Contract entity)

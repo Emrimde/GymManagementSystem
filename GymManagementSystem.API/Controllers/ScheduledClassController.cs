@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.ScheduledClass;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,10 @@ public class ScheduledClassController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll(CancellationToken cancellationToken)
-        => HandleListedResult(await _scheduledClassService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<PageResult<ScheduledClassResponse>>> GetAll()
+        => HandlePageResult(await _scheduledClassService.GetAllAsync());
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ScheduledClassDetailsResponse>> GetById([FromRoute] Guid id, CancellationToken cancellationToken) => HandleResult(await _scheduledClassService.GetByIdAsync(id, cancellationToken));
+    public async Task<ActionResult<ScheduledClassDetailsResponse>> GetById([FromRoute] Guid id) => HandleResult(await _scheduledClassService.GetByIdAsync(id));
 
 }

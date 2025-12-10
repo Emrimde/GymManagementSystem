@@ -10,5 +10,4 @@ public class ClientResponse
     public DateTime DateOfBirth { get; set; }
     public string Street { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
-    public bool CanClientAddMembership { get; set; }
 }

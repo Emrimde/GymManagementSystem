@@ -9,7 +9,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace GymManagementSystem.Core.Services;
 
-public class ClientService<Entity> : IClientService
+public class ClientService : IClientService
 {
     private readonly IClientRepository _repository;
     public ClientService(IClientRepository repository)
@@ -17,11 +17,10 @@ public class ClientService<Entity> : IClientService
         _repository = repository;
     }
 
-    public async Task<Result<IEnumerable<ClientResponse>>> GetAllAsync(string? searchText, CancellationToken cancellationToken)
+    public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText)
     {
-        IEnumerable<Client> clients = await _repository.GetAllAsync(searchText);
-        IEnumerable<ClientResponse> clientResponseList = clients.Select(client => client.ToClientResponse());
-        return Result<IEnumerable<ClientResponse>>.Success(clientResponseList, StatusCodeEnum.Ok);
+        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:searchText);
+        return clients;
     }
 
     public async Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest request)
@@ -61,14 +60,14 @@ public class ClientService<Entity> : IClientService
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id, bool isActiveOnly, CancellationToken cancellationToken)
+    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id, bool isActiveOnly)
     {
         if (id == Guid.Empty)
         {
             return Result<ClientDetailsResponse>.Failure("Invalid id", StatusCodeEnum.BadRequest);
         }
 
-        Client? client = await _repository.GetByIdAsync(id, cancellationToken);
+        Client? client = await _repository.GetByIdAsync(id);
 
         if (client == null)
         {

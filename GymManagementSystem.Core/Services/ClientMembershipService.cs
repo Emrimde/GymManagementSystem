@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.DTO.Contract;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -10,9 +11,9 @@ namespace GymManagementSystem.Core.Services;
 
 public class ClientMembershipService<Entity> : IClientMembershipService
 {
-    private readonly IRepository<ClientMembership> _clientMembershipRepository;
-    private readonly IRepository<Contract> _contractRepo;
-    public ClientMembershipService(IRepository<ClientMembership> clientMembershipRepository, IRepository<Contract> contractRepo)
+    private readonly IRepository<ClientMembershipResponse,ClientMembership> _clientMembershipRepository;
+    private readonly IRepository<ContractResponse,Contract> _contractRepo;
+    public ClientMembershipService(IRepository<ClientMembershipResponse, ClientMembership> clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
@@ -32,10 +33,10 @@ public class ClientMembershipService<Entity> : IClientMembershipService
         return Result<ClientMembershipInfoResponse>.Success(addedClientMembership.ToClientMembershipInfoResponse(createdContract.Id));
     }
 
-    public async Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        IEnumerable<ClientMembership> clientMembershipList = await _clientMembershipRepository.GetAllAsync();
-        return Result<IEnumerable<ClientMembershipResponse>>.Success(clientMembershipList.Select(item => item.ToClientMembershipResponse()));
+    public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1)
+    { 
+        PageResult<ClientMembershipResponse> clientMembershipList = await _clientMembershipRepository.GetAllAsync(pageSize: pageSize, page:page, searchText: searchText);
+        return clientMembershipList;
     }
 
     public Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)

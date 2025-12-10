@@ -10,10 +10,10 @@ namespace GymManagementSystem.Core.Services;
 
 public class GymClassService : IGymClassService
 {
-    private readonly IRepository<GymClass> _gymClassRepo;
+    private readonly IGymClassRepository _gymClassRepo;
     private readonly IScheduledClassRepository _scheduledClassRepo;
     private readonly ITrainerRepository _trainerRepo;
-    public GymClassService(IRepository<GymClass> gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo)
+    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;

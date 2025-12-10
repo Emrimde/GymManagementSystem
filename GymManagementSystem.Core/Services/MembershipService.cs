@@ -7,10 +7,10 @@ using GymManagementSystem.Core.ServiceContracts;
 
 namespace GymManagementSystem.Core.Services;
 
-public class MembershipService<Entity> : IService<MembershipResponse, MembershipAddRequest, MembershipUpdateRequest, Membership>
+public class MembershipService : IMembershipService
 {
-    private readonly IRepository<Membership> _repository;
-    public MembershipService(IRepository<Membership> repository)
+    private readonly IRepository<MembershipResponse,Membership> _repository;
+    public MembershipService(IRepository<MembershipResponse,Membership> repository)
     {
         _repository = repository;
     }
@@ -24,22 +24,23 @@ public class MembershipService<Entity> : IService<MembershipResponse, Membership
         return Result<MembershipResponse>.Success(response.ToMembershipResponse());
     }
 
-    public async Task<Result<IEnumerable<MembershipResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<MembershipResponse>> GetAllAsync()
     {
-       IEnumerable<Membership> memberships =  await _repository.GetAllAsync();
-       IEnumerable<MembershipResponse> response =  memberships.Select(item => item.ToMembershipResponse());
-       return Result<IEnumerable<MembershipResponse>>.Success(response);
+       PageResult<MembershipResponse> memberships =  await _repository.GetAllAsync();
+       return memberships;
     }
 
-    public async Task<Result<MembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<MembershipResponse>> GetByIdAsync(Guid id)
     {
-        Membership? membership = await _repository.GetByIdAsync(id, cancellationToken);
+        Membership? membership = await _repository.GetByIdAsync(id);
         if (membership == null)
         {
             return Result<MembershipResponse>.Failure($"Membership with id {id} not found");
         }
         return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
     }
+
+
 
     public async Task<Result<MembershipResponse>> UpdateAsync(Guid id, MembershipUpdateRequest entity)
     {

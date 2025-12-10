@@ -8,7 +8,7 @@ using GymManagementSystem.Core.ServiceContracts;
 
 namespace GymManagementSystem.Core.Services;
 
-public class ContractService<Entity> : IContractService
+public class ContractService : IContractService
 {
     private readonly IContractRepository _repository;
     public ContractService(IContractRepository repository)
@@ -21,16 +21,15 @@ public class ContractService<Entity> : IContractService
         throw new NotImplementedException();
     }
 
-    public async Task<Result<IEnumerable<ContractResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<ContractResponse>> GetAllAsync()
     {
-        IEnumerable<Contract> contracts = await _repository.GetAllAsync();
-        IEnumerable<ContractResponse> contractsResponse = contracts.Select(item => item.ToContractResponse());
-        return Result<IEnumerable<ContractResponse>>.Success(contractsResponse, StatusCodeEnum.Ok);
+        PageResult<ContractResponse> contracts = await _repository.GetAllAsync();
+        return contracts;
     }
 
-    public async Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id)
     {
-        Contract? contract = await _repository.GetByIdAsync(id, cancellationToken);
+        Contract? contract = await _repository.GetByIdAsync(id);
         if (contract == null)
         {
             return Result<ContractDetailsResponse>.Failure("Contract not found", StatusCodeEnum.NotFound);

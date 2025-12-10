@@ -1,8 +1,9 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.ScheduledClass;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
-public interface IScheduledClassRepository : IRepository<ScheduledClass>
+public interface IScheduledClassRepository : IRepository<ScheduledClassResponse, ScheduledClass>
 {
     Task AddRangeAsync(IEnumerable<ScheduledClass> entities);
 }

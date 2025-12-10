@@ -9,19 +9,19 @@ using GymManagementSystem.Core.ServiceContracts;
 
 namespace GymManagementSystem.Core.Services;
 
-public class TerminationService : IServiceReader<TerminationResponse>, IServiceAdder<TerminationResponse, TerminationAddRequest>
+public class TerminationService : ITerminationService
 {
-    private readonly IRepository<Termination> _terminationRepo;
+    private readonly IRepository<TerminationResponse,Termination> _terminationRepo;
     private readonly IContractRepository _contractRepo;
-    public TerminationService(IRepository<Termination> terminationRepository, IContractRepository contractRepository) 
+    public TerminationService(IRepository<TerminationResponse,Termination> terminationRepository, IContractRepository contractRepository) 
     {
         _terminationRepo = terminationRepository;
         _contractRepo = contractRepository;
     }
 
-    public async Task<Result<TerminationResponse>> CreateAsync(TerminationAddRequest entity, CancellationToken cancellationToken)
+    public async Task<Result<TerminationResponse>> CreateAsync(TerminationAddRequest entity)
     {
-        Contract? contract = await _contractRepo.GetByIdAsync(entity.ContractId,cancellationToken);
+        Contract? contract = await _contractRepo.GetByIdAsync(entity.ContractId);
         if (contract == null || contract.IsActive == false) 
         {
             return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client doesn't have contract", StatusCodeEnum.InternalServerError);
@@ -47,14 +47,13 @@ public class TerminationService : IServiceReader<TerminationResponse>, IServiceA
         return Result<TerminationResponse>.Success(createdTermination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<TerminationResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<TerminationResponse>> GetAllAsync()
     {
-        IEnumerable<Termination> terminations  = await _terminationRepo.GetAllAsync();
-        IEnumerable<TerminationResponse> terminationsResponse = terminations.Select(item => item.ToTerminationResponse());
-        return Result<IEnumerable<TerminationResponse>>.Success(terminationsResponse, StatusCodeEnum.Ok);
+        PageResult<TerminationResponse> terminations  = await _terminationRepo.GetAllAsync();
+        return terminations;
     }
 
-    public Task<Result<TerminationResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public Task<Result<TerminationResponse>> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }

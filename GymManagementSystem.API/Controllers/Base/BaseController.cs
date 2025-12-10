@@ -32,4 +32,9 @@ public class BaseController: ControllerBase
             : !result.IsSuccess ?
             Problem(detail: result.ErrorMessage, statusCode: (int)result.StatusCode) : Ok(result.Value);
     }
+
+    protected ActionResult HandlePageResult<T>(PageResult<T> result)
+    {
+        return Ok(result);
+    }
 }

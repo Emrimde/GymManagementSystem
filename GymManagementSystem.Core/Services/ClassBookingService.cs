@@ -9,8 +9,8 @@ namespace GymManagementSystem.Core.Services;
 
 public class ClassBookingService : IClassBookingService
 {
-    private readonly IRepository<ClassBooking> _classBookingRepo;
-    public ClassBookingService(IRepository<ClassBooking> classBookingRepo)
+    private readonly IRepository<ClassBookingResponse,ClassBooking> _classBookingRepo;
+    public ClassBookingService(IRepository<ClassBookingResponse,ClassBooking> classBookingRepo)
     {
         _classBookingRepo = classBookingRepo;
     }
@@ -20,13 +20,13 @@ public class ClassBookingService : IClassBookingService
         return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
     }
 
-    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<ClassBookingResponse>> GetAllAsync()
     {
-        IEnumerable<ClassBooking> classBookings = await _classBookingRepo.GetAllAsync();
-        return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
+        PageResult<ClassBookingResponse> classBookings = await _classBookingRepo.GetAllAsync();
+        return classBookings;
     }
 
-    public Task<Result<ClassBookingDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public Task<Result<ClassBookingDetailsResponse>> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }

@@ -17,9 +17,7 @@ public static class ClientMapper
             PhoneNumber = client.PhoneNumber,
             DateOfBirth = client.DateOfBirth,
             Street = client.StreetAddress,
-            CanClientAddMembership = client.ClientMemberships != null ? !client.ClientMemberships.Any(item => item.IsActive) : false,
             City = client.City,
-
         };
     }
     public static Client ToClient(this ClientUpdateRequest clientUpdateRequest)

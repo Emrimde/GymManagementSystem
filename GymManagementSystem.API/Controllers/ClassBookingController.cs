@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,10 @@ public class ClassBookingController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAll(CancellationToken cancellationToken) => HandleListedResult(await _classBookingService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<PageResult<ClassBookingResponse>>> GetAll() => HandlePageResult(await _classBookingService.GetAllAsync());
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ClassBookingDetailsResponse>> GetById([FromRoute] Guid id,CancellationToken cancellationToken) => HandleResult(await _classBookingService.GetByIdAsync(id,cancellationToken));
+    public async Task<ActionResult<ClassBookingDetailsResponse>> GetById([FromRoute] Guid id) => HandleResult(await _classBookingService.GetByIdAsync(id));
 
     [HttpPost]
     public async Task<ActionResult<ClassBookingInfoResponse>> Create(ClassBookingAddRequest request) => HandleResult(await _classBookingService.CreateAsync(request));

@@ -16,15 +16,15 @@ public class ScheduledClassService : IScheduledClassService
         _schedulecClassRepo = schedulecClassRepo;
     }
 
-    public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<ScheduledClassResponse>> GetAllAsync()
     {
-        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllAsync();
-        return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses.Select(item => item.ToScheduledClassResponse()), StatusCodeEnum.Ok);
+        PageResult<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllAsync();
+        return scheduledClasses;
     }
 
-    public async Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id)
     {
-       ScheduledClass? scheduledClass = await _schedulecClassRepo.GetByIdAsync(id, cancellationToken);
+       ScheduledClass? scheduledClass = await _schedulecClassRepo.GetByIdAsync(id);
         if (scheduledClass == null) 
         {
             return Result<ScheduledClassDetailsResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound);

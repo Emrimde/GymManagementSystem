@@ -1,7 +1,9 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GymManagementSystem.API.Controllers;
 
@@ -14,12 +16,12 @@ public class ClientController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClientResponse>>> GetAll([FromQuery] string? searchText,CancellationToken cancellationToken)
-        => HandleListedResult(await _clientService.GetAllAsync(searchText,cancellationToken));
+    public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int page, [FromQuery] int pageSize)
+        => HandlePageResult(await _clientService.GetAllAsync(searchText));
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly,  CancellationToken cancellationToken)
-        => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly, cancellationToken));
+    public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)
+        => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly));
 
     [HttpPost]
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)

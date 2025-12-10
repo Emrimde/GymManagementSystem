@@ -8,6 +8,11 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1000" Background="{StaticResource BackgoundColor}">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding SearchClientsCommand}"/>
+    </UserControl.InputBindings>
+        
+        
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
@@ -110,7 +115,7 @@
                 </DataGrid>
 
             </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
                 <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
                 <Button Content="Next" Width="100" Margin="10,0" />

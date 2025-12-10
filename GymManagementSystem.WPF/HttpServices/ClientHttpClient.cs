@@ -53,9 +53,9 @@ public class ClientHttpClient : BaseHttpClientService
         HttpResponseMessage response = await _httpClient.GetAsync(query);
         if (response.IsSuccessStatusCode)
         {
-            ObservableCollection<ClientResponse>? clients = await response.Content.ReadFromJsonAsync<ObservableCollection<ClientResponse>>();
-
-            return clients ?? new ObservableCollection<ClientResponse>();
+            PageResult<ClientResponse>? clients = await response.Content.ReadFromJsonAsync<PageResult<ClientResponse>>();
+            ObservableCollection<ClientResponse> c = new ObservableCollection<ClientResponse>(clients!.Items);
+            return c ?? new ObservableCollection<ClientResponse>();
         }
         else 
         {

@@ -6,8 +6,8 @@ namespace GymManagementSystem.Core.ServiceContracts
     public interface IContractService
     {
         Task<Result<ContractResponse>> CreateAsync(ContractAddRequest entity);
-        Task<Result<IEnumerable<ContractResponse>>> GetAllAsync(CancellationToken cancellationToken);
-        Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<PageResult<ContractResponse>> GetAllAsync();
+        Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id);
         Task<Result<ContractResponse>> UpdateAsync(Guid id, ContractUpdateRequest entity);
     }
 }

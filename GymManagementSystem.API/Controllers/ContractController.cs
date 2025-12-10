@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Contract;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,15 +17,15 @@ public class ContractController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ContractResponse>>> GetAll(CancellationToken cancellationToken)
-        => HandleListedResult(await _contractService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<PageResult<ContractResponse>>> GetAll()
+        => HandlePageResult(await _contractService.GetAllAsync());
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ContractDetailsResponse>> GetById(Guid id, CancellationToken cancellationToken)
-        => HandleResult(await _contractService.GetByIdAsync(id, cancellationToken));
+    public async Task<ActionResult<ContractDetailsResponse>> GetById(Guid id)
+        => HandleResult(await _contractService.GetByIdAsync(id));
 
     [HttpPost]
-    public async Task<ActionResult<ContractResponse>> Create([FromBody] ContractAddRequest entity, CancellationToken cancellationToken)
+    public async Task<ActionResult<ContractResponse>> Create([FromBody] ContractAddRequest entity)
         => HandleResult(await _contractService.CreateAsync(entity));
 
     [HttpPut("{id:guid}")]

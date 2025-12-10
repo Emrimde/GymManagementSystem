@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +14,8 @@ public class ClientMembershipsController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ClientMembershipResponse>>> GetAll(CancellationToken cancellationToken)
-            => HandleListedResult(await _clientMembershipService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<PageResult<ClientMembershipResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int pageSize = 50, [FromQuery] int page = 1)
+            => HandlePageResult(await _clientMembershipService.GetAllAsync(searchText,pageSize,page));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientMembershipResponse>> GetById(Guid id, CancellationToken cancellationToken)

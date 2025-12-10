@@ -6,7 +6,7 @@ namespace GymManagementSystem.Core.ServiceContracts
     public interface IClientMembershipService
     {
         Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity);
-        Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllAsync(CancellationToken cancellationToken);
+        Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1);
         Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
     }

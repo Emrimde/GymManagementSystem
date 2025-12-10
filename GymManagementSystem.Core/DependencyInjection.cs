@@ -12,12 +12,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
-        services.AddScoped<IClientService, ClientService<Client>>();
-        services.AddScoped<IService<MembershipResponse, MembershipAddRequest, MembershipUpdateRequest, Membership>, MembershipService<Membership>>();
-        services.AddScoped<IContractService, ContractService<Contract>>();
+        services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IMembershipService, MembershipService>();
+        services.AddScoped<IContractService, ContractService>();
         services.AddScoped<IClientMembershipService, ClientMembershipService<ClientMembership>>();
-        services.AddScoped<IServiceAdder<TerminationResponse, TerminationAddRequest>, TerminationService>();
-        services.AddScoped<IServiceReader<TerminationResponse>, TerminationService>();
+        services.AddScoped<ITerminationService, TerminationService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IGeneralGymDetailsService, GeneralGymDetailService>();
         services.AddScoped<ITerminationValidator, TerminationValidatorService>();
