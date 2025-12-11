@@ -1,13 +1,14 @@
 ﻿using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
 
-namespace GymManagementSystem.Core.ServiceContracts
+namespace GymManagementSystem.Core.ServiceContracts;
+
+public interface IClientMembershipService
 {
-    public interface IClientMembershipService
-    {
-        Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity);
-        Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1);
-        Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-        Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
-    }
+    Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity);
+    Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1);
+    
+    Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllMembershipsClientHistoryAsync(Guid id);
+    Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
 }

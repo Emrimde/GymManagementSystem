@@ -120,4 +120,14 @@ public class ClientRepository : IClientRepository
            .ToListAsync();
     }
 
+    public async Task<ClientNameResponse?> GetClientFullNameByIdAsync(Guid id)
+    {
+        return await _dbContext.Clients
+            .Where(item => item.Id == id)
+            .Select(item => new ClientNameResponse
+            {
+                FullName = item.FirstName + " " + item.LastName
+            })
+            .FirstOrDefaultAsync();
+    }
 }

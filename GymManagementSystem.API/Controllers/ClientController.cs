@@ -23,6 +23,11 @@ public class ClientController : BaseController
     public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)
         => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly));
 
+    [HttpGet("name/{id:guid}")]
+    public async Task<ActionResult<ClientNameResponse>> GetClientFullNameById(Guid id)
+        => HandleResult(await _clientService.GetClientFullNameByIdAsync(id));
+
+
     [HttpPost]
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)
         => HandleResult(await _clientService.CreateAsync(entity));

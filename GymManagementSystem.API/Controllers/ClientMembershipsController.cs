@@ -13,9 +13,9 @@ public class ClientMembershipsController : BaseController
         _clientMembershipService = clientMembershipService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<PageResult<ClientMembershipResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int pageSize = 50, [FromQuery] int page = 1)
-            => HandlePageResult(await _clientMembershipService.GetAllAsync(searchText,pageSize,page));
+    [HttpGet("membership-history/{clientId:guid}")]
+    public async Task<ActionResult<PageResult<ClientMembershipResponse>>> GetAllMembershipsClientHistory([FromRoute] Guid clientId)
+            => HandleListedResult(await _clientMembershipService.GetAllMembershipsClientHistoryAsync(clientId));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientMembershipResponse>> GetById(Guid id, CancellationToken cancellationToken)

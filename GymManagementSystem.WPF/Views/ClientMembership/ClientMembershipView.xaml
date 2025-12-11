@@ -29,19 +29,17 @@
 
                 <TextBlock 
         Grid.Column="0"
-        Text="Client Memberships" 
+        
         FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                    HorizontalAlignment="left"
+                    HorizontalAlignment="Center"
         
         VerticalAlignment="Center"
-                    Width="400" Margin="40,0,0,0"/>
+                    Width="400" Margin="40,0,0,0">
+                    <Run Text="History - "/>
+                    <Run Text="{Binding Client.FullName}"/>
+                </TextBlock>
 
-                <Button 
-        Grid.Column="1"
-        Content="Add Client"
-        Width="150"
-        Height="30"
-        HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
+             
             </Grid>
             <Border Grid.Row="1" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ClientMemberships}" x:Name="datagrid" CanUserAddRows="False"
@@ -50,10 +48,9 @@
 
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="First name" Binding="{Binding FirstName}"/>
-                        <DataGridTextColumn Header="Last name" Binding="{Binding LastName}"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
-                        <DataGridTextColumn Header="PhoneNumber" Binding="{Binding PhoneNumber}"/>
+                        <DataGridTextColumn Header="Start date of membership" Binding="{Binding StartDate}"/>
+                        <DataGridTextColumn Header="End date of membership" Binding="{Binding EndDate}"/>
+                        <DataGridTextColumn Header="Requested at" Binding="{Binding CreatedAt}"/>
                         <DataGridTextColumn Header="Membership Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Membership Name" Binding="{Binding MembershipType}"/>
 

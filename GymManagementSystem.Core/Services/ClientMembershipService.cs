@@ -9,11 +9,11 @@ using GymManagementSystem.Core.ServiceContracts;
 
 namespace GymManagementSystem.Core.Services;
 
-public class ClientMembershipService<Entity> : IClientMembershipService
+public class ClientMembershipService : IClientMembershipService
 {
-    private readonly IRepository<ClientMembershipResponse,ClientMembership> _clientMembershipRepository;
+    private readonly IClientMembershipRepository _clientMembershipRepository;
     private readonly IRepository<ContractResponse,Contract> _contractRepo;
-    public ClientMembershipService(IRepository<ClientMembershipResponse, ClientMembership> clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
@@ -37,6 +37,12 @@ public class ClientMembershipService<Entity> : IClientMembershipService
     { 
         PageResult<ClientMembershipResponse> clientMembershipList = await _clientMembershipRepository.GetAllAsync(pageSize: pageSize, page:page, searchText: searchText);
         return clientMembershipList;
+    }
+
+    public async Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllMembershipsClientHistoryAsync(Guid id)
+    {
+        IEnumerable<ClientMembershipResponse> clientMemberships = await _clientMembershipRepository.GetAllClientMemberships(id);
+        return Result<IEnumerable<ClientMembershipResponse>>.Success(clientMemberships);
     }
 
     public Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)

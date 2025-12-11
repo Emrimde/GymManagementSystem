@@ -15,7 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IContractService, ContractService>();
-        services.AddScoped<IClientMembershipService, ClientMembershipService<ClientMembership>>();
+        services.AddScoped<IClientMembershipService, ClientMembershipService>();
         services.AddScoped<ITerminationService, TerminationService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IGeneralGymDetailsService, GeneralGymDetailService>();

@@ -17,12 +17,13 @@ public static class DependencyInjection
     {
         //services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IMembershipRepository, MembershipRepository>();
+        services.AddScoped<IClientMembershipRepository, ClientMembershipRepository>();
         services.AddScoped<IRepository<MembershipResponse,Membership>, MembershipRepository>();
         services.AddScoped<IRepository<ContractResponse,Contract>, ContractRepository>();
         services.AddScoped<IContractRepository, ContractRepository>();
         services.AddScoped<IRepository<TerminationResponse,Termination>, TerminationRepository>();
         services.AddScoped<IGeneralGymRepository, GeneralGymDetailsRepository>();
-        services.AddScoped<IRepository<ClientMembershipResponse,ClientMembership>, ClientMembershipRepository>();
+        //services.AddScoped<IRepository<ClientMembershipResponse,ClientMembership>, ClientMembershipRepository>();
         services.AddScoped<ITrainerRepository, TrainerRepository>();
         //services.AddScoped<IRepository<GymClassResponse,GymClass>, GymClassRepository>();
         services.AddScoped<IScheduledClassRepository, ScheduledClassRepository>();

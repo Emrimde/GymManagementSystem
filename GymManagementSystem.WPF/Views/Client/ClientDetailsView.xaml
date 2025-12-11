@@ -63,13 +63,12 @@
             Visibility="{Binding Client.CanClientTerminate, Converter={StaticResource BoolToVisibilityConverter}}"
             Command="{Binding CreateNewTerminationCommand}"  />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />
+                </StackPanel>
+                
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-
-                <Button Content="Add Classes"
-                    Visibility="{Binding Client.CanClientTerminate, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Command="{Binding CreateNewTerminationCommand}"  />
-            </StackPanel>
+            
         </Grid>
         
     </Grid>

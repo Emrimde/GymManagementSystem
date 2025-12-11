@@ -96,4 +96,10 @@ public class ClientService : IClientService
         };
         return Result<ClientAgeValidationResponse>.Success(response, StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<ClientNameResponse>> GetClientFullNameByIdAsync(Guid id)
+    {
+        ClientNameResponse response = await _repository.GetClientFullNameByIdAsync(id);
+        return Result<ClientNameResponse>.Success(response, StatusCodeEnum.Ok);
+    }
 }

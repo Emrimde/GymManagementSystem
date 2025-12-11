@@ -21,12 +21,9 @@ public static class ClientMembershipMapper
         return new ClientMembershipResponse()
         {
             Id = request.Id,
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
-            FirstName = request.Client != null ? request.Client.FirstName : string.Empty,
-            LastName = request.Client != null ? request.Client.LastName : string.Empty,
-            Email = request.Client != null ? request.Client.Email : string.Empty,
-            PhoneNumber = request.Client != null ? request.Client.PhoneNumber : string.Empty,
+            StartDate = request.StartDate.ToString("yyyy:MM:dd"),
+            EndDate = request.EndDate.HasValue ? request.EndDate.Value.ToString("yyyy-MM-dd") : "",
+         
             Name = request.Membership != null ? request.Membership.Name : string.Empty,
             MembershipType = request.Membership != null ? request.Membership.MembershipType.ToString() : string.Empty,
             IsActive = request.IsActive,

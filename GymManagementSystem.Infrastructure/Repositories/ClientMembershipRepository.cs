@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 
-public class ClientMembershipRepository : IRepository<ClientMembershipResponse, ClientMembership>
+public class ClientMembershipRepository : IClientMembershipRepository
 {
     private readonly ApplicationDbContext _dbContext;
     public ClientMembershipRepository(ApplicationDbContext dbContext)
@@ -70,6 +70,21 @@ public class ClientMembershipRepository : IRepository<ClientMembershipResponse, 
             CurrentPage = page
         };
 
+    }
+
+    public async Task<IEnumerable<ClientMembershipResponse>> GetAllClientMemberships(Guid id)
+    {
+        return await _dbContext.ClientMemberships.Where(item => item.ClientId == id).Select(item => new ClientMembershipResponse
+        {
+            Id = item.Id,
+            Name = item.Membership!.Name,
+            MembershipType = item.Membership.MembershipType.ToString(),
+            IsActive = item.IsActive,
+            StartDate = item.StartDate.ToString("yyyy:MM:dd"),
+            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy-MM-dd") : "",
+            CreatedAt = item.CreatedAt,
+            DeletedAt = item.DeletedAt
+        }).ToListAsync();
     }
 
     public async Task<ClientMembership?> GetByIdAsync(Guid id)

@@ -16,9 +16,9 @@ public class ClientMembershipHttpClient : BaseHttpClientService
 
     }
 
-    public async Task<ObservableCollection<ClientMembershipResponse>> GetClientMembershipsAsync()
+    public async Task<ObservableCollection<ClientMembershipResponse>> GetClientMembershipsAsync(Guid clientId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
+        HttpResponseMessage response = await _httpClient.GetAsync($"membership-history/{clientId}");
         if (response.IsSuccessStatusCode)
         {
             ObservableCollection<ClientMembershipResponse>? clientMemberships = await response.Content.ReadFromJsonAsync<ObservableCollection<ClientMembershipResponse>>();

@@ -20,6 +20,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
+    public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
     public INavigationService Navigation
     {
@@ -27,6 +28,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         set { _navigation = value; OnPropertyChanged(); }
     }
 
+    private readonly ClientMembershipHttpClient _clientMembershipHttpClient;
     private readonly TerminationHttpClient _httpClient;
     public Guid ClientId { get; set; }
     private ClientDetailsResponse _client;
@@ -76,6 +78,9 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         Client = new ClientDetailsResponse();
         TerminationAddRequest = new TerminationAddRequest();
+        OpenClientMembershipsHistory = new RelayCommand(item =>
+            Navigation.NavigateTo<ClientMembershipViewModel>(ClientId), item => true);
+
 
         SidebarView = sidebarViewModel;
         CreateNewTerminationCommand = new RelayCommand(item =>
@@ -115,9 +120,9 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private void OpenCreateNewTermination()
     {
-        Navigation.NavigateTo<TerminationAddViewModel>(TerminationAddRequest);    
+        Navigation.NavigateTo<TerminationAddViewModel>(TerminationAddRequest);
     }
-    
+
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid id)

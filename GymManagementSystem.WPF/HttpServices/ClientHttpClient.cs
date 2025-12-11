@@ -46,6 +46,19 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
+    public async Task<ClientNameResponse?> GetClientNameById(Guid clientId)
+    {
+        try
+        {
+            ClientNameResponse? clientNameResponse = await _httpClient.GetFromJsonAsync<ClientNameResponse>($"name/{clientId}");
+            return clientNameResponse;
+        }
+        catch (HttpRequestException ex)
+        {
+            return null;
+        }
+        
+    }
 
     public async Task<PageResult<ClientResponse>> GetAllClientsAsync(string? searchText, int page)
     {
