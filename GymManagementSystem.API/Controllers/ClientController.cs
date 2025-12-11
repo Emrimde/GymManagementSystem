@@ -16,8 +16,8 @@ public class ClientController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int page, [FromQuery] int pageSize)
-        => HandlePageResult(await _clientService.GetAllAsync(searchText));
+    public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int page)
+        => HandlePageResult(await _clientService.GetAllAsync(searchText, page));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)

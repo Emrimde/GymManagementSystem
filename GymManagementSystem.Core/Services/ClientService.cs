@@ -17,9 +17,9 @@ public class ClientService : IClientService
         _repository = repository;
     }
 
-    public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText)
+    public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
     {
-        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:searchText);
+        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:searchText, page: page);
         return clients;
     }
 

@@ -47,20 +47,19 @@ public class ClientHttpClient : BaseHttpClientService
     }
 
 
-    public async Task<ObservableCollection<ClientResponse>> GetAllClientsAsync(string? searchText)
+    public async Task<PageResult<ClientResponse>> GetAllClientsAsync(string? searchText, int page)
     {
-        string query = string.IsNullOrWhiteSpace(searchText) ? "" : $"?searchText={Uri.UnescapeDataString(searchText)}";
+        string query = string.IsNullOrWhiteSpace(searchText) ? $"?page={page}" : $"?searchText={Uri.UnescapeDataString(searchText)}&page={page}";
         HttpResponseMessage response = await _httpClient.GetAsync(query);
         if (response.IsSuccessStatusCode)
         {
             PageResult<ClientResponse>? clients = await response.Content.ReadFromJsonAsync<PageResult<ClientResponse>>();
-            ObservableCollection<ClientResponse> c = new ObservableCollection<ClientResponse>(clients!.Items);
-            return c ?? new ObservableCollection<ClientResponse>();
+            return clients ?? new PageResult<ClientResponse>();
         }
         else 
         {
             MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new ObservableCollection<ClientResponse>();
+            return new PageResult<ClientResponse>();
         }
     }
 

@@ -116,9 +116,16 @@
 
             </Border>
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
-                <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
-                <Button Content="Next" Width="100" Margin="10,0" />
+                <ListBox ItemsSource="{Binding VisiblePages}"
+         SelectedItem="{Binding SelectedPage}"
+         Height="Auto"
+         Width="Auto" Background="{DynamicResource BackgoundColor}" Foreground="White">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
 
             </StackPanel>
         </Grid>
