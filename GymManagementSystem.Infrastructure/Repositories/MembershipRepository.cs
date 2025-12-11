@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 
-public class MembershipRepository : IRepository<MembershipResponse,Membership>
+public class MembershipRepository : IMembershipRepository
 {
     private readonly ApplicationDbContext _dbContext;
     public MembershipRepository(ApplicationDbContext dbContext)
@@ -59,6 +59,12 @@ public class MembershipRepository : IRepository<MembershipResponse,Membership>
             TotalPages = totalPages,
             CurrentPage = page
         };
+    }
+
+    public async Task<IEnumerable<MembershipResponse>> GetAllMemberships()
+    {
+        IQueryable<Membership> query = _dbContext.Memberships;
+        return await query.Select(item => item.ToMembershipResponse()).ToListAsync();
     }
 
     public async Task<Membership?> GetByIdAsync(Guid id)

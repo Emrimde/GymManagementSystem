@@ -18,8 +18,8 @@ public class MembershipController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PageResult<MembershipResponse>>> GetAll()
-        => HandlePageResult(await _membershipService.GetAllAsync());
+    public async Task<ActionResult<IEnumerable<MembershipResponse>>> GetAll()
+        => HandleListedResult(await _membershipService.GetAllAsync());
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<MembershipResponse>> GetMembershipById(Guid id)

@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Membership;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
@@ -9,8 +10,8 @@ namespace GymManagementSystem.Core.Services;
 
 public class MembershipService : IMembershipService
 {
-    private readonly IRepository<MembershipResponse,Membership> _repository;
-    public MembershipService(IRepository<MembershipResponse,Membership> repository)
+    private readonly IMembershipRepository _repository;
+    public MembershipService(IMembershipRepository repository)
     {
         _repository = repository;
     }
@@ -24,10 +25,10 @@ public class MembershipService : IMembershipService
         return Result<MembershipResponse>.Success(response.ToMembershipResponse());
     }
 
-    public async Task<PageResult<MembershipResponse>> GetAllAsync()
+    public async Task<Result<IEnumerable<MembershipResponse>>> GetAllAsync()
     {
-       PageResult<MembershipResponse> memberships =  await _repository.GetAllAsync();
-       return memberships;
+       IEnumerable<MembershipResponse> memberships =  await _repository.GetAllMemberships();
+       return Result<IEnumerable<MembershipResponse>>.Success(memberships,StatusCodeEnum.Ok);
     }
 
     public async Task<Result<MembershipResponse>> GetByIdAsync(Guid id)

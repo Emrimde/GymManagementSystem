@@ -16,6 +16,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         //services.AddScoped<IRepository<Client>, ClientRepository>();
+        services.AddScoped<IMembershipRepository, MembershipRepository>();
         services.AddScoped<IRepository<MembershipResponse,Membership>, MembershipRepository>();
         services.AddScoped<IRepository<ContractResponse,Contract>, ContractRepository>();
         services.AddScoped<IContractRepository, ContractRepository>();
