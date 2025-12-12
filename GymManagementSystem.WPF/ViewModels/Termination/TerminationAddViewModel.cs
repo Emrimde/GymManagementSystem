@@ -27,10 +27,10 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         TerminationAddRequest = new TerminationAddRequest();
 		_httpClient = httpClient;
-		CreateTerminationCommand = new AsyncRelayCommand(item => CreateTerminationAsync(item), item => true);
+		CreateTerminationCommand = new AsyncRelayCommand(item => CreateTerminationAsync(), item => true);
     }
 
-    private async Task CreateTerminationAsync(object item)
+    private async Task CreateTerminationAsync()
     {
 		Result<TerminationResponse> result = await _httpClient.PostTerminationAsync(TerminationAddRequest);
 		if (result.IsSuccess)
@@ -53,9 +53,9 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 	
 	public void ReceiveParameter(object parameter)
     {
-		if (parameter is TerminationAddRequest terminationAddRequest)
+		if (parameter is Guid id)
 		{
-			TerminationAddRequest = terminationAddRequest;
+			TerminationAddRequest.ClientMembershipId = id;
 		}
     }
 

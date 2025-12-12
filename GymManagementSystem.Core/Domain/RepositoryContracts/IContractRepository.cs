@@ -5,4 +5,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IContractRepository : IRepository<ContractResponse, Contract>
 {
     Task<Contract?> GetActiveContractAsync(Guid clientId);
+    Task<Contract?> GetContractByClientMembershipIdAsync(Guid clientMembershipId);
 }

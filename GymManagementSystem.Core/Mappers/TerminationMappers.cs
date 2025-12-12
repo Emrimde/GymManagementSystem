@@ -10,10 +10,9 @@ public static class TerminationMappers
     {
         return new Termination()
         {
-            ClientMembershipId = request.ClientId,
+            ClientMembershipId = request.ClientMembershipId,
             //ContractId = request.ContractId,
             Reason = request.Reason,
-            RequestedAt = DateTime.UtcNow,
         };
     }
     public static TerminationResponse ToTerminationResponse(this Termination termination)

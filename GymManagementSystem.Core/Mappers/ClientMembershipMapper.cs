@@ -46,6 +46,7 @@ public static class ClientMembershipMapper
     {
         return new ClientMembershipShortResponse()
         {
+            Id = request.Id,
             Membership = request.Membership != null ? request.Membership.ToMembershipResponse() : null,
             StartDate = request.StartDate,
             EndDate = request.EndDate,

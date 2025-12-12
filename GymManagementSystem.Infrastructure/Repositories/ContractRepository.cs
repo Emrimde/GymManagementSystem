@@ -9,7 +9,6 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace GymManagementSystem.Infrastructure.Repositories;
 
 public class ContractRepository : IContractRepository
@@ -78,11 +77,15 @@ public class ContractRepository : IContractRepository
 
     public async Task<Contract?> UpdateAsync(Guid id, Contract entity)
     {
-        Contract contract = new Contract { Id = id, ContractStatus = entity.ContractStatus };
-        _dbContext.Attach(contract);
-        _dbContext.Entry(contract).Property(item => item.ContractStatus).IsModified = true;
+        _dbContext.Contracts.Update(entity);
 
         await _dbContext.SaveChangesAsync();
-        return contract;
+   
+        return entity;
+    }
+
+    public async Task<Contract?> GetContractByClientMembershipIdAsync(Guid clientMembershipId)
+    {
+       return await _dbContext.Contracts.Include(item => item.ClientMembership).FirstOrDefaultAsync(item => item.ClientMembershipId == clientMembershipId);
     }
 }

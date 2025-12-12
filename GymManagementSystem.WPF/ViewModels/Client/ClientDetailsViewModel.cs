@@ -93,7 +93,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         if (result.IsSuccess)
         {
             Client = result.Value!;
-            TerminationAddRequest.ContractId = Client?.ClientMembership?.ContractId ?? Guid.Empty;
+            //TerminationAddRequest.ContractId = Client?.ClientMembership?.ContractId ?? Guid.Empty;
         }
         else
         {
@@ -103,7 +103,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private void OpenCreateNewTermination()
     {
-        Navigation.NavigateTo<TerminationAddViewModel>(TerminationAddRequest);
+        Navigation.NavigateTo<TerminationAddViewModel>(Client.ClientMembership?.Id! ?? Guid.Empty);
     }
 
     public void ReceiveParameter(object parameter)
@@ -112,7 +112,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         {
             ClientId = id;
             _ = LoadClient();
-            TerminationAddRequest.ClientId = ClientId;
+            //TerminationAddRequest.ClientId = ClientId;
         }
     }
 

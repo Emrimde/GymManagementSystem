@@ -5,6 +5,7 @@ namespace GymManagementSystem.Core.DTO.ClientMembership;
 
 public class ClientMembershipShortResponse
 {
+    public Guid Id { get; set; }
     public MembershipResponse? Membership { get; set; }
     public bool IsActive { get; set; }
     public MembershipStatusEnum MembershipStatus { get; set; }

@@ -8,24 +8,22 @@ namespace GymManagementSystem.API.Controllers;
 
 public class TerminationController : BaseController
 {
-    private readonly IServiceAdder<TerminationResponse, TerminationAddRequest> _serviceAdder;
-    private readonly IServiceReader<TerminationResponse> _serviceReader;
+    private readonly ITerminationService _terminationService;
     private readonly ITerminationValidator _terminationValidator;
 
-    public TerminationController(IServiceAdder<TerminationResponse, TerminationAddRequest> serviceAdder, IServiceReader<TerminationResponse> serviceReader, ITerminationValidator terminationValidator)
+    public TerminationController(ITerminationValidator terminationValidator, ITerminationService terminationService)
     {
         _terminationValidator = terminationValidator;
-        _serviceAdder = serviceAdder;
-        _serviceReader = serviceReader;
+        _terminationService = terminationService;
     }
 
     [HttpPost]
     public async Task<ActionResult<TerminationResponse>> PostTermination([FromBody] TerminationAddRequest request, CancellationToken cancellationToken)
-    => HandleResult(await _serviceAdder.CreateAsync(request, cancellationToken));
+    => HandleResult(await _terminationService.CreateAsync(request));
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Termination>>> GetTerminations(CancellationToken cancellationToken)
-    => HandleListedResult(await _serviceReader.GetAllAsync(cancellationToken));
+    //[HttpGet]
+    //public async Task<ActionResult<IEnumerable<Termination>>> GetTerminations(CancellationToken cancellationToken)
+    //=> HandleListedResult(await _terminationService.GetAllAsync());
 
     [HttpGet("{clientId:guid}/can-create-termination")]
     public async Task<ActionResult<bool>> CanCreateTermination([FromRoute]

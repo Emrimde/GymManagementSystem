@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClientMembership;
@@ -23,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IContractRepository, ContractRepository>();
         services.AddScoped<IRepository<TerminationResponse,Termination>, TerminationRepository>();
         services.AddScoped<IGeneralGymRepository, GeneralGymDetailsRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         //services.AddScoped<IRepository<ClientMembershipResponse,ClientMembership>, ClientMembershipRepository>();
         services.AddScoped<ITrainerRepository, TrainerRepository>();
         //services.AddScoped<IRepository<GymClassResponse,GymClass>, GymClassRepository>();
