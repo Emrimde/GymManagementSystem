@@ -1,4 +1,6 @@
-﻿namespace GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Enum;
+
+namespace GymManagementSystem.Core.Domain.Entities;
 
 public class ClientMembership
 {
@@ -9,9 +11,10 @@ public class ClientMembership
     public Membership? Membership { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public bool IsActive { get; set; } = true;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public MembershipStatusEnum MembershipStatus { get; set; }
     public Contract? Contract { get; set; }
+    public Termination? Termination { get; set; }
 }

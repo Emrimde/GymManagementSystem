@@ -51,6 +51,7 @@ public static class ClientMembershipMapper
             EndDate = request.EndDate,
             IsActive = request.IsActive,
             ContractId = request.Contract != null && request.Contract.IsActive ? request.Contract.Id : Guid.Empty,
+            MembershipStatus = request.MembershipStatus
         };
     }
 

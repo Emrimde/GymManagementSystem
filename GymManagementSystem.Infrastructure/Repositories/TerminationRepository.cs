@@ -28,42 +28,43 @@ public class TerminationRepository : IRepository<TerminationResponse,Termination
 
     public async Task<PageResult<TerminationResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
     {
-        IQueryable<Termination> query = _dbContext.Terminations;
+        //IQueryable<Termination> query = _dbContext.Terminations;
 
-        if (searchText != null)
-        {
-            string searchTextlower = searchText.ToLower();
-            string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string term in terms)
-            {
-                string pattern = $"%{term}%";
-                query = query.Where(item => item.Client!.FirstName.ToLower().Contains(term) ||
-                                                item.Client.LastName.ToLower().Contains(term) ||
-                                                    item.Client.PhoneNumber.Contains(term) ||
-                                                        item.Client.Email.ToLower().Contains(term));
-            }
-        }
-
-
-
-        int totalCount = await query.CountAsync();
-        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        List<TerminationResponse> list = await query.OrderBy(item => item.Client!.FirstName)
-                                                    .Skip((page - 1) * pageSize)
-                                                        .Take(pageSize)
-                                                            .Select(item => item.ToTerminationResponse())
-                                                                .ToListAsync();
+        //if (searchText != null)
+        //{
+        //    string searchTextlower = searchText.ToLower();
+        //    string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        //    foreach (string term in terms)
+        //    {
+        //        string pattern = $"%{term}%";
+        //        query = query.Where(item => item.ClientMembership!.FirstName.ToLower().Contains(term) ||
+        //                                        item.ClientMembership.LastName.ToLower().Contains(term) ||
+        //                                            item.ClientMembership.PhoneNumber.Contains(term) ||
+        //                                                item.ClientMembership.Email.ToLower().Contains(term));
+        //    }
+        //}
 
 
 
-        return new PageResult<TerminationResponse>()
-        {
-            Items = list,
-            TotalCount = totalCount,
-            PageSize = pageSize,
-            TotalPages = totalPages,
-            CurrentPage = page
-        };
+        //int totalCount = await query.CountAsync();
+        //int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        //List<TerminationResponse> list = await query.OrderBy(item => item.ClientMembership!.FirstName)
+        //                                            .Skip((page - 1) * pageSize)
+        //                                                .Take(pageSize)
+        //                                                    .Select(item => item.ToTerminationResponse())
+        //                                                        .ToListAsync();
+
+
+
+        //return new PageResult<TerminationResponse>()
+        //{
+        //    Items = list,
+        //    TotalCount = totalCount,
+        //    PageSize = pageSize,
+        //    TotalPages = totalPages,
+        //    CurrentPage = page
+        //};
+        throw new NotImplementedException();
     }
 
     public Task<Termination?> GetByIdAsync(Guid id)

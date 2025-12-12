@@ -11,7 +11,7 @@ public class Client
     public string StreetAddress { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public bool? HasParentalConsent { get; set; }
-    public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
+    //public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
     public ICollection<ClientMembership> ClientMemberships { get; set; } = new List<ClientMembership>();
     public ICollection<ClassBooking> ClassBookings { get; set; } = new List<ClassBooking>();
     public ICollection<PersonalBooking> PersonalBookings { get; set; } = new List<PersonalBooking>();

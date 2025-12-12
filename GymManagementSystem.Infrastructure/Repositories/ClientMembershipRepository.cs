@@ -18,9 +18,6 @@ public class ClientMembershipRepository : IClientMembershipRepository
 
     public async Task<ClientMembership> CreateAsync(ClientMembership entity)
     {
-        entity.IsActive = true;
-        entity.CreatedAt = DateTime.UtcNow;
-        entity.UpdatedAt = DateTime.UtcNow;
         _dbContext.ClientMemberships.Add(entity);
         await _dbContext.SaveChangesAsync();
         return entity;

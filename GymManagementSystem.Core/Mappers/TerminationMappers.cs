@@ -10,8 +10,8 @@ public static class TerminationMappers
     {
         return new Termination()
         {
-            ClientId = request.ClientId,
-            ContractId = request.ContractId,
+            ClientMembershipId = request.ClientId,
+            //ContractId = request.ContractId,
             Reason = request.Reason,
             RequestedAt = DateTime.UtcNow,
         };
@@ -23,8 +23,8 @@ public static class TerminationMappers
 
             Reason = termination.Reason,
             RequestedAt = termination.RequestedAt.ToString("dd.MM.yyyy"),
-            FirstName = termination.Client != null ? termination.Client.FirstName : "error",
-            LastName = termination.Client != null ? termination.Client.LastName: "error",
+            //FirstName = termination.ClientMembership != null ? termination.ClientMembership.FirstName : "error",
+            //LastName = termination.ClientMembership != null ? termination.ClientMembership.LastName: "error",
         };
     }
 }

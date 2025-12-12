@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.Mappers.ClientMapper;
 
@@ -82,13 +81,10 @@ public static class ClientMapper
             PhoneNumber = client.PhoneNumber,
             DateOfBirth = client.DateOfBirth,
             Street = client.StreetAddress,
-            CanClientAddMembership = !client.ClientMemberships.Any(item => item.IsActive), // 
-            CanClientTerminate = client.ClientMemberships
-                                        .FirstOrDefault(item => item.IsActive)?
-                                        .Contract is { ContractStatus: ContractStatus.Signed, IsActive: true },
             City = client.City,
             ClientMembership = client.ClientMemberships
-                                        .FirstOrDefault(item => item.IsActive)?.ToClientMembershipShortResponse()
+                                        .FirstOrDefault(item => item.IsActive)?.ToClientMembershipShortResponse(),
+            IsActive = client.ClientMemberships.Any(item => item.IsActive) && client.ClientMemberships != null,
         };
     }
 

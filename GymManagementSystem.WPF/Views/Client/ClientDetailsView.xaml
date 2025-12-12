@@ -56,11 +56,11 @@
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding ActiveMembershipName}" />
 
                     <Button Content="Add Membership"
-            Visibility="{Binding Client.CanClientAddMembership, Converter={StaticResource BoolToVisibilityConverter}}"
+            Visibility="{Binding Client.IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
             Command="{Binding OpenAddClientMembershipViewCommand}" CommandParameter="{Binding Client.Id}" />
 
                     <Button Content="Terminate"
-            Visibility="{Binding Client.CanClientTerminate, Converter={StaticResource BoolToVisibilityConverter}}"
+            Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
             Command="{Binding CreateNewTerminationCommand}"  />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">

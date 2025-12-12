@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
@@ -14,9 +13,9 @@ namespace GymManagementSystem.WPF.ViewModels.Client;
 public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 {
     public string ActiveMembershipName =>
-    Client?.CanClientAddMembership ?? false
-        ? "No membership"
-        : $"{Client?.ClientMembership?.Membership?.Name} {Client?.ClientMembership?.Membership?.MembershipType}";
+    Client.IsActive
+        ? $"{Client.ClientMembership?.Membership?.Name} {Client.ClientMembership?.Membership?.MembershipType}"
+        : "No membership";
 
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
@@ -28,8 +27,6 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         set { _navigation = value; OnPropertyChanged(); }
     }
 
-    private readonly ClientMembershipHttpClient _clientMembershipHttpClient;
-    private readonly TerminationHttpClient _httpClient;
     public Guid ClientId { get; set; }
     private ClientDetailsResponse _client;
     public ClientDetailsResponse Client
@@ -38,19 +35,6 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         set
         {
             _client = value; OnPropertyChanged();
-            OnPropertyChanged(nameof(ActiveMembershipName));
-        }
-    }
-
-    private ClientMembershipResponse _clientMembership;
-
-    public ClientMembershipResponse ClientMembership
-    {
-        get { return _clientMembership; }
-        set
-        {
-            _clientMembership = value;
-            OnPropertyChanged();
             OnPropertyChanged(nameof(ActiveMembershipName));
         }
     }
@@ -71,10 +55,9 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     private readonly ClientHttpClient _clienthttpClient;
     public SidebarViewModel SidebarView { get; }
 
-    public ClientDetailsViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, TerminationHttpClient httpClient, ClientHttpClient clientHttpClient)
+    public ClientDetailsViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, ClientHttpClient clientHttpClient)
     {
         _clienthttpClient = clientHttpClient;
-        _httpClient = httpClient;
         Navigation = navigation;
         Client = new ClientDetailsResponse();
         TerminationAddRequest = new TerminationAddRequest();
