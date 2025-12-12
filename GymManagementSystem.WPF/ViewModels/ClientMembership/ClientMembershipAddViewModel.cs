@@ -1,15 +1,12 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Contract;
 using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -65,26 +62,11 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
             {
                 _selectedMembership = value;
                 OnPropertyChanged(nameof(SelectedMembership));
-
-                // Logika widoczności EndDate
-                IsEndDateVisible = _selectedMembership.MembershipType == MembershipTypeEnum.Annual; // lub inny warunek
+                ClientMembershipAddRequest.MembershipId = _selectedMembership.Id;
             }
         }
     }
-    private bool _isEndDateVisible;
-    public bool IsEndDateVisible
-    {
-        get => _isEndDateVisible;
-        set
-        {
-            if (_isEndDateVisible != value)
-            {
-                _isEndDateVisible = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
+   
     private readonly ClientMembershipHttpClient _httpClient;
     private readonly ClientHttpClient _clientHttpClient;
     private readonly MembershipHttpClient _membershipHttpClient;
@@ -96,7 +78,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         _httpClient = httpClient;
         Client = new ClientDetailsResponse();
-        ClientMembershipAddRequest = new ClientMembershipAddRequest() { StartDate = new DateTime(year: 2000, month: 1, day: 1, 0,0,0,DateTimeKind.Utc) };
+        ClientMembershipAddRequest = new ClientMembershipAddRequest() { StartDate = DateTime.UtcNow};
         _membershipHttpClient = membershipHttpClient;
         MembershipsComboBox = new ObservableCollection<MembershipResponse>();
         AddClientMembershipCommand = new AsyncRelayCommand(item => AddClientMembershipAsync(), item => true);
@@ -105,13 +87,9 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     private async Task AddClientMembershipAsync()
     {
-       _clientMembershipAddRequest.MembershipId = SelectedMembership.Id;
-        _clientMembershipAddRequest.StartDate = ClientMembershipAddRequest.StartDate;
-        _clientMembershipAddRequest.EndDate = ClientMembershipAddRequest.EndDate;
         Result<ClientMembershipInfoResponse> result = await _httpClient.PostClientMembershipAsync(_clientMembershipAddRequest);
         if (result.IsSuccess) 
         {
-            MessageBox.Show($"Membership added for the {Client.FirstName + " " + Client.LastName}");
             Navigation.NavigateTo<ContractDetailsViewModel>(result.Value!.ContractId);
         }
         else

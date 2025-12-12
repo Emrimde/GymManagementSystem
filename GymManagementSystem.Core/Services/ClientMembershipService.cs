@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Contract;
+using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -13,14 +14,31 @@ public class ClientMembershipService : IClientMembershipService
 {
     private readonly IClientMembershipRepository _clientMembershipRepository;
     private readonly IRepository<ContractResponse,Contract> _contractRepo;
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo)
+    private readonly IMembershipRepository _membershipRepo;
+
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo, IMembershipRepository membershipRepo)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
+        _membershipRepo = membershipRepo;
     }
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
         ClientMembership clientMembership = entity.ToClientMembership();
+        Membership? membership = await _membershipRepo.GetByIdAsync(entity.MembershipId);
+        if(membership == null)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure("Membership not found");
+        }
+        if(membership.IsTrainerOnly)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure("Cannot create client membership for trainer only membership");
+        }
+        if(membership.MembershipType == MembershipTypeEnum.Annual)
+        {
+            clientMembership.EndDate = clientMembership.StartDate.AddYears(1);
+        }
+
         ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
         {

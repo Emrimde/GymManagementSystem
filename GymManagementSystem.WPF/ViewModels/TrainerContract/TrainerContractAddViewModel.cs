@@ -1,18 +1,17 @@
-﻿using GymManagementSystem.Core.DTO.Employee;
-using GymManagementSystem.Core.DTO.TrainerContract;
+﻿using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Windows;
 using System.IO;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
+using System.Windows;
 using System.Windows.Input;
-using GymManagementSystem.Core.Result;
 
 namespace GymManagementSystem.WPF.ViewModels.TrainerContract;
 

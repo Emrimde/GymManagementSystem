@@ -80,8 +80,8 @@ public class ClientMembershipRepository : IClientMembershipRepository
             Name = item.Membership!.Name,
             MembershipType = item.Membership.MembershipType.ToString(),
             IsActive = item.IsActive,
-            StartDate = item.StartDate.ToString("yyyy:MM:dd"),
-            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy-MM-dd") : "",
+            StartDate = item.StartDate.ToString("yyyy.MM.dd"),
+            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy.MM.dd") : "Permanent",
             CreatedAt = item.CreatedAt,
             DeletedAt = item.DeletedAt
         }).ToListAsync();
