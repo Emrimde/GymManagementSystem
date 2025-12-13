@@ -87,6 +87,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     private async Task AddClientMembershipAsync()
     {
+        GenerateClientContract();
         Result<ClientMembershipInfoResponse> result = await _httpClient.PostClientMembershipAsync(_clientMembershipAddRequest);
         if (result.IsSuccess) 
         {
@@ -97,6 +98,11 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
             MessageBox.Show($"Error: {result.ErrorMessage}");
         }
 
+    }
+
+    private void GenerateClientContract()
+    {
+        throw new NotImplementedException();
     }
 
     private async Task LoadMemberships()

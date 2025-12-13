@@ -16,17 +16,13 @@
         </Border>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+               
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Add new membership" />
-            <Grid Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+           
                 <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock Grid.Row="1" Margin="0,0,0,50" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Add new membership" />
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="Name" Foreground="White"/>
                         <TextBox Text="{Binding MembershipAddRequest.Name}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="150"/>
@@ -35,20 +31,15 @@
                         <TextBlock FontSize="25" Text="Price" Foreground="White"/>
                         <TextBox Text="{Binding MembershipAddRequest.Price}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
-                    
-                    
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                    
-                    
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <CheckBox Content="Is for trainer only?" FontSize="25" Foreground="White" IsChecked="{Binding MembershipAddRequest.IsTrainerOnly}"/>
                     </StackPanel>
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <ComboBox Text="Membership type" FontSize="25" Foreground="White" ItemsSource="{Binding MembershipTypes}" SelectedItem="{Binding SelectedMembershipType}"/>
+                        <TextBlock Text="Membership type" Foreground="{DynamicResource PrimaryColor}"/>
+                        <ComboBox FontSize="25" ItemsSource="{Binding MembershipTypes}" SelectedItem="{Binding SelectedMembershipType}" Margin="10,0,0,0"/>
                     </StackPanel>
                 </StackPanel>
-            </Grid>
+            
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Add Membership" Command="{Binding AddMembershipCommand }"/>
                 <Button Content="Cancel"/>
