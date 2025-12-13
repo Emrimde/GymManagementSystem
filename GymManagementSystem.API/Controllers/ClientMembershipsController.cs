@@ -15,7 +15,11 @@ public class ClientMembershipsController : BaseController
 
     [HttpGet("membership-history/{clientId:guid}")]
     public async Task<ActionResult<PageResult<ClientMembershipResponse>>> GetAllMembershipsClientHistory([FromRoute] Guid clientId)
-            => HandleListedResult(await _clientMembershipService.GetAllMembershipsClientHistoryAsync(clientId));
+            => HandleListedResult(await _clientMembershipService.GetAllMembershipsClientHistoryAsync(clientId));    
+    
+    [HttpGet("contract-preview/{clientId:guid}/{membershipId:guid}")]
+    public async Task<ActionResult<ClientMembershipContractPreviewResponse>> GetContractPreviewDetails([FromRoute] Guid clientId, [FromRoute] Guid membershipId)
+            => HandleResult(await _clientMembershipService.GetContractPreviewDetailsAsync(clientId,membershipId));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientMembershipResponse>> GetById(Guid id, CancellationToken cancellationToken)

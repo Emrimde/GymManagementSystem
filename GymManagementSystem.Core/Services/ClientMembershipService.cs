@@ -13,14 +13,16 @@ namespace GymManagementSystem.Core.Services;
 public class ClientMembershipService : IClientMembershipService
 {
     private readonly IClientMembershipRepository _clientMembershipRepository;
+    private readonly IClientRepository _clientRepository;
     private readonly IRepository<ContractResponse,Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo, IMembershipRepository membershipRepo)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
         _membershipRepo = membershipRepo;
+        _clientRepository = clientRepository;
     }
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
@@ -74,6 +76,30 @@ public class ClientMembershipService : IClientMembershipService
     public Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)
+    {
+        Client? client =  await _clientRepository.GetByIdAsync(clientId);
+        Membership? membership = await _membershipRepo.GetByIdAsync(membershipId);
+
+        if(membership == null || client == null)
+        {
+            return Result<ClientMembershipContractPreviewResponse>.Failure("Client or membership not found", StatusCodeEnum.NotFound);
+        }
+
+
+        ClientMembershipContractPreviewResponse response = new ClientMembershipContractPreviewResponse()
+        {
+            DateNow = DateTime.UtcNow.ToString("yy.MM.dd"),
+            StartDate = DateTime.UtcNow.ToString("yy.MM.dd"),
+            EndDate = DateTime.UtcNow.ToString("yy.MM.dd"),
+            FullName = client.FirstName + client.LastName,
+            MembershipName = membership.Name,
+            Price = membership.Price.ToString(),
+        };
+
+        return Result<ClientMembershipContractPreviewResponse>.Success(response);
     }
 
     public Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity)

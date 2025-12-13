@@ -1,11 +1,13 @@
 ﻿using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
+using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -29,6 +31,23 @@ public class ClientMembershipHttpClient : BaseHttpClientService
         {
             MessageBox.Show("Failed to load", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return new ObservableCollection<ClientMembershipResponse>();
+        }
+    }
+    
+    public async Task<ClientMembershipContractPreviewResponse> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"contract-preview/{clientId}/{membershipId}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            ClientMembershipContractPreviewResponse? clientMemberships = await response.Content.ReadFromJsonAsync<ClientMembershipContractPreviewResponse>();
+
+            return clientMemberships;
+        }
+        else
+        {
+            MessageBox.Show("Failed to load", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return new ClientMembershipContractPreviewResponse();
         }
     }
 
