@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,9 +68,28 @@ public class TrainerRepository : ITrainerRepository
         return trainerContract.ToTrainerContractInfoResponse();
 
     }
-    public async Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page = 1, int pageSize = 50, string? searchText = null)
     {
-        return await _dbContext.TrainerContracts.Include(item => item.Person).ToListAsync(cancellationToken);
+
+        IQueryable<TrainerContract> query = _dbContext.TrainerContracts;
+       if (searchText != null)
+        {
+            string searchLower = searchText.ToLower();
+            query = query.Where(item => item.Person.FirstName.ToLower().Contains(searchLower) || item.Person.LastName.ToLower().Contains(searchLower));
+        }
+
+       int totalCount = query.Count();
+       int totalpages = totalCount / pageSize;
+
+       List<TrainerContractResponse> list  = await query.OrderBy(item => item.Person.FirstName).Skip((page - 1) * pageSize).Take(pageSize).Include(item => item.Person).Select(item => item.ToTrainerContractResponse()).ToListAsync();
+        return new PageResult<TrainerContractResponse>
+        {
+            CurrentPage = page,
+            Items = list,
+            PageSize = pageSize,
+            TotalCount = totalCount, 
+            TotalPages = totalpages
+        };
     }
     public async Task<TrainerContract?> GetTrainerContractAsync(Guid id, bool includeDetails)
     {

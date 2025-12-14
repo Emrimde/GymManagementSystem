@@ -4,6 +4,7 @@ using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,16 +34,11 @@ public class TrainerController : BaseController
      [HttpGet("timeoffs")]
     public async Task<ActionResult<TrainerInfoResponse>> GetTrainerTimeOffs(CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerTimeOffs(cancellationToken));
 
-
-    //[HttpPost("personal-booking")]
-    //public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _trainerScheduleService.CreatePersonalBookingAsync(entity));
-
-
     [HttpPost("trainercontract")]
     public async Task<ActionResult<TrainerContractInfoResponse>> CreateTrainerContract([FromBody] TrainerContractAddRequest entity) => HandleResult(await _trainerService.CreateTrainerContractAsync(entity));
 
     [HttpGet("trainercontracts")]
-    public async Task<ActionResult<IEnumerable<TrainerContractInfoResponse>>> GetAllTrainerContracts(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllTrainerContractsAsync(cancellationToken));
+    public async Task<ActionResult<PageResult<TrainerContractInfoResponse>>> GetAllTrainerContracts( [FromQuery] int page = 1, [FromQuery] string? searchText = null, [FromQuery] int pageSize = 50) => HandlePageResult(await _trainerService.GetAllTrainerContractsAsync(page,searchText,pageSize));
 
     [HttpGet("trainercontract/{id:guid}")]
     public async Task<ActionResult<TrainerContractDetailsResponse>> GetTrainerContracts([FromRoute] Guid id, [FromQuery] bool includeDetails, CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerContractAsync(id, includeDetails,cancellationToken));

@@ -1,12 +1,11 @@
-﻿using GymManagementSystem.Core.DTO.Client;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
+using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 

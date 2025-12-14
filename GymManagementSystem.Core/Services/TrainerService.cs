@@ -99,10 +99,11 @@ public class TrainerService : ITrainerService
         return Result<TrainerTimeOffInfoResponse>.Success(addedTrainerAvailability.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<TrainerContractResponse>>> GetAllTrainerContractsAsync(CancellationToken cancellationToken)
+    public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page , string? searchText = null , int pageSize = 50)
     {
-        IEnumerable<TrainerContract> trainerContracts = await _trainerRepo.GetAllTrainerContractsAsync(cancellationToken);
-        return Result<IEnumerable<TrainerContractResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractResponse()), StatusCodeEnum.Ok);
+        PageResult<TrainerContractResponse> trainerContracts = await _trainerRepo.GetAllTrainerContractsAsync(page, pageSize, searchText);
+
+        return trainerContracts;
     }
 
     public async Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken)

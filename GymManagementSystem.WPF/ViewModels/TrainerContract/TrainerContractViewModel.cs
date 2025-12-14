@@ -10,7 +10,48 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.TrainerContract;
 public class TrainerContractViewModel : ViewModel
 {
-	private INavigationService _navigation;
+    private int _currentPage;
+
+    public int CurrentPage
+    {
+        get { return _currentPage; }
+        set
+        {
+            _currentPage = value; OnPropertyChanged();
+
+            OnPropertyChanged(nameof(CanGoPrevious));
+            OnPropertyChanged(nameof(CanGoNext));
+            OnPropertyChanged(nameof(VisiblePages));
+            OnPropertyChanged(nameof(start));
+            OnPropertyChanged(nameof(end));
+        }
+    }
+
+    private int _totalPages;
+
+    public int TotalPages
+    {
+        get { return _totalPages; }
+        set
+        {
+            _totalPages = value; OnPropertyChanged();
+
+            OnPropertyChanged(nameof(CanGoNext));
+            OnPropertyChanged(nameof(VisiblePages));
+        }
+    }
+
+    public bool CanGoNext => CurrentPage < TotalPages;
+    public bool CanGoPrevious => CurrentPage > 1;
+
+    private int start => Math.Max(1, CurrentPage - 2);
+    private int end => Math.Min(TotalPages, CurrentPage + 2);
+    private int count => end - start + 1;
+
+    public List<int> VisiblePages => Enumerable.Range(start, count).ToList();
+
+
+    private INavigationService _navigation;
 
 	public INavigationService Navigation
 	{
@@ -33,18 +74,11 @@ public class TrainerContractViewModel : ViewModel
 
     private async Task LoadTrainerContracts()
     {
-        Result<ObservableCollection<TrainerContractResponse>> result = await _trainerHttpClient.GetTrainerContracts();
-        if (!result.IsSuccess) 
-        {
-            MessageBox.Show($"{result.ErrorMessage}");
-        }
-        else
-        {
-            foreach(TrainerContractResponse item in result.Value!)
+        PageResult<TrainerContractResponse> result = await _trainerHttpClient.GetTrainerContracts(null);
+            foreach(TrainerContractResponse item in result.Items)
             {
                 TrainerContracts.Add(item);
             }
-        }
     }
 
     public SidebarViewModel SidebarView { get; set; }

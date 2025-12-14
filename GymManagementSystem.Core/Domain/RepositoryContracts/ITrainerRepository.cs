@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.TrainerContract;
+using GymManagementSystem.Core.Result;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
@@ -10,7 +11,7 @@ public interface ITrainerRepository
     Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken);
     Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end);
     Task<TrainerContractInfoResponse> CreateTrainerContractAsync(TrainerContract trainerContract);
-    Task<IEnumerable<TrainerContract>> GetAllTrainerContractsAsync(CancellationToken cancellationToken);
+    Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page = 1, int pageSize = 50 ,string? searchText = null);
     Task<IEnumerable<TrainerContract>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken);
     Task<TrainerContract?> GetTrainerContractAsync(Guid id,bool includeDetails);
 }

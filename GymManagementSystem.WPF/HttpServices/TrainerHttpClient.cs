@@ -2,7 +2,9 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Windows;
 using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
@@ -102,18 +104,19 @@ public class TrainerHttpClient : BaseHttpClientService
         return Result<bool>.Success(true);
     }
 
-    public async Task<Result<ObservableCollection<TrainerContractResponse>>> GetTrainerContracts()
+    public async Task<PageResult<TrainerContractResponse>> GetTrainerContracts(string? searchText, int page = 1)
     {
+        string query = string.IsNullOrWhiteSpace(searchText) ? $"trainercontracts?page={page}" : $"trainercontracts?searchText={Uri.UnescapeDataString(searchText)}&page={page}";
         try
         {
-            ObservableCollection<TrainerContractResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<TrainerContractResponse>>
-            ("trainercontracts");
-            return Result<ObservableCollection<TrainerContractResponse>>.Success(response ?? new ObservableCollection<TrainerContractResponse>());
+            PageResult<TrainerContractResponse>? response = await _httpClient.GetFromJsonAsync<PageResult<TrainerContractResponse>>(query);
+            return response;
 
         }
         catch (HttpRequestException ex)
         {
-            return Result<ObservableCollection<TrainerContractResponse>>.Failure(ex.Message);
+            MessageBox.Show("Failed to load trainers.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return new PageResult<TrainerContractResponse>();
         }
     }
     public async Task<Result<ObservableCollection<TrainerRateResponse>>> GetTrainerRatesAsync(Guid id)
