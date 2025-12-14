@@ -1,20 +1,13 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Employee;
+﻿using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
-using Microsoft.Extensions.Logging;
-using Syncfusion.UI.Xaml.Scheduler;
-using System;
-using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Threading;
-using System.Windows.Media;
-using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.WPF.HttpServices;
 public class TrainerHttpClient : BaseHttpClientService

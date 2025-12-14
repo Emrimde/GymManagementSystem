@@ -73,9 +73,14 @@ public class ClientMembershipService : IClientMembershipService
         return Result<IEnumerable<ClientMembershipResponse>>.Success(clientMemberships);
     }
 
-    public Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<ClientMembershipDetailsResponse>> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        ClientMembership? clientMembership = await _clientMembershipRepository.GetByIdAsync(id);
+        if (clientMembership == null)
+        {
+            return Result<ClientMembershipDetailsResponse>.Failure("Cannot open client membership details");
+        }
+        return Result<ClientMembershipDetailsResponse>.Success(clientMembership.ToClientMembershipDetailsResponse());
     }
 
     public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)
@@ -91,10 +96,9 @@ public class ClientMembershipService : IClientMembershipService
 
         ClientMembershipContractPreviewResponse response = new ClientMembershipContractPreviewResponse()
         {
-            DateNow = DateTime.UtcNow.ToString("yy.MM.dd"),
-            StartDate = DateTime.UtcNow.ToString("yy.MM.dd"),
+            StartDate = DateTime.UtcNow.ToString("dd.MM.yyyy"),
             EndDate = DateTime.UtcNow.ToString("yy.MM.dd"),
-            FullName = client.FirstName + client.LastName,
+            FullName = client.FirstName + " " + client.LastName,
             MembershipName = membership.Name,
             Price = membership.Price.ToString(),
         };

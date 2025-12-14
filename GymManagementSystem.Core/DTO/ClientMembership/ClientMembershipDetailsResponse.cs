@@ -6,12 +6,18 @@ namespace GymManagementSystem.Core.DTO.ClientMembership;
 public class ClientMembershipDetailsResponse
 {
     public Guid Id { get; set; }
-
     public ClientResponse? Client { get; set; }
-    public MembershipResponse? Membership { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime DeletedAt { get; set; }
+    public string? ClientFullName { get; set; } = default!;
+    public string? MembershipName { get; set; } = default!;
+    public string IsActive { get; set; } = default!;
+    public string StartDate { get; set; } = default!;
+    public string EndDate { get; set; } = default!;
+    public string SignedContractDate { get; set; } = default!;
+
+
+    // zwiazane z termination
+    public bool WasTerminated { get; set; } //flaga do visibility
+    public string? TerminationReason { get; set; } = default!;
+    public string? TerminationDate {  get; set; } = default!;
+    
 }

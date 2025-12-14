@@ -50,8 +50,8 @@ public class ClientMembershipRepository : IClientMembershipRepository
             string pattern = $"%{term}%";
             query = query.Where(item => item.Client!.FirstName.ToLower().Contains(term) ||
                                             item.Client.LastName.ToLower().Contains(term) ||
-                                                item.Client.Email.ToLower().Contains(term) || 
-                                                    item.Client.PhoneNumber.ToLower().Contains(term) || 
+                                                item.Client.Email.ToLower().Contains(term) ||
+                                                    item.Client.PhoneNumber.ToLower().Contains(term) ||
                                                         item.Membership!.Name.ToLower().Contains(term));
         }
 
@@ -86,7 +86,11 @@ public class ClientMembershipRepository : IClientMembershipRepository
 
     public async Task<ClientMembership?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.Id == id);
+        return await _dbContext.ClientMemberships.Include(item => item.Termination)
+                                                    .Include(item => item.Contract)
+                                                        .Include(item => item.Membership)
+                                                            .Include(item => item.Client)
+                                                                .FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<ClientMembership?> UpdateAsync(Guid id, ClientMembership entity)

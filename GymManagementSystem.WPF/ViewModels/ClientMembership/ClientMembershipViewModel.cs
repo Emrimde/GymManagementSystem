@@ -6,12 +6,14 @@ using GymManagementSystem.WPF.ServiceContracts;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 
 public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 {
 
+    public ICommand OpenClientMembershipDetails { get; }
     private ClientNameResponse _client;
 
     public ClientNameResponse Client
@@ -42,11 +44,12 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         Client = new ClientNameResponse();
         _clientHttpClient = clientHttpClient;
         //_ = LoadClientMemberships();
+        OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item), item => true);
     }
 
     private async Task LoadClientMemberships(Guid id)
     {
-        ClientMemberships = await _httpClient.GetClientMembershipsAsync(id);
+        ClientMemberships = await _httpClient.GetClientMembershipsHistoryAsync(id);
     }
 
     public void ReceiveParameter(object parameter)

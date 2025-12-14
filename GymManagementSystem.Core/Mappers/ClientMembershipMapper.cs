@@ -36,9 +36,15 @@ public static class ClientMembershipMapper
         {
             Id = request.Id,
             Client = request.Client != null ? request.Client.ToClientResponse() : null,
-            Membership = request.Membership != null ? request.Membership.ToMembershipResponse() : null,
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
+            StartDate = request?.StartDate.ToString("dd.MM.yyyy") ?? string.Empty,
+            EndDate = request?.EndDate?.ToString("dd.MM.yyyy") ?? "Permanent",
+            IsActive = request!.IsActive ? "Active" : "Unactive",
+            ClientFullName = request.Client?.FirstName + " " + request?.Client?.LastName,
+            MembershipName = request?.Membership?.Name,
+            SignedContractDate = request!.Contract?.CreatedAt.ToString("dd.MM.yyyy") ?? string.Empty,
+            WasTerminated = request.Termination != null,
+            TerminationReason = request.Termination?.Reason,
+            TerminationDate = request.Termination?.RequestedAt.ToString("dd.MM.yyyy")
         };
     }
 

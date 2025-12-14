@@ -21,9 +21,9 @@ public class ClientMembershipsController : BaseController
     public async Task<ActionResult<ClientMembershipContractPreviewResponse>> GetContractPreviewDetails([FromRoute] Guid clientId, [FromRoute] Guid membershipId)
             => HandleResult(await _clientMembershipService.GetContractPreviewDetailsAsync(clientId,membershipId));
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ClientMembershipResponse>> GetById(Guid id, CancellationToken cancellationToken)
-        => HandleResult(await _clientMembershipService.GetByIdAsync(id, cancellationToken));
+    [HttpGet("{clientMembershipId:guid}")]
+    public async Task<ActionResult<ClientMembershipDetailsResponse>> GetById(Guid clientMembershipId)
+        => HandleResult(await _clientMembershipService.GetByIdAsync(clientMembershipId));
 
     [HttpPost]
     public async Task<ActionResult<ClientMembershipInfoResponse>> Create([FromBody] ClientMembershipAddRequest entity)

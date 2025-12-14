@@ -9,7 +9,7 @@ public interface IClientMembershipService
     Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1);
     
     Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllMembershipsClientHistoryAsync(Guid id);
-    Task<Result<ClientMembershipResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Result<ClientMembershipDetailsResponse>> GetByIdAsync(Guid id);
     Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid memebershipId);
     Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
 }

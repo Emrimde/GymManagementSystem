@@ -87,6 +87,9 @@
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipViewModel}">
                         <clientMembershipview:ClientMembershipView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipDetailsViewModel}">
+                        <clientMembershipview:ClientMembershipDetailsView/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipAddViewModel}">
                         <clientMembershipview:ClientMembershipAddView/>
                     </DataTemplate>
