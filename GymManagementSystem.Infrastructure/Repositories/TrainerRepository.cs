@@ -72,22 +72,26 @@ public class TrainerRepository : ITrainerRepository
     {
 
         IQueryable<TrainerContract> query = _dbContext.TrainerContracts;
-       if (searchText != null)
+        if (searchText != null)
         {
             string searchLower = searchText.ToLower();
-            query = query.Where(item => item.Person.FirstName.ToLower().Contains(searchLower) || item.Person.LastName.ToLower().Contains(searchLower));
+            string[] terms = searchLower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
+            {
+                query = query.Where(item => item.Person.FirstName.ToLower().Contains(term) || item.Person.LastName.ToLower().Contains(term));
+            }
         }
 
-       int totalCount = query.Count();
-       int totalpages = totalCount / pageSize;
+        int totalCount = query.Count();
+        int totalpages = totalCount / pageSize;
 
-       List<TrainerContractResponse> list  = await query.OrderBy(item => item.Person.FirstName).Skip((page - 1) * pageSize).Take(pageSize).Include(item => item.Person).Select(item => item.ToTrainerContractResponse()).ToListAsync();
+        List<TrainerContractResponse> list = await query.OrderBy(item => item.Person.FirstName).Skip((page - 1) * pageSize).Take(pageSize).Include(item => item.Person).Select(item => item.ToTrainerContractResponse()).ToListAsync();
         return new PageResult<TrainerContractResponse>
         {
             CurrentPage = page,
             Items = list,
             PageSize = pageSize,
-            TotalCount = totalCount, 
+            TotalCount = totalCount,
             TotalPages = totalpages
         };
     }
