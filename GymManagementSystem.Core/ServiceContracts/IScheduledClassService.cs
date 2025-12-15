@@ -4,6 +4,6 @@ using GymManagementSystem.Core.Result;
 namespace GymManagementSystem.Core.ServiceContracts;
 public interface IScheduledClassService
 {
-    Task<PageResult<ScheduledClassResponse>> GetAllAsync();
+    Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText);
     Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id);
 }

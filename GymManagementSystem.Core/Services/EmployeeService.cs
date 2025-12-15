@@ -24,9 +24,9 @@ public class EmployeeService : IEmployeeService
 
     }
 
-    public async Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null)
     {
-        IEnumerable<Employee> employees = await _employeeRepo.GetAllEmployeesAsync(cancellationToken);
+        IEnumerable<Employee> employees = await _employeeRepo.GetAllEmployeesAsync(searchText);
         return Result<IEnumerable<EmployeeResponse>>.Success(employees.Select(item => item.ToEmployeeResponse()), StatusCodeEnum.Ok);
     }
 

@@ -23,10 +23,27 @@ public class EmployeeRepository : IEmployeeRepository
         return employee.ToEmployeeInfoResponse();
     }
 
-    public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null)
     {
-        return await _dbContext.Employees.AsNoTracking()
-        .Include(item => item.Person)
-        .ToListAsync(cancellationToken);
+        IQueryable<Employee> query = _dbContext.Employees.AsNoTracking();
+
+
+        if (searchText != null)
+        {
+            string searchLower = searchText.ToLower();
+            string[] terms = searchLower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
+            {
+                query = query.Where(item =>
+                    item.Person!.FirstName.ToLower().Contains(term) ||
+                    item.Person.LastName.ToLower().Contains(term) ||
+                    item.Person.Email.ToLower().Contains(term) ||
+                    item.Person.PhoneNumber.ToLower().Contains(term));
+            }
+        }
+
+
+
+        return await query.Include(item => item.Person).ToListAsync();
     }
 }

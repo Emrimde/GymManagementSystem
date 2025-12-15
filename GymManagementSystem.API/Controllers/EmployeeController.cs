@@ -15,7 +15,7 @@ public class EmployeeController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetAllEmployees(CancellationToken cancellationToken) => HandleListedResult(await _employeeService.GetAllEmployeesAsync(cancellationToken));
+    public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetAllEmployees([FromQuery] string? searchText = null) => HandleListedResult(await _employeeService.GetAllEmployeesAsync(searchText));
 
     [HttpPost]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));

@@ -6,4 +6,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IScheduledClassRepository : IRepository<ScheduledClassResponse, ScheduledClass>
 {
     Task AddRangeAsync(IEnumerable<ScheduledClass> entities);
+    Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(string? searchText = null);
 }

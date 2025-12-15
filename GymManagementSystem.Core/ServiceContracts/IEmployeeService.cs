@@ -6,6 +6,6 @@ namespace GymManagementSystem.Core.ServiceContracts;
 public interface IEmployeeService
 {
     Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request);
-    Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(CancellationToken cancellationToken);
+    Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null);
     Result<bool> ValidateEmployee(EmployeeAddRequest request);
 }

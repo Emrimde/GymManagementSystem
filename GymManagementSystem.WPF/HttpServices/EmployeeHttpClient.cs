@@ -89,11 +89,12 @@ public class EmployeeHttpClient : BaseHttpClientService
         return Result<EmployeeInfoResponse>.Failure("Something went wrong.");
     }
 
-    public async Task<Result<ObservableCollection<EmployeeResponse>>> GetAllEmployeesAsync()
+    public async Task<Result<ObservableCollection<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null)
     {
+        string query = string.IsNullOrWhiteSpace(searchText) ? "" : $"?searchText={Uri.EscapeDataString(searchText)}";  
         try
         {
-            ObservableCollection<EmployeeResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<EmployeeResponse>>("");
+            ObservableCollection<EmployeeResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<EmployeeResponse>>(query);
             return Result<ObservableCollection<EmployeeResponse>>.Success(response ?? new ObservableCollection<EmployeeResponse>());
         }
         catch (HttpRequestException ex)

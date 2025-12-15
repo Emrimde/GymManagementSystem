@@ -16,10 +16,10 @@ public class ScheduledClassService : IScheduledClassService
         _schedulecClassRepo = schedulecClassRepo;
     }
 
-    public async Task<PageResult<ScheduledClassResponse>> GetAllAsync()
+    public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText)
     {
-        PageResult<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllAsync();
-        return scheduledClasses;
+        IEnumerable<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClasses(searchText);
+        return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id)

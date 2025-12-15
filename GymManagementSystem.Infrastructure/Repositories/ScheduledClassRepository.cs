@@ -38,7 +38,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
             foreach (string term in terms)
             {
                 string pattern = $"%{term}%";
-                query = query.Where(item => item.GymClass!.Name.ToLower().Contains(term));
+                query = query.Where(item => item.GymClass!.Name.ToLower().Contains(term) );
                                                 
             }
         }
@@ -47,7 +47,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
         int totalCount = await query.CountAsync();
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        List<ScheduledClassResponse> list = await query.OrderBy(item => item.GymClass!.Name)
+        List<ScheduledClassResponse> list = await query.Include(item => item.GymClass).OrderBy(item => item.GymClass!.Name)
                                                     .Skip((page - 1) * pageSize)
                                                         .Take(pageSize)
                                                             .Select(item => item.ToScheduledClassResponse())
@@ -63,6 +63,30 @@ public class ScheduledClassRepository : IScheduledClassRepository
             TotalPages = totalPages,
             CurrentPage = page
         };
+    }
+
+    public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(string? searchText = null)
+    {
+        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses;
+
+        if (searchText != null)
+        {
+            string searchTextlower = searchText.ToLower();
+            string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
+            {
+                string pattern = $"%{term}%";
+                query = query.Where(item => item.GymClass!.Name.ToLower().Contains(term));
+
+            }
+        }
+
+        return await query
+            .Include(item => item.GymClass).OrderBy(item => item.Date)
+            .Select(item => item.ToScheduledClassResponse())
+            .ToListAsync();
+
+
     }
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id)

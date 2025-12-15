@@ -5,5 +5,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IEmployeeRepository
 {
     Task<EmployeeInfoResponse> CreateEmployeeAsync(Employee employee);
-    Task<IEnumerable<Employee>> GetAllEmployeesAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null);
 }

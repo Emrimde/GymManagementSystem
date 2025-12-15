@@ -17,7 +17,8 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="7*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="6*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0,20,0,0">
@@ -35,7 +36,11 @@
         VerticalAlignment="Center"
                     Width="300" Margin="40,0,0,0"/>
             </Grid>
-            <Border Grid.Row="1" Background="#2B2B2B">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Button Content="Search:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding SearchScheduledClassesCommand}"/>
+                <TextBox Width="200" Height="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            </StackPanel>
+            <Border Grid.Row="2" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ScheduledClasses}" x:Name="datagrid" CanUserAddRows="False"
                   AutoGenerateColumns="false">
 
@@ -97,12 +102,7 @@
                 </DataGrid>
 
             </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
-                <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
-                <Button Content="Next" Width="100" Margin="10,0" />
-
-            </StackPanel>
+        
         </Grid>
     </Grid>
 </UserControl>

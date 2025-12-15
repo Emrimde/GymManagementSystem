@@ -10,9 +10,10 @@ public class ScheduledClassHttpClient : BaseHttpClientService
     public ScheduledClassHttpClient(HttpClient httpClient) : base(httpClient)
     {
     }
-    public async Task<Result<ObservableCollection<ScheduledClassResponse>>> GetScheduledClasses()
+    public async Task<Result<ObservableCollection<ScheduledClassResponse>>> GetScheduledClasses(string? searchText)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
+        string queryString = string.IsNullOrWhiteSpace(searchText) ? "" : $"?searchText={Uri.EscapeDataString(searchText)}";
+        HttpResponseMessage response = await _httpClient.GetAsync(queryString);
         string responseBody = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
         {

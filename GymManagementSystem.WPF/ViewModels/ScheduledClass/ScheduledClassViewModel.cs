@@ -10,6 +10,15 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.ScheduledClass;
 public class ScheduledClassViewModel : ViewModel
 {
+
+    private string _searchText;
+
+    public string SearchText
+    {
+        get { return _searchText; }
+        set { _searchText = value; OnPropertyChanged(); }
+    }
+
     private readonly ScheduledClassHttpClient _scheduledClassHttpClient;
     public SidebarViewModel SidebarView { get; set; }
     private INavigationService _navigation;
@@ -23,7 +32,7 @@ public class ScheduledClassViewModel : ViewModel
             OnPropertyChanged();
         }
     }
-
+    public ICommand SearchScheduledClassesCommand { get; }
     private ObservableCollection<ScheduledClassResponse> _scheduledClasses;
 
     public ObservableCollection<ScheduledClassResponse> ScheduledClasses
@@ -41,11 +50,25 @@ public class ScheduledClassViewModel : ViewModel
         Navigation = navigation;
         OpenScheduledClassDetails = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassDetailsViewModel>(item), item => true);
         _ = LoadScheduledClasses();
+        SearchScheduledClassesCommand = new AsyncRelayCommand(item => SearchScheduledClasses(), item => true);
+    }
+
+    private async Task SearchScheduledClasses()
+    {
+        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(SearchText);
+        if (result.IsSuccess)
+        {
+            ScheduledClasses = result.Value!;
+        }
+        else
+        {
+            MessageBox.Show(result.ErrorMessage);
+        }
     }
 
     private async Task LoadScheduledClasses()
     {
-        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses();
+        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(null);
         if (result.IsSuccess)
         {
             ScheduledClasses = result.Value!;
