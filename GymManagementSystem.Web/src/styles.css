@@ -1,0 +1,69 @@
+:root {
+  --light-gray: #8f8f8f;
+  --green: #9aad00;
+  --black: #333333;
+  --white: #ffffff;
+}
+
+.background-light-gray {
+  background-color: var(--light-gray);
+}
+
+.background-white {
+  background-color: var(--white);
+}
+
+.background-black {
+  background-color: var(--black);
+}
+
+.background.green {
+  background-color: var(--green);
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-black {
+  color: var(--black);
+}
+.text-white-bg {
+  color: var(--white);
+}
+
+.text-white-bg:hover {
+  color: var(--green);
+}
+
+.text-light-gray {
+  color: var(--light-gray);
+}
+
+.button-green {
+  background-color: var(--green);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-green:hover {
+  background-color: #85a600; /* ciemniejszy odcień zieleni na hover */
+}
+
+
+
+.button-light-gray {
+  background-color: var(--light-gray);
+  color: var(--black);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-light-gray:hover {
+  background-color: #7a7a7a; /* ciemniejszy odcień szarości na hover */
+}

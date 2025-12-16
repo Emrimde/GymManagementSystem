@@ -1,0 +1,17 @@
+.logo {
+  max-height: 50px;   /* kontroluje navbar */
+  width: auto;       /* zachowuje proporcje */
+}
+
+.carousel-item img {
+  width: 100%;       /* obrazki karuzeli zajmują całą szerokość */
+  height: 50vh;
+       /* zachowuje proporcje obrazków */
+}
+/* responsywność */
+@media (min-width: 992px) {
+  .logo {
+    max-height: 50px;
+    width: auto;
+  }
+}

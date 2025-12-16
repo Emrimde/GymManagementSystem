@@ -1,0 +1,25 @@
+/* szerokość karuzeli */
+.carousel-container {
+  width: 100%;
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .carousel-container {
+    width: 80%;
+  }
+}
+
+/* desktop */
+@media (min-width: 992px) {
+  .carousel-container {
+    width: 70%;
+  }
+}
+
+/* obraz – zawsze cały, bez przycinania */
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
