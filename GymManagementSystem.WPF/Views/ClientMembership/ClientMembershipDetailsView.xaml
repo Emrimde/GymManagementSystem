@@ -18,8 +18,7 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
-                <RowDefinition/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}" Text="{Binding ClientMembership.ClientFullName}"/>
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
@@ -59,7 +58,8 @@
                         <TextBlock Text="Reason of termination: "  Foreground="PaleVioletRed" FontSize="20"  Visibility="{Binding  TrainerContract.IsB2B, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding ClientMembership.TerminationReason}" />
                     </StackPanel>
-                </StackPanel>
+                <Button Content="Return" Margin="0,50,0,0" Width="100" Command="{Binding OpenClientMembershipsHistoryCommand}" CommandParameter="{Binding ClientMembership.Client.Id}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

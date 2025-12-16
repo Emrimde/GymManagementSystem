@@ -6,12 +6,13 @@ using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Client;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 
 public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 {
-
+    public Guid ClientId { get; set; }
     public ICommand OpenClientMembershipDetails { get; }
     private ClientNameResponse _client;
 
@@ -24,6 +25,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
     private readonly ClientMembershipHttpClient _httpClient;
     private readonly ClientHttpClient _clientHttpClient;
     private ObservableCollection<ClientMembershipResponse> _clientMemberships;
+    public ICommand ReturnToClientDetailsViewCommand { get;  }
 
     public ObservableCollection<ClientMembershipResponse> ClientMemberships
     {
@@ -44,6 +46,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         _clientHttpClient = clientHttpClient;
         //_ = LoadClientMemberships();
         OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item), item => true);
+        ReturnToClientDetailsViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
     }
 
     private async Task LoadClientMemberships(Guid id)
@@ -55,6 +58,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
     {
         if(parameter is Guid id)
         {
+            ClientId = id;
            _ = LoadClientMemberships(id);
             _ = LoadClientNameById(id);
         }
