@@ -3,7 +3,6 @@ using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GymManagementSystem.API.Controllers;
 

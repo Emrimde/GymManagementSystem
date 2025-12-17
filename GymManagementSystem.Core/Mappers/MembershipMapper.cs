@@ -12,7 +12,6 @@ public static class MembershipMapper
             Id = membership.Id,
             Name = membership.Name,
             Price = membership.Price,
-            IsTrainerOnly = membership.IsTrainerOnly,
             MembershipType = membership.MembershipType,
         };
     }
@@ -22,7 +21,6 @@ public static class MembershipMapper
         {
             Name = membership.Name,
             Price = membership.Price,
-            IsTrainerOnly = membership.IsTrainerOnly,
             MembershipType = membership.MembershipType,
         };
     }
@@ -33,7 +31,6 @@ public static class MembershipMapper
         {
             Name = membership.Name,
             Price = membership.Price,
-            IsTrainerOnly = membership.IsTrainerOnly,
             MembershipType = membership.MembershipType,
         };
     }

@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
@@ -21,6 +22,11 @@ public class ClientMembershipRepository : IClientMembershipRepository
         _dbContext.ClientMemberships.Add(entity);
         await _dbContext.SaveChangesAsync();
         return entity;
+    }
+
+    public async Task<ClientMembership?> GetActiveClientMembershipByClientId(Guid clientId)
+    {
+        return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.ClientId == clientId && item.IsActive && item.MembershipStatus == MembershipStatusEnum.Active);
     }
 
     public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(int page = 1, int pageSize = 50, string? searchText = null)

@@ -66,7 +66,6 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
             MembershipId = membership.Id;
             MembershipUpdateRequest.Name = membership.Name;
             MembershipUpdateRequest.Price = membership.Price;
-            MembershipUpdateRequest.IsTrainerOnly = membership.IsTrainerOnly;
         }
     }
 }

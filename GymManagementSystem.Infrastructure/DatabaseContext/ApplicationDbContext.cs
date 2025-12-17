@@ -28,6 +28,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<TrainerRate> TrainerRates { get; set; }
     public DbSet<TrainerContract> TrainerContracts { get; set; }
     public DbSet<EmploymentTermination> EmploymentTerminations { get; set; }
+    public DbSet<Visit> Visits { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -48,7 +49,5 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 DefaultRate120 = 150m,
                 DefaultRate90 = 120m
             });
-
-
     }
 }

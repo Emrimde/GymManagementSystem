@@ -16,9 +16,11 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     Client.IsActive
         ? $"{Client.ClientMembership?.Membership?.Name} {Client.ClientMembership?.Membership?.MembershipType}"
         : "No membership";
+    private readonly VisitHttpClient _visitHttpClient;
 
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
+    public ICommand RegisterVisitCommand { get; }
     public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
     public INavigationService Navigation
@@ -55,7 +57,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     private readonly ClientHttpClient _clienthttpClient;
     public SidebarViewModel SidebarView { get; }
 
-    public ClientDetailsViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, ClientHttpClient clientHttpClient)
+    public ClientDetailsViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, ClientHttpClient clientHttpClient, VisitHttpClient visitHttpClient)
     {
         _clienthttpClient = clientHttpClient;
         Navigation = navigation;
@@ -64,7 +66,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         OpenClientMembershipsHistory = new RelayCommand(item =>
             Navigation.NavigateTo<ClientMembershipViewModel>(ClientId), item => true);
 
-
+        RegisterVisitCommand = new AsyncRelayCommand(item => RegisterVisitAsync(), item => true);
         SidebarView = sidebarViewModel;
         CreateNewTerminationCommand = new RelayCommand(item =>
 
@@ -85,6 +87,20 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
         }
            , item => true);
+        _visitHttpClient = visitHttpClient;
+    }
+
+    private async Task RegisterVisitAsync()
+    {
+        Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId);
+        if(result.IsSuccess)
+        {
+            MessageBox.Show("Visit registered successfully.");
+        }
+        else
+        {
+            MessageBox.Show($"Error registering visit: {result.ErrorMessage}");
+        }
     }
 
     private async Task LoadClient()

@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Contract;
@@ -14,10 +15,11 @@ public class ClientMembershipService : IClientMembershipService
 {
     private readonly IClientMembershipRepository _clientMembershipRepository;
     private readonly IClientRepository _clientRepository;
-    private readonly IRepository<ContractResponse,Contract> _contractRepo;
+    private readonly IRepository<ContractResponse, Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
+   
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse,Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
@@ -28,28 +30,38 @@ public class ClientMembershipService : IClientMembershipService
     {
         ClientMembership clientMembership = entity.ToClientMembership();
         Membership? membership = await _membershipRepo.GetByIdAsync(entity.MembershipId);
-        if(membership == null)
+        if (membership == null)
         {
             return Result<ClientMembershipInfoResponse>.Failure("Membership not found");
         }
-        if(membership.IsTrainerOnly)
-        {
-            return Result<ClientMembershipInfoResponse>.Failure("Cannot create client membership for trainer only membership");
-        }
-        if(membership.MembershipType == MembershipTypeEnum.Annual)
+
+        if (membership.MembershipType == MembershipTypeEnum.Annual)
         {
             clientMembership.EndDate = clientMembership.StartDate.AddYears(1);
         }
-        if(clientMembership.StartDate > DateTime.UtcNow)
+
+        else if (membership.MembershipType == MembershipTypeEnum.Monthly)
+        {
+            clientMembership.EndDate = clientMembership.StartDate.AddMonths(1);
+        }
+
+
+        if (clientMembership.StartDate > DateTime.UtcNow)
         {
             clientMembership.MembershipStatus = MembershipStatusEnum.Upcoming;
         }
+
         else
         {
             clientMembership.MembershipStatus = MembershipStatusEnum.Active;
         }
 
-            ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
+        if (membership.MembershipType == MembershipTypeEnum.Singular)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure("Singular memberships cannot be added as client memberships");
+        }
+
+        ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
         {
             ClientMembershipId = addedClientMembership.Id,
@@ -62,8 +74,8 @@ public class ClientMembershipService : IClientMembershipService
     }
 
     public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1)
-    { 
-        PageResult<ClientMembershipResponse> clientMembershipList = await _clientMembershipRepository.GetAllAsync(pageSize: pageSize, page:page, searchText: searchText);
+    {
+        PageResult<ClientMembershipResponse> clientMembershipList = await _clientMembershipRepository.GetAllAsync(pageSize: pageSize, page: page, searchText: searchText);
         return clientMembershipList;
     }
 
@@ -85,10 +97,10 @@ public class ClientMembershipService : IClientMembershipService
 
     public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)
     {
-        Client? client =  await _clientRepository.GetByIdAsync(clientId);
+        Client? client = await _clientRepository.GetByIdAsync(clientId);
         Membership? membership = await _membershipRepo.GetByIdAsync(membershipId);
 
-        if(membership == null || client == null)
+        if (membership == null || client == null)
         {
             return Result<ClientMembershipContractPreviewResponse>.Failure("Client or membership not found", StatusCodeEnum.NotFound);
         }

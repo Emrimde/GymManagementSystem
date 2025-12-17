@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.GeneralGymDetail;
+﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -20,7 +19,6 @@ using GymManagementSystem.WPF.ViewModels.Trainer;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using GymManagementSystem.WPF.ViewModels.TrainerRate;
 using Microsoft.Extensions.DependencyInjection;
-using QuestPDF.Infrastructure;
 using Syncfusion.Licensing;
 using System.Windows;
 using System.Windows.Media;
@@ -151,6 +149,11 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<EmploymentTerminationHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/employmentTermination/");
+            });
+           
+            services.AddHttpClient<VisitHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/visit/");
             });
            
             _serviceProvider = services.BuildServiceProvider();

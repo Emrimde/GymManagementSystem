@@ -1,7 +1,4 @@
 ﻿using GymManagementSystem.API.Controllers;
-using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IMembershipService, MembershipService>();
+        services.AddScoped<IVisitService, VisitService>();
         services.AddScoped<IContractService, ContractService>();
         services.AddScoped<IClientMembershipService, ClientMembershipService>();
         services.AddScoped<ITerminationService, TerminationService>();

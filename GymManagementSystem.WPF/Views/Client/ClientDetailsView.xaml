@@ -58,10 +58,16 @@
                     <Button Content="Add Membership"
             Visibility="{Binding Client.IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
             Command="{Binding OpenAddClientMembershipViewCommand}" CommandParameter="{Binding Client.Id}" />
+                    <Button Content="Singular entry"
+            Visibility="{Binding Client.IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+            Command="{Binding RegisterVisitCommand}"/>
 
                     <Button Content="Terminate"
             Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
             Command="{Binding CreateNewTerminationCommand}"  />
+                    <Button Content="Register visit"
+            Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+            Command="{Binding RegisterVisitCommand}"  />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />

@@ -6,4 +6,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IClientMembershipRepository : IRepository<ClientMembershipResponse, ClientMembership>
 {
     Task<IEnumerable<ClientMembershipResponse>> GetAllClientMemberships(Guid id);
+    Task<ClientMembership?> GetActiveClientMembershipByClientId(Guid clientId);
 }

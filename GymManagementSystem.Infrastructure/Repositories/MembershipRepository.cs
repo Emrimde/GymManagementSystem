@@ -83,7 +83,6 @@ public class MembershipRepository : IMembershipRepository
 
         membership.Price = entity.Price;
         membership.Name = entity.Name;
-        membership.IsTrainerOnly = entity.IsTrainerOnly;
         await _dbContext.SaveChangesAsync();
         return membership;
     }

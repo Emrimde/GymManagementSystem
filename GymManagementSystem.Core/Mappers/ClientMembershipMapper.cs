@@ -20,7 +20,7 @@ public static class ClientMembershipMapper
         return new ClientMembershipResponse()
         {
             Id = request.Id,
-            ClientId = request.ClientId,
+           
             StartDate = request.StartDate.ToString("yyyy:MM:dd"),
             EndDate = request.EndDate.HasValue ? request.EndDate.Value.ToString("yyyy-MM-dd") : "",
          
