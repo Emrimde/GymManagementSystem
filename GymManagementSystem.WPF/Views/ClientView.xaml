@@ -12,7 +12,6 @@
         <KeyBinding Key="Enter" Command="{Binding SearchClientsCommand}"/>
     </UserControl.InputBindings>
         
-        
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="SidebarColumn" Width="200"/>

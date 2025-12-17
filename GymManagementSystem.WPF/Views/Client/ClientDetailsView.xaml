@@ -78,11 +78,10 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />
+                    <Button Content="Visits history" Command="{Binding OpenVisitsHistoryCommand}" />
                 </StackPanel>
                 
             </StackPanel>
-            
         </Grid>
-        
     </Grid>
 </UserControl>

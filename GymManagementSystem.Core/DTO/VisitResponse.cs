@@ -1,6 +1,9 @@
-﻿namespace GymManagementSystem.Core.DTO;
+﻿using GymManagementSystem.Core.Enum;
+
+namespace GymManagementSystem.Core.DTO;
 public class VisitResponse
 {
-    public DateTime VisitDate { get; set; }
+    public VisitSourceEnum VisitSource { get; set; }
+    public string VisitDate { get; set; } = default!;
 
 }

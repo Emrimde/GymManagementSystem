@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,4 +16,8 @@ public class VisitController : BaseController
     [HttpPost("register-visit/{clientId:guid}")]
     public async Task<ActionResult> RegisterVisit([FromRoute] Guid clientId)
         => HandleResult(await _visitService.RegisterVisitAsync(clientId));
+
+    [HttpGet("{clientId:guid}")]
+    public async Task<ActionResult<IEnumerable<VisitResponse>>> GetAllClientVisits([FromRoute] Guid clientId)
+        => HandleListedResult(await _visitService.GetAllClientVisitsAsync(clientId));
 }

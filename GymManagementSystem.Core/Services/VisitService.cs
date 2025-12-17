@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain;
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
@@ -20,6 +21,12 @@ public class VisitService : IVisitService
         _unitOfWork = unitOfWork;
         _clientRepo = clientRepo;
         _clientMembershipRepo = clientMembershipRepo;
+    }
+
+    public async Task<Result<IEnumerable<VisitResponse>>> GetAllClientVisitsAsync(Guid clientId)
+    {
+        IEnumerable<VisitResponse> visits = await _visitRepository.GetAllClientVisits(clientId);
+        return Result<IEnumerable<VisitResponse>>.Success(visits, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<Unit>> RegisterVisitAsync(Guid clientId)

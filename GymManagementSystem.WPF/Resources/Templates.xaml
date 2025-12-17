@@ -32,6 +32,8 @@
                     xmlns:trainerrateview="clr-namespace:GymManagementSystem.WPF.Views.TrainerRate"
                     xmlns:employmentterminationvm="clr-namespace:GymManagementSystem.WPF.ViewModels.EmploymentTermination"
                     xmlns:employmentterminationview="clr-namespace:GymManagementSystem.WPF.Views.EmploymentTermination"
+                    xmlns:visitvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Visit"
+                    xmlns:visitview="clr-namespace:GymManagementSystem.WPF.Views.Visit"
                    
                    
                     >
@@ -140,6 +142,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type employmentterminationvm:EmploymentTerminationViewModel}">
                         <employmentterminationview:EmploymentTerminationView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type visitvm:VisitViewModel}">
+                        <visitview:VisitView />
                     </DataTemplate>
 
     

@@ -18,6 +18,7 @@ using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using GymManagementSystem.WPF.ViewModels.TrainerRate;
+using GymManagementSystem.WPF.ViewModels.Visit;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Licensing;
 using System.Windows;
@@ -61,6 +62,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<MembershipEditViewModel>();
             services.AddTransient<ClientUpdateViewModel>();
             services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<VisitViewModel>();
             
             services.AddTransient<TrainerScheduleViewModel>();
 

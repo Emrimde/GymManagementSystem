@@ -6,6 +6,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Termination;
+using GymManagementSystem.WPF.ViewModels.Visit;
 using System.Windows;
 using System.Windows.Input;
 
@@ -20,6 +21,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
+    public ICommand OpenVisitsHistoryCommand { get; }
     public ICommand RegisterVisitCommand { get; }
     public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
@@ -63,6 +65,9 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         Client = new ClientDetailsResponse();
         TerminationAddRequest = new TerminationAddRequest();
+        OpenVisitsHistoryCommand = new RelayCommand(item =>
+            Navigation.NavigateTo<VisitViewModel>(ClientId), item => true);
+
         OpenClientMembershipsHistory = new RelayCommand(item =>
             Navigation.NavigateTo<ClientMembershipViewModel>(ClientId), item => true);
 
