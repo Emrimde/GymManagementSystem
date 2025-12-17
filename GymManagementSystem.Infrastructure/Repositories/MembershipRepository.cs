@@ -64,12 +64,12 @@ public class MembershipRepository : IMembershipRepository
     public async Task<IEnumerable<MembershipResponse>> GetAllMemberships()
     {
         IQueryable<Membership> query = _dbContext.Memberships;
-        return await query.Select(item => item.ToMembershipResponse()).ToListAsync();
+        return await query.Include(item => item.MembershipPrices).Select(item => item.ToMembershipResponse()).ToListAsync();
     }
 
     public async Task<Membership?> GetByIdAsync(Guid id)
     {
-       return await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id);
+       return await _dbContext.Memberships.Include(item => item.MembershipPrices).FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<Membership?> UpdateAsync(Guid id, Membership entity)
@@ -81,7 +81,6 @@ public class MembershipRepository : IMembershipRepository
             return null!;
         }
 
-        membership.Price = entity.Price;
         membership.Name = entity.Name;
         await _dbContext.SaveChangesAsync();
         return membership;

@@ -10,6 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
         services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IMembershipPriceService, MembershipPriceService>();
         services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IVisitService, VisitService>();
         services.AddScoped<IContractService, ContractService>();

@@ -34,6 +34,8 @@
                     xmlns:employmentterminationview="clr-namespace:GymManagementSystem.WPF.Views.EmploymentTermination"
                     xmlns:visitvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Visit"
                     xmlns:visitview="clr-namespace:GymManagementSystem.WPF.Views.Visit"
+                    xmlns:membershippricevm="clr-namespace:GymManagementSystem.WPF.ViewModels.MembershipPrice"
+                    xmlns:membershippriceview="clr-namespace:GymManagementSystem.WPF.Views.MembershipPrice"
                    
                    
                     >
@@ -68,6 +70,10 @@
                     <DataTemplate DataType="{x:Type membershipvm:MembershipEditViewModel}">
                         <membershipview:MembershipEditView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type membershipvm:MembershipDetailsViewModel}">
+                        <membershipview:MembershipDetailsView/>
+                    </DataTemplate>
+                   
                     <DataTemplate DataType="{x:Type contractvm:ContractViewModel}">
                         <contractvview:ContractView/>
                     </DataTemplate>
@@ -145,6 +151,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type visitvm:VisitViewModel}">
                         <visitview:VisitView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type membershippricevm:MembershipPriceViewModel}">
+                        <membershippriceview:MembershipPriceView />
                     </DataTemplate>
 
     

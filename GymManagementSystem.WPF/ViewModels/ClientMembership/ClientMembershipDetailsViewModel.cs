@@ -1,11 +1,12 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using GymManagementSystem.WPF.ViewModels.MembershipPrice;
+using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 public class ClientMembershipDetailsViewModel : ViewModel, IParameterReceiver
@@ -41,6 +42,7 @@ public class ClientMembershipDetailsViewModel : ViewModel, IParameterReceiver
         ClientMembership = new ClientMembershipDetailsResponse();
         SidebarView = sidebarView;
         OpenClientMembershipsHistoryCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(item), item => true);
+       
     }
 
     public void ReceiveParameter(object parameter)

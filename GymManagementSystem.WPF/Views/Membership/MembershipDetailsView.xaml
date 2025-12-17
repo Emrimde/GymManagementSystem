@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="GymManagementSystem.WPF.Views.Membership.MembershipDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Membership"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ContentControl Grid.Column="0" Content="{Binding SidebarView}"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}" Text="{Binding Membership.Name}" />
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Price: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                     <Run Text="{Binding Membership.Price}"/>
+
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="MembershipType: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                     <Run Text="{Binding Membership.MembershipType}"/>
+
+                    </TextBlock>
+                </StackPanel>
+                <Button Content="Price history" Command="{Binding OpenMembershipPricesHistory}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

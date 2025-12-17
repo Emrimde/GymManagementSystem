@@ -112,4 +112,19 @@ public class MembershipHttpClient : BaseHttpClientService
             return Result<MembershipResponse>.Failure(errorMessage);
         }
     }
+
+    public async Task<Result<MembershipResponse>> GetMembershipByIdAsync(Guid membershipId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"{membershipId}");
+        if (response.IsSuccessStatusCode)
+        {
+            MembershipResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipResponse>();
+
+            return Result<MembershipResponse>.Success(memberships ?? new MembershipResponse());
+        }
+        else
+        {
+            return Result<MembershipResponse>.Failure("Failed to load membership.");
+        }
+    }
 }

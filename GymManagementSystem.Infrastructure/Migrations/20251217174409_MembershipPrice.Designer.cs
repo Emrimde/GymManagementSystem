@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251217174409_MembershipPrice")]
+    partial class MembershipPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,7 +288,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("77b40ca5-6014-4e2a-990e-d587953021fd"),
+                            Id = new Guid("7f1dade8-0315-41b5-be2e-696c71205666"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -361,36 +364,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Memberships");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
-                            IsVisibleOffer = true,
-                            MembershipType = 0,
-                            Name = "Silver Membership"
-                        },
-                        new
-                        {
-                            Id = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
-                            IsVisibleOffer = true,
-                            MembershipType = 0,
-                            Name = "Gold Membership"
-                        },
-                        new
-                        {
-                            Id = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
-                            IsVisibleOffer = true,
-                            MembershipType = 1,
-                            Name = "Silver Membership"
-                        },
-                        new
-                        {
-                            Id = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
-                            IsVisibleOffer = true,
-                            MembershipType = 1,
-                            Name = "Gold Membership"
-                        });
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipPrice", b =>
@@ -401,6 +374,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<string>("LabelPrice")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("MemberhsipId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("MembershipId")
                         .HasColumnType("uuid");
@@ -419,36 +395,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasIndex("MembershipId");
 
                     b.ToTable("MembershipPrices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3222b689-8d09-490c-8731-96717a710e07"),
-                            MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
-                            Price = 100m,
-                            ValidFrom = new DateTime(2025, 12, 17, 18, 6, 1, 290, DateTimeKind.Utc).AddTicks(9702)
-                        },
-                        new
-                        {
-                            Id = new Guid("7191cac9-5b1d-4416-a70d-dc694f9911ae"),
-                            MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
-                            Price = 150m,
-                            ValidFrom = new DateTime(2025, 12, 17, 18, 6, 1, 290, DateTimeKind.Utc).AddTicks(9709)
-                        },
-                        new
-                        {
-                            Id = new Guid("ec882a0a-3e04-448f-b2b1-93e7c2fc72ff"),
-                            MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
-                            Price = 1000m,
-                            ValidFrom = new DateTime(2025, 12, 17, 18, 6, 1, 290, DateTimeKind.Utc).AddTicks(9711)
-                        },
-                        new
-                        {
-                            Id = new Guid("dabf4ecc-127c-4c63-b7a9-99a2fad90756"),
-                            MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
-                            Price = 1500m,
-                            ValidFrom = new DateTime(2025, 12, 17, 18, 6, 1, 290, DateTimeKind.Utc).AddTicks(9713)
-                        });
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Person", b =>

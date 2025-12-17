@@ -33,7 +33,6 @@ public static class ContractMapper
         {
             Client = contract.ClientMembership?.Client?.ToClientDetailsResponse(),
             Name = contract.ClientMembership?.Membership?.Name + " " + contract.ClientMembership?.Membership?.MembershipType,
-            Price = (decimal)contract.ClientMembership?.Membership?.Price!,
             StartDate = contract.ClientMembership.StartDate.ToString("dd.MM.yyyy"),
             EndDate = contract.ClientMembership.EndDate?.ToString("dd.MM.yyyy")
           ?? "indefinite time",

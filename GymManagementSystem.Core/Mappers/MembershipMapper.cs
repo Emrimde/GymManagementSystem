@@ -11,8 +11,8 @@ public static class MembershipMapper
         {
             Id = membership.Id,
             Name = membership.Name,
-            Price = membership.Price,
             MembershipType = membership.MembershipType,
+            Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m
         };
     }
     public static Membership ToMembership(this MembershipAddRequest membership)
@@ -20,7 +20,7 @@ public static class MembershipMapper
         return new Membership()
         {
             Name = membership.Name,
-            Price = membership.Price,
+            //Price = membership.Price,
             MembershipType = membership.MembershipType,
         };
     }
@@ -30,7 +30,7 @@ public static class MembershipMapper
         return new Membership()
         {
             Name = membership.Name,
-            Price = membership.Price,
+            //Price = membership.Price,
             MembershipType = membership.MembershipType,
         };
     }

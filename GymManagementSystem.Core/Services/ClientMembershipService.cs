@@ -112,7 +112,6 @@ public class ClientMembershipService : IClientMembershipService
             EndDate = DateTime.UtcNow.ToString("yy.MM.dd"),
             FullName = client.FirstName + " " + client.LastName,
             MembershipName = membership.Name,
-            Price = membership.Price.ToString(),
         };
 
         return Result<ClientMembershipContractPreviewResponse>.Success(response);

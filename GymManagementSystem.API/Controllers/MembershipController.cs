@@ -21,9 +21,9 @@ public class MembershipController : BaseController
     public async Task<ActionResult<IEnumerable<MembershipResponse>>> GetAll()
         => HandleListedResult(await _membershipService.GetAllAsync());
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<MembershipResponse>> GetMembershipById(Guid id)
-        => HandleResult(await _membershipService.GetByIdAsync(id));
+    [HttpGet("{membershipId:guid}")]
+    public async Task<ActionResult<MembershipResponse>> GetMembershipById(Guid membershipId)
+        => HandleResult(await _membershipService.GetByIdAsync(membershipId));
 
     [HttpPost]
     public async Task<ActionResult<MembershipResponse>> CreateMembership([FromBody] MembershipAddRequest entity)
