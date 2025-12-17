@@ -30,27 +30,34 @@
             </TextBlock>
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Address:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Address: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
                         <Run Text="{Binding Client.Street}"/>
-                        <Run Text=","/>
+                        <Run Text=", "/>
                         <Run Text="{Binding Client.City}"/>
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Phone number:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Phone number: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
                         <Run Text="{Binding Client.PhoneNumber}"/>
          
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Date of birth:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-         <Run Text="{Binding Client.DateOfBirth}"/>
+                    <TextBlock Text="Date of birth: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.DateOfBirth}"/>
 
-                    </TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Total visits: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.TotalVisits}"/>
+
+                </StackPanel><StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Last visit date: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.LastVisitDate}"/>
+
+                </StackPanel> 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Active Membership: " />
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding ActiveMembershipName}" />

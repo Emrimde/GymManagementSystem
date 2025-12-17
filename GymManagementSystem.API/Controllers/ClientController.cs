@@ -19,7 +19,7 @@ public class ClientController : BaseController
         => HandlePageResult(await _clientService.GetAllAsync(searchText, page));
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ClientResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)
+    public async Task<ActionResult<ClientDetailsResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)
         => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly));
 
     [HttpGet("name/{id:guid}")]

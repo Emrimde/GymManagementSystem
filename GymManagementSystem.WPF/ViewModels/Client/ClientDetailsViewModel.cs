@@ -92,10 +92,26 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private async Task RegisterVisitAsync()
     {
+        if (!Client.IsActive)
+        {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Is client paid for single entry?.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                MessageBox.Show("Visit registered for single entry.");
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
         Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId);
         if(result.IsSuccess)
         {
-            MessageBox.Show("Visit registered successfully.");
+            
+
+            await LoadClient();
         }
         else
         {

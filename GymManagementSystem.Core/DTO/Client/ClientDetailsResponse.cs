@@ -15,4 +15,6 @@ public class ClientDetailsResponse
     public string City { get; set; } = string.Empty;
     public bool IsActive { get; set; }
     public ClientMembershipShortResponse? ClientMembership { get; set; }
+    public int TotalVisits { get; set; }
+    public string? LastVisitDate { get; set; }
 }

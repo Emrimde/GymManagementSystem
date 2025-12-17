@@ -5,16 +5,17 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using System.Reflection.Metadata.Ecma335;
 
 namespace GymManagementSystem.Core.Services;
 
 public class ClientService : IClientService
 {
     private readonly IClientRepository _repository;
-    public ClientService(IClientRepository repository)
+    private readonly IVisitRepository _visitRepo;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository)
     {
         _repository = repository;
+        _visitRepo = visitRepository;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
@@ -74,7 +75,13 @@ public class ClientService : IClientService
             return Result<ClientDetailsResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
         }
 
+        int visitsCount = await _visitRepo.GetTotalVisitsByClientId(id);
+        DateTime lastVisit = await _visitRepo.GetLastVisitDateByClientId(id);
+
         ClientDetailsResponse clientResponse = client.ToClientDetailsResponse();
+        clientResponse.LastVisitDate = lastVisit == DateTime.MinValue ? "0 visits" : lastVisit.ToString("dd.MM.yyyy - HH:mm");
+        clientResponse.TotalVisits = visitsCount;
+
 
         return Result<ClientDetailsResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
