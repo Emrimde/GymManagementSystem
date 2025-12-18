@@ -16,4 +16,8 @@ public class MembershipPriceController : BaseController
     public async Task<ActionResult<IEnumerable<MembershipPriceResponse>>> GetMembershipPricesByMembershipId([FromRoute] Guid membershipId)
     => HandleListedResult(await _membershipPriceService.GetMembershipPricesByMembershipIdAsync(membershipId));
 
+
+    [HttpPost]
+    public async Task<ActionResult> CreateMembershipPrice([FromBody] MembershipPriceAddRequest membershipPriceAddRequest) => HandleResult(await _membershipPriceService.CreateMembershipPriceAsync(membershipPriceAddRequest));
+    
 }

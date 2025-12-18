@@ -18,6 +18,7 @@ public class MembershipDetailsViewModel : ViewModel, IParameterReceiver
     private INavigationService _navigation;
     private MembershipResponse _membership;
     public ICommand OpenMembershipPricesHistory { get; }
+    public ICommand OpenAddMembershipPriceCommand { get; }
 
     public MembershipResponse Membership
     {
@@ -31,6 +32,7 @@ public class MembershipDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         SidebarView = sidebarView;
         OpenMembershipPricesHistory = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceViewModel>(Membership.Id), item => true);
+        OpenAddMembershipPriceCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceAddViewModel>(Membership.Id), item => true);
     }
 
     public INavigationService Navigation

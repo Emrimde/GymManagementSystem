@@ -13,17 +13,23 @@ public class MembershipPriceRepository : IMembershipPriceRepository
         _dbContext = dbContext;
     }
 
-
-
-    public async Task<IEnumerable<MembershipPriceResponse>> GetMembershipPricesByMembershipId(Guid membershipId)
+    public void AddMembershipPrice(MembershipPrice membershipPrice)
     {
-        return await _dbContext.MembershipPrices.Where(item => item.MembershipId == membershipId).Select(item => new MembershipPriceResponse
-        {
-            Price = item.Price,
-            ValidFrom = item.ValidFrom,
-            ValidTo = item.ValidTo,
-            LabelPrice = item.LabelPrice
-        }).ToListAsync();
+        _dbContext.MembershipPrices.Add(membershipPrice);
     }
 
+    public void EditMembershipPrice(MembershipPrice membershipPrice)
+    {
+       _dbContext.MembershipPrices.Update(membershipPrice);
+    }
+
+    public async Task<MembershipPrice?> GetActiveMembershipPriceByMembershipId(Guid membershipId)
+    {
+        return await _dbContext.MembershipPrices.FirstOrDefaultAsync(item => item.MembershipId == membershipId && item.ValidTo == null);
+    }
+
+    public async Task<IEnumerable<MembershipPrice>> GetMembershipPricesByMembershipId(Guid membershipId)
+    {
+        return await _dbContext.MembershipPrices.Where(item => item.MembershipId == membershipId).ToListAsync();
+    }
 }

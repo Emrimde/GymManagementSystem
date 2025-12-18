@@ -43,33 +43,21 @@
      Height="30"
      HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
             </Grid>
-
-
-
             <Border Grid.Row="2" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding MembershipPrices}" x:Name="datagrid" CanUserAddRows="False"
                AutoGenerateColumns="false">
 
-
-
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
-                        <DataGridTextColumn Header="Valid From" Binding="{Binding ValidFrom}"/>
-                        <DataGridTextColumn Header="Valid To:" Binding="{Binding ValidTo}"/>
+                        <DataGridTextColumn Header="Valid From" Binding="{Binding ValidFromLabel}"/>
+                        <DataGridTextColumn Header="Valid To:" Binding="{Binding ValidToLabel}"/>
                         <DataGridTextColumn Header="Label Price: " Binding="{Binding LabelPrice}"/>
-                    
-
-                       
-
-                        
                     </DataGrid.Columns>
 
                 </DataGrid>
 
             </Border>
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-             
-
             </StackPanel>
         </Grid>
     </Grid>

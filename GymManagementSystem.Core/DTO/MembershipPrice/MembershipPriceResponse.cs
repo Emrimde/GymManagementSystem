@@ -3,7 +3,7 @@
 public class MembershipPriceResponse
 {
     public decimal Price { get; set; }
-    public DateTime ValidFrom { get; set; }
-    public DateTime? ValidTo { get; set; }
-    public string? LabelPrice { get; set; }
+    public string ValidFromLabel { get; set; } = default!; 
+    public string ValidToLabel { get; set; } = default!; 
+    public string LabelPrice { get; set; }
 }

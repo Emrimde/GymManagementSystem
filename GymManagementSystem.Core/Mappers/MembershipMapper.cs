@@ -20,7 +20,6 @@ public static class MembershipMapper
         return new Membership()
         {
             Name = membership.Name,
-            //Price = membership.Price,
             MembershipType = membership.MembershipType,
         };
     }
@@ -30,7 +29,6 @@ public static class MembershipMapper
         return new Membership()
         {
             Name = membership.Name,
-            //Price = membership.Price,
             MembershipType = membership.MembershipType,
         };
     }

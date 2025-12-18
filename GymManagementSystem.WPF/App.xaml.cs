@@ -85,6 +85,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientMembershipDetailsViewModel>();
             services.AddTransient<MembershipDetailsViewModel>();
             services.AddTransient<MembershipPriceViewModel>();
+            services.AddTransient<MembershipPriceAddViewModel>();
             
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
