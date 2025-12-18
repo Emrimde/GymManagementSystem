@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251218120903_MembershipFeature")]
+    partial class MembershipFeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,38 +246,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Features");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("e00cbd24-7e96-4074-85c9-10438a662c89"),
-                            BenefitDescription = "access to all training areas"
-                        },
-                        new
-                        {
-                            Id = new Guid("3daf4cdb-eac4-4b11-b63a-f08a2b2fb5f9"),
-                            BenefitDescription = "one-time one-hour coaching consultation"
-                        },
-                        new
-                        {
-                            Id = new Guid("265c36b0-c3b6-4a1d-a374-9769e7c0e2b7"),
-                            BenefitDescription = "fitness classes included in the price of the pass"
-                        },
-                        new
-                        {
-                            Id = new Guid("4adcfe6c-8b0a-440e-9eb3-9fd10a78d82f"),
-                            BenefitDescription = "1 hour of personal training every 6 months"
-                        },
-                        new
-                        {
-                            Id = new Guid("724ec9bc-c40c-43cc-a5d8-6704eb2626d8"),
-                            BenefitDescription = "going to training with a friend 3 times a month"
-                        },
-                        new
-                        {
-                            Id = new Guid("4647b50e-5d18-4920-bd4f-953ba60e033d"),
-                            BenefitDescription = "the possibility to book group classes 7 days in advance"
-                        });
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GeneralGymDetail", b =>
@@ -332,7 +303,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c6fa742d-d972-4402-befa-557476744d6a"),
+                            Id = new Guid("8c8b4914-6e5d-4487-af3c-ad4a84155cf3"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -497,31 +468,31 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bfd3dee5-ca75-4695-a524-82b5a39e8151"),
+                            Id = new Guid("5b505cd1-81f1-4ad4-963c-b4ea37fa9846"),
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
                             Price = 100m,
-                            ValidFrom = new DateTime(2025, 12, 18, 12, 59, 40, 992, DateTimeKind.Utc).AddTicks(6116)
+                            ValidFrom = new DateTime(2025, 12, 18, 12, 9, 3, 265, DateTimeKind.Utc).AddTicks(5429)
                         },
                         new
                         {
-                            Id = new Guid("20f68550-6270-4c79-a95e-4d85471b679d"),
+                            Id = new Guid("71c8dfb9-bd63-4f73-a3d3-1039e69a2bf0"),
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
                             Price = 150m,
-                            ValidFrom = new DateTime(2025, 12, 18, 12, 59, 40, 992, DateTimeKind.Utc).AddTicks(6129)
+                            ValidFrom = new DateTime(2025, 12, 18, 12, 9, 3, 265, DateTimeKind.Utc).AddTicks(5432)
                         },
                         new
                         {
-                            Id = new Guid("1fb69ad4-226d-4a81-9d8c-316b691ea51c"),
+                            Id = new Guid("73893ea9-6bcc-44b6-abc5-60c4802cdbb9"),
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
                             Price = 1000m,
-                            ValidFrom = new DateTime(2025, 12, 18, 12, 59, 40, 992, DateTimeKind.Utc).AddTicks(6131)
+                            ValidFrom = new DateTime(2025, 12, 18, 12, 9, 3, 265, DateTimeKind.Utc).AddTicks(5434)
                         },
                         new
                         {
-                            Id = new Guid("cf9b052f-3f1f-4993-99c5-fb3746959872"),
+                            Id = new Guid("bbcf9e17-080e-4c92-b226-2ae4dea2c73e"),
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
                             Price = 1500m,
-                            ValidFrom = new DateTime(2025, 12, 18, 12, 59, 40, 992, DateTimeKind.Utc).AddTicks(6133)
+                            ValidFrom = new DateTime(2025, 12, 18, 12, 9, 3, 265, DateTimeKind.Utc).AddTicks(5436)
                         });
                 });
 

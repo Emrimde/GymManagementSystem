@@ -36,6 +36,8 @@
                     xmlns:visitview="clr-namespace:GymManagementSystem.WPF.Views.Visit"
                     xmlns:membershippricevm="clr-namespace:GymManagementSystem.WPF.ViewModels.MembershipPrice"
                     xmlns:membershippriceview="clr-namespace:GymManagementSystem.WPF.Views.MembershipPrice"
+                    xmlns:membershipfeaturevm="clr-namespace:GymManagementSystem.WPF.ViewModels.MembershipFeature"
+                    xmlns:membershipfeatureview="clr-namespace:GymManagementSystem.WPF.Views.MembershipFeature"
                    
                    
                     >
@@ -157,6 +159,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type membershippricevm:MembershipPriceAddViewModel}">
                         <membershippriceview:MembershipPriceAddViewModel />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureAddViewModel}">
+                        <membershipfeatureview:MembershipFeatureAddView />
                     </DataTemplate>
 
     

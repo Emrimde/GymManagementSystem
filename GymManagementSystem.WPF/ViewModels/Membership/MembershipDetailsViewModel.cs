@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.MembershipFeature;
 using GymManagementSystem.WPF.ViewModels.MembershipPrice;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ public class MembershipDetailsViewModel : ViewModel, IParameterReceiver
     private readonly MembershipHttpClient _membershipHttpClient;
     private INavigationService _navigation;
     private MembershipResponse _membership;
+    public ICommand OpenAddMembershipFeatureViewCommand { get; }
     public ICommand OpenMembershipPricesHistory { get; }
     public ICommand OpenAddMembershipPriceCommand { get; }
 
@@ -33,6 +35,7 @@ public class MembershipDetailsViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         OpenMembershipPricesHistory = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceViewModel>(Membership.Id), item => true);
         OpenAddMembershipPriceCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceAddViewModel>(Membership.Id), item => true);
+        OpenAddMembershipFeatureViewCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipFeatureAddViewModel>(Membership.Id), item => true);
     }
 
     public INavigationService Navigation

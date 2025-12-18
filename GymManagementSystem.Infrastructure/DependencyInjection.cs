@@ -2,9 +2,7 @@
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
-using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Contract;
-using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Infrastructure.Repositories;
@@ -18,6 +16,8 @@ public static class DependencyInjection
     {
         //services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IMembershipRepository, MembershipRepository>();
+        services.AddScoped<IMembershipFeatureRepository, MembershipFeatureRepository>();
+
         services.AddScoped<IMembershipPriceRepository, MembershipPriceRepository>();
         services.AddScoped<IVisitRepository, VisitRepository>();
         services.AddScoped<IClientMembershipRepository, ClientMembershipRepository>();
@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<IEmploymentTerminationRepository, EmploymentTerminationRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGymClassRepository, GymClassRepository>();
+        services.AddScoped<IFeatureRepository, FeatureRepository>();
         
         return services;
     }

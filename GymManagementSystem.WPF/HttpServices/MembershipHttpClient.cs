@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
+using GymManagementSystem.Core.DTO.MembershipFeature;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -71,6 +72,39 @@ public class MembershipHttpClient : BaseHttpClientService
             return Result<MembershipResponse>.Failure(errorMessage);
         }
     }
+
+
+    public async Task<Result<Unit>> PostMembershipFeatureAsync(MembershipFeatureAddRequest membershipFeatureAddRequest)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-membership-feature", membershipFeatureAddRequest);
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Result<Unit>.Success(new Unit());
+        }
+        else
+        {
+            string errorMessage = responseBody;
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<Unit>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
+            }
+
+            return Result<Unit>.Failure(errorMessage);
+        }
+    }
+
 
     public async Task<Result<MembershipResponse>> PutMembershipAsync(MembershipUpdateRequest membershipUpdateRequest, Guid membershipId)
     {

@@ -12,6 +12,7 @@ using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.EmploymentTermination;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
+using GymManagementSystem.WPF.ViewModels.MembershipFeature;
 using GymManagementSystem.WPF.ViewModels.MembershipPrice;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
@@ -86,6 +87,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<MembershipDetailsViewModel>();
             services.AddTransient<MembershipPriceViewModel>();
             services.AddTransient<MembershipPriceAddViewModel>();
+            services.AddTransient<MembershipFeatureAddViewModel>();
             
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
@@ -164,6 +166,10 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<MembershipPriceHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/membershipPrice/");
+            });
+            services.AddHttpClient<FeatureHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/feature/");
             });
            
             _serviceProvider = services.BuildServiceProvider();

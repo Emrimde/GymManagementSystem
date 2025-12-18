@@ -31,6 +31,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<EmploymentTermination> EmploymentTerminations { get; set; }
     public DbSet<Visit> Visits { get; set; }
     public DbSet<MembershipPrice> MembershipPrices { get; set; }
+    public DbSet<MembershipFeature> MembershipFeatures { get; set; }
+    public DbSet<Feature> Features { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -117,6 +119,42 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 ValidTo = null,
                 Price = 1500m
             }
+            );
+
+        builder.Entity<Feature>().HasData(
+            new Feature()
+            {
+                Id = new Guid("E00CBD24-7E96-4074-85C9-10438A662C89"),
+                BenefitDescription = "access to all training areas",
+               
+            },
+            new Feature()
+            {
+                Id = new Guid("3DAF4CDB-EAC4-4B11-B63A-F08A2B2FB5F9"),
+                BenefitDescription = "one-time one-hour coaching consultation",
+                
+            },
+            new Feature()
+            {
+                Id = new Guid("265C36B0-C3B6-4A1D-A374-9769E7C0E2B7"),
+                BenefitDescription = "fitness classes included in the price of the pass"
+            },
+            new Feature()
+            {
+                Id = new Guid("4ADCFE6C-8B0A-440E-9EB3-9FD10A78D82F"),
+                BenefitDescription = "1 hour of personal training every 6 months"
+            },
+            new Feature()
+            {
+                Id = new Guid("724EC9BC-C40C-43CC-A5D8-6704EB2626D8"),
+                BenefitDescription = "going to training with a friend 3 times a month"
+            },
+            new Feature()
+            {
+                Id = new Guid("4647B50E-5D18-4920-BD4F-953BA60E033D"),
+                BenefitDescription = "the possibility to book group classes 7 days in advance"
+            }
+
             );
     }
 }
