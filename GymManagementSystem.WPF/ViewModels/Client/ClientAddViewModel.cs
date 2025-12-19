@@ -82,15 +82,15 @@ public class ClientAddViewModel : ViewModel
             if (result == MessageBoxResult.No)
                 return;
         }
-        else
+        else if (validationResult.Value!.Age <= 13)
         {
             MessageBox.Show("Client must be at least 14 years old to register.", "Age Restriction", MessageBoxButton.OK, MessageBoxImage.Error);
             Navigation.NavigateTo<ClientViewModel>();
             return;
         }
+      
 
-
-            Result<ClientInfoResponse> addResult = await _httpClient.PostClientAsync(ClientAddRequest);
+        Result<ClientInfoResponse> addResult = await _httpClient.PostClientAsync(ClientAddRequest);
 
         if (!addResult.IsSuccess)
         {
@@ -98,7 +98,7 @@ public class ClientAddViewModel : ViewModel
             return;
         }
 
-        Navigation.NavigateTo<ClientViewModel>();
+        Navigation.NavigateTo<ClientDetailsViewModel>(addResult.Value!.Id);
     }
 
 }

@@ -89,6 +89,7 @@
                     <DataTemplate DataType="{x:Type terminationvm:TerminationAddViewModel}">
                         <terminationview:TerminationAddView/>
                     </DataTemplate>
+
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipViewModel}">
                         <clientMembershipview:ClientMembershipView/>
                     </DataTemplate>
@@ -157,6 +158,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureAddViewModel}">
                         <membershipfeatureview:MembershipFeatureAddView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureViewModel}">
+                        <membershipfeatureview:MembershipFeatureView />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type featurevm:FeatureViewModel}">
                         <featureview:FeatureView />

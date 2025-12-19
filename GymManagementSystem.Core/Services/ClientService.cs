@@ -96,7 +96,7 @@ public class ClientService : IClientService
     {
         DateTime today = DateTime.UtcNow;
         int age = today.Year - entity.DateOfBirth.Year;
-        if (entity.DateOfBirth > today.AddYears(-age)) age--;
+        if (entity.DateOfBirth > today.AddYears(age)) age--;
         ClientAgeValidationResponse response = new ClientAgeValidationResponse()
         {
             Age = age

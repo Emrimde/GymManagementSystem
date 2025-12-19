@@ -38,6 +38,7 @@
                 <Button Content="Price history" Command="{Binding OpenMembershipPricesHistory}" />
                 <Button Content="Add new price" Command="{Binding OpenAddMembershipPriceCommand}" />
                 <Button Content="Add membership feature" Command="{Binding OpenAddMembershipFeatureViewCommand}" />
+                <Button Content="Check features for membership" Command="{Binding OpenMembershipFeaturesViewCommand}" />
             </StackPanel>
         </Grid>
     </Grid>

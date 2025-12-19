@@ -14,4 +14,13 @@ public static class MembershipFeatureMapper
             Period = request.Period,
         };
     }
+    public static MembershipFeatureResponse ToMembershipFeatureResponse(this MembershipFeature request)
+    {
+        return new MembershipFeatureResponse()
+        {
+            BenefitFrequency = request.BenefitFrequency.ToString() ?? "Not set",
+            BenefitDesciption = request.Feature!.BenefitDescription,
+            Period = request.Period.ToString() ?? "Not set",
+        };
+    }
 }

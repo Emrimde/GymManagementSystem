@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.MembershipFeature;
 using GymManagementSystem.Core.ServiceContracts;
@@ -32,6 +33,10 @@ public class MembershipController : BaseController
     [HttpPost("create-membership-feature")]
     public async Task<ActionResult> CreateMembershipFeature([FromBody] MembershipFeatureAddRequest entity)
         => HandleResult(await _membershipFeatureService.CreateMembershipFeatureAsync(entity));
+
+    [HttpGet("get-membership-features/{membershipId:guid}")]
+    public async Task<ActionResult<IEnumerable<MembershipFeatureResponse>>> GetMembershipFeaturesByMembershipId([FromRoute] Guid membershipId)
+        => HandleListedResult(await _membershipFeatureService.GetMembershipFeaturesByMembershipIdAsync(membershipId));
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<MembershipResponse>> UpdateMembership(Guid id, MembershipUpdateRequest entity)
