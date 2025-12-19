@@ -14,17 +14,17 @@ public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver
 {
     public MembershipFeatureAddRequest MembershipFeatureAdd { get; set; }
 
-    private ObservableCollection<FeatureSelectResponse> _features;
+    private ObservableCollection<FeatureResponse> _features;
 
-    public ObservableCollection<FeatureSelectResponse> Features
+    public ObservableCollection<FeatureResponse> Features
     {
         get { return _features; }
         set { _features = value; OnPropertyChanged(); }
     }
 
-    private FeatureSelectResponse _selectedFeature ;
+    private FeatureResponse _selectedFeature ;
 
-    public FeatureSelectResponse SelectedFeature
+    public FeatureResponse SelectedFeature
     {
         get { return  _selectedFeature; }
         set {  _selectedFeature = value; 
@@ -57,8 +57,8 @@ public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver
         _membershipHttpClient = membershipHttpClient;
         MembershipFeatureAdd = new MembershipFeatureAddRequest();
         _featureHttpClient = featureHttpClient;
-        Features = new ObservableCollection<FeatureSelectResponse>();
-        SelectedFeature = new FeatureSelectResponse();
+        Features = new ObservableCollection<FeatureResponse>();
+        SelectedFeature = new FeatureResponse();
         
         AddMembershipFeatureCommand = new AsyncRelayCommand(item => AddMembershipFeatureAsync(), item => true);
     }
@@ -85,7 +85,7 @@ public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadFeatures()
     {
-        Result<ObservableCollection<FeatureSelectResponse>> result = await _featureHttpClient.GetFeaturesForSelect();
+        Result<ObservableCollection<FeatureResponse>> result = await _featureHttpClient.GetFeaturesForSelect();
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");

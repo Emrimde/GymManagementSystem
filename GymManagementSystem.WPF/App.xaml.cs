@@ -10,6 +10,7 @@ using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.EmploymentTermination;
+using GymManagementSystem.WPF.ViewModels.Feature;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using GymManagementSystem.WPF.ViewModels.MembershipFeature;
@@ -88,6 +89,8 @@ namespace GymManagementSystem.WPF
             services.AddTransient<MembershipPriceViewModel>();
             services.AddTransient<MembershipPriceAddViewModel>();
             services.AddTransient<MembershipFeatureAddViewModel>();
+            services.AddTransient<FeatureViewModel>();
+            services.AddTransient<FeatureAddViewModel>();
             
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));

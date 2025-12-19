@@ -12,9 +12,9 @@ public class FeatureRepository : IFeatureRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<FeatureSelectResponse>> GetAllFeatures()
+    public async Task<IEnumerable<FeatureResponse>> GetAllFeatures()
     {
-        return await _dbContext.Features.Select(item => new FeatureSelectResponse()
+        return await _dbContext.Features.Select(item => new FeatureResponse()
         {
             BenefitDescription = item.BenefitDescription,
             FeatureId = item.Id

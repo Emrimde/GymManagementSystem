@@ -12,5 +12,5 @@ public class FeatureController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllFeaturesForSelect() => HandleResult(await _featureService.GetFeaturesForSelect());    
+    public async Task<ActionResult> GetAllFeatures() => HandleResult(await _featureService.GetFeaturesForSelect());    
 }

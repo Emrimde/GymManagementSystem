@@ -4,9 +4,9 @@ using GymManagementSystem.Core.DTO.Feature;
 namespace GymManagementSystem.Core.Mappers.ClientMapper;
 public static class FeatureMapper
 {
-    public static FeatureSelectResponse ToFeatureSelectResponse(this Feature feature)
+    public static FeatureResponse ToFeatureSelectResponse(this Feature feature)
     {
-        return new FeatureSelectResponse()
+        return new FeatureResponse()
         {
             BenefitDescription = feature.BenefitDescription,
             FeatureId = feature.Id,

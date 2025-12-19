@@ -3,5 +3,5 @@
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IFeatureRepository
 {
-    Task<IEnumerable<FeatureSelectResponse>> GetAllFeatures();
+    Task<IEnumerable<FeatureResponse>> GetAllFeatures();
 }

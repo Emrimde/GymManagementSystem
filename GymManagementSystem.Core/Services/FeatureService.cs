@@ -12,9 +12,9 @@ public class FeatureService : IFeatureService
         _featureRepository = featureRepository;
     }
 
-    public async Task<Result<IEnumerable<FeatureSelectResponse>>> GetFeaturesForSelect()
+    public async Task<Result<IEnumerable<FeatureResponse>>> GetFeaturesForSelect()
     {
-        IEnumerable<FeatureSelectResponse> dto = await _featureRepository.GetAllFeatures();
-        return Result<IEnumerable<FeatureSelectResponse>>.Success(dto,StatusCodeEnum.Ok);
+        IEnumerable<FeatureResponse> dto = await _featureRepository.GetAllFeatures();
+        return Result<IEnumerable<FeatureResponse>>.Success(dto,StatusCodeEnum.Ok);
     }
 }
