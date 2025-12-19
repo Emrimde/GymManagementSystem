@@ -4,5 +4,6 @@ using GymManagementSystem.Core.Result;
 namespace GymManagementSystem.Core.ServiceContracts;
 public interface IFeatureService
 {
-    Task<Result<IEnumerable<FeatureResponse>>> GetFeaturesForSelect();
+    Task<Result<Unit>> CreateFeatureAsync(FeatureAddRequest featureAddRequest);
+    Task<Result<IEnumerable<FeatureResponse>>> GetAllFeaturesAsync();
 }

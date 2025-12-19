@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.RepositoryContracts;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Feature;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,11 @@ public class FeatureRepository : IFeatureRepository
     public FeatureRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public void AddFeature(Feature feature)
+    {
+        _dbContext.Features.Add(feature);
     }
 
     public async Task<IEnumerable<FeatureResponse>> GetAllFeatures()

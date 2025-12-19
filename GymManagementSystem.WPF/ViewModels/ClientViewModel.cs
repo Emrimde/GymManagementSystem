@@ -13,8 +13,6 @@ namespace GymManagementSystem.WPF.ViewModels;
 
 public class ClientViewModel : ViewModel
 {
-    // proba napisania paginacji
-
     private int _currentPage;
 
     public int CurrentPage

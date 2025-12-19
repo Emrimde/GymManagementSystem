@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.Feature;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,5 +13,7 @@ public class FeatureController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllFeatures() => HandleResult(await _featureService.GetFeaturesForSelect());    
+    public async Task<ActionResult> GetAllFeatures() => HandleResult(await _featureService.GetAllFeaturesAsync());    
+    [HttpPost]
+    public async Task<ActionResult> CreateFeature([FromBody] FeatureAddRequest featureAddRequest) => HandleResult(await _featureService.CreateFeatureAsync(featureAddRequest));    
 }

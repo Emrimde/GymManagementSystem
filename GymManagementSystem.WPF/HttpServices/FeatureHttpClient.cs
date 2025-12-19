@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.Feature;
-using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -58,6 +57,5 @@ public class FeatureHttpClient : BaseHttpClientService
         return Result<Unit>.Failure("Something went wrong.");
     }
 
-    
-    }
 }
+

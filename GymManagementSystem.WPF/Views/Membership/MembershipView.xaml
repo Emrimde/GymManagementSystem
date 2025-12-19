@@ -26,22 +26,31 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock 
 
-                <TextBlock 
-        Grid.Column="0"
-        Text="Memberships" 
-        FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                    HorizontalAlignment="left"
-        
-        VerticalAlignment="Center"
-                    Width="200" Margin="40,0,0,0"/>
+Text="Memberships" 
+FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
+            HorizontalAlignment="left"
 
-                <Button 
-        Grid.Column="1"
-        Content="Add new price"
-        Width="170"
-        Height="35"
-        HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershipView}" />
+VerticalAlignment="Center"
+            Width="200" Margin="40,0,0,0"/>
+
+                    <Button 
+
+Content="Add new price"
+Width="170"
+Height="35"
+HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershipView}" />
+          
+                    <Button 
+
+Content="All features"
+Width="170"
+Height="35"
+HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenFeatureView}" />
+                </StackPanel>
+               
             </Grid>
             <Border Grid.Row="1" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding Memberships}" x:Name="datagrid" CanUserAddRows="False"
