@@ -14,22 +14,6 @@ public class TerminationHttpClient : BaseHttpClientService
     {
     }
 
-    public async Task<ObservableCollection<TerminationResponse>> GetTerminationsAsync()
-    {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
-        if (response.IsSuccessStatusCode)
-        {
-            ObservableCollection<TerminationResponse>? terminations = await response.Content.ReadFromJsonAsync<ObservableCollection<TerminationResponse>>();
-
-            return terminations ?? new ObservableCollection<TerminationResponse>();
-        }
-        else
-        {
-            MessageBox.Show("Failed to load", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new ObservableCollection<TerminationResponse>();
-        }
-    }
-
     public async Task<Result<TerminationResponse>> PostTerminationAsync(TerminationAddRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);

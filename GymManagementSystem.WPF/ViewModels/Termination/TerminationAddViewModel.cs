@@ -36,7 +36,6 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 		if (result.IsSuccess)
 		{
 			MessageBox.Show("Success");
-			Navigation.NavigateTo<TerminationViewModel>();
 		}
 		else
 		{

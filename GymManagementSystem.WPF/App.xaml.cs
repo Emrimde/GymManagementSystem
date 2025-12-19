@@ -56,7 +56,6 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientViewModel>();
             services.AddTransient<TerminationAddViewModel>();
             services.AddTransient<ContractDetailsViewModel>();
-            services.AddTransient<TerminationViewModel>();
             services.AddTransient<MembershipViewModel>();
             services.AddTransient<ClientDetailsViewModel>();
             services.AddTransient<GeneralSettingsViewModel>();
@@ -65,9 +64,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientUpdateViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddTransient<VisitViewModel>();
-            
             services.AddTransient<TrainerScheduleViewModel>();
-
             services.AddTransient<GymClassAddViewModel>();
             services.AddTransient<GymClassViewModel>();
             services.AddTransient<ScheduledClassViewModel>();

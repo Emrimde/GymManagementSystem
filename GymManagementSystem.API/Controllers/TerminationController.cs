@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
-using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +19,6 @@ public class TerminationController : BaseController
     [HttpPost]
     public async Task<ActionResult<TerminationResponse>> PostTermination([FromBody] TerminationAddRequest request, CancellationToken cancellationToken)
     => HandleResult(await _terminationService.CreateAsync(request));
-
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<Termination>>> GetTerminations(CancellationToken cancellationToken)
-    //=> HandleListedResult(await _terminationService.GetAllAsync());
 
     [HttpGet("{clientId:guid}/can-create-termination")]
     public async Task<ActionResult<bool>> CanCreateTermination([FromRoute]

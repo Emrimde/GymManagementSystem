@@ -89,9 +89,6 @@
                     <DataTemplate DataType="{x:Type terminationvm:TerminationAddViewModel}">
                         <terminationview:TerminationAddView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type terminationvm:TerminationViewModel}">
-                        <terminationview:TerminationView/>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipViewModel}">
                         <clientMembershipview:ClientMembershipView/>
                     </DataTemplate>

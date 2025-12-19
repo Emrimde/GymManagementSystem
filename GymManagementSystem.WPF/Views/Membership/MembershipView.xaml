@@ -36,19 +36,14 @@ FontSize="30" FontWeight="Bold" Foreground="#EEEEEE"
 VerticalAlignment="Center"
             Width="200" Margin="40,0,0,0"/>
 
-                    <Button 
-
-Content="Add new price"
-Width="170"
-Height="35"
-HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershipView}" />
+                    
           
                     <Button 
 
 Content="All features"
 Width="170"
 Height="35"
-HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenFeatureView}" />
+HorizontalAlignment="Right" Margin="50,0,40,0" Command="{Binding OpenFeatureView}" />
                 </StackPanel>
                
             </Grid>

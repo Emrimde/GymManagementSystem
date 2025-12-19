@@ -47,12 +47,6 @@ public class TerminationService : ITerminationService
         return Result<TerminationResponse>.Success(createdTermination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }
 
-    public async Task<PageResult<TerminationResponse>> GetAllAsync()
-    {
-        PageResult<TerminationResponse> terminations  = await _terminationRepo.GetAllAsync();
-        return terminations;
-    }
-
     public Task<Result<TerminationResponse>> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();

@@ -10,9 +10,6 @@
         <Button Command="{Binding OpenDashboardView}" Content="Dashboard" Margin="5"/>
         <Button Command="{Binding OpenClientView}" Content="Clients" Margin="5"/>
         <Button Command="{Binding OpenMembershipView}" Content="Memberships" Margin="5"/>
-        <Button Content="Terminations" Command="{Binding OpenTerminationView}" Margin="5"/>
-        <Button Content="Client Memberships" Command="{Binding OpenClientMembershipView}" Margin="5"/>
-       
         <Button Content="Gym Classes" Command="{Binding OpenGymClassesView}" Margin="5"/>
         <Button Content="Scheduled Classes" Command="{Binding OpenScheduledClassesView}" Margin="5"/>
         <Button Content="Class Bookings" Command="{Binding OpenClassBookingsView}" Margin="5"/>

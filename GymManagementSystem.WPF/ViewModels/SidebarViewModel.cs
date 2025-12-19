@@ -52,7 +52,6 @@ public class SidebarViewModel : ViewModel
         OpenDashboardView = new RelayCommand(item => Navigation.NavigateTo<DashboardViewModel>(), o => true);
         OpenMembershipView = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), o => true);
         OpenSettingsView = new RelayCommand(item => Navigation.NavigateTo<GeneralSettingsViewModel>(), o => true);
-        OpenTerminationView = new RelayCommand(item => Navigation.NavigateTo<TerminationViewModel>(), item => true);
         OpenClientMembershipView = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(), item => true);
        
         OpenGymClassesView = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
