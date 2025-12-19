@@ -10,7 +10,6 @@
         <Button Command="{Binding OpenDashboardView}" Content="Dashboard" Margin="5"/>
         <Button Command="{Binding OpenClientView}" Content="Clients" Margin="5"/>
         <Button Command="{Binding OpenMembershipView}" Content="Memberships" Margin="5"/>
-        <Button Command="{Binding OpenContractView}" Content="Contracts" Margin="5"/>
         <Button Content="Terminations" Command="{Binding OpenTerminationView}" Margin="5"/>
         <Button Content="Client Memberships" Command="{Binding OpenClientMembershipView}" Margin="5"/>
        

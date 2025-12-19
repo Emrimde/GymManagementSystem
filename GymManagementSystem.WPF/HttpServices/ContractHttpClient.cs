@@ -13,21 +13,6 @@ public class ContractHttpClient : BaseHttpClientService
     public ContractHttpClient(HttpClient httpClient) : base(httpClient)
     {
     }
-    public async Task<ObservableCollection<ContractResponse>> GetContractsAsync()
-    {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
-        if (response.IsSuccessStatusCode)
-        {
-            ObservableCollection<ContractResponse>? contracts = await response.Content.ReadFromJsonAsync<ObservableCollection<ContractResponse>>();
-
-            return contracts ?? new ObservableCollection<ContractResponse>();
-        }
-        else
-        {
-            MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new ObservableCollection<ContractResponse>();
-        }
-    }
 
     public async Task<Result<ContractResponse>> PutContractAsync(ContractUpdateRequest request, Guid id)
     {

@@ -21,12 +21,6 @@ public class ContractService : IContractService
         throw new NotImplementedException();
     }
 
-    public async Task<PageResult<ContractResponse>> GetAllAsync()
-    {
-        PageResult<ContractResponse> contracts = await _repository.GetAllAsync();
-        return contracts;
-    }
-
     public async Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id)
     {
         Contract? contract = await _repository.GetByIdAsync(id);

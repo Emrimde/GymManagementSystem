@@ -16,10 +16,6 @@ public class ContractController : BaseController
         _contractService = contractService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<PageResult<ContractResponse>>> GetAll()
-        => HandlePageResult(await _contractService.GetAllAsync());
-
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ContractDetailsResponse>> GetById(Guid id)
         => HandleResult(await _contractService.GetByIdAsync(id));

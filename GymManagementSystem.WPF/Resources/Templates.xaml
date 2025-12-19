@@ -77,10 +77,6 @@
                     <DataTemplate DataType="{x:Type membershipvm:MembershipDetailsViewModel}">
                         <membershipview:MembershipDetailsView/>
                     </DataTemplate>
-                   
-                    <DataTemplate DataType="{x:Type contractvm:ContractViewModel}">
-                        <contractvview:ContractView/>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type contractvm:ContractDetailsViewModel}">
                         <contractvview:ContractDetails/>
                     </DataTemplate>
