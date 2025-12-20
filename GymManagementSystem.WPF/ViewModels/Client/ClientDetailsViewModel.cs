@@ -27,6 +27,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     public ICommand RegisterVisitCommand { get; }
     public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
+    public ICommand OpenAllClientClassBookingCommand { get; }
     public INavigationService Navigation
     {
         get { return _navigation; }
@@ -80,6 +81,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
          OpenCreateNewTermination()
         , item => true);
+        OpenAllClientClassBookingCommand = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(ClientId), item => true);
 
 
         OpenAddClientMembershipViewCommand = new RelayCommand(item =>

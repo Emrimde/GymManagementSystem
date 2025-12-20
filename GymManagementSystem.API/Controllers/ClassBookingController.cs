@@ -14,8 +14,8 @@ public class ClassBookingController : BaseController
         _classBookingService = classBookingService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<PageResult<ClassBookingResponse>>> GetAll() => HandlePageResult(await _classBookingService.GetAllAsync());
+    [HttpGet("getAll/{clientId:guid}")]
+    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAllByClientId([FromRoute] Guid clientId) => HandleListedResult(await _classBookingService.GetAllByClientIdAsync(clientId));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClassBookingDetailsResponse>> GetById([FromRoute] Guid id) => HandleResult(await _classBookingService.GetByIdAsync(id));

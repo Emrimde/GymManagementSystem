@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -25,20 +26,20 @@ public class ClassBookingService : IClassBookingService
     public async Task<Result<ClassBookingInfoResponse>> CreateAsync(ClassBookingAddRequest request)
     {
         ClientMembership? clientMembership = await _clientMembershipRepo.GetActiveClientMembershipByClientId(request.ClientId);
-        if(clientMembership == null) // Jak nie masz karnetu = wypierdalasz =D, nie ma cie na zajeciach chuju
+        if(clientMembership == null) 
         {
             return Result<ClassBookingInfoResponse>.Failure("Unable to book class for client because he doesn't have active membership", StatusCodeEnum.BadRequest);
         }
 
         ScheduledClass? scheduledClass = await _scheduledClassRepository.GetByIdAsync(request.ScheduledClassId);
-        if (scheduledClass == null) // Jak te zajęcia w tym terminie nie istnieją = to się nie ma na co zapisywać X D
+        if (scheduledClass == null) 
         {
-            return Result<ClassBookingInfoResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound); // ZWRACAM RECEPCJONIŚCIE BŁĄD ŻE JEST DEBILEM?
+            return Result<ClassBookingInfoResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound); 
         }
 
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(scheduledClass.GymClassId);
 
-        if(clientMembership.MembershipStatus == MembershipStatusEnum.Upcoming) // Jeśli kupiłeś sobie karnet który bedzie aktywny dopiero za tydzień - to w tej chwili WYPIERDALAJ!
+        if(clientMembership.MembershipStatus == MembershipStatusEnum.Upcoming) 
         {
             return Result<ClassBookingInfoResponse>.Failure("Client's memebrship status is upcoming", StatusCodeEnum.BadRequest);
         }
@@ -53,10 +54,10 @@ public class ClassBookingService : IClassBookingService
         return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
     }
 
-    public async Task<PageResult<ClassBookingResponse>> GetAllAsync()
+    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllByClientIdAsync(Guid clientId)
     {
-        PageResult<ClassBookingResponse> classBookings = await _classBookingRepo.GetAllAsync();
-        return classBookings;
+        IEnumerable<ClassBookingReadModel> classBookings = await _classBookingRepo.GetAllClassBookingsByClientId(clientId);
+        return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
     }
 
     public Task<Result<ClassBookingDetailsResponse>> GetByIdAsync(Guid id)

@@ -55,12 +55,12 @@ public class ClassBookingHttpClient : BaseHttpClientService
 
         return Result<ClassBookingInfoResponse>.Failure(response.ReasonPhrase ?? "Unknown error.");
     }
-    public async Task<Result<ObservableCollection<ClassBookingResponse>>> GetClassBookings()
+    public async Task<Result<ObservableCollection<ClassBookingResponse>>> GetClassBookingsByClientId(Guid clientId)
     {
         try
         {
             var classBookings = await _httpClient.GetFromJsonAsync<ObservableCollection<ClassBookingResponse>>(
-                "");
+                $"getAll/{clientId}");
 
             return Result<ObservableCollection<ClassBookingResponse>>.Success(
                 classBookings);

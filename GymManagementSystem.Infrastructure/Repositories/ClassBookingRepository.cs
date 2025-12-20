@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
@@ -29,39 +30,20 @@ public class ClassBookingRepository : IClassBookingRepository
 
     public async Task<PageResult<ClassBookingResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
     {
-        IQueryable<ClassBooking> query = _dbContext.ClassBookings;
-        if (searchText != null)
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)
+    {
+        return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow).Select(item => new ClassBookingReadModel()
         {
-            string searchTextLower = searchText.ToLower();
-            string[] terms = searchTextLower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string term in terms)
-            {
-                string pattern = $"%{term}%";
-                query = query.Where(item => item.Client!.FirstName.ToLower().Contains(term) ||
-                                            item.Client.LastName.ToLower().Contains(term) ||
-                                                item.Client.PhoneNumber.Contains(term));
-            }
-        }
-
-        int totalCount = await query.CountAsync();
-        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-
-
-        List<ClassBookingResponse> list = await query.OrderBy(item => item.Client!.FirstName)
-                                                            .Skip((page - 1) * pageSize)
-                                                                .Take(pageSize)
-                                                                    .Select(item => item.ToClassBookingResponse())
-                                                                        .ToListAsync();
-
-        return new PageResult<ClassBookingResponse>
-        {
-            CurrentPage = page,
-            Items = list,
-            PageSize = pageSize,
-            TotalCount = totalCount,
-            TotalPages = totalPages
-        };
-
+            Id = item.Id,
+            CreatedAt = item.CreatedAt,
+            Date = item.ScheduledClass!.Date,
+            StartFrom = item.ScheduledClass.StartFrom,
+            StartTo = item.ScheduledClass.StartTo,
+            Name = item.ScheduledClass!.GymClass!.Name,
+        }).ToListAsync();
     }
 
     public async Task<ClassBooking?> GetByIdAsync(Guid id)

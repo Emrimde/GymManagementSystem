@@ -80,6 +80,7 @@
                     <Button Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />
                     <Button Content="Visits history" Command="{Binding OpenVisitsHistoryCommand}" />
                     <Button Content="Book classes" Command="{Binding OpenAddClassBooking}" />
+                    <Button Content="All class bookings" Command="{Binding OpenAllClientClassBookingCommand}" />
                 </StackPanel>
                 
             </StackPanel>
