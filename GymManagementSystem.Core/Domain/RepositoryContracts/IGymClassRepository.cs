@@ -6,4 +6,5 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IGymClassRepository : IRepository<GymClassResponse, GymClass>
 {
     Task<IEnumerable<GymClass>> GetAllAsync();
+    Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassesForSelectAsync();
 }

@@ -32,7 +32,7 @@ public static class DependencyInjection
         //services.AddScoped<IRepository<GymClassResponse,GymClass>, GymClassRepository>();
         services.AddScoped<IScheduledClassRepository, ScheduledClassRepository>();
         services.AddScoped<IClientRepository, ClientRepository>();
-        services.AddScoped<IRepository<ClassBookingResponse,ClassBooking>, ClassBookingRepository>();
+        //services.AddScoped<IRepository<ClassBookingResponse,ClassBooking>, ClassBookingRepository>();
         services.AddScoped<ITrainerTimeOffRepository, TrainerTimeOffRepository>();
         services.AddScoped<IPersonalBookingRepository, PersonalBookingRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGymClassRepository, GymClassRepository>();
         services.AddScoped<IFeatureRepository, FeatureRepository>();
+        services.AddScoped<IClassBookingRepository, ClassBookingRepository>();
         
         return services;
     }

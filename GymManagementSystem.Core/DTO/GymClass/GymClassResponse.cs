@@ -7,9 +7,9 @@ public class GymClassResponse
     public string Name { get; set; } = default!;
     public TimeSpan StartHour { get; set; }
     public TimeSpan Duration { get; set; }
+    public TimeSpan EndTime { get; set; }
     public string Days { get; set; }
     public int MaxPeople { get; set; }
-    public decimal Price { get; set; }
     public string CreatedAt { get; set; } = default!;
     public string UpdatedAt { get; set; } = default!;
 }

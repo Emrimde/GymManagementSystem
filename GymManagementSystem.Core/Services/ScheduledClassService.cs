@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
@@ -11,15 +12,25 @@ namespace GymManagementSystem.Core.Services;
 public class ScheduledClassService : IScheduledClassService
 {
     private readonly IScheduledClassRepository _schedulecClassRepo;
-    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo)
+    private readonly IClassBookingRepository _classBookingRepo;
+    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo)
     {
         _schedulecClassRepo = schedulecClassRepo;
+        _classBookingRepo = classBookingRepo;
     }
+        
 
     public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText)
     {
         IEnumerable<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClasses(searchText);
         return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymclassId)
+    {
+        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId);
+        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClasses.Select(item => item.ToScheduledClassComboBoxResponse());
+        return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id)

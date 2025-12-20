@@ -7,12 +7,17 @@ using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
-public class ClassBookingRepository : IRepository<ClassBookingResponse,ClassBooking>
+public class ClassBookingRepository : IClassBookingRepository
 {
     private readonly ApplicationDbContext _dbContext;
     public ClassBookingRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<int> CountClassBookingsByScheduledClassId(Guid scheduleClassId)
+    {
+        return await _dbContext.ClassBookings.CountAsync(item => item.ScheduledClassId == scheduleClassId);
     }
 
     public async Task<ClassBooking> CreateAsync(ClassBooking entity)
@@ -25,11 +30,11 @@ public class ClassBookingRepository : IRepository<ClassBookingResponse,ClassBook
     public async Task<PageResult<ClassBookingResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
     {
         IQueryable<ClassBooking> query = _dbContext.ClassBookings;
-        if(searchText != null)
+        if (searchText != null)
         {
             string searchTextLower = searchText.ToLower();
-            string[] terms = searchTextLower.Split(' ',StringSplitOptions.RemoveEmptyEntries);
-            foreach(string term in terms)
+            string[] terms = searchTextLower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
             {
                 string pattern = $"%{term}%";
                 query = query.Where(item => item.Client!.FirstName.ToLower().Contains(term) ||

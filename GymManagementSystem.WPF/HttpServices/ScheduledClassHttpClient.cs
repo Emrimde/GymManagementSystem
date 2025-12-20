@@ -46,6 +46,42 @@ public class ScheduledClassHttpClient : BaseHttpClientService
             return Result<ObservableCollection<ScheduledClassResponse>>.Failure(errorMessage);
         }
     }
+    public async Task<Result<ObservableCollection<ScheduledClassComboBoxResponse>>> GetScheduledClassesComboBox(Guid gymClassId)
+    {
+        string queryString =  $"scheduledclasses/{gymClassId}";
+        HttpResponseMessage response = await _httpClient.GetAsync(queryString);
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            ObservableCollection<ScheduledClassComboBoxResponse>? scheduledClasses = JsonSerializer.Deserialize<ObservableCollection<ScheduledClassComboBoxResponse>>(responseBody, jsonSerializerOptions);
+            return Result<ObservableCollection<ScheduledClassComboBoxResponse>>.Success(scheduledClasses) ?? Result<ObservableCollection<ScheduledClassComboBoxResponse>>.Failure("Unexpected error during loading scheduled classes");
+        }
+        else
+        {
+
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ObservableCollection<ScheduledClassComboBoxResponse>>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<ObservableCollection<ScheduledClassComboBoxResponse>>.Failure($"Fatal error {ex.Message}");
+            }
+
+            return Result<ObservableCollection<ScheduledClassComboBoxResponse>>.Failure(errorMessage);
+        }
+    }
 
     public async Task<Result<ScheduledClassDetailsResponse>> GetScheduledClassById(Guid id)
     {

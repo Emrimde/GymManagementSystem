@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Visit;
@@ -22,6 +23,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
     public ICommand OpenVisitsHistoryCommand { get; }
+    public ICommand OpenAddClassBooking { get; }
     public ICommand RegisterVisitCommand { get; }
     public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
@@ -70,6 +72,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
         OpenClientMembershipsHistory = new RelayCommand(item =>
             Navigation.NavigateTo<ClientMembershipViewModel>(ClientId), item => true);
+        OpenAddClassBooking = new RelayCommand(item => Navigation.NavigateTo<AddClassBookingViewModel>(Client.Id), item => true);
 
         RegisterVisitCommand = new AsyncRelayCommand(item => RegisterVisitAsync(), item => true);
         SidebarView = sidebarViewModel;

@@ -46,12 +46,12 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    public async Task<ClientNameResponse?> GetClientNameById(Guid clientId)
+    public async Task<ClientNameResponse> GetClientNameById(Guid clientId)
     {
         try
         {
-            ClientNameResponse? clientNameResponse = await _httpClient.GetFromJsonAsync<ClientNameResponse>($"name/{clientId}");
-            return clientNameResponse;
+            ClientNameResponse clientNameResponse = await _httpClient.GetFromJsonAsync<ClientNameResponse>($"name/{clientId}");
+            return clientNameResponse ?? new ClientNameResponse();
         }
         catch (HttpRequestException ex)
         {

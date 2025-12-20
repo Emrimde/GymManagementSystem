@@ -8,8 +8,6 @@ public class GymClass
     public string Name { get; set; } = default!;
     public Guid TrainerContractId { get; set; }
     public TrainerContract? Trainer { get; set; }
-    //public Guid TrainerContractId { get; set; }
-    //public TrainerContract? TrainerContract { get; set; }
     public DaysOfWeekFlags DaysOfWeek { get; set; }
     public TimeSpan StartHour { get; set; }
     public TimeSpan Duration { get; set; }
@@ -19,6 +17,4 @@ public class GymClass
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     //public Guid? CreatedById { get; set; }
    // public Guid? UpdatedById { get; set; }
-
-
 }

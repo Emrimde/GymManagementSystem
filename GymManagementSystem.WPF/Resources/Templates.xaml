@@ -129,6 +129,9 @@
                     <DataTemplate DataType="{x:Type classbookingvm:ClassBookingViewModel}">
                         <classbookingview:ClassBookingView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type classbookingvm:AddClassBookingViewModel}">
+                        <classbookingview:AddClassBookingView/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractViewModel}">
                         <trainercontractsview:TrainerContractView/>
                     </DataTemplate>

@@ -17,6 +17,9 @@ public class ScheduledClassController : BaseController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll([FromQuery] string? searchText = null)
         => HandleListedResult(await _scheduledClassService.GetAllAsync(searchText));
+    [HttpGet("scheduledclasses/{gymClassId:guid}")]
+    public async Task<ActionResult<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId([FromRoute] Guid gymClassId)
+        => HandleListedResult(await _scheduledClassService.GetAllScheduledClassesByGymClassId(gymClassId));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ScheduledClassDetailsResponse>> GetById([FromRoute] Guid id) => HandleResult(await _scheduledClassService.GetByIdAsync(id));

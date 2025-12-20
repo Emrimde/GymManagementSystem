@@ -20,6 +20,14 @@ public static class ScheduledClassMapper
             StartTo = scheduledClass.StartTo,
         };
     }
+    public static ScheduledClassComboBoxResponse ToScheduledClassComboBoxResponse(this ScheduledClass scheduledClass)
+    {
+        return new ScheduledClassComboBoxResponse()
+        {
+            ScheduledClassId = scheduledClass.Id,
+            ScheduledClassDetails = scheduledClass.Date.ToString("dd.MM") + " - " +  scheduledClass.StartFrom.ToString() + " - " + scheduledClass.StartTo.ToString() + " - Slots " +  scheduledClass.ClassBookings.Count.ToString() + " / " + scheduledClass.GymClass!.MaxPeople.ToString() ,
+        };
+    }
 
     public static ScheduledClassDetailsResponse ToScheduledClassDetailsResponse(this ScheduledClass scheduledClass)
     {

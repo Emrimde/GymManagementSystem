@@ -65,6 +65,12 @@ public class GymClassService : IGymClassService
         throw new NotImplementedException();
     }
 
+    public async Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync()
+    {
+        IEnumerable<GymClassComboBoxResponse> dto = await _gymClassRepo.GetGymClassesForSelectAsync();
+        return Result<IEnumerable<GymClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
+    }
+
     public Task<Result<GymClassInfoResponse>> UpdateAsync(Guid id, GymClassUpdateRequest entity)
     {
         throw new NotImplementedException();

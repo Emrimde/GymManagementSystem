@@ -7,4 +7,5 @@ public interface IScheduledClassRepository : IRepository<ScheduledClassResponse,
 {
     Task AddRangeAsync(IEnumerable<ScheduledClass> entities);
     Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(string? searchText = null);
+    Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId);
 }

@@ -8,6 +8,6 @@ public class ClassBooking
     public Client? Client { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? CancelledAt { get; set; } = DateTime.UtcNow;
+    public DateTime? CancelledAt { get; set; } 
     public bool IsActive { get; set; } = true;
 }

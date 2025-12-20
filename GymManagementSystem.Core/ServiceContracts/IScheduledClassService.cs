@@ -5,5 +5,6 @@ namespace GymManagementSystem.Core.ServiceContracts;
 public interface IScheduledClassService
 {
     Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText);
+    Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymClassId);
     Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id);
 }

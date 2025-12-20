@@ -12,6 +12,7 @@ public static class GymClassMapper
             CreatedAt = gymClass.CreatedAt.ToString("dd.MM.yyyy"),
             UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy"),
             Duration = gymClass.Duration,
+            EndTime = gymClass.StartHour + gymClass.Duration,
             MaxPeople = gymClass.MaxPeople,
             Name = gymClass.Name,
             StartHour = gymClass.StartHour,

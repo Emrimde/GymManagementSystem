@@ -50,10 +50,11 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Start Hour" Binding="{Binding StartHour}"/>
+                        <DataGridTextColumn Header="Start time" Binding="{Binding StartHour}"/>
                         <DataGridTextColumn Header="Duration" Binding="{Binding Duration}"/>
+                        <DataGridTextColumn Header="End time" Binding="{Binding EndTime}"/>
                         <DataGridTextColumn Header="Max People" Binding="{Binding MaxPeople}"/>
-                        <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                        <DataGridTextColumn Header="Days" Binding="{Binding Days}"/>
                         <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt}"/>
                         <DataGridTextColumn Header="Updated At" Binding="{Binding UpdatedAt}"/>
 

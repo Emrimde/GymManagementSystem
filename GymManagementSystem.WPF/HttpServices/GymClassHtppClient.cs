@@ -47,6 +47,41 @@ public class GymClassHtppClient : BaseHttpClientService
             return Result<ObservableCollection<GymClassResponse>>.Failure(errorMessage);
         }
     }
+    public async Task<Result<ObservableCollection<GymClassComboBoxResponse>>> GetGymClassComboBoxResponses()
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync("select-gymclasses");
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            ObservableCollection<GymClassComboBoxResponse>? gymClasses = JsonSerializer.Deserialize<ObservableCollection<GymClassComboBoxResponse>>(responseBody, jsonSerializerOptions);
+            return Result<ObservableCollection<GymClassComboBoxResponse>>.Success(gymClasses) ?? Result<ObservableCollection<GymClassComboBoxResponse>>.Failure("Unexpected error during load gym classes");
+        }
+        else
+        {
+
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<ObservableCollection<GymClassComboBoxResponse>>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<ObservableCollection<GymClassComboBoxResponse>>.Failure($"Fatal error: {ex.Message}");
+            }
+
+            return Result<ObservableCollection<GymClassComboBoxResponse>>.Failure(errorMessage);
+        }
+    }
 
     public async Task<Result<GymClassInfoResponse>> PostGymClassAsync(GymClassAddRequest request)
     {
