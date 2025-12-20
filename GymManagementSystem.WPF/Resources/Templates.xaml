@@ -40,8 +40,8 @@
                     xmlns:membershipfeatureview="clr-namespace:GymManagementSystem.WPF.Views.MembershipFeature"
                     xmlns:featurevm="clr-namespace:GymManagementSystem.WPF.ViewModels.Feature"
                     xmlns:featureview="clr-namespace:GymManagementSystem.WPF.Views.Feature"
-                   
-                   
+                    xmlns:staffvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Staff"
+                    xmlns:staffview="clr-namespace:GymManagementSystem.WPF.Views.Staff"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -170,6 +170,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type featurevm:FeatureAddViewModel}">
                         <featureview:FeatureAddView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type staffvm:StaffViewModel}">
+                        <staffview:StaffView />
                     </DataTemplate>
 
     

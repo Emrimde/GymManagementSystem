@@ -9,6 +9,7 @@ using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
+using GymManagementSystem.WPF.ViewModels.Staff;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Trainer;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
@@ -29,10 +30,10 @@ public class SidebarViewModel : ViewModel
     public ICommand OpenTrainersView { get;  }
     public ICommand OpenGymClassesView { get;  }
     public ICommand OpenScheduledClassesView { get;  }
-    public ICommand OpenClassBookingsView { get;  }
     public ICommand OpenEmployeesView { get; }
     public ICommand OpenTrainerContractsView { get; }
     public ICommand OpenEmploymentTerminationsViewCommand { get; }
+    public ICommand OpenStaffView { get; }
 
     private INavigationService _navigation;
     public INavigationService Navigation
@@ -53,13 +54,14 @@ public class SidebarViewModel : ViewModel
         OpenMembershipView = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), o => true);
         OpenSettingsView = new RelayCommand(item => Navigation.NavigateTo<GeneralSettingsViewModel>(), o => true);
         OpenClientMembershipView = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(), item => true);
-       
         OpenGymClassesView = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
         OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
-        OpenClassBookingsView = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(), item => true);
         OpenEmployeesView = new RelayCommand(item => Navigation.NavigateTo<EmployeeViewModel>(), item => true);
         OpenTrainerContractsView = new RelayCommand(item => Navigation.NavigateTo<TrainerContractViewModel>(), item => true);
         OpenEmploymentTerminationsViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmploymentTerminationViewModel>(), item => true);
-        
+        OpenStaffView = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
+
+
+
     }
 }

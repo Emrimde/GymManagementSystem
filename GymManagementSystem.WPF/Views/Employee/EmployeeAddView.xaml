@@ -57,11 +57,7 @@
                         <TextBlock FontSize="25" Text="Contract type " Foreground="White"/>
                         <ComboBox ItemsSource="{Binding AvailableContractsForEmployees}" SelectedItem="{Binding SelectedContractType}"/>
                     </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="{Binding IsProbation , Converter={StaticResource BoolToVisibilityConverter }}">
-                        <TextBlock FontSize="25" Text="ValidFrom " Foreground="White"/>
-                        <DatePicker SelectedDate="{Binding Employee.ValidFrom}" SelectedDateFormat="Short" />
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="{Binding IsProbation , Converter={StaticResource BoolToVisibilityConverter }}">
+                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="{Binding IsFixedTerm , Converter={StaticResource BoolToVisibilityConverter }}">
                         <TextBlock FontSize="25" Text="Valid To " Foreground="White"/>
                         <DatePicker SelectedDate="{Binding Employee.ValidTo}"/>
                     </StackPanel>

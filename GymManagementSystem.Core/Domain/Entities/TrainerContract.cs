@@ -20,7 +20,6 @@ public class TrainerContract
 
     // Podpisy i dokumenty
     public bool IsSigned { get; set; } = true;
-    public string? ContractDocumentPath { get; set; }
     public DateTime? SignedAt { get; set; } = DateTime.UtcNow;
 
     // Nawigacje

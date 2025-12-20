@@ -18,7 +18,6 @@
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Content="Add Employee" Command="{Binding OpenEmployeeAddViewCommand}"/>
             <Button Content="Add Trainer" Command="{Binding OpenTrainerAddViewCommand}"/>
-            <Button Content="Add Instructor"/>
         </StackPanel>
     </Grid>
 </UserControl>

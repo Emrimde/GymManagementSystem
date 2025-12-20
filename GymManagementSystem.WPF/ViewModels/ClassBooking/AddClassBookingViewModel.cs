@@ -6,6 +6,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Client;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -115,7 +116,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         {
             MessageBox.Show($"{result.ErrorMessage}");
         }
-        Navigation.NavigateTo<ClassBookingViewModel>();
+        Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
     }
 
     private async Task LoadScheduledClassesComboBox()

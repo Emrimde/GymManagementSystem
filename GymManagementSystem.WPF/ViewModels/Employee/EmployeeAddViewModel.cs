@@ -4,18 +4,14 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using System.Threading.Tasks;
-using System.Windows.Automation.Provider;
+using System.Windows;
+using System.Windows.Input;
 
 
 namespace GymManagementSystem.WPF.ViewModels.Employee;
@@ -24,12 +20,12 @@ public class EmployeeAddViewModel : ViewModel
     private readonly EmployeeHttpClient _employeeHttpClient;
     private EmployeeAddRequest _employee;
 
-    private bool _isProbation;
+    private bool _isFixedTerm;
 
-    public bool IsProbation
+    public bool IsFixedTerm
     {
-        get { return _isProbation; }
-        set { _isProbation = value; OnPropertyChanged(); }
+        get { return _isFixedTerm; }
+        set { _isFixedTerm = value; OnPropertyChanged(); }
     }
 
 
@@ -75,13 +71,13 @@ public class EmployeeAddViewModel : ViewModel
             {
                 _selectedContractType = value;
 
-                if (_selectedContractType == ContractTypeEnum.Probation)
+                if (_selectedContractType == ContractTypeEnum.FixedTerm)
                 {
-                    IsProbation = true;
+                    IsFixedTerm = true;
                 }
                 else
                 {
-                    IsProbation = false;
+                    IsFixedTerm = false;
                 }
                 Employee.ContractTypeEnum = _selectedContractType;
                 OnPropertyChanged();
@@ -325,12 +321,6 @@ public class EmployeeAddViewModel : ViewModel
                 FileName = filePath,
                 UseShellExecute = true
             });
-
-            // Jeśli masz metodę statusu (np. SetToSigned) odkomentuj poniżej:
-            // await SetToSigned(ContractStatus.Generated);
-
-            // Jeśli chcesz powiadomić użytkownika w UI:
-            // MessageBox.Show($"Umowa wygenerowana: {filePath}");
         }
         catch (Exception ex)
         {
