@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.TrainerContract;
 
-public class TrainerContractAddViewModel : ViewModel
+public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
 {
     private readonly TrainerHttpClient _trainerHttpClient;
     private INavigationService _navigation;
@@ -209,7 +209,7 @@ public class TrainerContractAddViewModel : ViewModel
         }
 
         // Nazwa pliku bez niedozwolonych znaków
-        string safeFileName = $"{request.FirstName}_{request.LastName}_{contractTitle}"
+        string safeFileName = $"{request.TaxId}_{request.TaxId}_{contractTitle}"
             .Replace(" ", "_")
             .Replace(":", "")
             .Replace("/", "_");
@@ -241,11 +241,11 @@ public class TrainerContractAddViewModel : ViewModel
                     if (request.ContractType == ContractTypeEnum.B2B)
                     {
                         column.Item().Text($"b) Wykonawca (firma): {companyName}, NIP: {taxId}, adres: {companyAddress}");
-                        column.Item().Text($"   Osoba kontaktowa: {request.FirstName} {request.LastName}, e-mail: {request.Email ?? "-"}, tel: {request.PhoneNumber ?? "-"}");
+                        column.Item().Text($"   Osoba kontaktowa: {request.TaxId} {request.TaxId}, e-mail: {request.TaxId ?? "-"}, tel: {request.TaxId ?? "-"}");
                     }
                     else
                     {
-                        column.Item().Text($"b) Zleceniobiorca: {request.FirstName} {request.LastName}, e-mail: {request.Email ?? "-"}, tel: {request.PhoneNumber ?? "-"}");
+                        column.Item().Text($"b) Zleceniobiorca: {request.TaxId} {request.TaxId}, e-mail: {request.TaxId ?? "-"}, tel: {request.TaxId ?? "-"}");
                     }
 
                     column.Item().Text($"   Rola: {trainerRoleText}");
@@ -327,5 +327,11 @@ public class TrainerContractAddViewModel : ViewModel
         }
     }
 
-
+    public void ReceiveParameter(object parameter)
+    {
+        if(parameter is Guid personId)
+        {
+            TrainerContract.PersonId = personId;
+        }
+    }
 }

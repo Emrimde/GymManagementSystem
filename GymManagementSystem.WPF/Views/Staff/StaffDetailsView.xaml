@@ -41,27 +41,24 @@
 
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Phone number "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Person.PhoneNumber}"/>
+                    <TextBlock Text="Address"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                        <Run Text="{Binding Person.City}"/>
+                        <Run Text="st."/>
+                        <Run Text="{Binding Person.Street}"/>
+                    </TextBlock>
 
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Status " />
+                    <TextBlock VerticalAlignment="Center" Text="Status "  Foreground="{DynamicResource PrimaryColor}" FontSize="20" />
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding Client.Status}" />
-
-
-                    <Button Content="Terminate"
-        Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
-        Command="{Binding CreateNewTerminationCommand}"  />
-                    <Button Content="Register visit"
-        Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
-        Command="{Binding RegisterVisitCommand}"  />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />
+                <TextBlock Text="Actions:" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Margin="0,30,0,10" />
+                <StackPanel Orientation="Horizontal" >
+                    <Button Content="Add trainer role" Command="{Binding OpenAddTrainerViewCommand}" />
+                    <Button Content="Add employee role" Command="{Binding OpenEmployeeViewCommand}" />
                 </StackPanel>
-
             </StackPanel>
         </Grid>
     </Grid>

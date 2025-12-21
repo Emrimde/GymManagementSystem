@@ -4,10 +4,7 @@ namespace GymManagementSystem.Core.DTO.Employee;
 
 public class EmployeeAddRequest
 {
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Email { get; set; } = default!;
-    public string PhoneNumber { get; set; } = default!;
+    public Guid PersonId { get; set; }
     public decimal MonthlySalaryBrutto { get; set; }
     public DateTime? ValidFrom { get; set; }
     public DateTime? ValidTo { get; set; }

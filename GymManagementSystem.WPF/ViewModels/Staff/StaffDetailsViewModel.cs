@@ -3,7 +3,10 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Employee;
+using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Staff;
 public class StaffDetailsViewModel : ViewModel, IParameterReceiver
@@ -11,6 +14,8 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
     private readonly StaffHttpClient _staffHttpClient;
     public SidebarViewModel SidebarView { get; set; }
     public INavigationService Navigation { get; set; }
+    public ICommand OpenAddTrainerViewCommand { get; }
+    public ICommand OpenEmployeeViewCommand { get; }
 
     private PersonDetailsResponse _person;
 
@@ -19,6 +24,8 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
         _staffHttpClient = staffHttpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
+        OpenAddTrainerViewCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerContractAddViewModel>(PersonId), item => true);
+        OpenEmployeeViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmployeeAddViewModel>(PersonId), item => true);
         Person = new PersonDetailsResponse();
 
     }

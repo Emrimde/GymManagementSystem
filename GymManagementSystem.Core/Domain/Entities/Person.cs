@@ -7,6 +7,9 @@ public class Person
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
+    public string Street { get; set; } = default!;
+    public string City { get; set; } = default!;
+    
     public bool IsActive { get; set; } = false;
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

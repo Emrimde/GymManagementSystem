@@ -26,7 +26,7 @@ public class StaffAddViewModel : ViewModel
             MessageBox.Show($"{result.ErrorMessage}");
             return;
         }
-        // person details nawigacja
+        Navigation.NavigateTo<StaffViewModel>();
     }
 
     public PersonAddRequest PersonAdd {  get; set; }

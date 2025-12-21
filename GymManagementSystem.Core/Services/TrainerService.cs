@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 
 using GymManagementSystem.Core.DTO.TrainerContract;
@@ -16,11 +17,13 @@ public class TrainerService : ITrainerService
     private readonly ITrainerRepository _trainerRepo;
     private readonly IGeneralGymRepository _generalGymRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
-    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo)
+    private readonly IUnitOfWork _unitOfWork;
+    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork)
     {
         _trainerRepo = trainerRepo;
         _generalGymRepo = generalGymRepo;
         _trainerRateRepo = trainerRateRepo;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity)
@@ -28,8 +31,9 @@ public class TrainerService : ITrainerService
         TrainerContract trainer = entity.ToTrainerContract();
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
        
-        TrainerContractInfoResponse trainerContract = await _trainerRepo.CreateTrainerContractAsync(entity.ToTrainerContract());
+        TrainerContractInfoResponse trainerContract = _trainerRepo.CreateTrainerContractAsync(entity.ToTrainerContract());
         await GeneratedTrainerRates(trainer, trainerContract,settings!);
+        await _unitOfWork.SaveChangesAsync();
         return Result<TrainerContractInfoResponse>.Success(trainerContract, StatusCodeEnum.Ok);
     }
 

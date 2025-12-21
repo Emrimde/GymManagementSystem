@@ -8,13 +8,7 @@ public static class EmployeeMapper
     {
         return new Employee()
         {
-            Person = new Person()
-            {
-              FirstName = request.FirstName,
-              LastName = request.LastName,
-              Email = request.Email,
-              PhoneNumber = request.PhoneNumber, 
-            },
+            PersonId = request.PersonId,
             EmploymentType = request.EmploymentType,
             Role = request.Role,
             ContractTypeEnum = request.ContractTypeEnum,

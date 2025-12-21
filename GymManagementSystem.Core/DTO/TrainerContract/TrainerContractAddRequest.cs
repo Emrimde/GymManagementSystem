@@ -6,10 +6,11 @@ public class TrainerContractAddRequest
     public ContractTypeEnum ContractType { get; set; } // B2B / Zlecenie
     public TrainerTypeEnum TrainerType { get; set; } // B2B / Zlecenie
 
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Email { get; set; } = default!;
-    public string PhoneNumber { get; set; } = default!;
+    //public string FirstName { get; set; } = default!;
+    //public string LastName { get; set; } = default!;
+    //public string Email { get; set; } = default!;
+    //public string PhoneNumber { get; set; } = default!;
+    public Guid PersonId { get; set; }
 
     // Rozliczenia
     public decimal ClubCommissionPercent { get; set; }

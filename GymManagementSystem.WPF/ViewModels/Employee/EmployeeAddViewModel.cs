@@ -6,6 +6,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using Syncfusion.Windows.Shared;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -15,7 +16,7 @@ using System.Windows.Input;
 
 
 namespace GymManagementSystem.WPF.ViewModels.Employee;
-public class EmployeeAddViewModel : ViewModel
+public class EmployeeAddViewModel : ViewModel, IParameterReceiver
 {
     private readonly EmployeeHttpClient _employeeHttpClient;
     private EmployeeAddRequest _employee;
@@ -217,7 +218,7 @@ public class EmployeeAddViewModel : ViewModel
         string roleText = employee.Role.ToString();
 
         // Nazwa pliku
-        string safeName = $"{employee.FirstName}_{employee.LastName}_{contractTypeText}".Replace(" ", "_");
+        string safeName = $"{employee.ValidFrom}_{employee.ValidFrom}_{contractTypeText}".Replace(" ", "_");
         string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{safeName}.pdf");
 
         // Tworzenie dokumentu PDF
@@ -238,14 +239,14 @@ public class EmployeeAddViewModel : ViewModel
 
                 page.Content().Column(column =>
                 {
-                    column.Item().PaddingTop(8).Text($"Zawarta w dniu: {DateTime.Now:yyyy-MM-dd} w mieście: {gymAddress.Split(',')[0]}.");
+                    //column.Item().PaddingTop(8).Text($"Zawarta w dniu: {DateTime.Now:yyyy-MM-dd} w mieście: {gymAddress.Split(',')[0]}.");
 
-                    column.Item().PaddingTop(8).Text("1. Strony umowy:");
-                    column.Item().Text($"a) Pracodawca: {gymName}, {gymAddress}, NIP: {nip}, numer kontaktowy: {contactNumber}");
-                    column.Item().Text($"b) Pracownik: {employee.FirstName} {employee.LastName}, zamieszkały: {(string.IsNullOrWhiteSpace(employee.Email) ? "-" : employee.Email)} (email), telefon: {employee.PhoneNumber ?? "-"}");
-                    column.Item().Text($"   Stanowisko / rola: {roleText}");
-                    column.Item().Text($"   Typ zatrudnienia: {employmentTypeText}");
-                    column.Item().Text($"   Wynagrodzenie: {salaryText} brutto miesięcznie");
+                    //column.Item().PaddingTop(8).Text("1. Strony umowy:");
+                    //column.Item().Text($"a) Pracodawca: {gymName}, {gymAddress}, NIP: {nip}, numer kontaktowy: {contactNumber}");
+                    //column.Item().Text($"b) Pracownik: {employee.ValidFrom} {employee.ValidFrom}, zamieszkały: {(string.IsNullOrWhiteSpace(employee.ValidTo) ? "-" : employee.ValidFrom)} (email), telefon: {employee.ValidFrom ?? "-"}");
+                    //column.Item().Text($"   Stanowisko / rola: {roleText}");
+                    //column.Item().Text($"   Typ zatrudnienia: {employmentTypeText}");
+                    //column.Item().Text($"   Wynagrodzenie: {salaryText} brutto miesięcznie");
 
                     column.Item().PaddingTop(10).Text("§1 Przedmiot umowy:");
                     column.Item().Text("1. Pracodawca zatrudnia Pracownika, a Pracownik podejmuje pracę na warunkach określonych niniejszą umową oraz obowiązującym regulaminem pracy.");
@@ -325,6 +326,14 @@ public class EmployeeAddViewModel : ViewModel
         catch (Exception ex)
         {
             MessageBox.Show($"Błąd podczas generowania PDF: {ex.Message}");
+        }
+    }
+
+    public void ReceiveParameter(object parameter)
+    {
+        if(parameter is Guid personId)
+        {
+            Employee.PersonId = personId;
         }
     }
 }

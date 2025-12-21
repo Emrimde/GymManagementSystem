@@ -15,13 +15,14 @@ public static class TrainerContractMapper
             CompanyName = request.CompanyName,
             ContractType = request.ContractType,
             TrainerType = request.TrainerType,
-            Person = new Person()
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                PhoneNumber = request.PhoneNumber,
-                Email = request.Email,
-            },
+            PersonId = request.PersonId,
+            //Person = new Person()
+            //{
+            //    FirstName = request.FirstName,
+            //    LastName = request.LastName,
+            //    PhoneNumber = request.PhoneNumber,
+            //    Email = request.Email,
+            //},
             ValidFrom = request?.ValidFrom ??  DateTime.UtcNow,
             ValidTo = request?.ValidTo ?? null,
             TaxId = request?.TaxId

@@ -50,6 +50,8 @@ public static class PersonMapper
             FirstName = personAddRequest.FirstName,
             LastName = personAddRequest.LastName,
             PhoneNumber = personAddRequest.PhoneNumber,
+            Street = personAddRequest.Street,
+            City = personAddRequest.City,
         };
     }
 }

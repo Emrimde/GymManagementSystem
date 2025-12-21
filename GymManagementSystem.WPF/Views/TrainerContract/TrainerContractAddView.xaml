@@ -27,31 +27,9 @@
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+             
                 <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="First name" Foreground="White"/>
-                        <TextBox Text="{Binding TrainerContract.FirstName}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Last name" Foreground="White"/>
-                        <TextBox Text="{Binding TrainerContract.LastName}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Email" Foreground="White"/>
-                        <TextBox Text="{Binding TrainerContract.Email}" VerticalContentAlignment="Center" FontSize="20" Margin="47,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Phone number" Foreground="White"/>
-                        <TextBox Text="{Binding TrainerContract.PhoneNumber}" VerticalContentAlignment="Center" FontSize="20" Margin="47,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="ClubCommissionPercent" Foreground="White"/>
-                        <TextBox Text="{Binding TrainerContract.ClubCommissionPercent}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
                     <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="Contract type " Foreground="White"/>
                         <ComboBox ItemsSource="{Binding ContractTypes}" SelectedItem="{Binding SelectedContractType}"/>
