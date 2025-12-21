@@ -32,7 +32,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId)
     {
-        Employee employee = await _employeeRepo.GetEmployeeByIdAsync(employeeId);
+        Employee? employee = await _employeeRepo.GetEmployeeByIdAsync(employeeId);
        return Result<EmployeeDetailsResponse>.Success(employee.ToEmployeeDetailsResponse(), StatusCodeEnum.Ok);
     }
 
