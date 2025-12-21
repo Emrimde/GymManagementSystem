@@ -17,5 +17,5 @@ public class PersonController : BaseController
     public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAllStaff() => HandleListedResult(await _personService.GetAllStaffAsync());
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<PersonResponse>>> AddPersonToStaff() => HandleListedResult(await _personService.GetAllStaffAsync());
+    public async Task<ActionResult<PersonInfoResponse>> AddPersonToStaff([FromBody] PersonAddRequest request) => HandleResult(await _personService.AddPersonToStaffAsync(request));
 }

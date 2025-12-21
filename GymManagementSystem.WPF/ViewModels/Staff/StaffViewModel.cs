@@ -4,8 +4,8 @@ using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.Staff;
 
 public class StaffViewModel : ViewModel
@@ -20,13 +20,15 @@ public class StaffViewModel : ViewModel
 	public SidebarViewModel SidebarView { get; set; }
 	public INavigationService Navigation {  get; set; }
 	private readonly StaffHttpClient _staffHttpClient;
+    public ICommand OpenStaffAddView { get;  }
 
     public StaffViewModel(SidebarViewModel sidebarView, INavigationService navigation, StaffHttpClient staffHttpClient)
     {
         SidebarView = sidebarView;
         Navigation = navigation;
         _staffHttpClient = staffHttpClient;
-		People = new ObservableCollection<PersonResponse>();
+        OpenStaffAddView = new RelayCommand(item => Navigation.NavigateTo<StaffAddViewModel>(), item => true);
+        People = new ObservableCollection<PersonResponse>();
         _ = LoadPeopleAsync();
     }
 

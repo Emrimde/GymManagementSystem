@@ -36,13 +36,13 @@
      
      VerticalAlignment="Center"
                  Width="200" Margin="40,0,0,0"/>
-
+                
                 <Button 
      Grid.Column="1"
      Content="Add person"
      Width="150"
-     Height="30"
-     HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
+     Height="35"
+     HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenStaffAddView}" />
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Button Content="Search:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding SearchClientsCommand}"/>

@@ -14,6 +14,12 @@ public class PersonRepository : IPersonRepository
         _dbContext = dbContext;
     }
 
+    public Guid AddPersonToStaff(Person person)
+    {
+        _dbContext.People.Add(person);
+        return person.Id;
+    }
+
     public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync()
     {
         return await _dbContext.People.Select(item => new PersonReadModel()

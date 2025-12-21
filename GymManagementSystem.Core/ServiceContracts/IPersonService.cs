@@ -4,5 +4,6 @@ using GymManagementSystem.Core.Result;
 namespace GymManagementSystem.Core.ServiceContracts;
 public interface IPersonService
 {
+    Task<Result<PersonInfoResponse>> AddPersonToStaffAsync(PersonAddRequest request);
     Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync();
 }

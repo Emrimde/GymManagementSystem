@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221104457_Adjustments")]
+    partial class Adjustments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -332,7 +335,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("428a3d91-9103-411a-9460-e1514592c2cd"),
+                            Id = new Guid("7bb4f95c-ba1c-4298-a034-8bd5ba682a28"),
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
@@ -497,31 +500,31 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8e40d4cc-6d40-4292-aaad-84f54175d855"),
+                            Id = new Guid("c62b9abe-4498-4389-9c45-33322f39d26b"),
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
                             Price = 100m,
-                            ValidFrom = new DateTime(2025, 12, 21, 10, 46, 38, 403, DateTimeKind.Utc).AddTicks(7549)
+                            ValidFrom = new DateTime(2025, 12, 21, 10, 44, 56, 894, DateTimeKind.Utc).AddTicks(9741)
                         },
                         new
                         {
-                            Id = new Guid("d739953f-21c2-4ec5-bbaf-afc017019a5c"),
+                            Id = new Guid("81c6950e-6629-4881-8f22-273a132223e7"),
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
                             Price = 150m,
-                            ValidFrom = new DateTime(2025, 12, 21, 10, 46, 38, 403, DateTimeKind.Utc).AddTicks(7553)
+                            ValidFrom = new DateTime(2025, 12, 21, 10, 44, 56, 894, DateTimeKind.Utc).AddTicks(9745)
                         },
                         new
                         {
-                            Id = new Guid("18e764c2-2662-446d-a826-90c12a2b82b1"),
+                            Id = new Guid("e0eebff7-1125-4861-a270-6183203c94d3"),
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
                             Price = 1000m,
-                            ValidFrom = new DateTime(2025, 12, 21, 10, 46, 38, 403, DateTimeKind.Utc).AddTicks(7564)
+                            ValidFrom = new DateTime(2025, 12, 21, 10, 44, 56, 894, DateTimeKind.Utc).AddTicks(9748)
                         },
                         new
                         {
-                            Id = new Guid("2d154396-f2b7-40e9-ab3a-8fff66e27027"),
+                            Id = new Guid("60103f8f-fdac-4015-b44f-63c4a6b6ddbd"),
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
                             Price = 1500m,
-                            ValidFrom = new DateTime(2025, 12, 21, 10, 46, 38, 403, DateTimeKind.Utc).AddTicks(7566)
+                            ValidFrom = new DateTime(2025, 12, 21, 10, 44, 56, 894, DateTimeKind.Utc).AddTicks(9759)
                         });
                 });
 
@@ -530,9 +533,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -555,9 +555,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Person;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Person;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
 
 namespace GymManagementSystem.Core.Mappers;
@@ -18,6 +19,16 @@ public static class PersonMapper
             IsActive = personReadModel.IsActive,
             PhoneNumber = personReadModel.PhoneNumber,
             UpdatedAt = personReadModel.UpdatedAt.ToString("dd.MM.yyyy")
+        };
+    }
+    public static Person ToPerson(this PersonAddRequest personAddRequest)
+    {
+        return new Person()
+        {
+            Email = personAddRequest.Email,
+            FirstName = personAddRequest.FirstName,
+            LastName = personAddRequest.LastName,
+            PhoneNumber = personAddRequest.PhoneNumber,
         };
     }
 }
