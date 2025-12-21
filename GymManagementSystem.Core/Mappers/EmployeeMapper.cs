@@ -13,7 +13,7 @@ public static class EmployeeMapper
             Role = request.Role,
             ContractTypeEnum = request.ContractTypeEnum,
             MonthlySalaryBrutto = request.MonthlySalaryBrutto,
-            ValidFrom = request.ValidFrom ?? DateTime.UtcNow, 
+            ValidFrom = request.ValidFrom ?? DateTime.UtcNow,
             ValidTo = request.ValidTo,
         };
     }
@@ -37,6 +37,20 @@ public static class EmployeeMapper
             Email = employee.Person.Email,
             EmployeeRole = employee.Role,
             EmploymentType = employee.EmploymentType,
+        };
+    }
+    public static EmployeeDetailsResponse ToEmployeeDetailsResponse(this Employee employee)
+    {
+        return new EmployeeDetailsResponse()
+        {
+            Id = employee.Id,
+            FirstName = employee.Person.FirstName,
+            LastName = employee.Person.LastName,
+            PhoneNumber = employee.Person.PhoneNumber,
+            Email = employee.Person.Email,
+            Role = employee.Role.ToString(),
+            ValidFrom = employee.ValidFrom.ToString("dd.MM.yyyy"),
+            ValidTo = employee.ValidTo?.ToString("dd.MM.yyyy") ?? "permanent",
         };
     }
 }

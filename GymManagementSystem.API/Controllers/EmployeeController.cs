@@ -17,6 +17,9 @@ public class EmployeeController : BaseController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetAllEmployees([FromQuery] string? searchText = null) => HandleListedResult(await _employeeService.GetAllEmployeesAsync(searchText));
 
+    [HttpGet("{employeeId:guid}")]
+    public async Task<ActionResult<EmployeeDetailsResponse>> GetEmployeeById([FromRoute] Guid employeeId) => HandleResult(await _employeeService.GetEmployeeByIdAsync(employeeId));
+
     [HttpPost]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
     

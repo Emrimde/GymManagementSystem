@@ -46,4 +46,10 @@ public class EmployeeRepository : IEmployeeRepository
 
         return await query.Include(item => item.Person).ToListAsync();
     }
+
+    public async Task<Employee?> GetEmployeeByIdAsync(Guid employeeId)
+    {
+       return await _dbContext.Employees.Include(item => item.Person).FirstOrDefaultAsync(item => item.Id == employeeId);    
+    }
+}
 }

@@ -30,6 +30,12 @@ public class EmployeeService : IEmployeeService
         return Result<IEnumerable<EmployeeResponse>>.Success(employees.Select(item => item.ToEmployeeResponse()), StatusCodeEnum.Ok);
     }
 
+    public async Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId)
+    {
+        Employee employee = await _employeeRepo.GetEmployeeByIdAsync(employeeId);
+       return Result<EmployeeDetailsResponse>.Success(employee.ToEmployeeDetailsResponse(), StatusCodeEnum.Ok);
+    }
+
     public Result<bool> ValidateEmployee(EmployeeAddRequest request)
     {
         if (request.ContractTypeEnum == ContractTypeEnum.Probation)

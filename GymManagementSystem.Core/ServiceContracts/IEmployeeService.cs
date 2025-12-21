@@ -7,5 +7,6 @@ public interface IEmployeeService
 {
     Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request);
     Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null);
+    Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId);
     Result<bool> ValidateEmployee(EmployeeAddRequest request);
 }
