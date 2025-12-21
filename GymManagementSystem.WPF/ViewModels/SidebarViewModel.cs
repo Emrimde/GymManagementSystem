@@ -56,8 +56,6 @@ public class SidebarViewModel : ViewModel
         OpenClientMembershipView = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(), item => true);
         OpenGymClassesView = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
         OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
-        OpenEmployeesView = new RelayCommand(item => Navigation.NavigateTo<EmployeeViewModel>(), item => true);
-        OpenTrainerContractsView = new RelayCommand(item => Navigation.NavigateTo<TrainerContractViewModel>(), item => true);
         OpenEmploymentTerminationsViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmploymentTerminationViewModel>(), item => true);
         OpenStaffView = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
 

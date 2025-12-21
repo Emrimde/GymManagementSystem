@@ -99,9 +99,7 @@
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipAddViewModel}">
                         <clientMembershipview:ClientMembershipAddView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type employeevm:EmployeeViewModel}">
-                        <employeeview:EmployeeView/>
-                    </DataTemplate>
+     
                     <DataTemplate DataType="{x:Type employeevm:EmployeeAddViewModel}">
                         <employeeview:EmployeeAddView/>
                     </DataTemplate>
@@ -132,9 +130,7 @@
                     <DataTemplate DataType="{x:Type classbookingvm:AddClassBookingViewModel}">
                         <classbookingview:AddClassBookingView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractViewModel}">
-                        <trainercontractsview:TrainerContractView/>
-                    </DataTemplate>
+                   
                     <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractAddViewModel}">
                         <trainercontractsview:TrainerContractAddView/>
                     </DataTemplate>

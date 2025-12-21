@@ -56,7 +56,7 @@
             </Grid>
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Add employee" Command="{Binding AddEmployeeCommand }"/>
-                <Button Content="Cancel"/>
+                <Button Content="Cancel" Command="{Binding ReturnToStaffViewCommand }"/>
             </StackPanel>
         </Grid>
     </Grid>

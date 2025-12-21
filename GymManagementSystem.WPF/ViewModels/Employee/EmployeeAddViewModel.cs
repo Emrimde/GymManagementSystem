@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Staff;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using Syncfusion.Windows.Shared;
@@ -86,7 +87,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
         }
     }
 
-
+    public ICommand ReturnToStaffViewCommand { get;  }
 
     public ObservableCollection<EmploymentType> EmploymentTypes { get; set; }
     private EmploymentType _selectedEmploymentType;
@@ -127,6 +128,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
         _navigation = navigation;
         Employee = new EmployeeAddRequest();
         SelectedContractType = ContractTypeEnum.Permanent;
+        ReturnToStaffViewCommand = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
 
         EmploymentTypes = new ObservableCollection<EmploymentType>(Enum.GetValues<EmploymentType>().Cast<EmploymentType>());
         EmployeeRoles = new ObservableCollection<EmployeeRole>(Enum.GetValues<EmployeeRole>().Cast<EmployeeRole>());
@@ -152,7 +154,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
                 Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(Employee);
                 if (result.IsSuccess)
                 {
-                    Navigation.NavigateTo<EmployeeViewModel>();
+                    Navigation.NavigateTo<StaffViewModel>();
                 }
                 else
                 {
@@ -161,7 +163,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
             }
             else
             {
-                Navigation.NavigateTo<EmployeeViewModel>();
+                Navigation.NavigateTo<StaffViewModel>();
             }
         }
 

@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Staff;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
@@ -48,7 +49,7 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
             OnPropertyChanged();
         }
     }
-
+    public ICommand ReturnToStaffViewCommand { get;  }
 
 
     public IEnumerable<ContractTypeEnum> ContractTypes => [
@@ -108,6 +109,7 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         SidebarView = sidebarView;
         TrainerContract = new TrainerContractAddRequest();
+        ReturnToStaffViewCommand = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
         TrainerTypes = new ObservableCollection<TrainerTypeEnum>(Enum.GetValues<TrainerTypeEnum>().Cast<TrainerTypeEnum>());
         AddTrainerCommand = new AsyncRelayCommand(item => AddTrainerAsync(), item => true);
     }
@@ -121,7 +123,7 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
             Result<TrainerContractInfoResponse> result = await _trainerHttpClient.PostTrainerContractAsync(TrainerContract);
             if (result.IsSuccess)
             {
-                Navigation.NavigateTo<TrainerContractViewModel>();
+                Navigation.NavigateTo<TrainerContractDetailsViewModel>(result.Value!.Id);
             }
             else
             {
