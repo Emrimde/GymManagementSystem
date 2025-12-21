@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ public class StaffViewModel : ViewModel
 	public INavigationService Navigation {  get; set; }
 	private readonly StaffHttpClient _staffHttpClient;
     public ICommand OpenStaffAddView { get;  }
+    public ICommand OpenPersonDetailsCommand { get; set; }
 
     public StaffViewModel(SidebarViewModel sidebarView, INavigationService navigation, StaffHttpClient staffHttpClient)
     {
@@ -28,8 +30,30 @@ public class StaffViewModel : ViewModel
         Navigation = navigation;
         _staffHttpClient = staffHttpClient;
         OpenStaffAddView = new RelayCommand(item => Navigation.NavigateTo<StaffAddViewModel>(), item => true);
+        OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item), item => true);
+
         People = new ObservableCollection<PersonResponse>();
         _ = LoadPeopleAsync();
+    }
+
+    private void OpenDetailsAsync(object parameter)
+    {
+        if (parameter is PersonResponse response)
+        {
+            if (response.TrainerContractId != null)
+            {
+                Navigation.NavigateTo<TrainerContractDetailsViewModel>(response.TrainerContractId);
+            }
+            else if(response.EmployeeId != null) 
+            {
+                Navigation.NavigateTo<ClientViewModel>();
+            }
+            else
+            {
+                Navigation.NavigateTo<StaffDetailsViewModel>(response.Id);
+            }
+
+        }
     }
 
     private async Task LoadPeopleAsync()

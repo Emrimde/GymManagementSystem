@@ -6,4 +6,5 @@ public interface IPersonService
 {
     Task<Result<PersonInfoResponse>> AddPersonToStaffAsync(PersonAddRequest request);
     Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync();
+    Task<Result<PersonDetailsResponse>> GetPersonDetailsAsync(Guid personId);
 }

@@ -10,6 +10,8 @@ namespace GymManagementSystem.Core.DTO.Person.ReadModel
     public class PersonReadModel
     {
         public Guid Id { get; set; }
+        public Guid? TrainerContractId { get; set; }
+        public Guid? EmployeeId { get; set; }
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public string Email { get; set; } = default!;

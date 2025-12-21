@@ -70,8 +70,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-                                     Command="{Binding DataContext.      OpenClientDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
-                                     CommandParameter="{Binding Id}">
+                                     Command="{Binding DataContext.OpenPersonDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
+                                     CommandParameter="{Binding}">
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

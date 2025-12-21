@@ -33,4 +33,15 @@ public class PersonService : IPersonService
         IEnumerable<PersonReadModel> readModels = await _personRepo.GetAllStaffAsync();
         return Result<IEnumerable<PersonResponse>>.Success(readModels.Select(item => item.ToPersonResponse()), StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<PersonDetailsResponse>> GetPersonDetailsAsync(Guid personId)
+    {
+       Person? person = await _personRepo.GetPersonByIdAsync(personId);
+        if (person == null)
+        {
+            return Result<PersonDetailsResponse>.Failure("Person not found", StatusCodeEnum.BadRequest);
+        }
+       return Result<PersonDetailsResponse>.Success(person.ToPersonDetailsResponse(), StatusCodeEnum.Ok);
+       
+    }
 }

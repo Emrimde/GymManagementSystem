@@ -177,6 +177,9 @@
                     <DataTemplate DataType="{x:Type staffvm:StaffAddViewModel}">
                         <staffview:StaffAddView />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type staffvm:StaffDetailsViewModel}">
+                        <staffview:StaffDetailsView />
+                    </DataTemplate>
 
     
                    

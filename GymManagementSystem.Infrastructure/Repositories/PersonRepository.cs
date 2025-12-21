@@ -36,11 +36,13 @@ public class PersonRepository : IPersonRepository
             IsActive = item.IsActive,
             PhoneNumber = item.PhoneNumber,
             UpdatedAt = item.UpdatedAt,
+            TrainerContractId = item.TrainerContract != null ? item.TrainerContract.Id : null,
+            EmployeeId = item.Employee != null ? item.Employee.Id : null,
         }).ToListAsync();
     }
 
     public async Task<Person?> GetPersonByIdAsync(Guid personId)
     {
-        return await _dbContext.People.Include(item => item.TrainerContract).Include(item => item.Employee).FirstOrDefaultAsync(item => item.Id == personId);
+        return await _dbContext.People.Include(item => item.TrainerContract).Include(item => item.Employee).Include(item => item.EmploymentTerminations).FirstOrDefaultAsync(item => item.Id == personId);
     }
 }

@@ -29,6 +29,21 @@ public class StaffHttpClient : BaseHttpClientService
             return Result<ObservableCollection<PersonResponse>>.Failure($"Error fetching staff: {ex.Message}");
         }
     }
+    public async Task<Result<PersonDetailsResponse>> GetPersonDetailsAsync(Guid personId)
+    {
+        try
+        {
+            var response = await _httpClient.GetFromJsonAsync<PersonDetailsResponse>($"{personId}");
+
+            return Result<PersonDetailsResponse>.Success(response ?? new PersonDetailsResponse());
+        }
+
+
+        catch (HttpRequestException ex)
+        {
+            return Result<PersonDetailsResponse>.Failure($"Error fetching staff: {ex.Message}");
+        }
+    }
 
     public async Task<Result<PersonInfoResponse>> PostPersonToStaffAsync(PersonAddRequest request)
     {
