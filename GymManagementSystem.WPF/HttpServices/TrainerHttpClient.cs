@@ -167,14 +167,12 @@ public class TrainerHttpClient : BaseHttpClientService
 
     public async Task<Result<TrainerContractInfoResponse>> PostTrainerContractAsync(TrainerContractAddRequest request)
     {
-        request.ValidFrom = request.ValidFrom?.ToUniversalTime();
-        request.ValidTo = request.ValidTo?.ToUniversalTime();
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("trainercontract", request);
         string responseBody = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
         {
             JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-            TrainerContractInfoResponse? employee = JsonSerializer.Deserialize<TrainerContractInfoResponse>(responseBody);
+            TrainerContractInfoResponse? employee = JsonSerializer.Deserialize<TrainerContractInfoResponse>(responseBody, jsonSerializerOptions);
             if (employee == null)
             {
                 return Result<TrainerContractInfoResponse>.Failure("Unexpected employee");

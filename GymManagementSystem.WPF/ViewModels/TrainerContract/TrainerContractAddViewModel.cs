@@ -145,8 +145,8 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
         string gymNip = Application.Current?.Resources["GymNip"] as string ?? "000-000-0000";
 
         var pl = CultureInfo.CreateSpecificCulture("pl-PL");
-        string validFromText = request.ValidFrom?.ToString("yyyy-MM-dd", pl) ?? "—"; 
-        string validToText = request.ValidTo.HasValue ? request.ValidTo.Value.ToString("yyyy-MM-dd", pl) : "—";
+        //string validFromText = request.ValidFrom?.ToString("yyyy-MM-dd", pl) ?? "—"; 
+        //string validToText = request.ValidTo.HasValue ? request.ValidTo.Value.ToString("yyyy-MM-dd", pl) : "—";
 
         // Typ umowy (czytelny)
         string contractTitle = request.ContractType switch
@@ -251,7 +251,7 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
                     }
 
                     column.Item().Text($"   Rola: {trainerRoleText}");
-                    column.Item().Text($"   Okres obowiązywania: od {validFromText} do {(request.ValidTo.HasValue ? validToText : "— (umowa na czas nieokreślony)")}");
+                    //column.Item().Text($"   Okres obowiązywania: od {validFromText} do {(request.ValidTo.HasValue ? validToText : "— (umowa na czas nieokreślony)")}");
                     column.Item().PaddingTop(10).Text("§1 Przedmiot umowy:");
                     column.Item().Text(mainClause);
 
@@ -281,8 +281,8 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
 
                     column.Item().PaddingTop(24).Row(row =>
                     {
-                        row.RelativeItem().Text($"Data rozpoczęcia: {validFromText}");
-                        row.RelativeItem().Text($"Data zakończenia: {validToText}");
+                        //row.RelativeItem().Text($"Data rozpoczęcia: {validFromText}");
+                        //row.RelativeItem().Text($"Data zakończenia: {validToText}");
                     });
 
                     column.Item().PaddingTop(30).Row(row =>

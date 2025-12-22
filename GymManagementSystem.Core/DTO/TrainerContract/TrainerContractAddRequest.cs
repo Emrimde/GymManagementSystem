@@ -14,8 +14,6 @@ public class TrainerContractAddRequest
 
     // Rozliczenia
     public decimal ClubCommissionPercent { get; set; }
-    public DateTime? ValidFrom { get; set; }
-    public DateTime? ValidTo { get; set; }
 
     // --- Dane firmy do B2B ---
     public string? CompanyName { get; set; }     // Nazwa działalności

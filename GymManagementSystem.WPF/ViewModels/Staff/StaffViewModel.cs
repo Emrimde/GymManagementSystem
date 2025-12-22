@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -46,7 +47,7 @@ public class StaffViewModel : ViewModel
             }
             else if(response.EmployeeId != null) 
             {
-                Navigation.NavigateTo<ClientViewModel>();
+                Navigation.NavigateTo<EmployeeDetailsViewModel>(response.EmployeeId);
             }
             else
             {

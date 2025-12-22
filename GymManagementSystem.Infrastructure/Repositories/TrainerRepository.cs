@@ -61,10 +61,10 @@ public class TrainerRepository : ITrainerRepository
         IEnumerable<TrainerTimeOff> list = await _dbContext.TrainerTimeOff.ToListAsync();
         return list;
     }
-    public TrainerContractInfoResponse CreateTrainerContractAsync(TrainerContract trainerContract)
+    public TrainerContract CreateTrainerContractAsync(TrainerContract trainerContract)
     {
         _dbContext.TrainerContracts.Add(trainerContract);
-        return trainerContract.ToTrainerContractInfoResponse();
+        return trainerContract;
     }
     public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page = 1, int pageSize = 50, string? searchText = null)
     {

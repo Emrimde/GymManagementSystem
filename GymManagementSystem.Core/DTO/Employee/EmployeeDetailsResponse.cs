@@ -9,4 +9,6 @@ public class EmployeeDetailsResponse
     public string? Role { get; set; }
     public string ValidFrom { get; set; } = default!;
     public string ValidTo { get; set; } = default!;
+    public string Street { get; set; } = default!;
+    public string City { get; set; } = default!;
 }

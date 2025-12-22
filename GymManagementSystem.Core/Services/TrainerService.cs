@@ -26,22 +26,24 @@ public class TrainerService : ITrainerService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity)
+    public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
     {
-        TrainerContract trainer = entity.ToTrainerContract();
+        TrainerContract trainer = request.ToTrainerContract();
+        trainer.ValidFrom = DateTime.UtcNow;
+        trainer.ValidTo = null;
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
-       
-        TrainerContractInfoResponse trainerContract = _trainerRepo.CreateTrainerContractAsync(entity.ToTrainerContract());
-        await GeneratedTrainerRates(trainer, trainerContract,settings!);
+
+        TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
         await _unitOfWork.SaveChangesAsync();
-        return Result<TrainerContractInfoResponse>.Success(trainerContract, StatusCodeEnum.Ok);
+        await GeneratedTrainerRates(trainerContract, settings!);
+        return Result<TrainerContractInfoResponse>.Success(new TrainerContractInfoResponse() { Id = trainerContract.Id}, StatusCodeEnum.Ok);
     }
 
-    private async Task GeneratedTrainerRates(TrainerContract trainer, TrainerContractInfoResponse trainerContract,GeneralGymDetail generalGymDetail)
+    private async Task GeneratedTrainerRates(TrainerContract trainerContract,GeneralGymDetail generalGymDetail)
     {
         List<TrainerRate> rates = new List<TrainerRate>();
 
-        if (trainer.TrainerType == TrainerTypeEnum.PersonalTrainer)
+        if (trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer)
         {
 
             TrainerRate trainerRate60 = new TrainerRate()
@@ -49,24 +51,24 @@ public class TrainerService : ITrainerService
                 TrainerContractId = trainerContract.Id,
                 DurationInMinutes = 60,
                 RatePerSessions = generalGymDetail.DefaultRate60,
-                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
-                ValidTo = trainer?.ValidTo ?? null,
+                ValidFrom = trainerContract.ValidFrom,
+                ValidTo = trainerContract?.ValidTo ?? null,
             };
             TrainerRate trainerRate90 = new TrainerRate()
             {
                 TrainerContractId = trainerContract.Id,
                 DurationInMinutes = 90,
                 RatePerSessions = generalGymDetail.DefaultRate60,
-                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
-                ValidTo = trainer?.ValidTo ?? null,
+                ValidFrom = trainerContract.ValidFrom,
+                ValidTo = trainerContract?.ValidTo ?? null,
             };
             TrainerRate trainerRate120 = new TrainerRate()
             {
                 TrainerContractId = trainerContract.Id,
                 DurationInMinutes = 120,
                 RatePerSessions = generalGymDetail.DefaultRate60,
-                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
-                ValidTo = trainer?.ValidTo ?? null,
+                ValidFrom = trainerContract.ValidFrom,
+                ValidTo = trainerContract?.ValidTo ?? null,
             };
 
             rates.Add(trainerRate60);
@@ -75,15 +77,15 @@ public class TrainerService : ITrainerService
            
 
         }
-        else if(trainer.TrainerType == TrainerTypeEnum.GroupInstructor)
+        else if(trainerContract.TrainerType == TrainerTypeEnum.GroupInstructor)
         {
             TrainerRate trainerRate = new TrainerRate()
             {
                 TrainerContractId = trainerContract.Id,
                 DurationInMinutes = 60,
                 RatePerSessions = generalGymDetail.DefaultGroupClassRate,
-                ValidFrom = trainer?.ValidFrom ?? DateTime.UtcNow,
-                ValidTo = trainer?.ValidTo ?? null,
+                ValidFrom = trainerContract.ValidFrom,
+                ValidTo = trainerContract?.ValidTo ?? null,
             };
             rates.Add(trainerRate);
         }

@@ -50,7 +50,7 @@
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
                         <DataGridTextColumn Header="Start from" Binding="{Binding StartFrom}"/>
-                        <DataGridTextColumn Header="Start to" Binding="{Binding StartTo}"/>
+                        <DataGridTextColumn Header="End time" Binding="{Binding StartTo}"/>
                         <DataGridTextColumn Header="Max People" Binding="{Binding MaxPeople}"/>
                         <DataGridTextColumn Header="Is Cancelled" Binding="{Binding IsCancelled}"/>
                         <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt}"/>

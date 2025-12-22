@@ -102,4 +102,17 @@ public class EmployeeHttpClient : BaseHttpClientService
             return Result<ObservableCollection<EmployeeResponse>>.Failure(ex.Message);
         }
     }
+
+    public async Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId)
+    {
+        try
+        {
+            EmployeeDetailsResponse? response = await _httpClient.GetFromJsonAsync<EmployeeDetailsResponse>($"{employeeId}");
+            return Result<EmployeeDetailsResponse>.Success(response ?? new EmployeeDetailsResponse());
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<EmployeeDetailsResponse>.Failure(ex.Message);
+        }
+    }
 }

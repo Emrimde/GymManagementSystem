@@ -1,16 +1,17 @@
-﻿using GymManagementSystem.Core.Result;
+﻿using GymManagementSystem.Core.DTO.Employee;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace GymManagementSystem.WPF.ViewModels.Employee;
 public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
 {
     private readonly EmployeeHttpClient _employeeHttpClient;
-    private EmployeeDetailsViewModel _employee;
+    private EmployeeDetailsResponse _employee;
 
-    public EmployeeDetailsViewModel Employee
+    public EmployeeDetailsResponse Employee
     {
         get { return _employee; }
         set { _employee = value; OnPropertyChanged(); }
@@ -34,8 +35,13 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    private async Task<object> LoadEmployeeAsync(Guid employeeId)
+    private async Task LoadEmployeeAsync(Guid employeeId)
     {
         Result<EmployeeDetailsResponse> result = await _employeeHttpClient.GetEmployeeByIdAsync(employeeId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.ErrorMessage}");
+        }
+        Employee = result.Value!;
     }
 }

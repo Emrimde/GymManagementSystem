@@ -16,15 +16,6 @@ public static class TrainerContractMapper
             ContractType = request.ContractType,
             TrainerType = request.TrainerType,
             PersonId = request.PersonId,
-            //Person = new Person()
-            //{
-            //    FirstName = request.FirstName,
-            //    LastName = request.LastName,
-            //    PhoneNumber = request.PhoneNumber,
-            //    Email = request.Email,
-            //},
-            ValidFrom = request?.ValidFrom ??  DateTime.UtcNow,
-            ValidTo = request?.ValidTo ?? null,
             TaxId = request?.TaxId
             
         };
@@ -35,7 +26,7 @@ public static class TrainerContractMapper
         return new TrainerContractInfoResponse()
         {
             Id = trainerContract.Id,
-            FullName = trainerContract.Person?.FirstName ?? "" + " " + trainerContract.Person?.LastName ?? ""
+            //FullName = trainerContract.Person.FirstName  + " " + trainerContract.Person.LastName
         };
     }
 

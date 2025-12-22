@@ -44,13 +44,15 @@ public static class EmployeeMapper
         return new EmployeeDetailsResponse()
         {
             Id = employee.Id,
-            FirstName = employee.Person.FirstName,
+            FirstName = employee.Person!.FirstName,
             LastName = employee.Person.LastName,
             PhoneNumber = employee.Person.PhoneNumber,
             Email = employee.Person.Email,
             Role = employee.Role.ToString(),
             ValidFrom = employee.ValidFrom.ToString("dd.MM.yyyy"),
             ValidTo = employee.ValidTo?.ToString("dd.MM.yyyy") ?? "permanent",
+            City = employee.Person.City,
+            Street = employee.Person.Street
         };
     }
 }

@@ -4,7 +4,6 @@ using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 
@@ -52,4 +51,4 @@ public class EmployeeRepository : IEmployeeRepository
        return await _dbContext.Employees.Include(item => item.Person).FirstOrDefaultAsync(item => item.Id == employeeId);    
     }
 }
-}
+
