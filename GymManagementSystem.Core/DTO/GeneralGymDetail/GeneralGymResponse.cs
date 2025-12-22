@@ -12,4 +12,5 @@ public class GeneralGymResponse
     public decimal DefaultRate60 { get; set; }
     public decimal DefaultRate90 { get; set; }
     public decimal DefaultRate120 { get; set; }
+    public decimal DefaultGroupClassRate { get; set; }
 }

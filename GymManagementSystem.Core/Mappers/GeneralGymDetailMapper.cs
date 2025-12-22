@@ -19,8 +19,7 @@ public static class GeneralGymDetailMapper
             DefaultRate90 = generalGymDetail.DefaultRate90,
             DefaultRate120 = generalGymDetail.DefaultRate120,
             DefaultRate60 = generalGymDetail.DefaultRate60,
-
-
+            DefaultGroupClassRate = generalGymDetail.DefaultGroupClassRate
         };
     }
 

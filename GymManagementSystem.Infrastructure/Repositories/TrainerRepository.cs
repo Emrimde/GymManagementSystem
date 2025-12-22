@@ -108,8 +108,12 @@ public class TrainerRepository : ITrainerRepository
         }
     }
 
-    public async Task<IEnumerable<TrainerContract>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<TrainerContractInfoResponse>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken)
     {
-        return await _dbContext.TrainerContracts.Where(item => item.TrainerType == TrainerTypeEnum.GroupInstructor).Include(item => item.Person).ToListAsync(cancellationToken);
+        return await _dbContext.TrainerContracts.AsNoTracking().Where(item => item.TrainerType == TrainerTypeEnum.GroupInstructor).Select(item => new TrainerContractInfoResponse()
+        {
+           Id = item.Id,
+           FullName = item.Person.FirstName + " " + item.Person.LastName
+        }).ToListAsync(cancellationToken);
     }
 }

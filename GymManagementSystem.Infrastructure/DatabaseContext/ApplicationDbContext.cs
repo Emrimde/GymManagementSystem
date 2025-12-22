@@ -51,7 +51,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 CloseTime = new TimeSpan(22, 0, 0),
                 DefaultRate60 = 100m,
                 DefaultRate120 = 150m,
-                DefaultRate90 = 120m
+                DefaultRate90 = 120m,
+                DefaultGroupClassRate = 60m
             });
 
         builder.Entity<Membership>().HasData(

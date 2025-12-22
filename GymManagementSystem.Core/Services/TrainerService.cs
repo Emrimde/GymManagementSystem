@@ -120,8 +120,8 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllGetAllInstructorsAsync(CancellationToken cancellationToken)
     {
-       IEnumerable<TrainerContract> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
-       return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts.Select(item => item.ToTrainerContractInfoResponse()), StatusCodeEnum.Ok);
+       IEnumerable<TrainerContractInfoResponse> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
+       return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<TrainerContractDetailsResponse>> GetTrainerContractAsync(Guid id, bool includeDetails, CancellationToken cancellationToken)

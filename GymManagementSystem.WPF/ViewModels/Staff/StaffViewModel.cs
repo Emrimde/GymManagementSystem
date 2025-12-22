@@ -53,7 +53,6 @@ public class StaffViewModel : ViewModel
             {
                 Navigation.NavigateTo<StaffDetailsViewModel>(response.Id);
             }
-
         }
     }
 

@@ -26,7 +26,7 @@ public static class TrainerContractMapper
         return new TrainerContractInfoResponse()
         {
             Id = trainerContract.Id,
-            //FullName = trainerContract.Person.FirstName  + " " + trainerContract.Person.LastName
+            FullName = trainerContract.Person?.FirstName  + " " + trainerContract.Person?.LastName
         };
     }
 
