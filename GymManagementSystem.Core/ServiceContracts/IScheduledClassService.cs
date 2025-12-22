@@ -4,7 +4,7 @@ using GymManagementSystem.Core.Result;
 namespace GymManagementSystem.Core.ServiceContracts;
 public interface IScheduledClassService
 {
-    Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText);
+    Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(Guid gymClassId, string? searchText);
     Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymClassId);
     Task<Result<ScheduledClassDetailsResponse>> GetByIdAsync(Guid id);
 }

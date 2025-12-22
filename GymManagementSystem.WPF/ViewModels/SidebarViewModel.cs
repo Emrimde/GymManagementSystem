@@ -29,7 +29,6 @@ public class SidebarViewModel : ViewModel
     public ICommand OpenClientMembershipView { get;  }
     public ICommand OpenTrainersView { get;  }
     public ICommand OpenGymClassesView { get;  }
-    public ICommand OpenScheduledClassesView { get;  }
     public ICommand OpenEmployeesView { get; }
     public ICommand OpenTrainerContractsView { get; }
     public ICommand OpenEmploymentTerminationsViewCommand { get; }
@@ -55,11 +54,7 @@ public class SidebarViewModel : ViewModel
         OpenSettingsView = new RelayCommand(item => Navigation.NavigateTo<GeneralSettingsViewModel>(), o => true);
         OpenClientMembershipView = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(), item => true);
         OpenGymClassesView = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
-        OpenScheduledClassesView = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(), item => true);
         OpenEmploymentTerminationsViewCommand = new RelayCommand(item => Navigation.NavigateTo<EmploymentTerminationViewModel>(), item => true);
         OpenStaffView = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
-
-
-
     }
 }

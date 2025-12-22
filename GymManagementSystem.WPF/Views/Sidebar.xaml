@@ -11,7 +11,6 @@
         <Button Command="{Binding OpenClientView}" Content="Clients" Margin="5"/>
         <Button Command="{Binding OpenMembershipView}" Content="Memberships" Margin="5"/>
         <Button Content="Gym Classes" Command="{Binding OpenGymClassesView}" Margin="5"/>
-        <Button Content="Scheduled Classes" Command="{Binding OpenScheduledClassesView}" Margin="5"/>
         <Button Content="Staff" Command="{Binding OpenStaffView}" Margin="5"/>
         <!--<Button Content="Employment Terminations" Command="{Binding OpenEmploymentTerminationsViewCommand}" Margin="5"/>-->
        

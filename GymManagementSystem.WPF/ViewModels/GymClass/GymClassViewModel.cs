@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,12 +26,14 @@ public class GymClassViewModel : ViewModel
     private ObservableCollection<GymClassResponse> _gymClasses;
 
     public ICommand OpenAddGymClassCommand { get; }
+    public ICommand OpenScheduledClassesViewCommand { get; }
     public GymClassViewModel(GymClassHtppClient httpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {
         _httpClient = httpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
         OpenAddGymClassCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassAddViewModel>(), item => true);
+        OpenScheduledClassesViewCommand = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(item), item => true);
         GymClasses = new ObservableCollection<GymClassResponse>();
         _ = LoadGymClasses();
     }

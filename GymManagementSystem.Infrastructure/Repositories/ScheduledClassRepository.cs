@@ -65,9 +65,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         };
     }
 
-    public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(string? searchText = null)
+    public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(Guid gymClassId, string? searchText = null)
     {
-        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses;
+        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId);
 
         if (searchText != null)
         {

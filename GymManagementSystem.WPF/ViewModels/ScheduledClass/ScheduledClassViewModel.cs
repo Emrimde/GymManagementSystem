@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.ScheduledClass;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
@@ -8,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ScheduledClass;
-public class ScheduledClassViewModel : ViewModel
+public class ScheduledClassViewModel : ViewModel, IParameterReceiver
 {
 
     private string _searchText;
@@ -32,6 +33,7 @@ public class ScheduledClassViewModel : ViewModel
             OnPropertyChanged();
         }
     }
+    public Guid GymClassId { get; set; }
     public ICommand SearchScheduledClassesCommand { get; }
     private ObservableCollection<ScheduledClassResponse> _scheduledClasses;
 
@@ -49,13 +51,12 @@ public class ScheduledClassViewModel : ViewModel
         SidebarView = sidebarView;
         Navigation = navigation;
         OpenScheduledClassDetails = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassDetailsViewModel>(item), item => true);
-        _ = LoadScheduledClasses();
         SearchScheduledClassesCommand = new AsyncRelayCommand(item => SearchScheduledClasses(), item => true);
     }
 
     private async Task SearchScheduledClasses()
     {
-        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(SearchText);
+        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(SearchText,GymClassId);
         if (result.IsSuccess)
         {
             ScheduledClasses = result.Value!;
@@ -66,9 +67,9 @@ public class ScheduledClassViewModel : ViewModel
         }
     }
 
-    private async Task LoadScheduledClasses()
+    private async Task LoadScheduledClasses(Guid gymClassId)
     {
-        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(null);
+        Result<ObservableCollection<ScheduledClassResponse>> result = await _scheduledClassHttpClient.GetScheduledClasses(null, gymClassId);
         if (result.IsSuccess)
         {
             ScheduledClasses = result.Value!;
@@ -76,6 +77,15 @@ public class ScheduledClassViewModel : ViewModel
         else
         {
             MessageBox.Show(result.ErrorMessage);
+        }
+    }
+
+    public void ReceiveParameter(object parameter)
+    {
+        if(parameter is Guid gymClassId)
+        {
+            GymClassId = gymClassId;
+            _ = LoadScheduledClasses(GymClassId);
         }
     }
 }

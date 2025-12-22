@@ -20,9 +20,9 @@ public class ScheduledClassService : IScheduledClassService
     }
         
 
-    public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(string? searchText)
+    public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(Guid gymClassId, string? searchText)
     {
-        IEnumerable<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClasses(searchText);
+        IEnumerable<ScheduledClassResponse> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClasses(gymClassId,searchText);
         return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses, StatusCodeEnum.Ok);
     }
 
