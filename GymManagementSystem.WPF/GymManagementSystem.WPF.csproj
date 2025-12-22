@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
     <PackageReference Include="QuestPDF" Version="2025.7.4" />
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="31.2.15" />
     <PackageReference Include="Syncfusion.SfScheduler.WPF" Version="31.2.15" />

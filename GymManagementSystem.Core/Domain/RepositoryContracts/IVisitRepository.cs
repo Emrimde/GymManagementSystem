@@ -9,4 +9,5 @@ public interface IVisitRepository
     Task<int> GetTotalVisitsByClientId(Guid clientId);
     Task<DateTime> GetLastVisitDateByClientId(Guid clientId);
     Task<IEnumerable<VisitResponse>> GetAllClientVisits(Guid clientId);
+    Task<int> GetTotalVisitsAsync(DateTime? date);
 }

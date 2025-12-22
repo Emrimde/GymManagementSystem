@@ -7,4 +7,5 @@ public interface IClientMembershipRepository : IRepository<ClientMembershipRespo
 {
     Task<IEnumerable<ClientMembershipResponse>> GetAllClientMemberships(Guid id);
     Task<ClientMembership?> GetActiveClientMembershipByClientId(Guid clientId);
+    Task<int> GetActiveClientMembershipsCountAsync(DateTime? from);
 }

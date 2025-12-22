@@ -1,4 +1,4 @@
-﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
+﻿ using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -49,7 +49,7 @@ namespace GymManagementSystem.WPF
             SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF1cXGZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWH1edHRWRWFdV0J/WEtWYEg=");
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<RegisterViewModel>();
-            services.AddSingleton<DashboardViewModel>();
+            services.AddTransient<DashboardViewModel>();
             services.AddSingleton<ClientMembershipViewModel>();
             services.AddSingleton<SidebarViewModel>();
             services.AddTransient<ClientAddViewModel>();
@@ -178,6 +178,10 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<StaffHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/person/");
+            });
+            services.AddHttpClient<DashboardHttpClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://localhost:5105/api/dashboard/");
             });
            
             _serviceProvider = services.BuildServiceProvider();

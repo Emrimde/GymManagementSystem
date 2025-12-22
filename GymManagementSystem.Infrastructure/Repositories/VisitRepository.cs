@@ -43,4 +43,20 @@ public class VisitRepository : IVisitRepository
     {
         return await _dbContext.Visits.CountAsync(item => item.ClientId == clientId);
     }
+
+
+    public async Task<int> GetTotalVisitsAsync(DateTime? date)
+    {
+        IQueryable<Visit> query = _dbContext.Visits;
+        if (date != null)
+        {
+            DateTime startTime = date.Value.Date;
+            DateTime endTime = startTime.AddDays(1);
+
+            query = query.Where(item => item.VisitDate >= startTime && item.VisitDate < endTime);
+        }
+
+        return await query.CountAsync();
+    }
+
 }

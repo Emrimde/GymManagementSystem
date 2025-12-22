@@ -10,6 +10,7 @@ public interface IClientMembershipService
     
     Task<Result<IEnumerable<ClientMembershipResponse>>> GetAllMembershipsClientHistoryAsync(Guid id);
     Task<Result<ClientMembershipDetailsResponse>> GetByIdAsync(Guid id);
+
     Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid memebershipId);
     Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
 }

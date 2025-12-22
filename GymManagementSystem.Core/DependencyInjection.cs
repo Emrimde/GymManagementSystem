@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IMembershipFeatureService, MembershipFeatureService>();
         services.AddScoped<IFeatureService, FeatureService>();
         services.AddScoped<IPersonService, PersonService>();
+        services.AddScoped<IDashboardService, DashboardService>();
        
         return services;
     }

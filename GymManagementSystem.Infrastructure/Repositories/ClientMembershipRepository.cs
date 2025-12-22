@@ -29,6 +29,24 @@ public class ClientMembershipRepository : IClientMembershipRepository
         return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.ClientId == clientId && item.IsActive && item.MembershipStatus == MembershipStatusEnum.Active);
     }
 
+    public async Task<int> GetActiveClientMembershipsCountAsync(DateTime? from)
+    {
+        IQueryable<ClientMembership> query =
+            _dbContext.ClientMemberships.Where(x => x.IsActive);
+
+        if (from != null)
+        {
+            DateTime start = from.Value.Date; // 00:00
+            DateTime end = start.AddDays(1);            
+
+            query = query.Where(x => x.CreatedAt >= start && x.CreatedAt < end);
+        }
+
+        return await query.CountAsync();
+    }
+
+
+
     public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(int page = 1, int pageSize = 50, string? searchText = null)
     {
         IQueryable<ClientMembership> query = _dbContext.ClientMemberships;
