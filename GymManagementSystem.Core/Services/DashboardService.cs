@@ -3,7 +3,6 @@ using GymManagementSystem.Core.DTO.Dashboard;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using System.Linq;
 
 namespace GymManagementSystem.Core.Services;
 public class DashboardService : IDashboardService
@@ -16,33 +15,49 @@ public class DashboardService : IDashboardService
         _visitRepository = visitRepository;
     }
 
-    public async Task<Result<IEnumerable<PointResponse>>> GetAllVisitsForLastDaysAsync()
+    public async Task<Result<DashboardPlotsDataResponse>> GetDataForDashboardPlotsAsync()
     {
-        DateTime startDate = DateTime.UtcNow.Date - TimeSpan.FromDays(7);
+        DateTime startDate = DateTime.UtcNow.Date - TimeSpan.FromDays(6);
         DateTime endDate = DateTime.UtcNow.Date;
-        IEnumerable<PointResponse> points = await _visitRepository.GetAllVisitsFromLast7Days(startDate, endDate);
-        List<PointResponse> allDays = new List<PointResponse>();
-        Dictionary<DateTime, int> pointsDict = points.ToDictionary(item => item.Date, item => item.VisitsNumber);
 
-        for (DateTime day = startDate; day <= endDate; day = day.AddDays(1))
+        IEnumerable<PointResponse> visits =
+            await _visitRepository.GetAllVisitsOverTime(startDate, endDate);
+
+        IEnumerable<PointResponse> memberships =
+            await _clientMembershipRepository.GetAllClientMembershipsOverTime();
+
+        DashboardPlotsDataResponse response = new()
         {
-            PointResponse point = new PointResponse()
-            {
-                Date = day
-            };
+            VisitsPoints = FillMissingDays(visits, startDate, endDate),
+            ClientMembershipsPoints = FillMissingDays(memberships, startDate, endDate)
+        };
 
-            if (pointsDict.TryGetValue(day.Date, out var numberOfVisits))
-            {
-                point.VisitsNumber = numberOfVisits;
-                allDays.Add(point);
-                continue;
-            }
-            point.VisitsNumber = 0;
-            allDays.Add(point);
-        }
-        
-        return Result<IEnumerable<PointResponse>>.Success(allDays, StatusCodeEnum.Ok);
+        return Result<DashboardPlotsDataResponse>.Success(response, StatusCodeEnum.Ok);
     }
+
+
+    private static List<PointResponse> FillMissingDays(
+    IEnumerable<PointResponse> source,
+    DateTime startDate,
+    DateTime endDate)
+    {
+        Dictionary<DateTime, int> dict =
+            source.ToDictionary(item => item.Date.Date, item => item.TimeSeriesPoint);
+
+        List<PointResponse> result = new();
+
+        for (DateTime day = startDate.Date; day <= endDate.Date; day = day.AddDays(1))
+        {
+            result.Add(new PointResponse
+            {
+                Date = day,
+                TimeSeriesPoint = dict.TryGetValue(day, out var value) ? value : 0
+            });
+        }
+
+        return result;
+    }
+
 
     public async Task<Result<DashboardKpiResponse>> GetKPIAsync()
     {

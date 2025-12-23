@@ -26,19 +26,19 @@ public class DashboardHttpClient : BaseHttpClientService
             return Result<DashboardKpiResponse>.Failure($"Error fetching dashboard stats: {ex.Message}");
         }
     }
-    public async Task<Result<List<PointResponse>>> GetAllPointsAsync()
+    public async Task<Result<DashboardPlotsDataResponse>> GetAllPointsAsync()
     {
         try
         {
-            var response = await _httpClient.GetFromJsonAsync<List<PointResponse>>("get-visit-points-7days");
+            var response = await _httpClient.GetFromJsonAsync<DashboardPlotsDataResponse>("get-visit-points-7days");
 
-            return Result<List<PointResponse>>.Success(response ?? new List<PointResponse>());
+            return Result<DashboardPlotsDataResponse>.Success(response ?? new DashboardPlotsDataResponse());
         }
 
 
         catch (HttpRequestException ex)
         {
-            return Result<List<PointResponse>>.Failure($"Error fetching points for chart: {ex.Message}");
+            return Result<DashboardPlotsDataResponse>.Failure($"Error fetching points for chart: {ex.Message}");
         }
     }
 }

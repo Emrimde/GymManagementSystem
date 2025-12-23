@@ -11,5 +11,5 @@ public interface IVisitRepository
     Task<DateTime> GetLastVisitDateByClientId(Guid clientId);
     Task<IEnumerable<VisitResponse>> GetAllClientVisits(Guid clientId);
     Task<int> GetTotalVisitsAsync(DateTime? date);
-    Task<IEnumerable<PointResponse>> GetAllVisitsFromLast7Days(DateTime startTime, DateTime endTime);
+    Task<IEnumerable<PointResponse>> GetAllVisitsOverTime(DateTime startTime, DateTime endTime);
 }

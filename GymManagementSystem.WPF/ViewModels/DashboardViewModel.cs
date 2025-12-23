@@ -24,6 +24,13 @@ public class DashboardViewModel : ViewModel
         get { return _visitsModel; }
         set { _visitsModel = value; OnPropertyChanged(); }
     }
+    private PlotModel clientMemberships;
+
+    public PlotModel ClientMemberships
+    {
+        get { return clientMemberships; }
+        set { clientMemberships = value; OnPropertyChanged(); }
+    }
 
     private readonly DashboardHttpClient _dashboardHttpClient;
 
@@ -34,9 +41,9 @@ public class DashboardViewModel : ViewModel
         get { return _dashboardKpi; }
         set { _dashboardKpi = value; OnPropertyChanged(); }
     }
-    private List<PointResponse> _points;
+    private DashboardPlotsDataResponse _points;
 
-    public List<PointResponse> Points
+    public DashboardPlotsDataResponse Points
     {
         get { return _points; }
         set { _points = value; OnPropertyChanged(); }
@@ -66,28 +73,44 @@ public class DashboardViewModel : ViewModel
 
     private async Task LoadPointsAsync()
     {
-        Result<List<PointResponse>> result = await _dashboardHttpClient.GetAllPointsAsync();
+        Result<DashboardPlotsDataResponse> result =
+            await _dashboardHttpClient.GetAllPointsAsync();
+
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");
+            return;
         }
+
         Points = result.Value!;
-        CreateChart();
+
+        VisitsModel = CreateBarChart(
+            "Visits over week",
+            "Number of visits",
+            Points.VisitsPoints
+        );
+
+        ClientMemberships = CreateBarChart(
+            "Memberships bought over the week",
+            "Number of bought memberships",
+            Points.ClientMembershipsPoints
+        );
     }
 
-    private void CreateChart()
+    private PlotModel CreateBarChart(
+      string title,
+      string yAxisTitle,
+      IEnumerable<PointResponse> points)
     {
-        VisitsModel = new PlotModel
+        var model = new PlotModel
         {
-            Title = "Visits over week",
+            Title = title,
             Background = OxyColors.Transparent,
             TextColor = OxyColors.White,
             TitleColor = OxyColors.White,
-            PlotAreaBorderColor = OxyColors.Gray,
-           
+            PlotAreaBorderColor = OxyColors.Gray
         };
 
-        // oś kategorii (etykiety dni) — przypisz Key
         var categoryAxis = new CategoryAxis
         {
             Key = "CategoryAxis",
@@ -97,41 +120,37 @@ public class DashboardViewModel : ViewModel
             IsPanEnabled = false
         };
 
-        // oś wartości — przypisz Key
         var valueAxis = new LinearAxis
         {
             Key = "ValueAxis",
             Position = AxisPosition.Left,
-            Title = "Number of visits",
+            Title = yAxisTitle,
             Minimum = 0,
             IsZoomEnabled = false,
             IsPanEnabled = false
         };
 
-        // BarSeries - ale "transponujemy" ją przez powiązanie kluczy osi
         var series = new BarSeries
         {
-            // YAxisKey wskazuje na Key osi kategorii, XAxisKey na Key osi wartości
             YAxisKey = categoryAxis.Key,
             XAxisKey = valueAxis.Key,
             FillColor = OxyColors.LimeGreen,
-            TrackerFormatString = "{1}: {2:0}" // tooltip: kategoria i wartość jako int
+            TrackerFormatString = "{1}: {2:0}"
         };
 
-        // Dodaj etykiety i wartości (BarItem)
-        foreach (var point in Points)
+        foreach (var point in points)
         {
             categoryAxis.Labels.Add(point.Date.ToString("dd.MM"));
-            series.Items.Add(new BarItem(point.VisitsNumber));
+            series.Items.Add(new BarItem(point.TimeSeriesPoint));
         }
 
-        VisitsModel.Axes.Add(categoryAxis);
-        VisitsModel.Axes.Add(valueAxis);
-        VisitsModel.Series.Add(series);
+        model.Axes.Add(categoryAxis);
+        model.Axes.Add(valueAxis);
+        model.Series.Add(series);
+        model.InvalidatePlot(true);
 
-        VisitsModel.InvalidatePlot(true);
+        return model;
     }
-
 
     private async Task LoadActiveClientsCountAsync()
     {

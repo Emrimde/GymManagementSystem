@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.DTO.Dashboard;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -45,7 +46,19 @@ public class ClientMembershipRepository : IClientMembershipRepository
         return await query.CountAsync();
     }
 
+    public async Task<List<PointResponse>> GetAllClientMembershipsOverTime()
+    {
+        DateTime startDate = DateTime.UtcNow.Date - TimeSpan.FromDays(6);
+        DateTime endDate = DateTime.UtcNow.Date;
 
+        List<PointResponse> points = await _dbContext.ClientMemberships.Where(item => item.CreatedAt >= startDate && item.CreatedAt.Date <= endDate).GroupBy(item => item.CreatedAt.Date).Select(item => new PointResponse()
+        {
+            Date = item.Key,
+            TimeSeriesPoint = item.Count()
+        }).ToListAsync();
+
+        return points;   
+    }
 
     public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(int page = 1, int pageSize = 50, string? searchText = null)
     {

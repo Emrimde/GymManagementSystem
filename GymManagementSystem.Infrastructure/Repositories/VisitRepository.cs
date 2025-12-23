@@ -45,14 +45,13 @@ public class VisitRepository : IVisitRepository
         return await _dbContext.Visits.CountAsync(item => item.ClientId == clientId);
     }
 
-    public async Task<IEnumerable<PointResponse>> GetAllVisitsFromLast7Days(DateTime startTime, DateTime endTime)
+    public async Task<IEnumerable<PointResponse>> GetAllVisitsOverTime(DateTime startTime, DateTime endTime)
     {
-        DateTime startDate = DateTime.UtcNow.Date - TimeSpan.FromDays(7);
-        DateTime endDate = DateTime.UtcNow.Date;
-        List<PointResponse> points = await _dbContext.Visits.Where(item => startDate <= item.VisitDate.Date && endDate >= item.VisitDate.Date).GroupBy(item => item.VisitDate.Date).Select(item => new PointResponse()
+        
+        List<PointResponse> points = await _dbContext.Visits.Where(item => startTime <= item.VisitDate.Date && endTime >= item.VisitDate.Date).GroupBy(item => item.VisitDate.Date).Select(item => new PointResponse()
         {
             Date = item.Key,
-            VisitsNumber = item.Count()
+            TimeSeriesPoint = item.Count()
         }).ToListAsync();
 
         return points;

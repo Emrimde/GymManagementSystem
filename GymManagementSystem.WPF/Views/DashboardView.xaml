@@ -106,7 +106,7 @@
 
                 <!-- Memberships chart -->
                 <Border Grid.Row="1" Style="{StaticResource KpiCardStyle}">
-                    <oxy:PlotView Model="{Binding MembershipsModel}" Background="{DynamicResource BackgoundColor}"/>
+                    <oxy:PlotView Model="{Binding ClientMemberships}" Background="{DynamicResource BackgoundColor}"/>
                 </Border>
 
             </Grid>
