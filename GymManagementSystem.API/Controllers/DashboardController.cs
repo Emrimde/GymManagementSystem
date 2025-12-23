@@ -15,4 +15,7 @@ public class DashboardController : BaseController
 
     [HttpGet]
     public async Task<ActionResult<DashboardKpiResponse>> GetKPI() => HandleResult(await _dashboardService.GetKPIAsync());
+
+    [HttpGet("get-visit-points-7days")]
+    public async Task<ActionResult<IEnumerable<PointResponse>>> GetAllVisitsForLastDays() => HandleListedResult(await _dashboardService.GetAllVisitsForLastDaysAsync());
 }

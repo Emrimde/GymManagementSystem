@@ -1,15 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Windows;
-using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
+using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Windows;
 
 namespace GymManagementSystem.WPF.HttpServices;
 public class TrainerHttpClient : BaseHttpClientService
