@@ -31,9 +31,9 @@ public class GymClassRepository : IGymClassRepository
         throw new NotImplementedException();
     }
 
-    public Task<GymClass?> GetByIdAsync(Guid id)
+    public async Task<GymClass?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.GymClasses.FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassesForSelectAsync()
