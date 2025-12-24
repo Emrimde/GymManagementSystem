@@ -1,18 +1,32 @@
 ﻿using GymManagementSystem.Core.DTO;
+using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Client;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Visit;
 
 public class VisitViewModel : ViewModel, IParameterReceiver
 {
     private readonly VisitHttpClient _visitHttpClient;
+    private readonly ClientHttpClient _clientHttpClient;
     public SidebarViewModel SidebarView { get; }
     private INavigationService _navigation;
+    public ICommand ReturnCommand { get; set; }
+    private ClientNameResponse _clientName;
+
+    public ClientNameResponse ClientName
+    {
+        get { return _clientName; }
+        set { _clientName = value; OnPropertyChanged();}
+    }
+
+    public Guid ClientId { get; set; }
 
     public INavigationService Navigation
     {
@@ -29,18 +43,29 @@ public class VisitViewModel : ViewModel, IParameterReceiver
     }
 
 
-    public VisitViewModel(VisitHttpClient visitHttpClient, INavigationService navigation,SidebarViewModel sidebarViewModel)
+    public VisitViewModel(VisitHttpClient visitHttpClient, INavigationService navigation,SidebarViewModel sidebarViewModel, ClientHttpClient clientHttpClient)
     {
         _visitHttpClient = visitHttpClient;
         Navigation = navigation;
         SidebarView = sidebarViewModel;
+        _clientHttpClient = clientHttpClient;
+        ReturnCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+
+
+    }
+
+    private async Task LoadClientNameAsync(Guid clientId)
+    {
+        ClientName =  await _clientHttpClient.GetClientNameById(clientId);
     }
 
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid clientId)
         {
-            LoadVisits(clientId);
+            ClientId = clientId;
+            _ = LoadVisits(clientId);
+            _ = LoadClientNameAsync(clientId);
         }
     }
 

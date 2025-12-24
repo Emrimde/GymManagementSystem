@@ -28,17 +28,17 @@
 
                 <TextBlock 
      Grid.Column="0"
-     Text="Client Visits" 
+     
      FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                 HorizontalAlignment="left"
+                 HorizontalAlignment="Center"
      
      VerticalAlignment="Center"
-                 Width="200" Margin="40,0,0,0"/>
-
+                 Width="auto" Margin="40,0,0,0">
+                    <Run Text="{Binding ClientName.FullName}"/>
+                    <Run Text=" - Last Visits"/>
+                </TextBlock>
 
             </Grid>
-
-
 
             <Border Grid.Row="1" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding Visits}" x:Name="datagrid" CanUserAddRows="False"
