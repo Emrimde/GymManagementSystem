@@ -68,8 +68,6 @@ public class ClientRepository : IClientRepository
         return await _dbContext.Clients
     .Include(c => c.ClientMemberships)
         .ThenInclude(cm => cm.Membership)
-    .Include(c => c.ClientMemberships)
-        .ThenInclude(cm => cm.Contract)
     .FirstOrDefaultAsync(c => c.Id == id);
     }
 

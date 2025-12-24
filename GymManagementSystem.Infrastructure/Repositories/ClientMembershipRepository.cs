@@ -135,4 +135,9 @@ public class ClientMembershipRepository : IClientMembershipRepository
         await _dbContext.SaveChangesAsync();
         return entity;
     }
+
+    public async Task<ClientMembership?> GetActiveClientMembershipById(Guid clientMembershipId)
+    {
+        return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.IsActive && item.Id == clientMembershipId);
+    }
 }

@@ -6,12 +6,11 @@ namespace GymManagementSystem.Core.Mappers;
 
 public static class TerminationMappers
 {
-    public static Termination ToTermination(this TerminationAddRequest request)
+    public static Termination ToTermination(this TerminationAddRequest request,Guid clientMembershipId)
     {
         return new Termination()
         {
-            ClientMembershipId = request.ClientMembershipId,
-            //ContractId = request.ContractId,
+            ClientMembershipId = clientMembershipId,
             Reason = request.Reason,
         };
     }
@@ -22,8 +21,6 @@ public static class TerminationMappers
 
             Reason = termination.Reason,
             RequestedAt = termination.RequestedAt.ToString("dd.MM.yyyy"),
-            //FirstName = termination.ClientMembership != null ? termination.ClientMembership.FirstName : "error",
-            //LastName = termination.ClientMembership != null ? termination.ClientMembership.LastName: "error",
         };
     }
 }

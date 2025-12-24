@@ -1,9 +1,9 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Termination;
+﻿using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Client;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,6 +13,7 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 {
 	private readonly TerminationHttpClient _httpClient;
 	private INavigationService _navigation;
+	public Guid ClientId { get; set; }
 	public SidebarViewModel SidebarView { get; }
 	public INavigationService Navigation
 	{
@@ -33,14 +34,13 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
     private async Task CreateTerminationAsync()
     {
 		Result<TerminationResponse> result = await _httpClient.PostTerminationAsync(TerminationAddRequest);
-		if (result.IsSuccess)
+		if (!result.IsSuccess)
 		{
-			MessageBox.Show("Success");
+			MessageBox.Show($"{result.ErrorMessage}");
+			return;
 		}
-		else
-		{
-			MessageBox.Show($"Fail! {result.ErrorMessage}");
-		}
+		Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
+
     }
 
     private TerminationAddRequest _terminationAddRequest;
@@ -52,10 +52,10 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 	
 	public void ReceiveParameter(object parameter)
     {
-		if (parameter is Guid id)
+		if (parameter is Guid clientId)
 		{
-			TerminationAddRequest.ClientMembershipId = id;
-		}
+			TerminationAddRequest.ClientId = clientId;
+			ClientId = clientId;
+        }
     }
-
 }

@@ -86,6 +86,6 @@ public class ContractRepository : IContractRepository
 
     public async Task<Contract?> GetContractByClientMembershipIdAsync(Guid clientMembershipId)
     {
-       return await _dbContext.Contracts.Include(item => item.ClientMembership).FirstOrDefaultAsync(item => item.ClientMembershipId == clientMembershipId);
+       return await _dbContext.Contracts.FirstOrDefaultAsync(item => item.ClientMembershipId == clientMembershipId);
     }
 }

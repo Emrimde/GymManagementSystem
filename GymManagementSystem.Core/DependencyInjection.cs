@@ -18,7 +18,6 @@ public static class DependencyInjection
         services.AddScoped<ITerminationService, TerminationService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IGeneralGymDetailsService, GeneralGymDetailService>();
-        services.AddScoped<ITerminationValidator, TerminationValidatorService>();
         services.AddScoped<ITrainerService, TrainerService>();
         services.AddScoped<ITrainerScheduleService, TrainerScheduleService>();
         services.AddScoped<IGymClassService, GymClassService>();

@@ -86,7 +86,8 @@ public static class ClientMapper
             ClientMembership = client.ClientMemberships
                                         .FirstOrDefault(item => item.IsActive)?.ToClientMembershipShortResponse(),
             IsActive = client.ClientMemberships.Any(item => item.IsActive),
-            
+            CanTerminate = client.ClientMemberships.Any(item => item.IsActive && item.Membership!.MembershipType == MembershipTypeEnum.Monthly),
+
         };
     }
 

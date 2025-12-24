@@ -12,43 +12,28 @@ public class TerminationService : ITerminationService
 {
     private readonly IRepository<TerminationResponse,Termination> _terminationRepo;
     private readonly IContractRepository _contractRepo;
+    private readonly IClientMembershipRepository _clientMembershipRepo;
     private readonly IUnitOfWork _unitOfWork;
-    public TerminationService(IRepository<TerminationResponse,Termination> terminationRepository, IContractRepository contractRepository,IUnitOfWork unitOfWork) 
+    public TerminationService(IRepository<TerminationResponse,Termination> terminationRepository, IContractRepository contractRepository,IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepo) 
     {
         _terminationRepo = terminationRepository;
         _contractRepo = contractRepository;
         _unitOfWork = unitOfWork;
+        _clientMembershipRepo = clientMembershipRepo;
     }
 
     public async Task<Result<TerminationResponse>> CreateAsync(TerminationAddRequest entity)
     {
-        Contract? contract = await _contractRepo.GetContractByClientMembershipIdAsync(entity.ClientMembershipId);
-        if (contract == null) 
+        ClientMembership? activeMembership = await _clientMembershipRepo.GetActiveClientMembershipByClientId(entity.ClientId);
+        if (activeMembership == null)
         {
-            return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client doesn't have contract", StatusCodeEnum.InternalServerError);
+            return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client doesn't have active membership");
         }
-
-        if (contract.ContractStatus != ContractStatus.Signed)
-        {
-            return Result<TerminationResponse>.Failure("Error: Terminantion cannot be created because client either has not signed contract or the contract is already terminated", StatusCodeEnum.InternalServerError);
-        }
-        contract.ContractStatus = ContractStatus.Terminated;
-
-        if (contract.ClientMembership == null)
-        {
-            return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client membership not found", StatusCodeEnum.InternalServerError);
-        }
-
-        contract.ClientMembership.IsActive = false;
-        await _contractRepo.UpdateAsync(contract.Id,contract);
-        Termination termination = entity.ToTermination();
+        
+        activeMembership.IsActive = false;
+        Termination termination = entity.ToTermination(activeMembership.Id);
         Termination createdTermination = await _terminationRepo.CreateAsync(termination);
-        //await _unitOfWork.SaveChangesAsync(); to powinno byc 
+        //await _unitOfWork.SaveChangesAsync();  
         return Result<TerminationResponse>.Success(createdTermination.ToTerminationResponse(), StatusCodeEnum.Ok);
-    }
-
-    public Task<Result<TerminationResponse>> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
     }
 }

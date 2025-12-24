@@ -68,7 +68,7 @@
                    
 
                     <Button Content="Terminate"
-            Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+            Visibility="{Binding Client.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}"
             Command="{Binding CreateNewTerminationCommand}"  />
                    
                 </StackPanel>

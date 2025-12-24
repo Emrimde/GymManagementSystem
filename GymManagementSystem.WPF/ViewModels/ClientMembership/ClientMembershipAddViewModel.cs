@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
@@ -20,7 +21,7 @@ namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 {
     private ClientMembershipAddRequest _clientMembershipAddRequest;
-
+    public Guid ClientId { get; set; }
     public ClientMembershipAddRequest ClientMembershipAddRequest
     {
         get { return _clientMembershipAddRequest; }
@@ -103,7 +104,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                 return;
             }
         }
-        Navigation.NavigateTo<ClientDetailsViewModel>(Client.Id);
+        Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
 
     }
 
@@ -266,11 +267,11 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     public void ReceiveParameter(object parameter)
     {
-        if (parameter is Guid id)
+        if (parameter is Guid clientId)
         {
-
-            _ = LoadClientNameAsync(id);
-            _clientMembershipAddRequest.ClientId = id;
+            ClientId = clientId;
+            _ = LoadClientNameAsync(clientId);
+            _clientMembershipAddRequest.ClientId = clientId;
         }
     }
 
