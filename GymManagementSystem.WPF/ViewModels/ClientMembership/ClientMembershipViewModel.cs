@@ -14,9 +14,9 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 {
     public Guid ClientId { get; set; }
     public ICommand OpenClientMembershipDetails { get; }
-    private ClientNameResponse _client;
+    private ClientInfoResponse _client;
 
-    public ClientNameResponse Client
+    public ClientInfoResponse Client
     {
         get { return _client; }
         set { _client = value; OnPropertyChanged(); }
@@ -42,9 +42,8 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         SidebarView = sidebarView;
         ClientMemberships = new ObservableCollection<ClientMembershipResponse>();
-        Client = new ClientNameResponse();
+        Client = new ClientInfoResponse();
         _clientHttpClient = clientHttpClient;
-        //_ = LoadClientMemberships();
         OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item), item => true);
         ReturnToClientDetailsViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
     }
@@ -66,14 +65,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClientNameById(Guid id)
     {
-        ClientNameResponse? result = await _clientHttpClient.GetClientNameById(id);
-        if(result != null)
-        {
-            Client = result;
-            return;
-        }
-
-        MessageBox.Show("Failed to load client name.");
+        Client = await _clientHttpClient.GetClientNameById(id);
     }
 
     public INavigationService Navigation

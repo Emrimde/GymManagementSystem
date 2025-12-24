@@ -11,7 +11,6 @@ public static class ClientMembershipMapper
         {
             ClientId = request.ClientId,
             MembershipId = request.MembershipId,
-            StartDate = request.StartDate,
         };
     }
 

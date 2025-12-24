@@ -30,7 +30,7 @@
     Grid.Column="0"
     
     FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                HorizontalAlignment="left"
+                HorizontalAlignment="Center"
     
     VerticalAlignment="Center"
                 Width="auto" Margin="40,0,0,0">

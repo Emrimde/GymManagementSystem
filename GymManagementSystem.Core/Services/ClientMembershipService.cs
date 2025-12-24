@@ -29,6 +29,13 @@ public class ClientMembershipService : IClientMembershipService
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
         ClientMembership clientMembership = entity.ToClientMembership();
+        ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(entity.ClientId);
+
+        if(activeMembership != null)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure("You can't add membership for this client - client has membership", StatusCodeEnum.BadRequest);
+        }
+
         Membership? membership = await _membershipRepo.GetByIdAsync(entity.MembershipId);
         if (membership == null)
         {
@@ -42,30 +49,30 @@ public class ClientMembershipService : IClientMembershipService
 
         else if (membership.MembershipType == MembershipTypeEnum.Monthly)
         {
-            clientMembership.EndDate = clientMembership.StartDate.AddMonths(1);
+            clientMembership.EndDate = null;
         }
 
 
-        if (clientMembership.StartDate > DateTime.UtcNow)
-        {
-            clientMembership.MembershipStatus = MembershipStatusEnum.Upcoming;
-        }
+        //if (clientMembership.StartDate > DateTime.UtcNow)
+        //{
+        //    clientMembership.MembershipStatus = MembershipStatusEnum.Upcoming;
+        //}
 
-        else
-        {
-            clientMembership.MembershipStatus = MembershipStatusEnum.Active;
-        }
+        //else
+        //{
+        //    clientMembership.MembershipStatus = MembershipStatusEnum.Active;
+        //}
 
-        if (membership.MembershipType == MembershipTypeEnum.Singular)
-        {
-            return Result<ClientMembershipInfoResponse>.Failure("Singular memberships cannot be added as client memberships");
-        }
+        //if (membership.MembershipType == MembershipTypeEnum.Singular)
+        //{
+        //    return Result<ClientMembershipInfoResponse>.Failure("Singular memberships cannot be added as client memberships");
+        //}
 
         ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
         {
             ClientMembershipId = addedClientMembership.Id,
-            CreatedAt = addedClientMembership.CreatedAt,
+            CreatedAt = addedClientMembership.StartDate,
             ContractStatus = ContractStatus.Draft,
             IsActive = true
         };

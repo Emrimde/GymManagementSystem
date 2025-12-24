@@ -61,7 +61,7 @@ public class ClientService : IClientService
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id, bool isActiveOnly)
+    public async Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id)
     {
         if (id == Guid.Empty)
         {
@@ -104,9 +104,13 @@ public class ClientService : IClientService
         return Result<ClientAgeValidationResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientNameResponse>> GetClientFullNameByIdAsync(Guid id)
+    public async Task<Result<ClientInfoResponse>> GetClientFullNameByIdAsync(Guid id)
     {
-        ClientNameResponse response = await _repository.GetClientFullNameByIdAsync(id);
-        return Result<ClientNameResponse>.Success(response, StatusCodeEnum.Ok);
+        ClientInfoResponse? dto = await _repository.GetClientFullNameByIdAsync(id);
+        if(dto == null)
+        {
+            return Result<ClientInfoResponse>.Failure("Error during getting client data");
+        }
+        return Result<ClientInfoResponse>.Success(dto, StatusCodeEnum.Ok);
     }
 }

@@ -27,9 +27,9 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
         }
     }
     public Guid ClientId { get; set; }
-    private ClientNameResponse _client;
+    private ClientInfoResponse _client;
 
-    public ClientNameResponse Client
+    public ClientInfoResponse Client
     {
         get { return _client; }
         set { _client = value; OnPropertyChanged(); }

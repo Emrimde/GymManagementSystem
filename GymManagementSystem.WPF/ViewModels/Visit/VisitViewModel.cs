@@ -18,9 +18,9 @@ public class VisitViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; }
     private INavigationService _navigation;
     public ICommand ReturnCommand { get; set; }
-    private ClientNameResponse _clientName;
+    private ClientInfoResponse _clientName;
 
-    public ClientNameResponse ClientName
+    public ClientInfoResponse ClientName
     {
         get { return _clientName; }
         set { _clientName = value; OnPropertyChanged();}

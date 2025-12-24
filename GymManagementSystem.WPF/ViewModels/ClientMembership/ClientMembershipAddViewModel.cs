@@ -31,16 +31,15 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         get { return _clientMembershipAddRequest; }
         set { _clientMembershipAddRequest = value; OnPropertyChanged(); }
     }
-    private ClientDetailsResponse _client;
+    private ClientInfoResponse _client;
 
-    public ClientDetailsResponse Client
+    public ClientInfoResponse Client
     {
         get { return _client; }
         set { _client = value; OnPropertyChanged(); }
     }
 
     public SidebarViewModel SidebarView { get; set; }
-    private INavigationService _navigation;
 
     private ObservableCollection<MembershipResponse> _membershipsComboBox;
     public ObservableCollection<MembershipResponse> MembershipsComboBox
@@ -56,11 +55,10 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         }
     }
     public ICommand AddClientMembershipCommand { get; }
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public ICommand CancelCommand { get; }
+   
+    public INavigationService Navigation { get; set; }
+
 
     private MembershipResponse _selectedMembership;
     public MembershipResponse SelectedMembership
@@ -87,8 +85,9 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         _httpClient = httpClient;
-        Client = new ClientDetailsResponse();
-        ClientMembershipAddRequest = new ClientMembershipAddRequest() { StartDate = DateTime.UtcNow };
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(Client.Id), item => true);
+        Client = new ClientInfoResponse();
+        ClientMembershipAddRequest = new ClientMembershipAddRequest();
         _membershipHttpClient = membershipHttpClient;
         MembershipsComboBox = new ObservableCollection<MembershipResponse>();
         AddClientMembershipCommand = new AsyncRelayCommand(item => AddClientMembershipAsync(), item => true);
@@ -256,21 +255,13 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid id)
         {
 
-            _ = LoadClients(id);
+            _ = LoadClientNameAsync(id);
             _clientMembershipAddRequest.ClientId = id;
         }
     }
 
-    private async Task LoadClients(Guid id)
+    private async Task LoadClientNameAsync(Guid id)
     {
-        Result<ClientDetailsResponse> result = await _clientHttpClient.GetClientById(id);
-        if (result.IsSuccess)
-        {
-            Client = result.Value!;
-        }
-        else
-        {
-            MessageBox.Show("Fail to load single client");
-        }
+        Client = await _clientHttpClient.GetClientNameById(id);
     }
 }

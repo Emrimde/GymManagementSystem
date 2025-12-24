@@ -46,12 +46,12 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    public async Task<ClientNameResponse> GetClientNameById(Guid clientId)
+    public async Task<ClientInfoResponse> GetClientNameById(Guid clientId)
     {
         try
         {
-            ClientNameResponse clientNameResponse = await _httpClient.GetFromJsonAsync<ClientNameResponse>($"name/{clientId}");
-            return clientNameResponse ?? new ClientNameResponse();
+            ClientInfoResponse clientNameResponse = await _httpClient.GetFromJsonAsync<ClientInfoResponse>($"name/{clientId}");
+            return clientNameResponse ?? new ClientInfoResponse();
         }
         catch (HttpRequestException ex)
         {
@@ -161,9 +161,9 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    public async Task<Result<ClientDetailsResponse>> GetClientById(Guid id, bool isActiveOnly = true)
+    public async Task<Result<ClientDetailsResponse>> GetClientById(Guid id)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"{id}?isActiveOnly={isActiveOnly}");
+        HttpResponseMessage response = await _httpClient.GetAsync($"{id}");
         string responseBody = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)

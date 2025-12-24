@@ -131,7 +131,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClient()
     {
-        Result<ClientDetailsResponse> result = await _clienthttpClient.GetClientById(ClientId, true);
+        Result<ClientDetailsResponse> result = await _clienthttpClient.GetClientById(ClientId);
         if (result.IsSuccess)
         {
             Client = result.Value!;

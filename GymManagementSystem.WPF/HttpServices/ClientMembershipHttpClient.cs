@@ -89,7 +89,6 @@ public class ClientMembershipHttpClient : BaseHttpClientService
 
     public async Task<Result<ClientMembershipInfoResponse>> PostClientMembershipAsync(ClientMembershipAddRequest request)
     {
-        request.StartDate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc);
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);
         string responseBody = await response.Content.ReadAsStringAsync();
 

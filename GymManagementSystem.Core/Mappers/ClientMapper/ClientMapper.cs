@@ -85,7 +85,7 @@ public static class ClientMapper
             City = client.City,
             ClientMembership = client.ClientMemberships
                                         .FirstOrDefault(item => item.IsActive)?.ToClientMembershipShortResponse(),
-            IsActive = client.ClientMemberships.Any(item => item.IsActive &&  item.MembershipStatus == MembershipStatusEnum.Active) && client.ClientMemberships != null,
+            IsActive = client.ClientMemberships.Any(item => item.IsActive),
             
         };
     }

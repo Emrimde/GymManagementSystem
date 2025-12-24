@@ -19,13 +19,12 @@ public class ClientController : BaseController
         => HandlePageResult(await _clientService.GetAllAsync(searchText, page));
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ClientDetailsResponse>> GetById(Guid id,[FromQuery] bool isActiveOnly)
-        => HandleResult(await _clientService.GetByIdAsync(id,isActiveOnly));
+    public async Task<ActionResult<ClientDetailsResponse>> GetById(Guid id)
+        => HandleResult(await _clientService.GetByIdAsync(id));
 
     [HttpGet("name/{id:guid}")]
-    public async Task<ActionResult<ClientNameResponse>> GetClientFullNameById(Guid id)
+    public async Task<ActionResult<ClientInfoResponse>> GetClientFullNameById(Guid id)
         => HandleResult(await _clientService.GetClientFullNameByIdAsync(id));
-
 
     [HttpPost]
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)

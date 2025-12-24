@@ -27,7 +27,7 @@ public class ClientMembershipRepository : IClientMembershipRepository
 
     public async Task<ClientMembership?> GetActiveClientMembershipByClientId(Guid clientId)
     {
-        return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.ClientId == clientId && item.IsActive && item.MembershipStatus == MembershipStatusEnum.Active);
+        return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.ClientId == clientId && item.IsActive);
     }
 
     public async Task<int> GetActiveClientMembershipsCountAsync(DateTime? from)
@@ -40,7 +40,7 @@ public class ClientMembershipRepository : IClientMembershipRepository
             DateTime start = from.Value.Date; // 00:00
             DateTime end = start.AddDays(1);            
 
-            query = query.Where(x => x.CreatedAt >= start && x.CreatedAt < end);
+            query = query.Where(x => x.StartDate >= start && x.StartDate < end);
         }
 
         return await query.CountAsync();
@@ -51,7 +51,7 @@ public class ClientMembershipRepository : IClientMembershipRepository
         DateTime startDate = DateTime.UtcNow.Date - TimeSpan.FromDays(6);
         DateTime endDate = DateTime.UtcNow.Date;
 
-        List<PointResponse> points = await _dbContext.ClientMemberships.Where(item => item.CreatedAt >= startDate && item.CreatedAt.Date <= endDate).GroupBy(item => item.CreatedAt.Date).Select(item => new PointResponse()
+        List<PointResponse> points = await _dbContext.ClientMemberships.Where(item => item.StartDate >= startDate && item.StartDate.Date <= endDate).GroupBy(item => item.StartDate.Date).Select(item => new PointResponse()
         {
             Date = item.Key,
             TimeSeriesPoint = item.Count()
@@ -116,7 +116,7 @@ public class ClientMembershipRepository : IClientMembershipRepository
             IsActive = item.IsActive,
             StartDate = item.StartDate.ToString("yyyy.MM.dd"),
             EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy.MM.dd") : "Permanent",
-            CreatedAt = item.CreatedAt,
+            CreatedAt = item.StartDate,
             DeletedAt = item.DeletedAt
         }).ToListAsync();
     }

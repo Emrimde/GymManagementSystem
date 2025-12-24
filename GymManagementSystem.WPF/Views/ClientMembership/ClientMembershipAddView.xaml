@@ -30,7 +30,6 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- JEDEN StackPanel zamiast dwóch -->
                     <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Margin="0,20,0,60" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}">
                     <Run Text="Add membership for"/>
@@ -38,29 +37,6 @@
                     <Run Text="{Binding Client.LastName}"/>
                 </TextBlock>
 
-                        <!-- EMAIL -->
-                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="Email:" Foreground="{DynamicResource PrimaryColor}"/>
-                            <TextBlock Text="{Binding Client.Email}" VerticalAlignment="Center" FontSize="20" Margin="30,0,0,0" Width="Auto" Foreground="{DynamicResource PrimaryColor}"/>
-                        </StackPanel>
-
-                        <!-- PHONE -->
-                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="Phone Number" Foreground="{DynamicResource PrimaryColor}"/>
-                            <TextBlock Text="{Binding Client.PhoneNumber}" VerticalAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="150" Foreground="{DynamicResource PrimaryColor}"/>
-                        </StackPanel>
-
-                        <!-- START DATE -->
-                        <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock FontSize="25" Text="Start date" Foreground="{DynamicResource PrimaryColor}"/>
-                            <DatePicker SelectedDate="{Binding ClientMembershipAddRequest.StartDate}"
-                            SelectedDateFormat="Short"
-                            VerticalContentAlignment="Center"
-                            FontSize="20"
-                            Margin="10,0,0,0"/>
-                        </StackPanel>
-
-                        <!-- MEMBERSHIP -->
                         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                             <TextBlock FontSize="25" Text="Membership" Foreground="White"/>
                             <ComboBox Margin="10,0,0,0" Width="Auto" 
@@ -74,7 +50,7 @@
 
                 <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Add membership" Command="{Binding AddClientMembershipCommand }"/>
-                    <Button Content="Cancel"/>
+                    <Button Content="Cancel" Command="{Binding CancelCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>
