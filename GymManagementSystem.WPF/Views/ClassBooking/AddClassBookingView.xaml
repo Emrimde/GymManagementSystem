@@ -47,7 +47,7 @@
             </Grid>
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Book class" Command="{Binding AddClassBookingCommand }"/>
-                <Button Content="Cancel"/>
+                <Button Content="Cancel" Command="{Binding CancelCommand}"/>
             </StackPanel>
         </Grid>
     </Grid>

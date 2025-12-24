@@ -17,14 +17,16 @@ public class ClientMembershipService : IClientMembershipService
     private readonly IClientRepository _clientRepository;
     private readonly IRepository<ContractResponse, Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
+    private readonly IMembershipPriceRepository _membershipPriceRepo;
    
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
         _membershipRepo = membershipRepo;
         _clientRepository = clientRepository;
+        _membershipPriceRepo = membershipPriceRepo;
     }
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
@@ -51,22 +53,6 @@ public class ClientMembershipService : IClientMembershipService
         {
             clientMembership.EndDate = null;
         }
-
-
-        //if (clientMembership.StartDate > DateTime.UtcNow)
-        //{
-        //    clientMembership.MembershipStatus = MembershipStatusEnum.Upcoming;
-        //}
-
-        //else
-        //{
-        //    clientMembership.MembershipStatus = MembershipStatusEnum.Active;
-        //}
-
-        //if (membership.MembershipType == MembershipTypeEnum.Singular)
-        //{
-        //    return Result<ClientMembershipInfoResponse>.Failure("Singular memberships cannot be added as client memberships");
-        //}
 
         ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
@@ -106,19 +92,25 @@ public class ClientMembershipService : IClientMembershipService
     {
         Client? client = await _clientRepository.GetByIdAsync(clientId);
         Membership? membership = await _membershipRepo.GetByIdAsync(membershipId);
+        MembershipPrice? actualPrice = await _membershipPriceRepo.GetActiveMembershipPriceByMembershipId(membershipId);
+        if(actualPrice == null)
+        {
+            return Result<ClientMembershipContractPreviewResponse>.Failure("Error during loading actual price", StatusCodeEnum.InternalServerError);
+        }
 
         if (membership == null || client == null)
         {
             return Result<ClientMembershipContractPreviewResponse>.Failure("Client or membership not found", StatusCodeEnum.NotFound);
         }
-
+        string? endDate = membership.MembershipType == MembershipTypeEnum.Monthly ? null : DateTime.UtcNow.AddYears(1).ToString("dd.MM.yyyy");
 
         ClientMembershipContractPreviewResponse response = new ClientMembershipContractPreviewResponse()
         {
             StartDate = DateTime.UtcNow.ToString("dd.MM.yyyy"),
-            EndDate = DateTime.UtcNow.ToString("yy.MM.dd"),
+            EndDate = endDate,
             FullName = client.FirstName + " " + client.LastName,
             MembershipName = membership.Name,
+            Price = actualPrice.Price.ToString(),
         };
 
         return Result<ClientMembershipContractPreviewResponse>.Success(response);

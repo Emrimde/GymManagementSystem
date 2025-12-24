@@ -5,20 +5,15 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.Contract;
+using GymManagementSystem.WPF.ViewModels.Client;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Windows;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using System.Diagnostics;
-using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using System.IO;
-using GymManagementSystem.WPF.ViewModels.Client;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 
@@ -56,7 +51,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
     }
     public ICommand AddClientMembershipCommand { get; }
     public ICommand CancelCommand { get; }
-   
+
     public INavigationService Navigation { get; set; }
 
 
@@ -157,12 +152,13 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                     column.Spacing(6);
 
                     column.Item().Text(
-                        $"Zawarta dnia {contract.DateNow} w miejscowości {gymAddress.Split(',')[0]}.");
+                        //$"Zawarta dnia {contract.StartDate} w miejscowości {gymAddress.Split(',')[0]}.");
+                        $"Zawarta dnia {contract.StartDate} w miejscowości {gymAddress}.");
 
                     column.Item().PaddingTop(10).Text("1. Strony umowy:");
 
                     column.Item().Text(
-                        $"a) Klub: {gymName}, {gymAddress}, NIP: {gymNip}, tel: {contactNumber}");
+                        $"a) Klub: {gymName}, {gymAddress}, tel: {contactNumber}");
 
                     column.Item().Text(
                         $"b) Klient: {contract.FullName}");
@@ -173,14 +169,32 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                         $"w ramach członkostwa: \"{contract.MembershipName}\".");
 
                     column.Item().PaddingTop(10).Text("§2 Okres obowiązywania:");
-                    column.Item().Text(
-                        $"Umowa zostaje zawarta na okres od {contract.StartDate} do {contract.EndDate}.");
+                    if (contract.EndDate != null)
+                    {
+                        column.Item().Text(
+                            $"Umowa zostaje zawarta na okres od {contract.StartDate} do {contract.EndDate}.");
+                    }
+                    else
+                    {
+                        column.Item().Text(
+                            $"Umowa zostaje zawarta na czas nieokreślony od {contract.StartDate}");
+                    }
 
                     column.Item().PaddingTop(10).Text("§3 Opłaty:");
-                    column.Item().Text(
-                        $"1. Cena członkostwa wynosi {contract.Price}.");
-                    column.Item().Text(
-                        "2. Opłata uprawnia Klienta do korzystania z infrastruktury klubu zgodnie z regulaminem.");
+                    if (contract.EndDate != null)
+                    {
+
+                        column.Item().Text(
+                            $"1. Cena członkostwa w ramach karnetu rocznego wynosi jednorazowo {contract.Price}$ w momencie podpisania umowy.");
+                    }
+                    else
+                    {
+
+                        column.Item().Text(
+                            $"1. Cena członkostwa w ramach karnetu miesięcznego wynosi comiesięcznie {contract.Price}$. Pierwsza opłata miesięczna za pierwszy miesiąc następuje w trakcie podpisywania umowy");
+                    }
+                        column.Item().Text(
+                            "2. Opłata uprawnia Klienta do korzystania z infrastruktury klubu zgodnie z regulaminem.");
 
                     column.Item().PaddingTop(10).Text("§4 Prawa i obowiązki Klienta:");
                     column.Item().Text(

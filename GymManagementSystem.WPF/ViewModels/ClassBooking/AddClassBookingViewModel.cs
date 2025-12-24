@@ -23,6 +23,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     private readonly ClientHttpClient _clientHttpClient;
     public ClassBookingAddRequest ClassBookingRequest { get; set; }
     public ICommand AddClassBookingCommand { get; }
+    public ICommand CancelCommand { get; }
     public Guid ClientId { get; set; }
     private ObservableCollection<ScheduledClassComboBoxResponse> _scheduledClasses;
 
@@ -101,6 +102,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         GymClasses = new ObservableCollection<GymClassComboBoxResponse>();
         SidebarView = sidebarView;
         Navigation = navigation;
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item=> true);
         _clientHttpClient = clientHttpClient;
         _classBookingHttpClient = classBookingHttpClient;
         _gymClassHttpClient = gymClassHttpClient;
