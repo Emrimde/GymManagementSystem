@@ -29,8 +29,12 @@ public class TerminationService : ITerminationService
         {
             return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client doesn't have active membership");
         }
-        
+        if(activeMembership.EndDate != null)
+        {
+            return Result<TerminationResponse>.Failure("Error: Termination cannot be created for yearly membership");
+        }
         activeMembership.IsActive = false;
+        activeMembership.EndDate = DateTime.UtcNow;
         Termination termination = entity.ToTermination(activeMembership.Id);
         Termination createdTermination = await _terminationRepo.CreateAsync(termination);
         //await _unitOfWork.SaveChangesAsync();  
