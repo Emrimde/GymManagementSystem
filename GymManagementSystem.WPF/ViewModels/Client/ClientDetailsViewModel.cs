@@ -6,6 +6,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
+using GymManagementSystem.WPF.ViewModels.PersonalBooking;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Visit;
 using System.Windows;
@@ -28,6 +29,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     public ICommand OpenClientMembershipsHistory { get; }
     public ICommand OpenAddClientMembershipViewCommand { get; }
     public ICommand OpenAllClientClassBookingCommand { get; }
+    public ICommand OpenPersonalTrainingAddViewCommand { get; }
     public INavigationService Navigation
     {
         get { return _navigation; }
@@ -83,7 +85,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         , item => true);
         OpenAllClientClassBookingCommand = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(ClientId), item => true);
 
-
+        OpenPersonalTrainingAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingAddViewModel>(ClientId), item => true);
         OpenAddClientMembershipViewCommand = new RelayCommand(item =>
         {
             if (item is Guid id)

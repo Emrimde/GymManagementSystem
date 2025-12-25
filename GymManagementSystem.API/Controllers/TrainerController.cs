@@ -44,7 +44,10 @@ public class TrainerController : BaseController
     public async Task<ActionResult<TrainerContractDetailsResponse>> GetTrainerContracts([FromRoute] Guid id, [FromQuery] bool includeDetails, CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerContractAsync(id, includeDetails,cancellationToken));
 
     [HttpGet("instructors")]
-    public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllInstructors(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllGetAllInstructorsAsync(cancellationToken));
+    public async Task<ActionResult<IEnumerable<TrainerContractResponse>>> GetAllInstructors(CancellationToken cancellationToken) => HandleListedResult(await _trainerService.GetAllInstructorsAsync(cancellationToken));
+
+    [HttpGet("personal-trainers")]
+    public async Task<ActionResult<IEnumerable<TrainerInfoResponse>>> GetAllPersonalTrainers() => HandleListedResult(await _trainerService.GetAllPersonalTrainersAsync());
 
     [HttpGet("trainer-rates/{id:guid}")]
     public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id));

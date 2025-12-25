@@ -148,6 +148,21 @@ public class TrainerHttpClient : BaseHttpClientService
             return Result<ObservableCollection<TrainerRateSelectResponse>>.Failure(ex.Message);
         }
     }
+    public async Task<Result<ObservableCollection<TrainerInfoResponse>>> GetPersonalTrainersAsync()
+    {
+        try
+        {
+
+            ObservableCollection<TrainerInfoResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<TrainerInfoResponse>>
+            ($"personal-trainers");
+            return Result<ObservableCollection<TrainerInfoResponse>>.Success(response ?? new ObservableCollection<TrainerInfoResponse>());
+
+        }
+        catch (HttpRequestException ex)
+        {
+            return Result<ObservableCollection<TrainerInfoResponse>>.Failure(ex.Message);
+        }
+    }
 
     public async Task<Result<ObservableCollection<TrainerContractInfoResponse>>> GetInstructors()
     {

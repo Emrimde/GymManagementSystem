@@ -42,6 +42,8 @@
                     xmlns:featureview="clr-namespace:GymManagementSystem.WPF.Views.Feature"
                     xmlns:staffvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Staff"
                     xmlns:staffview="clr-namespace:GymManagementSystem.WPF.Views.Staff"
+                    xmlns:personalbookingvm="clr-namespace:GymManagementSystem.WPF.ViewModels.PersonalBooking"
+                    xmlns:personalbookingview ="clr-namespace:GymManagementSystem.WPF.Views.PersonalBooking"
                     >
     
                     <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
@@ -178,6 +180,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type staffvm:StaffDetailsViewModel}">
                         <staffview:StaffDetailsView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingAddViewModel}">
+                        <personalbookingview:PersonalBookingAddView />
                     </DataTemplate>
 
     

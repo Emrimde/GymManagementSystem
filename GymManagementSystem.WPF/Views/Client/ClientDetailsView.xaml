@@ -78,9 +78,12 @@
                 <Button Content="Singular entry" Width="200"
                         Visibility="{Binding Client.IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                         Command="{Binding RegisterVisitCommand}"/>
-                                        <Button Content="Register visit" Width="200"
+                <Button Content="Register visit" Width="200"
                         Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
                         Command="{Binding RegisterVisitCommand}"  />
+                <Button Content="Add Personal Training" Width="200"
+                        Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Command="{Binding OpenPersonalTrainingAddViewCommand}"  />
                     <TextBlock  HorizontalAlignment="Center" Text="History" Foreground="{DynamicResource PrimaryColor}" FontSize="25"/>
                 
                     <Button Width="200" Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />

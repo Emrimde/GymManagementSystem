@@ -15,6 +15,7 @@ using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using GymManagementSystem.WPF.ViewModels.MembershipFeature;
 using GymManagementSystem.WPF.ViewModels.MembershipPrice;
+using GymManagementSystem.WPF.ViewModels.PersonalBooking;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Staff;
@@ -92,6 +93,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<StaffAddViewModel>();
             services.AddTransient<StaffDetailsViewModel>();
             services.AddTransient<EmployeeDetailsViewModel>();
+            services.AddTransient<PersonalBookingAddViewModel>();
             
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));

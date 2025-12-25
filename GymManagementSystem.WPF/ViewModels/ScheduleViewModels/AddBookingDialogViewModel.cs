@@ -139,11 +139,8 @@ public class AddBookingDialogViewModel : ViewModel
         {
             TrainerId = _trainerId,
             ClientId = SelectedClient.Id,
-            Start = DateTime.SpecifyKind(start, DateTimeKind.Utc),
-            End = DateTime.SpecifyKind(end, DateTimeKind.Utc),
+            StartDay = DateTime.SpecifyKind(start, DateTimeKind.Utc),
             TrainerRateId = SelectedTrainerRate.TrainerRateId,
-            DurationInMinutes = SelectedTrainerRate.DurationInMinutes,
-            Price = SelectedTrainerRate.Price,
         };
     }
 }

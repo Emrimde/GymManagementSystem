@@ -15,9 +15,8 @@ public static class PersonalBookingMapper
         {
             TrainerContractId = personalBooking.TrainerId,
             ClientId = personalBooking.ClientId,
-            Start = personalBooking.Start,
-            End = personalBooking.End,
-            Price = personalBooking.Price
+            Start = personalBooking.StartDay,
+           
         };
     }
 }

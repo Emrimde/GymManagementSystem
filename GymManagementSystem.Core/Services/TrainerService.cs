@@ -1,7 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain;
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
@@ -15,20 +15,32 @@ namespace GymManagementSystem.Core.Services;
 public class TrainerService : ITrainerService
 {
     private readonly ITrainerRepository _trainerRepo;
+    private readonly IPersonRepository _personRepo;
     private readonly IGeneralGymRepository _generalGymRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
     private readonly IUnitOfWork _unitOfWork;
-    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork)
+    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork, IPersonRepository personRepo)
     {
         _trainerRepo = trainerRepo;
         _generalGymRepo = generalGymRepo;
         _trainerRateRepo = trainerRateRepo;
         _unitOfWork = unitOfWork;
+        _personRepo = personRepo;
     }
 
     public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
     {
         TrainerContract trainer = request.ToTrainerContract();
+        Person? person = await _personRepo.GetPersonByIdAsync(request.PersonId);
+
+        if (person == null)
+        {
+            return Result<TrainerContractInfoResponse>.Failure("Person not found", StatusCodeEnum.InternalServerError);
+        }
+
+        person.IsActive = true;
+        _personRepo.UpdatePerson(person);
+
         trainer.ValidFrom = DateTime.UtcNow;
         trainer.ValidTo = null;
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
@@ -118,7 +130,7 @@ public class TrainerService : ITrainerService
       return Result<IEnumerable<TrainerTimeOffInfoResponse>>.Success(timeOffs.Select(item => item.ToTrainerTimeOffInfoResponse()), StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllGetAllInstructorsAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllInstructorsAsync(CancellationToken cancellationToken)
     {
        IEnumerable<TrainerContractInfoResponse> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
        return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts, StatusCodeEnum.Ok);
@@ -172,5 +184,11 @@ public class TrainerService : ITrainerService
         TrainerRateInfoResponse response =  await _trainerRateRepo.AddTrainerRateAsync(request.ToTrainerRate());
 
         return Result<TrainerRateInfoResponse>.Success(response, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<TrainerInfoResponse>>> GetAllPersonalTrainersAsync()
+    {
+        IEnumerable<TrainerInfoResponse> dto = await _trainerRepo.GetAllPersonalTrainersAsync();
+        return Result<IEnumerable<TrainerInfoResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 }

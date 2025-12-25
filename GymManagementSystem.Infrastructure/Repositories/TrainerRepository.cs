@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
@@ -115,5 +116,16 @@ public class TrainerRepository : ITrainerRepository
            Id = item.Id,
            FullName = item.Person.FirstName + " " + item.Person.LastName
         }).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<TrainerInfoResponse>> GetAllPersonalTrainersAsync()
+    {
+        return await _dbContext.TrainerContracts.AsNoTracking().Where(item => item.TrainerType == TrainerTypeEnum.PersonalTrainer && item.Person.IsActive).Select(item => new TrainerInfoResponse()
+        {
+            FirstName = item.Person.FirstName,
+            LastName = item.Person.LastName,
+            FullName = item.Person.FirstName + " " + item.Person.LastName ,
+            Id  = item.Id
+        }).ToListAsync();
     }
 }

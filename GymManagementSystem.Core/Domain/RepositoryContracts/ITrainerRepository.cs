@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Result;
 
@@ -14,4 +15,5 @@ public interface ITrainerRepository
     Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page = 1, int pageSize = 50 ,string? searchText = null);
     Task<IEnumerable<TrainerContractInfoResponse>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken);
     Task<TrainerContract?> GetTrainerContractAsync(Guid id,bool includeDetails);
+    Task<IEnumerable<TrainerInfoResponse>> GetAllPersonalTrainersAsync();
 }

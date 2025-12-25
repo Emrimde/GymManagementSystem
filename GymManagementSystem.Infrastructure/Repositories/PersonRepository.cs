@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
 using GymManagementSystem.Infrastructure.DatabaseContext;
@@ -18,6 +17,11 @@ public class PersonRepository : IPersonRepository
     {
         _dbContext.People.Add(person);
         return person.Id;
+    }
+
+    public void UpdatePerson(Person person)
+    {
+        _dbContext.People.Update(person);
     }
 
     public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync()
