@@ -33,6 +33,11 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 
     private async Task CreateTerminationAsync()
     {
+		MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to terminate this memberhip?","Membership termination", MessageBoxButton.YesNo, MessageBoxImage.Question);
+		if(messageBoxResult == MessageBoxResult.No)
+		{
+			return;
+		}
 		Result<TerminationResponse> result = await _httpClient.PostTerminationAsync(TerminationAddRequest);
 		if (!result.IsSuccess)
 		{
