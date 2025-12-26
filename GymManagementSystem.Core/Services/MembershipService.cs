@@ -41,7 +41,15 @@ public class MembershipService : IMembershipService
         return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
     }
 
-
+    public async Task<Result<MembershipInfoResponse>> GetMembershipNameAsync(Guid membershipId)
+    {
+        MembershipInfoResponse? dto = await _repository.GetMembershipNameAsync(membershipId);
+        if (dto == null)
+        {
+            return Result<MembershipInfoResponse>.Failure("Error during loading membership name", StatusCodeEnum.InternalServerError);
+        }
+        return Result<MembershipInfoResponse>.Success(dto, StatusCodeEnum.Ok);
+    }
 
     public async Task<Result<MembershipResponse>> UpdateAsync(Guid id, MembershipUpdateRequest entity)
     {
@@ -50,6 +58,6 @@ public class MembershipService : IMembershipService
         {
             return Result<MembershipResponse>.Failure($"Membership with id {id} not found");
         }
-        return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
+        return Result<MembershipResponse>.Success(membership.ToMembershipResponse(), StatusCodeEnum.Ok);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -70,6 +69,15 @@ public class MembershipRepository : IMembershipRepository
     public async Task<Membership?> GetByIdAsync(Guid id)
     {
        return await _dbContext.Memberships.Include(item => item.MembershipPrices).FirstOrDefaultAsync(item => item.Id == id);
+    }
+
+    public async Task<MembershipInfoResponse?> GetMembershipNameAsync(Guid membershipId)
+    {
+       return await _dbContext.Memberships.Where(item => item.Id == membershipId).Select(item => new MembershipInfoResponse()
+        {
+            MembershipId = membershipId,
+            MembershipName = item.Name,
+        }).FirstOrDefaultAsync();
     }
 
     public async Task<Membership?> UpdateAsync(Guid id, Membership entity)

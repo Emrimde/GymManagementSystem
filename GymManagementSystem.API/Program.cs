@@ -27,6 +27,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .GetConnectionString("ConnectionString"));
 });
 
+//builder.Services.AddAuthentication.AddJwtBearer(options =>
+//{
+
+//});
+
 builder.Services.AddInfrastructureServices();
 builder.Services.AddCoreServices();
 
