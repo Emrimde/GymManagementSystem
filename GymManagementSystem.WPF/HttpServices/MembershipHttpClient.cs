@@ -31,6 +31,24 @@ public class MembershipHttpClient : BaseHttpClientService
             return new ObservableCollection<MembershipResponse>();
         }
     }
+    public async Task<MembershipInfoResponse> GetMembershipNameAsync(Guid membershipId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"membership-name/{membershipId}");
+        if (response.IsSuccessStatusCode)
+        {
+            MembershipInfoResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipInfoResponse>();
+
+            return memberships ?? new MembershipInfoResponse();
+        }
+        else
+        {
+            MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return new MembershipInfoResponse();
+        }
+    }
+
+
+
     public async Task<ObservableCollection<MembershipFeatureResponse>> GetAllMembershipFeaturesByMembershipIdAsync(Guid membershipId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"get-membership-features/{membershipId}");
