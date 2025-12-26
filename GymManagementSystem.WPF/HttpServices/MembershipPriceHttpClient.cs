@@ -49,7 +49,7 @@ public class MembershipPriceHttpClient : BaseHttpClientService
     }
 
 
-    public async Task<ObservableCollection<MembershipPriceResponse>> GetAllMembershipsAsync(Guid membershipId)
+    public async Task<ObservableCollection<MembershipPriceResponse>> GetAllMembershipsPricesAsync(Guid membershipId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync($"{membershipId}");
         if (response.IsSuccessStatusCode)

@@ -29,19 +29,19 @@
 
                 <TextBlock 
      Grid.Column="0"
-     Text="Gym Clients" 
+     Text="Membership prices history" 
      FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
                  HorizontalAlignment="left"
      
      VerticalAlignment="Center"
-                 Width="200" Margin="40,0,0,0"/>
+                 Width="auto" Margin="40,0,0,0"/>
 
                 <Button 
      Grid.Column="1"
-     Content="Add Client"
-     Width="150"
-     Height="30"
-     HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
+     Content="Update membership price"
+     Width="auto"
+     Height="40"
+     HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershipPriceViewCommand}" />
             </Grid>
             <Border Grid.Row="2" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding MembershipPrices}" x:Name="datagrid" CanUserAddRows="False"
@@ -58,6 +58,7 @@
 
             </Border>
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Button Content="Return" Command="{Binding ReturnCommand}" />
             </StackPanel>
         </Grid>
     </Grid>

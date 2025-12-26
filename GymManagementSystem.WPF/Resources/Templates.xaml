@@ -216,4 +216,6 @@
         TextWrapping="Wrap" />
         </StackPanel>
     </DataTemplate>
+    <SolidColorBrush x:Key="SchedulerViewHeaderBackgroundBrush" Color="#1e1e1e"/>
+    <SolidColorBrush x:Key="SchedulerTimeRulerBackgroundBrush" Color="#1e1e1e"/>
 </ResourceDictionary>

@@ -1,10 +1,10 @@
 ﻿using GymManagementSystem.Core.DTO.MembershipPrice;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Membership;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.MembershipPrice;
 
@@ -22,6 +22,8 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         MembershipPrices = new ObservableCollection<MembershipPriceResponse>();
+        ReturnCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(MembershipId), item => true);
+        OpenAddMembershipPriceViewCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceAddViewModel>(MembershipId), item => true);
     }
 
     public ObservableCollection<MembershipPriceResponse> MembershipPrices
@@ -29,8 +31,10 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
         get { return _membershipPrices; }
         set { _membershipPrices = value; OnPropertyChanged(); }
     }
+    public Guid MembershipId { get; set; }
 
-
+    public ICommand ReturnCommand { get; }
+    public ICommand OpenAddMembershipPriceViewCommand { get; }
     public INavigationService Navigation
     {
         get { return _navigation; }
@@ -39,14 +43,17 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
 
     public void ReceiveParameter(object parameter)
     {
-        if(parameter is Guid id)
+        if(parameter is Guid membershipId)
         {
-            _ = LoadMembershipPrices(id);
+            MembershipId = membershipId;
+            _ = LoadMembershipPrices(membershipId);
         }
     }
 
     private async Task LoadMembershipPrices(Guid id)
     {
-        MembershipPrices = await _membershipPriceHttpClient.GetAllMembershipsAsync(id);
+
+       
+        MembershipPrices = await _membershipPriceHttpClient.GetAllMembershipsPricesAsync(id);
     }
 }

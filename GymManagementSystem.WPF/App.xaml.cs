@@ -26,6 +26,7 @@ using GymManagementSystem.WPF.ViewModels.TrainerRate;
 using GymManagementSystem.WPF.ViewModels.Visit;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Licensing;
+using Syncfusion.SfSkinManager;
 using System.Windows;
 using System.Windows.Media;
 
@@ -39,7 +40,6 @@ namespace GymManagementSystem.WPF
         private readonly IServiceProvider _serviceProvider;
         public App()
         {
-
             IServiceCollection services = new ServiceCollection();  
             services.AddSingleton(provider => new MainWindow
             {
