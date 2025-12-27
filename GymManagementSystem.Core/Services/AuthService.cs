@@ -11,27 +11,29 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IJwtService _jwtService;
 
-    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager)
+    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _jwtService = jwtService;
     }
-    public  async Task<Result<bool>> LoginAsync(SignInDto request)
+    public  async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
     {
         User? user = await _userManager.FindByNameAsync(request.Username);
         if(user == null)
         {
-            return Result<bool>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+            return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
         }   
         SignInResult result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: false);
-
-        if(!result.Succeeded)
+        AuthenticationResponse authenticationResponse = await _jwtService.CreateJwtToken(user);
+        if (!result.Succeeded)
         {
-            return Result<bool>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+            return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
         }
 
-        return Result<bool>.Success(true, StatusCodeEnum.Ok);
+        return Result<AuthenticationResponse>.Success(authenticationResponse, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<bool>> RegisterAsync(RegisterDto request)
@@ -54,6 +56,8 @@ public class AuthService : IAuthService
         };
 
         IdentityResult result = await _userManager.CreateAsync(user, request.Password);
+
+        await _userManager.AddToRoleAsync(user, "");
 
         if (!result.Succeeded)
         {

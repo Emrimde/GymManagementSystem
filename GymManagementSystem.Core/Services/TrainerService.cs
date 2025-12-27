@@ -1,6 +1,8 @@
 ﻿using GymManagementSystem.Core.Domain;
 using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
@@ -9,6 +11,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -19,13 +22,15 @@ public class TrainerService : ITrainerService
     private readonly IGeneralGymRepository _generalGymRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
     private readonly IUnitOfWork _unitOfWork;
-    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork, IPersonRepository personRepo)
+    private readonly UserManager<User> _userManager;
+    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork, IPersonRepository personRepo, UserManager<User> userManager)
     {
         _trainerRepo = trainerRepo;
         _generalGymRepo = generalGymRepo;
         _trainerRateRepo = trainerRateRepo;
         _unitOfWork = unitOfWork;
         _personRepo = personRepo;
+        _userManager = userManager;
     }
 
     public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
@@ -45,13 +50,25 @@ public class TrainerService : ITrainerService
         trainer.ValidTo = null;
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
 
-        TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
-        await _unitOfWork.SaveChangesAsync();
-        await GeneratedTrainerRates(trainerContract, settings!);
-        return Result<TrainerContractInfoResponse>.Success(new TrainerContractInfoResponse() { Id = trainerContract.Id}, StatusCodeEnum.Ok);
-    }
+        User user = new User()
+        {
+            UserName = $"{person.FirstName + person.LastName}",
+        };
+        var createResult = await _userManager.CreateAsync(user, "trainer");
+        if (!createResult.Succeeded)
+        {
+            return Result<TrainerContractInfoResponse>.Failure($"Creating new trainer failed", StatusCodeEnum.InternalServerError);}
+    
+            await _userManager.AddToRoleAsync(user, "Trainer");
 
-    private async Task GeneratedTrainerRates(TrainerContract trainerContract,GeneralGymDetail generalGymDetail)
+
+            TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
+            await _unitOfWork.SaveChangesAsync();
+            await GeneratedTrainerRates(trainerContract, settings!);
+            return Result<TrainerContractInfoResponse>.Success(new TrainerContractInfoResponse() { Id = trainerContract.Id }, StatusCodeEnum.Ok);
+        }
+
+    private async Task GeneratedTrainerRates(TrainerContract trainerContract, GeneralGymDetail generalGymDetail)
     {
         List<TrainerRate> rates = new List<TrainerRate>();
 
@@ -86,10 +103,10 @@ public class TrainerService : ITrainerService
             rates.Add(trainerRate60);
             rates.Add(trainerRate90);
             rates.Add(trainerRate120);
-           
+
 
         }
-        else if(trainerContract.TrainerType == TrainerTypeEnum.GroupInstructor)
+        else if (trainerContract.TrainerType == TrainerTypeEnum.GroupInstructor)
         {
             TrainerRate trainerRate = new TrainerRate()
             {
@@ -107,7 +124,7 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<TrainerTimeOffInfoResponse>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
-        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null ,entity.Start, entity.End);
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null, entity.Start, entity.End);
         if (isOverlap)
         {
             return Result<TrainerTimeOffInfoResponse>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
@@ -117,7 +134,7 @@ public class TrainerService : ITrainerService
         return Result<TrainerTimeOffInfoResponse>.Success(addedTrainerAvailability.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
     }
 
-    public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page , string? searchText = null , int pageSize = 50)
+    public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50)
     {
         PageResult<TrainerContractResponse> trainerContracts = await _trainerRepo.GetAllTrainerContractsAsync(page, pageSize, searchText);
 
@@ -127,19 +144,19 @@ public class TrainerService : ITrainerService
     public async Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
         IEnumerable<Domain.Entities.TrainerTimeOff> timeOffs = await _trainerRepo.GetTrainerTimeOffs(cancellationToken);
-      return Result<IEnumerable<TrainerTimeOffInfoResponse>>.Success(timeOffs.Select(item => item.ToTrainerTimeOffInfoResponse()), StatusCodeEnum.Ok);
+        return Result<IEnumerable<TrainerTimeOffInfoResponse>>.Success(timeOffs.Select(item => item.ToTrainerTimeOffInfoResponse()), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllInstructorsAsync(CancellationToken cancellationToken)
     {
-       IEnumerable<TrainerContractInfoResponse> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
-       return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts, StatusCodeEnum.Ok);
+        IEnumerable<TrainerContractInfoResponse> trainerContracts = await _trainerRepo.GetAllGroupInstructorsAsync(cancellationToken);
+        return Result<IEnumerable<TrainerContractInfoResponse>>.Success(trainerContracts, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<TrainerContractDetailsResponse>> GetTrainerContractAsync(Guid id, bool includeDetails, CancellationToken cancellationToken)
     {
-        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(id,includeDetails);
-        if(trainerContract == null)
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(id, includeDetails);
+        if (trainerContract == null)
         {
             return Result<TrainerContractDetailsResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
         }
@@ -148,11 +165,11 @@ public class TrainerService : ITrainerService
         Console.WriteLine($"ValidFrom: {trainerContract.ValidFrom:o}");
         Console.WriteLine($"UtcNow:    {DateTime.UtcNow:o}");
         Console.WriteLine($"validFromOK: {trainerContract.ValidFrom <= DateTime.UtcNow}");
-       
+
 
         TrainerContractDetailsResponse response = trainerContract.ToTrainerContractDetailsResponse();
         Console.WriteLine($"Final CanShowBooking: {response.CanShowBooking}");
-            return Result<TrainerContractDetailsResponse>.Success(response, StatusCodeEnum.Ok);
+        return Result<TrainerContractDetailsResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id)
@@ -173,7 +190,7 @@ public class TrainerService : ITrainerService
         TrainerRate trainerRate = new TrainerRate();
         foreach (var item in trainerRates)
         {
-            if(item.DurationInMinutes == request.DurationInMinutes)
+            if (item.DurationInMinutes == request.DurationInMinutes)
             {
                 trainerRate = item;
                 break;
@@ -181,7 +198,7 @@ public class TrainerService : ITrainerService
         }
         trainerRate.ValidTo = DateTime.UtcNow;
         request.ValidFrom = DateTime.UtcNow;
-        TrainerRateInfoResponse response =  await _trainerRateRepo.AddTrainerRateAsync(request.ToTrainerRate());
+        TrainerRateInfoResponse response = await _trainerRateRepo.AddTrainerRateAsync(request.ToTrainerRate());
 
         return Result<TrainerRateInfoResponse>.Success(response, StatusCodeEnum.Ok);
     }

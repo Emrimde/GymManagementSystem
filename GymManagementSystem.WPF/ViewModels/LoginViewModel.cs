@@ -1,9 +1,10 @@
 ﻿using GymManagementSystem.Core.DTO.Auth;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Mappers;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.Settings;
+using GymManagementSystem.WPF.Services;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
@@ -44,10 +45,11 @@ public class LoginViewModel : ViewModel
             _navigation = value; OnPropertyChanged();
         }
     }
-
+    private readonly AuthService _authService;
     private readonly AuthHttpClient _authHttpClient;
-    public LoginViewModel(INavigationService navigationService, AuthHttpClient authHttpClient)
+    public LoginViewModel(INavigationService navigationService, AuthHttpClient authHttpClient,AuthService authService)
     {
+        _authService = authService;
         _navigation = navigationService;
         _authHttpClient = authHttpClient;   
         OpenRegisterViewCommand = new RelayCommand(o => Navigation.NavigateTo<RegisterViewModel>(), o => true);
@@ -57,14 +59,15 @@ public class LoginViewModel : ViewModel
     private async Task LoginAsync(object arg)
     {
         SignInDto signInDto = AuthMapper.ToSignInDto(Username,Password);
-        HttpResponseMessage response = await _authHttpClient.LoginAsync(signInDto);
-        if (!response.IsSuccessStatusCode)
+        Result<AuthenticationResponse> result = await _authHttpClient.LoginAsync(signInDto);
+        if (!result.IsSuccess)
         {
             MessageBox.Show("Login failed. Please check your credentials and try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         else
         {
-            MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            _authService.SetProperty(result.Value!.Token!); // tutaj
+
             _navigation.NavigateTo<DashboardViewModel>();
         }
     }

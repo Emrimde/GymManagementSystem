@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Authentication.Internal;
-
-namespace GymManagementSystem.Core.DTO.Client;
+﻿namespace GymManagementSystem.Core.DTO.Client;
 public class ClientInfoResponse
 {
     public Guid Id { get; set; }

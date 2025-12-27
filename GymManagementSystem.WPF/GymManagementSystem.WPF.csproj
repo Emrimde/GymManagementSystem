@@ -41,4 +41,8 @@
     <Resource Include="Resources\Strings.xaml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Nowy folder\" />
+  </ItemGroup>
+
 </Project>

@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IVisitService, VisitService>();
         services.AddScoped<IContractService, ContractService>();
+        services.AddTransient<IJwtService, JwtService>();
         services.AddScoped<IClientMembershipService, ClientMembershipService>();
         services.AddScoped<ITerminationService, TerminationService>();
         services.AddScoped<IAuthService, AuthService>();

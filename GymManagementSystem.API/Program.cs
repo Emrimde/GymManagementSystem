@@ -4,6 +4,9 @@ using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -27,10 +30,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .GetConnectionString("ConnectionString"));
 });
 
-//builder.Services.AddAuthentication.AddJwtBearer(options =>
-//{
 
-//});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 
 builder.Services.AddInfrastructureServices();
 builder.Services.AddCoreServices();
@@ -48,6 +64,17 @@ builder.Services.AddIdentity<User, Role>(options =>
 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+    string[] roles = { "Receptionist", "Trainer", "Manager", "Member" };
+
+    foreach (var role in roles)
+        if (!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new Role() {Name = role});
+}
+
 app.UseRouting();
 app.UseCors("AllowAll");
 

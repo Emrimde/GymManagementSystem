@@ -1,4 +1,4 @@
-﻿ using GymManagementSystem.Core.DTO.GeneralGymDetail;
+﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -40,7 +40,7 @@ namespace GymManagementSystem.WPF
         private readonly IServiceProvider _serviceProvider;
         public App()
         {
-            IServiceCollection services = new ServiceCollection();  
+            IServiceCollection services = new ServiceCollection();
             services.AddSingleton(provider => new MainWindow
             {
                 DataContext = provider.GetRequiredService<MainWindowViewModel>()
@@ -94,9 +94,11 @@ namespace GymManagementSystem.WPF
             services.AddTransient<StaffDetailsViewModel>();
             services.AddTransient<EmployeeDetailsViewModel>();
             services.AddTransient<PersonalBookingAddViewModel>();
-            
+            services.AddTransient<JwtHandler>();
+
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<Func<Type,ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
+            services.AddSingleton<AuthService>();
+            services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
 
             services.AddHttpClient<AuthHttpClient>(options =>
             {
@@ -108,90 +110,98 @@ namespace GymManagementSystem.WPF
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/gymClass/");
                 options.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
+            }).AddHttpMessageHandler<JwtHandler>(); ;
 
             services.AddHttpClient<GeneralGymDetailsHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/generalGymDetail/");
                 options.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
+            }).AddHttpMessageHandler<JwtHandler>(); ;
 
             services.AddHttpClient<ContractHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/contract/");
                 options.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
+            }).AddHttpMessageHandler<JwtHandler>(); ;
 
             services.AddHttpClient<MembershipHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/membership/");
                 options.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
+            }).AddHttpMessageHandler<JwtHandler>(); ;
 
             services.AddHttpClient<ClientHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/client/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<TerminationHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/termination/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<ClientMembershipHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/clientMemberships/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<TrainerHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/trainer/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<ScheduledClassHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/scheduledClass/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<ClassBookingHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/classBooking/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<PersonalBookingHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/personalBooking/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<EmployeeHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/employee/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<EmploymentTerminationHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/employmentTermination/");
-            });
-           
+            }).AddHttpMessageHandler<JwtHandler>();
+
             services.AddHttpClient<VisitHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/visit/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
             services.AddHttpClient<MembershipPriceHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/membershipPrice/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
             services.AddHttpClient<FeatureHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/feature/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
             services.AddHttpClient<StaffHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/person/");
-            });
+            }).AddHttpMessageHandler<JwtHandler>();
             services.AddHttpClient<DashboardHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/dashboard/");
-            });
-           
+            }).AddHttpMessageHandler<JwtHandler>();
+
             _serviceProvider = services.BuildServiceProvider();
         }
         protected async override void OnStartup(StartupEventArgs e)
         {
             GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
-            GeneralGymUpdateRequest gymDetails =  await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
+            GeneralGymUpdateRequest gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
             Application.Current.Resources["GymName"] = gymDetails.GymName;
             Application.Current.Resources["Address"] = gymDetails.Address;
             Application.Current.Resources["ContactNumber"] = gymDetails.ContactNumber;
