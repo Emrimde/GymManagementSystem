@@ -65,6 +65,7 @@ public class ClientService : IClientService
         {
             UserName = createdClient.FirstName + createdClient.LastName,
             ClientId = createdClient.Id,
+            Email = createdClient.Email,
         };
         var createResult = await _userManager.CreateAsync(user, "example");
         if (!createResult.Succeeded)

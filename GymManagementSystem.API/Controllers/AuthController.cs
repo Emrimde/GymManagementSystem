@@ -1,9 +1,12 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Auth;
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
+
+[AllowAnonymous]
 public class AuthController : BaseController
 {
     private readonly IAuthService _authService;
@@ -13,6 +16,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("login")]
+    
     public async Task<ActionResult<AuthenticationResponse>> Login([FromBody] SignInDto request) => HandleResult(await _authService.LoginAsync(request));
 
     [HttpPost("register")]

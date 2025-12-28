@@ -3,8 +3,9 @@
 namespace GymManagementSystem.Core.DTO.Auth;
 public class SignInDto
 {
-    [Required(ErrorMessage = "Username is required.")]
-    public string Username { get; set; } = default!;
+    public string? Username { get; set; }
+
+    public string? Email { get; set; } 
 
     [Required(ErrorMessage = "Password is required.")]
     public string Password { get; set; } = default!;
