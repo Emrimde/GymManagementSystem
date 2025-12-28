@@ -1,4 +1,6 @@
-﻿namespace GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain.Identity;
+
+namespace GymManagementSystem.Core.Domain.Entities;
 
 public class Client
 {
@@ -10,6 +12,7 @@ public class Client
     public DateTime DateOfBirth { get; set; }
     public string StreetAddress { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
+    public User? User { get; set; }
     public bool? HasParentalConsent { get; set; }
     //public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
     public ICollection<Visit> Visits { get; set; } = new List<Visit>();

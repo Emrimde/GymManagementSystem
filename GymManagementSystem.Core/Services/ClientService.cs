@@ -1,10 +1,13 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -12,10 +15,12 @@ public class ClientService : IClientService
 {
     private readonly IClientRepository _repository;
     private readonly IVisitRepository _visitRepo;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository)
+    private readonly UserManager<User> _userManager;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager)
     {
         _repository = repository;
         _visitRepo = visitRepository;
+        _userManager = userManager;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
@@ -56,7 +61,18 @@ public class ClientService : IClientService
 
         client.HasParentalConsent = age < 18 ? true : null;
         Client createdClient = await _repository.CreateAsync(client);
-
+        User user = new User()
+        {
+            UserName = createdClient.FirstName + createdClient.LastName,
+            ClientId = createdClient.Id,
+        };
+        var createResult = await _userManager.CreateAsync(user, "example");
+        if (!createResult.Succeeded)
+        {
+            return Result<ClientInfoResponse>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
+        }
+        
+        await _userManager.AddToRoleAsync(user, "Member");
         ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }

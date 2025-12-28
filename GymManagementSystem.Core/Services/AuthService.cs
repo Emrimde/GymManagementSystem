@@ -22,10 +22,11 @@ public class AuthService : IAuthService
     public  async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
     {
         User? user = await _userManager.FindByNameAsync(request.Username);
-        if(user == null)
+        if(user == null || await _userManager.IsInRoleAsync(user, "Member"))
         {
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
-        }   
+        }
+        
         SignInResult result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: false);
         AuthenticationResponse authenticationResponse = await _jwtService.CreateJwtToken(user);
         if (!result.Succeeded)
