@@ -1,0 +1,13 @@
+.banner{
+  width:100%;
+  aspect-ratio: 3 / 1;   /* 👉 niska wysokość, zmień np. na 4/1, 6/1 itd. */
+  max-height: 500px;     /* opcjonalnie */
+  
+}
+
+.banner img{
+  width:100%;
+  height:100%;
+  object-fit:contain;  
+ 
+}

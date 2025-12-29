@@ -4,6 +4,7 @@ import { AuthService } from '../../../services-api/auth-service';
 import { SignInDto } from '../../../dto/sign-in-dto';
 import { AuthenticationResponse } from '../../../dto/AuthDto/authentication-response';
 import { AuthStateService } from '../../../services-api/auth-state-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-login',
@@ -13,7 +14,7 @@ import { AuthStateService } from '../../../services-api/auth-state-service';
 })
 export class ClientLogin implements OnInit {
   
-  constructor(private authService: AuthService, private fb:FormBuilder, private authStateService: AuthStateService){}
+  constructor(private authService: AuthService, private fb:FormBuilder, private authStateService: AuthStateService, private router: Router){}
 
   loginForm!: FormGroup
 
@@ -44,6 +45,7 @@ export class ClientLogin implements OnInit {
           localStorage.setItem("token", result.token)
           localStorage.setItem("expirationDate", result.expirationDate)
           this.authStateService.setLoggedIn(true)
+          // this.router.navigate()
           console.log(result)
         },
         error: (err) =>{

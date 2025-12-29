@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { MainPage } from './components/main-page/main-page';
 import { ClientLogin } from './components/client-zone/client-login/client-login';
 import { ClientRegister } from './components/client-zone/client-register/client-register';
+import { ClientMainPage } from './components/client-zone/client-main-page/client-main-page';
 
 export const routes: Routes = [
 {
@@ -15,6 +16,10 @@ export const routes: Routes = [
 {
     path: 'register-client',
     component: ClientRegister
+},
+{
+    path: 'client-main-page',
+    component: ClientMainPage
 }
 
 ];
