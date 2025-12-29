@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SignInDto } from '../dto/sign-in-dto';
 import { HttpClient } from '@angular/common/http';
+import { AuthenticationResponse } from '../dto/AuthDto/authentication-response';
 
 @Injectable({
   providedIn: 'root',

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services-api/auth-service';
 import { SignInDto } from '../../../dto/sign-in-dto';
+import { AuthenticationResponse } from '../../../dto/AuthDto/authentication-response';
+import { AuthStateService } from '../../../services-api/auth-state-service';
 
 @Component({
   selector: 'app-client-login',
@@ -11,7 +13,7 @@ import { SignInDto } from '../../../dto/sign-in-dto';
 })
 export class ClientLogin implements OnInit {
   
-  constructor(private authService: AuthService, private fb:FormBuilder){}
+  constructor(private authService: AuthService, private fb:FormBuilder, private authStateService: AuthStateService){}
 
   loginForm!: FormGroup
 
@@ -35,15 +37,23 @@ export class ClientLogin implements OnInit {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
     }
-    try{
-      const response:any = await this.authService.signIn(dto).subscribe();
-      console.log(response)
+   
+      this.authService.signIn(dto).subscribe({
+        next: (response:any) =>{
+          const result: AuthenticationResponse = response
+          localStorage.setItem("token", result.token)
+          localStorage.setItem("expirationDate", result.expirationDate)
+          this.authStateService.setLoggedIn(true)
+          console.log(result)
+        },
+        error: (err) =>{
+          console.error(err);
+        }
+      });
     }
-    catch(err){
-      
-    }
+
   }
-}
+
 
 
 
