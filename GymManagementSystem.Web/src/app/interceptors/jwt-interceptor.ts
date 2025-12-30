@@ -9,5 +9,6 @@ export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
   }
+  console.log('JWT:', token);
   return next(req);
 };

@@ -45,7 +45,7 @@ export class ClientLogin implements OnInit {
           localStorage.setItem("token", result.token)
           localStorage.setItem("expirationDate", result.expirationDate)
           this.authStateService.setLoggedIn(true)
-          // this.router.navigate()
+          this.router.navigate(['/client-main-page']);
           console.log(result)
         },
         error: (err) =>{

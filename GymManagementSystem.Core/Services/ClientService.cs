@@ -7,7 +7,10 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -16,11 +19,13 @@ public class ClientService : IClientService
     private readonly IClientRepository _repository;
     private readonly IVisitRepository _visitRepo;
     private readonly UserManager<User> _userManager;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager)
+    private readonly IHttpContextAccessor _http;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http)
     {
         _repository = repository;
         _visitRepo = visitRepository;
         _userManager = userManager;
+        _http = http;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
@@ -129,5 +134,19 @@ public class ClientService : IClientService
             return Result<ClientInfoResponse>.Failure("Error during getting client data");
         }
         return Result<ClientInfoResponse>.Success(dto, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<ClientDetailsWebResponse>> GetClientDetailsByUserIdAsync()
+    {
+        var sub = _http.HttpContext?.User.FindFirst("sub")?.Value;
+        if (!Guid.TryParse(sub, out var userId))
+            return Result<ClientDetailsWebResponse>.Failure("Error, token not found dsfsd", StatusCodeEnum.Unauthorized);
+
+        ClientDetailsWebResponse? dto = await _repository.GetClientByUserIdAsync(userId);
+        if(dto == null)
+        {
+            return Result<ClientDetailsWebResponse>.Failure("Error during loading client", StatusCodeEnum.BadRequest);
+        }
+        return Result<ClientDetailsWebResponse>.Success(dto, StatusCodeEnum.Ok);
     }
 }

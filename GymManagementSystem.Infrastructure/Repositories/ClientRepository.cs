@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -128,5 +129,16 @@ public class ClientRepository : IClientRepository
                 FullName = item.FirstName + " " + item.LastName
             })
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<ClientDetailsWebResponse?> GetClientByUserIdAsync(Guid userId)
+    {
+      return await _dbContext.Clients.Where(item => item.User!.Id == userId).Select(item => new ClientDetailsWebResponse()
+      {
+          Email = item.Email,
+          FirstName = item.FirstName,
+          LastName = item.LastName,
+          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType).FirstOrDefault()
+      }).FirstOrDefaultAsync();  
     }
 }

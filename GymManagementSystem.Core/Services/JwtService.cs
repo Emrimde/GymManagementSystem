@@ -28,7 +28,10 @@ public class JwtService : IJwtService
         List<Claim> claims = new List<Claim> {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString() ),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+           new Claim(
+    JwtRegisteredClaimNames.Iat,
+    DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+    ClaimValueTypes.Integer64),
        
     };
         foreach (var role in roles)
