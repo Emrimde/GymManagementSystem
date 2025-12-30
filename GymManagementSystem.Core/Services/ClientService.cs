@@ -11,6 +11,8 @@ using GymManagementSystem.Core.WebDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -138,7 +140,10 @@ public class ClientService : IClientService
 
     public async Task<Result<ClientDetailsWebResponse>> GetClientDetailsByUserIdAsync()
     {
-        var sub = _http.HttpContext?.User.FindFirst("sub")?.Value;
+        var sub = _http.HttpContext?
+    .User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
+    ?? _http.HttpContext?
+    .User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!Guid.TryParse(sub, out var userId))
             return Result<ClientDetailsWebResponse>.Failure("Error, token not found dsfsd", StatusCodeEnum.Unauthorized);
 

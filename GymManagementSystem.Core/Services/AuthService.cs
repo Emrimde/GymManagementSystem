@@ -19,31 +19,23 @@ public class AuthService : IAuthService
         _signInManager = signInManager;
         _jwtService = jwtService;
     }
-    public  async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
+    public async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
     {
-        User? user;
-        if (request.Email != null)
-        {
-            user = await _userManager.FindByEmailAsync(request.Email);
-        }
-        else
-        {
-            user = await _userManager.FindByNameAsync(request.Username);
-        }
+        var user = request.Email != null
+            ? await _userManager.FindByEmailAsync(request.Email)
+            : await _userManager.FindByNameAsync(request.Username);
 
-        if(user == null)
-        {
+        if (user is null)
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
-        }
-        
-        SignInResult result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: false);
-        AuthenticationResponse authenticationResponse = await _jwtService.CreateJwtToken(user);
-        if (!result.Succeeded)
-        {
-            return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
-        }
 
-        return Result<AuthenticationResponse>.Success(authenticationResponse, StatusCodeEnum.Ok);
+        var passwordOk = await _userManager.CheckPasswordAsync(user, request.Password);
+        if (!passwordOk)
+            return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+
+        // ⬇️ TYLKO TERAZ generujesz JWT
+        var token = await _jwtService.CreateJwtToken(user);
+
+        return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<bool>> RegisterAsync(RegisterDto request)

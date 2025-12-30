@@ -3,6 +3,7 @@ using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,7 @@ public class ClientController : BaseController
     [HttpPost]
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)
         => HandleResult(await _clientService.CreateAsync(entity));
+
 
     [Authorize(Roles = "Member")]
     [HttpGet("get-client-details")]

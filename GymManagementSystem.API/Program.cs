@@ -31,25 +31,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration
            .GetConnectionString("ConnectionString"));
 });
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 3;
 
+})
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-   .AddJwtBearer(options =>
-   {
-       options.Events = new JwtBearerEvents
-       {
-           OnAuthenticationFailed = ctx =>
-           {
-               Console.WriteLine("AUTH ERROR:");
-               Console.WriteLine(ctx.Exception);
-               return Task.CompletedTask;
-           }
-       };
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
+})
+       .AddJwtBearer(options =>
+        {
        options.TokenValidationParameters = new TokenValidationParameters
        {
            ValidateIssuer = true,
@@ -66,35 +68,26 @@ builder.Services.AddAuthentication(options =>
        };
    });
 
+
+builder.Services.AddAuthorization();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddCoreServices();
 
-builder.Services.AddIdentity<User, Role>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 3;
-    
-})
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Events.OnRedirectToLogin = ctx =>
-    {
-        ctx.Response.StatusCode = 401;
-        return Task.CompletedTask;
-    };
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.Events.OnRedirectToLogin = ctx =>
+//    {
+//        ctx.Response.StatusCode = 401;
+//        return Task.CompletedTask;
+//    };
 
-    options.Events.OnRedirectToAccessDenied = ctx =>
-    {
-        ctx.Response.StatusCode = 403;
-        return Task.CompletedTask;
-    };
-});
+//    options.Events.OnRedirectToAccessDenied = ctx =>
+//    {
+//        ctx.Response.StatusCode = 403;
+//        return Task.CompletedTask;
+//    };
+//});
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
