@@ -11,12 +11,22 @@
     <div class="card-body">
 
       <h5 class="fw-bold mb-3 text-center">
-        Krzysztof Gargas
+       {{ clientResponse()?.firstName }} {{ clientResponse()?.lastName }}
       </h5>
 
-      <p class="mb-1"><strong>Email:</strong><br></p>
-      <p class="mb-1"><strong>Telefon:</strong><br></p>
-      <p class="mb-1"><strong>Członkostwo:</strong><br></p>
+      <p class="mb-1"><strong>Email:</strong>{{ clientResponse()?.email }}</p>
+      <p class="mb-1"><strong>Telefon:</strong>{{ clientResponse()?.phoneNumber }}</p>
+      @if(clientResponse()?.membershipName == null){
+
+        <p class="mb-1"><strong>Członkostwo:</strong> No membership</p>
+         <button class="btn button-green w-50">
+        Buy membership
+      </button>
+      }
+      @else{
+
+        <p class="mb-1"><strong>Członkostwo:</strong>{{ clientResponse()?.membershipName }}</p>
+      }
 
       <hr>
 

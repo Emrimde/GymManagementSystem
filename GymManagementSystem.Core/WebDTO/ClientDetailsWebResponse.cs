@@ -5,5 +5,5 @@ public class ClientDetailsWebResponse
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string PhoneNumber { get; set; } = default!;
-    public string MembershipName { get; set; } = default!;
+    public string? MembershipName { get; set; }
 }

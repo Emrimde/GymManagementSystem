@@ -137,8 +137,9 @@ public class ClientRepository : IClientRepository
       {
           Email = item.Email,
           FirstName = item.FirstName,
+          PhoneNumber = item.PhoneNumber,
           LastName = item.LastName,
-          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType).FirstOrDefault()
+          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType).FirstOrDefault() ?? null,
       }).FirstOrDefaultAsync();  
     }
 }
