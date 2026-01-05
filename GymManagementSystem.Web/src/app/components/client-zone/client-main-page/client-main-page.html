@@ -52,18 +52,27 @@
           
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Moje transakcje</a>
+              <a (click)="activeTab='membership'" class="nav-link active" [class.active]="activeTab === 'membership'">My membership</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Moje członkostwo</a>
+              <a (click)="activeTab='reservations'" class="nav-link" [class.active]="activeTab === 'reservations'" >My personal trainings</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Rezerwacje</a>
+              <a (click)="activeTab='personalTrainings'" class="nav-link" [class.active]="activeTab === 'personalTrainings'" >Classes reservations</a>
             </li>
           </ul>
 
+          @if(activeTab == 'membership'){
+            <app-client-membership/>
+          }
+          @if(activeTab == 'reservations'){
+            <app-client-reservation/>
+          }
+          @if(activeTab == 'personalTrainings'){
+            <app-client-personal-training/>
+          }
+
           
-          Prawa kolumna — treść
         </div>
       </div>
     </div>
