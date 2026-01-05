@@ -13,9 +13,6 @@ public class ClientMembershipDetailsResponse
     public string StartDate { get; set; } = default!;
     public string EndDate { get; set; } = default!;
     public string SignedContractDate { get; set; } = default!;
-
-
-    // zwiazane z termination
     public bool WasTerminated { get; set; } //flaga do visibility
     public string? TerminationReason { get; set; } = default!;
     public string? TerminationDate {  get; set; } = default!;

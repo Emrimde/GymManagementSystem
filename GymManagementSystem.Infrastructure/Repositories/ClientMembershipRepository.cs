@@ -5,6 +5,7 @@ using GymManagementSystem.Core.DTO.Dashboard;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.WebDTO.ClientMembership;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -139,5 +140,15 @@ public class ClientMembershipRepository : IClientMembershipRepository
     public async Task<ClientMembership?> GetActiveClientMembershipById(Guid clientMembershipId)
     {
         return await _dbContext.ClientMemberships.FirstOrDefaultAsync(item => item.IsActive && item.Id == clientMembershipId);
+    }
+    public async Task<ClientMembershipWebResponse?> GetClientMembershipByClientIdAsync(Guid clientId)
+    {
+        return await _dbContext.ClientMemberships.Where(item => item.ClientId == clientId && item.IsActive).Select(item => new ClientMembershipWebResponse()
+        {
+            EndDate = item.EndDate,
+            Name = item.Membership.Name,
+            StartDate = item.EndDate,
+            IsActive = item.IsActive,
+        }).FirstOrDefaultAsync();
     }
 }

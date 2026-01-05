@@ -145,7 +145,7 @@ public class ClientService : IClientService
     ?? _http.HttpContext?
     .User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!Guid.TryParse(sub, out var userId))
-            return Result<ClientDetailsWebResponse>.Failure("Error, token not found dsfsd", StatusCodeEnum.Unauthorized);
+            return Result<ClientDetailsWebResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
 
         ClientDetailsWebResponse? dto = await _repository.GetClientByUserIdAsync(userId);
         if(dto == null)

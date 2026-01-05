@@ -32,13 +32,18 @@ public class JwtService : IJwtService
     JwtRegisteredClaimNames.Iat,
     DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
     ClaimValueTypes.Integer64),
-       
+           
+
     };
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
+        if (roles.Contains("Member") && user.ClientId != null)
+        {
+            claims.Add(new Claim("client_id", user.ClientId.ToString()!));
+        }
 
 
         SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

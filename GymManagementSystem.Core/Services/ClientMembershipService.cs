@@ -8,6 +8,8 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.ClientMembership;
+using Microsoft.AspNetCore.Http;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -18,15 +20,18 @@ public class ClientMembershipService : IClientMembershipService
     private readonly IRepository<ContractResponse, Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
     private readonly IMembershipPriceRepository _membershipPriceRepo;
+
+    private readonly IHttpContextAccessor _contextAccessor;
    
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo,IHttpContextAccessor contextAccessor)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
         _membershipRepo = membershipRepo;
         _clientRepository = clientRepository;
         _membershipPriceRepo = membershipPriceRepo;
+        _contextAccessor = contextAccessor;
     }
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
@@ -86,6 +91,19 @@ public class ClientMembershipService : IClientMembershipService
             return Result<ClientMembershipDetailsResponse>.Failure("Cannot open client membership details");
         }
         return Result<ClientMembershipDetailsResponse>.Success(clientMembership.ToClientMembershipDetailsResponse());
+    }
+
+    public async Task<Result<ClientMembershipWebResponse?>> GetClientMembershipInfoAsync()
+    {
+        string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+        if(!Guid.TryParse(claim, out var clientId))
+        {
+            return Result<ClientMembershipWebResponse?>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+
+        ClientMembershipWebResponse? dto = await _clientMembershipRepository.GetClientMembershipByClientIdAsync(clientId);
+
+        return Result<ClientMembershipWebResponse?>.Success(dto, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)
