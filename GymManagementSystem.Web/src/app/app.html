@@ -20,7 +20,8 @@
         <li class="nav-item"><a class="nav-link text-white-bg" routerLink="/about-us">About us</a></li>
         <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/classes">Classes</a></li>
         <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/client-main-page">strefa klienta</a></li>
-        <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/login-trainer">Trainer zone</a></li>
+       
+        <!-- <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/login-trainer">Trainer zone</a></li> -->
         @if(authStateService.isLoggedIn()){
  <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/client-main-page">Account</a></li>
  <li class="nav-item"><a class="nav-link text-white-bg " (click)="logout()">Log out</a></li>
@@ -55,3 +56,5 @@
 </footer>
 
 </div>
+
+

@@ -6,6 +6,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.Membership;
 
 namespace GymManagementSystem.Core.Services;
 public class MembershipFeatureService : IMembershipFeatureService
@@ -37,6 +38,8 @@ public class MembershipFeatureService : IMembershipFeatureService
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
+
+  
 
     public async Task<Result<IEnumerable<MembershipFeatureResponse>>> GetMembershipFeaturesByMembershipIdAsync(Guid membershipId)
     {

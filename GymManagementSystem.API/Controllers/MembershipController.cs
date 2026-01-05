@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.MembershipFeature;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.Membership;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -45,4 +46,10 @@ public class MembershipController : BaseController
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<MembershipResponse>> UpdateMembership(Guid id, MembershipUpdateRequest entity)
         => HandleResult(await _membershipService.UpdateAsync(id, entity));
+
+    [HttpGet("get-all-memberships")]
+    public async Task<ActionResult<IEnumerable<MembershipWebDetailsResponse>>> GetAllMembershipsWithFeatures()
+       => HandleListedResult(await _membershipService.GetAllMembershipsWithFeaturesAsync());
+
+
 }

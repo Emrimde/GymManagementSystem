@@ -1,0 +1,77 @@
+<h3 class="text-center mb-4 mt-5 h1">Choose Your Membership</h3>
+
+<h5 class="mb-3  text-center h2">Monthly memberships</h5>
+
+<div class="row justify-content-center g-4">
+
+  @for (m of monthlyMemberships(); track m.id) {
+
+    <div class="col-md-5">
+      <div class="card shadow-sm h-100 background-black">
+        <div class="card-body">
+
+          <h5 class="text-center text-green fw-bold display-6">{{ m.membershipName }}</h5>
+
+          <p class="display-6 text-center text-white fw-bold">
+            {{ m.price }} PLN
+          </p>
+
+          <p class="text-center text-green">
+            billed monthly
+          </p>
+
+          <ul class="list mt-3 mb-4 text-white">
+            @for (f of m.membershipFeatures; track f) {
+              <li>{{ f }}</li>
+            }
+          </ul>
+
+          <div class="d-grid">
+            <button class="btn button-green">CHOOSE PLAN</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  }
+
+</div>
+
+<h5 class="mt-5 mb-3 text-center h2">Yearly memberships</h5>
+
+<div class="row justify-content-center g-4">
+
+  @for (m of yearlyMemberships(); track m.id) {
+
+    <div class="col-md-5 ">
+      <div class="card shadow-sm h-100 background-black">
+        <div class="card-body">
+
+          <h5 class="text-center fw-bold display-6 text-green">{{ m.membershipName }}</h5>
+
+          <p class="display-6 text-center text-white fw-bold">
+            {{ m.price }} PLN
+          </p>
+
+          <p class="text-center text-green">
+            billed yearly
+          </p>
+
+          <ul class="list-unstyled mt-3 mb-4 text-white">
+            @for (f of m.membershipFeatures; track f) {
+              <li>{{ f }}</li>
+            }
+          </ul>
+
+          <div class="d-grid">
+            <button class="btn button-green">CHOOSE PLAN</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  }
+
+</div>

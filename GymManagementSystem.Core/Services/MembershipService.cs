@@ -5,6 +5,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.Membership;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -29,6 +30,12 @@ public class MembershipService : IMembershipService
     {
        IEnumerable<MembershipResponse> memberships =  await _repository.GetAllMemberships();
        return Result<IEnumerable<MembershipResponse>>.Success(memberships,StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<MembershipWebDetailsResponse>>> GetAllMembershipsWithFeaturesAsync()
+    {
+        IEnumerable<MembershipWebDetailsResponse> dto = await _repository.GetAllMembershipsWithFeaturesAsync();
+        return Result<IEnumerable<MembershipWebDetailsResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<MembershipResponse>> GetByIdAsync(Guid id)

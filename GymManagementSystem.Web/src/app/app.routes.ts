@@ -3,6 +3,7 @@ import { MainPage } from './components/main-page/main-page';
 import { ClientLogin } from './components/client-zone/client-login/client-login';
 import { ClientRegister } from './components/client-zone/client-register/client-register';
 import { ClientMainPage } from './components/client-zone/client-main-page/client-main-page';
+import { Membership } from './components/membership/membership';
 
 export const routes: Routes = [
 {
@@ -20,6 +21,10 @@ export const routes: Routes = [
 {
     path: 'client-main-page',
     component: ClientMainPage
+},
+{
+    path: 'memberships',
+    component: Membership
 }
 
 ];
