@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthStateService } from './services-api/auth-state-service';
 import { AuthService } from './services-api/auth-service';
 
@@ -11,10 +11,11 @@ import { AuthService } from './services-api/auth-service';
 })
 export class App {
   protected readonly title = signal('GymManagementSystem.Web');
-  constructor(public authStateService: AuthStateService, private authService: AuthService){}
+  constructor(public authStateService: AuthStateService, private authService: AuthService, private router: Router){}
   
   logout(){
     localStorage.removeItem("token")
     this.authStateService.setLoggedIn(false);
+    this.router.navigate(['/']);
   }
 }

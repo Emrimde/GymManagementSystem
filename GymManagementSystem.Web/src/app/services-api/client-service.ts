@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ClientAddRequest } from '../dto/Client/client-add-request';
 
 @Injectable({
   providedIn: 'root',
@@ -10,5 +11,9 @@ export class ClientService {
   
   getClientDetails() {
     return this.httpClient.get(`${this.base}/get-client-details`)
+  }
+
+  createClient(dto: ClientAddRequest){
+    return this.httpClient.post(`${this.base}/create-account`, dto)
   }
 }

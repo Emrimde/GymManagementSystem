@@ -4,11 +4,13 @@ import { ClientLogin } from './components/client-zone/client-login/client-login'
 import { ClientRegister } from './components/client-zone/client-register/client-register';
 import { ClientMainPage } from './components/client-zone/client-main-page/client-main-page';
 import { Membership } from './components/membership/membership';
+import { authGuardGuard } from './guard/auth-guard-guard';
 
 export const routes: Routes = [
 {
     path: '',
-    component: MainPage
+    component: MainPage, 
+    
 },
 {
     path: 'login-client',
@@ -20,7 +22,8 @@ export const routes: Routes = [
 },
 {
     path: 'client-main-page',
-    component: ClientMainPage
+    component: ClientMainPage,
+    canActivate: [authGuardGuard]
 },
 {
     path: 'memberships',

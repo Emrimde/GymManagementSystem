@@ -8,6 +8,7 @@ using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
+using GymManagementSystem.Core.WebDTO.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
@@ -153,5 +154,26 @@ public class ClientService : IClientService
             return Result<ClientDetailsWebResponse>.Failure("Error during loading client", StatusCodeEnum.BadRequest);
         }
         return Result<ClientDetailsWebResponse>.Success(dto, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest entity)
+    {
+        Client client = entity.ToClient();
+        Client createdClient = await _repository.CreateAsync(client);
+        User user = new User()
+        {
+            UserName = createdClient.FirstName + createdClient.LastName,
+            ClientId = createdClient.Id,
+            Email = createdClient.Email,
+        };
+        var createResult = await _userManager.CreateAsync(user,entity.Password);
+        if (!createResult.Succeeded)
+        {
+            return Result<Unit>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
+        }
+
+        await _userManager.AddToRoleAsync(user, "Member");
+       
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
 }

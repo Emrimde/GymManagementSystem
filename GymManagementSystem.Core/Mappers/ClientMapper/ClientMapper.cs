@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.WebDTO.Client;
 
 namespace GymManagementSystem.Core.Mappers.ClientMapper;
 
@@ -46,6 +47,17 @@ public static class ClientMapper
             DateOfBirth = clientAddRequest.DateOfBirth,
             StreetAddress = clientAddRequest.Street,
             City = clientAddRequest.City,
+        };
+    }
+
+    public static Client ToClient(this ClientWebAddRequest clientAddRequest)
+    {
+        return new Client
+        {
+            FirstName = clientAddRequest.FirstName,
+            LastName = clientAddRequest.LastName,
+            Email = clientAddRequest.Email,
+            PhoneNumber = clientAddRequest.PhoneNumber,
         };
     }
 
