@@ -1,7 +1,7 @@
 :root {
   --light-gray: #8f8f8f;
   --green: #9aad00;
-  --black: #333333;
+  --black: #393A42;
   --white: #ffffff;
 }
 
@@ -32,10 +32,9 @@
   color: var(--white);
 }
 
-.text-white-bg:hover {
-  color: var(--green);
+.hover-green:hover {
+  color: var(--green) !important; 
 }
-
 .text-light-gray {
   color: var(--light-gray);
 }
@@ -50,7 +49,7 @@
 }
 
 .button-green:hover {
-  background-color: #85a600; /* ciemniejszy odcień zieleni na hover */
+  color: var(--black); 
 }
 
 

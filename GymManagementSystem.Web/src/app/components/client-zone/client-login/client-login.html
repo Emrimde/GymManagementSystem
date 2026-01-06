@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-        <div class="background-light-gray p-4 rounded shadow-sm">
+        <div class="background-black p-4 rounded shadow-sm">
           <h3 class="text-white text-center mb-3">Sign in</h3>
           <form [formGroup] = "loginForm" (ngSubmit) = "submit()">
             <div class="mb-3">
@@ -23,7 +23,7 @@
 
           <div class="text-center">
             <span class="text-white">Don’t have an account?</span><br>
-            <a href="#" class="text-green fw-bold text-decoration-none">
+            <a routerLink="/register-client" class="text-green fw-bold text-decoration-none">
               Create account
             </a>
           </div>

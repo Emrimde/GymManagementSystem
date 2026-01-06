@@ -1,6 +1,6 @@
 <div class="d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg background-light-gray ">
+<nav class="navbar navbar-expand-lg background-black ">
   <div class="container">
 
     <a class="navbar-brand" href="/">
@@ -17,20 +17,15 @@
 
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link text-white-bg" routerLink="/about-us">About us</a></li>
-        <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/classes">Classes</a></li>
-        <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/client-main-page">strefa klienta</a></li>
-       
+        <li class="nav-item"><a class="nav-link text-white hover-green" routerLink="/about-us">About us</a></li>
+        <li class="nav-item"><a class="nav-link text-white hover-green" routerLink="/classes">Classes</a></li> 
+        <li class="nav-item"><a class="nav-link text-white hover-green" routerLink="/login-client">Client zone</a></li>      
         <!-- <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/login-trainer">Trainer zone</a></li> -->
         @if(authStateService.isLoggedIn()){
- <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/client-main-page">Account</a></li>
- <li class="nav-item"><a class="nav-link text-white-bg " (click)="logout()">Log out</a></li>
+ <li class="nav-item"><a class="nav-link text-white " (click)="logout()">Log out</a></li>
         }
-        @else{
-
-          <li class="nav-item"><a class="nav-link text-white-bg " routerLink="/login-client">Client zone</a></li>
-        }
-        <li class="nav-item"><a class="nav-link text-white-bg  fw-bold" routerLink="/memberships">Buy membership online</a></li>
+       
+        <li class="nav-item"><a class="nav-link text-white hover-green  fw-bold" routerLink="/memberships">Buy membership online</a></li>
       </ul>
     </div>
 

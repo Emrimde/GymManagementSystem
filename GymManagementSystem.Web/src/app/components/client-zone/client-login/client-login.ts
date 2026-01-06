@@ -4,11 +4,11 @@ import { AuthService } from '../../../services-api/auth-service';
 import { SignInDto } from '../../../dto/sign-in-dto';
 import { AuthenticationResponse } from '../../../dto/AuthDto/authentication-response';
 import { AuthStateService } from '../../../services-api/auth-state-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-client-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './client-login.html',
   styleUrl: './client-login.css',
 })
