@@ -17,4 +17,5 @@ public interface IClientService
     Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null);
     Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest entity);
     Result<ClientAgeValidationResponse> ValidateClientAgeAsync(ClientAgeValidationRequest entity);
+    Task<Result<Unit>> UpdateWebClientInfoAsync(ClientWebUpdateRequest updateRequest);
 }

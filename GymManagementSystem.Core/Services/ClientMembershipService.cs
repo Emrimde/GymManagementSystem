@@ -11,6 +11,7 @@ using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -21,6 +22,7 @@ public class ClientMembershipService : IClientMembershipService
     private readonly IRepository<ContractResponse, Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
     private readonly IMembershipPriceRepository _membershipPriceRepo;
+
 
     private readonly IHttpContextAccessor _contextAccessor;
    
@@ -37,6 +39,15 @@ public class ClientMembershipService : IClientMembershipService
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
         ClientMembership clientMembership = entity.ToClientMembership();
+        if (entity.IsFromWeb)
+        {
+            string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+            if (!Guid.TryParse(claim, out var clientId))
+            {
+                return Result<ClientMembershipInfoResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+            }
+            clientMembership.ClientId = clientId;
+        }
         ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(entity.ClientId);
 
         if(activeMembership != null)
@@ -122,7 +133,7 @@ public class ClientMembershipService : IClientMembershipService
         }
 
         MembershipInfoResponse? membershipInfo = await _membershipRepo.GetMembershipNameAsync(membershipId);
-        if (membershipPrice == null)
+        if (membershipInfo == null)
         {
             return Result<ClientMembershipWebPreviewResponse>.Failure("No name found", StatusCodeEnum.InternalServerError);
         }
@@ -132,7 +143,20 @@ public class ClientMembershipService : IClientMembershipService
         {
             return Result<ClientMembershipWebPreviewResponse>.Failure("No client details found", StatusCodeEnum.InternalServerError);
         }
+        ClientMembershipWebPreviewResponse response = new ClientMembershipWebPreviewResponse()
+        {
+            City = client.City,
+            DateOfBirth = client.DateOfBirth.HasValue && client.DateOfBirth.Value.Date == DateTime.MinValue.Date ? null : client.DateOfBirth,
+            Email = client.Email,
+            FirstName = client.FirstName,
+            LastName = client.LastName,
+            MembershipName  = membershipInfo.MembershipName,
+            Price = membershipPrice.Price.ToString(),
+            PhoneNumber = client.PhoneNumber,
+            Street = client.Street,
+        };
 
+        return Result<ClientMembershipWebPreviewResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)

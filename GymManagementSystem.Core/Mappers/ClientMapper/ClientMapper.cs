@@ -36,6 +36,16 @@ public static class ClientMapper
            
         };
     }
+    public static Client ToClient(this ClientWebUpdateRequest clientUpdateRequest)
+    {
+        return new Client
+        {
+            PhoneNumber = clientUpdateRequest.PhoneNumber,
+            DateOfBirth = clientUpdateRequest.DateOfBirth,
+            StreetAddress = clientUpdateRequest.Street,
+            City = clientUpdateRequest.City,
+        };
+    }
     public static Client ToClient(this ClientAddRequest clientAddRequest)
     {
         return new Client

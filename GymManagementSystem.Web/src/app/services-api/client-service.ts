@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClientAddRequest } from '../dto/Client/client-add-request';
+import { ClientUpdateRequest } from '../dto/Client/client-update-request';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,9 @@ import { ClientAddRequest } from '../dto/Client/client-add-request';
 export class ClientService {
   constructor(private httpClient: HttpClient){}
   private readonly base = "http://localhost:5105/api/Client"
-  
+  updateClient(dto: ClientUpdateRequest) {
+    return this.httpClient.put(`${this.base}/update-client`, dto)
+  }
   getClientDetails() {
     return this.httpClient.get(`${this.base}/get-client-details`)
   }

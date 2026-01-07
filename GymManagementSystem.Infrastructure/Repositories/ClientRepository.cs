@@ -145,4 +145,17 @@ public class ClientRepository : IClientRepository
           Street = item.StreetAddress
       }).FirstOrDefaultAsync();  
     }
+
+    public async Task UpdateClientAsync(Client updated)
+    {
+        Client? client = await _dbContext.Clients.FindAsync(updated.Id);
+        if (client == null) return;
+
+        client.City = updated.City;
+        client.StreetAddress = updated.StreetAddress;
+        client.DateOfBirth = updated.DateOfBirth;
+        client.PhoneNumber = updated.PhoneNumber;
+    }
+
+   
 }

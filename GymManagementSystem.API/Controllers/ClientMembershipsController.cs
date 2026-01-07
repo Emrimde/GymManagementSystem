@@ -37,7 +37,7 @@ public class ClientMembershipsController : BaseController
     [HttpGet("get-client-membership-info")]
     public async Task<ActionResult<ClientMembershipWebResponse?>> GetClientMembershipWebInformation() => HandleResult(await _clientMembershipService.GetClientMembershipInfoAsync());
 
-    [HttpGet("get-client-membership-preview")]
+    [HttpGet("get-client-membership-preview/{membershipId:guid}")]
     public async Task<ActionResult<ClientMembershipWebPreviewResponse?>> GetClientMembershipWebPreview([FromRoute] Guid membershipId) => HandleResult(await _clientMembershipService.GetClientMembershipPreviewAsync(membershipId));
     
 

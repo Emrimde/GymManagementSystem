@@ -45,6 +45,12 @@ public class ClientController : BaseController
         => HandleResult(await _clientService.GetClientProfileInfoAsync());
 
 
+    [Authorize(Roles = "Member")]
+    [HttpPut("update-client")]
+    public async Task<ActionResult> UpdateWebClientInfo([FromBody] ClientWebUpdateRequest updateRequest)
+        => HandleResult(await _clientService.UpdateWebClientInfoAsync(updateRequest));
+
+
     [HttpPost("validate")]
     public ActionResult<ClientInfoResponse> ValidateClientAge([FromBody] ClientAgeValidationRequest entity)
         => HandleResult(_clientService.ValidateClientAgeAsync(entity));

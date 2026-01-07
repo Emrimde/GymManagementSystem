@@ -5,6 +5,9 @@ import { ClientDetails } from '../../dto/Client/client-details';
 import { ClientService } from '../../services-api/client-service';
 import { ClientMembershipService } from '../../services-api/client-membership-service';
 import { email } from '@angular/forms/signals';
+import { ClientMembershipPreviewResponse } from '../../dto/ClientMembership/client-membership-preview-response';
+import { ClientUpdateRequest } from '../../dto/Client/client-update-request';
+import { ClientMembershipAddRequest } from '../../dto/ClientMembership/client-membership-add-request';
 
 @Component({
   selector: 'app-buy-membership',
@@ -14,13 +17,17 @@ import { email } from '@angular/forms/signals';
 })
 export class BuyMembership implements OnInit {
   clientMembershipForm!: FormGroup;
-  clientDetails = signal<ClientDetails | null>(null)
+  id!: string | null;
+  clientDetails = signal<ClientMembershipPreviewResponse | null>(null)
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')
+    this.id = this.route.snapshot.paramMap.get('id')
     this.clientMembershipForm = this.buildClientMembershipForm()
-    this.clientService.getClientDetails().subscribe({
+    this.clientMembershipService.getClientMembershipPreview(this.id!).subscribe({
       next: (response:any) =>{
+       response.dateOfBirth = response.dateOfBirth?.slice(0, 10) || null;
+       console.log(response.dateOfBirth)
        this.clientMembershipForm.patchValue(response)
+       
       },
       error: (error:any) =>{
         console.error(error)
@@ -29,8 +36,29 @@ export class BuyMembership implements OnInit {
     
   }
 
-  submit() {
-  throw new Error('Method not implemented.');
+  async submit() {
+    if(this.clientMembershipForm.invalid){
+      return
+    } 
+    const dto: ClientUpdateRequest = {
+      city: this.clientMembershipForm.value.city,
+      street: this.clientMembershipForm.value.street,
+      phoneNumber: this.clientMembershipForm.value.phoneNumber,
+      dateOfBirth: this.clientMembershipForm.value.dateOfBirth
+    }
+
+    this.clientService.updateClient(dto).subscribe({
+      next: () => {
+        const clientMembershipAddRequest: ClientMembershipAddRequest ={
+          membershipId: this.id!,
+          isFromWeb: true
+        }
+        this.clientMembershipService.createClientMembership(clientMembershipAddRequest).subscribe()
+      },
+      error: (error:any) => {
+        console.error(error)
+      }
+    })
   }
 
 

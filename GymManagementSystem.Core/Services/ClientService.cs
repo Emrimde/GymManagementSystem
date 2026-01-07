@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -24,12 +26,14 @@ public class ClientService : IClientService
     private readonly IVisitRepository _visitRepo;
     private readonly UserManager<User> _userManager;
     private readonly IHttpContextAccessor _http;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http)
+    private readonly IUnitOfWork _unitOfWork;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _visitRepo = visitRepository;
         _userManager = userManager;
         _http = http;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
@@ -175,5 +179,21 @@ public class ClientService : IClientService
         await _userManager.AddToRoleAsync(user, "Member");
        
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> UpdateWebClientInfoAsync(ClientWebUpdateRequest updateRequest)
+    {
+        string? claim = _http.HttpContext?.User.FindFirst("client_id")?.Value;
+        if (!Guid.TryParse(claim, out var clientId))
+        {
+            return Result<Unit>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+
+        Client client = updateRequest.ToClient();
+        client.Id = clientId;
+        client.DateOfBirth = DateTime.SpecifyKind(updateRequest.DateOfBirth, DateTimeKind.Utc);
+        await _repository.UpdateClientAsync(client);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
 }
