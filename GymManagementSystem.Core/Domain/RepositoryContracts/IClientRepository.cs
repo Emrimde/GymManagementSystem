@@ -6,7 +6,7 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
 public interface IClientRepository : IRepository<ClientResponse,Client>
 {
-    Task<ClientDetailsWebResponse?> GetClientByUserIdAsync(Guid userId);
+    Task<ClientDetailsWebResponse?> GetClientProfileInfoAsync(Guid clientId);
     Task<ClientInfoResponse?> GetClientFullNameByIdAsync(Guid id);
     Task<IEnumerable<Client>> LookUpClientsAsync(string query, Guid? scheduledClassId = null);
 }

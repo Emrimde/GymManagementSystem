@@ -5,6 +5,7 @@ import { ClientRegister } from './components/client-zone/client-register/client-
 import { ClientMainPage } from './components/client-zone/client-main-page/client-main-page';
 import { Membership } from './components/membership/membership';
 import { authGuardGuard } from './guard/auth-guard-guard';
+import { BuyMembership } from './components/buy-membership/buy-membership';
 
 export const routes: Routes = [
 {
@@ -28,6 +29,12 @@ export const routes: Routes = [
 {
     path: 'memberships',
     component: Membership
+}
+,
+{
+    path: 'buy-membership/:id',
+    component: BuyMembership,
+    canActivate: [authGuardGuard]
 }
 
 ];

@@ -41,8 +41,8 @@ public class ClientController : BaseController
 
     [Authorize(Roles = "Member")]
     [HttpGet("get-client-details")]
-    public async Task<ActionResult<ClientDetailsWebResponse>> GetClientDetailsByUserId()
-        => HandleResult(await _clientService.GetClientDetailsByUserIdAsync());
+    public async Task<ActionResult<ClientDetailsWebResponse>> GetClientWebProfileInfo()
+        => HandleResult(await _clientService.GetClientProfileInfoAsync());
 
 
     [HttpPost("validate")]

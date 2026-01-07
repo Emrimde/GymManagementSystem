@@ -27,13 +27,12 @@
           </ul>
 
           <div class="d-grid">
-            <button class="btn button-green">CHOOSE PLAN</button>
+            <button [routerLink]="['/buy-membership', m.id]" class="btn button-green">CHOOSE PLAN</button>
           </div>
 
         </div>
       </div>
     </div>
-
   }
 
 </div>
@@ -65,7 +64,7 @@
           </ul>
 
           <div class="d-grid">
-            <button class="btn button-green">CHOOSE PLAN</button>
+            <button [routerLink]="['/buy-membership', m.id]"  class="btn button-green">CHOOSE PLAN</button>
           </div>
 
         </div>

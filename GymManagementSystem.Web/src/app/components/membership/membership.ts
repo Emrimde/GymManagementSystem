@@ -1,13 +1,14 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { MembershipService } from '../../services-api/membership-service';
 import { MembershipResponse } from '../../dto/Membership/membership-response';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-membership',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './membership.html',
   styleUrl: './membership.css',
-})
+})  
 export class Membership implements OnInit {
   memberships = signal<MembershipResponse[]>([])
   monthlyMemberships = computed(() => this.memberships().filter(item => item.isMonthly))

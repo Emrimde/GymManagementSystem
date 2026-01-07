@@ -131,15 +131,18 @@ public class ClientRepository : IClientRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ClientDetailsWebResponse?> GetClientByUserIdAsync(Guid userId)
+    public async Task<ClientDetailsWebResponse?> GetClientProfileInfoAsync(Guid clientId)
     {
-      return await _dbContext.Clients.Where(item => item.User!.Id == userId).Select(item => new ClientDetailsWebResponse()
+      return await _dbContext.Clients.Where(item => item.Id == clientId).Select(item => new ClientDetailsWebResponse()
       {
           Email = item.Email,
           FirstName = item.FirstName,
           PhoneNumber = item.PhoneNumber,
           LastName = item.LastName,
           MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType).FirstOrDefault() ?? null,
+          City = item.City,
+          DateOfBirth = item.DateOfBirth,
+          Street = item.StreetAddress
       }).FirstOrDefaultAsync();  
     }
 }

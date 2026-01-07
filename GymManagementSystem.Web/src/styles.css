@@ -50,6 +50,7 @@
 
 .button-green:hover {
   color: var(--black); 
+  background-color: var(--green);
 }
 
 .button-light-gray {

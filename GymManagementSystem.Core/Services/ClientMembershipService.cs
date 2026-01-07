@@ -8,6 +8,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
 
@@ -104,6 +105,34 @@ public class ClientMembershipService : IClientMembershipService
         ClientMembershipWebResponse? dto = await _clientMembershipRepository.GetClientMembershipByClientIdAsync(clientId);
 
         return Result<ClientMembershipWebResponse?>.Success(dto, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<ClientMembershipWebPreviewResponse>> GetClientMembershipPreviewAsync(Guid membershipId)
+    {
+        string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+        if (!Guid.TryParse(claim, out var clientId))
+        {
+            return Result<ClientMembershipWebPreviewResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+
+        MembershipPrice? membershipPrice = await _membershipPriceRepo.GetActiveMembershipPriceByMembershipId(membershipId);
+        if(membershipPrice == null)
+        {
+            return Result<ClientMembershipWebPreviewResponse>.Failure("No price found", StatusCodeEnum.InternalServerError);
+        }
+
+        MembershipInfoResponse? membershipInfo = await _membershipRepo.GetMembershipNameAsync(membershipId);
+        if (membershipPrice == null)
+        {
+            return Result<ClientMembershipWebPreviewResponse>.Failure("No name found", StatusCodeEnum.InternalServerError);
+        }
+
+        ClientDetailsWebResponse? client = await _clientRepository.GetClientProfileInfoAsync(clientId);
+        if (client == null)
+        {
+            return Result<ClientMembershipWebPreviewResponse>.Failure("No client details found", StatusCodeEnum.InternalServerError);
+        }
+
     }
 
     public async Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid membershipId)

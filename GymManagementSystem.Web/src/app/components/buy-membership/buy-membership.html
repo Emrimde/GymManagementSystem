@@ -1,0 +1,92 @@
+<div class="container my-5">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+      <div class="card shadow-sm background-black p-4">
+
+        <h3 class="text-center text-green mb-4">
+         Zakup karnetu
+        </h3>
+        @if(clientMembershipForm){
+
+          <form [formGroup]="clientMembershipForm" (ngSubmit)="submit()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Imię</label>
+                <input formControlName="firstName" type="text" class="form-control" />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Nazwisko</label>
+                <input formControlName="lastName" type="text" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Email</label>
+                <input formControlName="email" type="email" class="form-control" />
+              </div>
+  
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Telefon</label>
+                <input type="tel" formControlName="phoneNumber" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Data urodzenia</label>
+                <input type="date" formControlName="dateOfBirth" class="form-control" />
+              </div>
+  
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Wybrany karnet</label>
+                <input type="text" formControlName="membershipName" class="form-control" readonly />
+               
+              </div>
+            </div>
+  
+            <hr class="text-white-bg my-4">
+  
+            <h5 class="text-green mb-3">Adres zamieszkania</h5>
+  
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Miasto</label>
+                <input type="text" formControlName="city" class="form-control" />
+              </div>
+  
+              <div class="col-md-6 mb-3">
+                <label class="form-label text-white-bg">Ulica</label>
+                <input type="text" formControlName="street" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="form-check mt-3 mb-4">
+              <input class="form-check-input" type="checkbox" id="accept" />
+              <label class="form-check-label text-white-bg" for="accept">
+                Akceptuję regulamin i warunki umowy
+              </label>
+            </div>
+  
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn button-green fw-bold">
+                Kup karnet
+              </button>
+  
+              <button type="button" class="btn button-light-gray">
+                Wróć
+              </button>
+            </div>
+  
+          </form>
+        }
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

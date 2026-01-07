@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.Core.ServiceContracts;
 
@@ -13,4 +14,5 @@ public interface IClientMembershipService
     Task<Result<ClientMembershipContractPreviewResponse>> GetContractPreviewDetailsAsync(Guid clientId, Guid memebershipId);
     Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity);
     Task<Result<ClientMembershipWebResponse?>> GetClientMembershipInfoAsync();
+    Task<Result<ClientMembershipWebPreviewResponse>> GetClientMembershipPreviewAsync(Guid membershipId);
 }

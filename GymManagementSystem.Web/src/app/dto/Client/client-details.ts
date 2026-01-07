@@ -4,4 +4,7 @@ export interface ClientDetails {
     email: string
     phoneNumber:string
     membershipName: string
+    street: string
+    city: string
+    dateOfBirth: Date
 }

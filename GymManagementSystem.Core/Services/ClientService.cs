@@ -9,6 +9,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
+using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
@@ -139,16 +140,15 @@ public class ClientService : IClientService
         return Result<ClientInfoResponse>.Success(dto, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<ClientDetailsWebResponse>> GetClientDetailsByUserIdAsync()
+    public async Task<Result<ClientDetailsWebResponse>> GetClientProfileInfoAsync()
     {
-        var sub = _http.HttpContext?
-    .User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
-    ?? _http.HttpContext?
-    .User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!Guid.TryParse(sub, out var userId))
+        string? claim = _http.HttpContext?.User.FindFirst("client_id")?.Value;
+        if (!Guid.TryParse(claim, out var clientId))
+        {
             return Result<ClientDetailsWebResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
 
-        ClientDetailsWebResponse? dto = await _repository.GetClientByUserIdAsync(userId);
+        ClientDetailsWebResponse? dto = await _repository.GetClientProfileInfoAsync(clientId);
         if(dto == null)
         {
             return Result<ClientDetailsWebResponse>.Failure("Error during loading client", StatusCodeEnum.BadRequest);
