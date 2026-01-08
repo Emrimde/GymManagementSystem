@@ -3,7 +3,11 @@ using GymManagementSystem.Core.DTO.Auth;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.ClientMembership;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -12,13 +16,45 @@ public class AuthService : IAuthService
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IJwtService _jwtService;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService)
+    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _jwtService = jwtService;
+        _contextAccessor = contextAccessor;
     }
+
+    public async Task<Result<Unit>> ChangePasswordForLoggedInUserAsync(ChangePasswordRequest request)
+    {
+        Console.WriteLine(_contextAccessor.HttpContext?.User.Claims);
+        string? userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //string? userId = _contextAccessor.HttpContext?.User.FindFirst("sub")?.Value;
+        if (userId == null)
+        {
+            return Result<Unit>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+        User? user = await _userManager.FindByIdAsync(userId);
+        if(user == null)
+        {
+            return Result<Unit>.Failure("User not found", StatusCodeEnum.NotFound);
+        }
+
+        if(request.CurrentPassword == request.NewPassword)
+        {
+            return Result<Unit>.Failure("New password is the same as old password", StatusCodeEnum.BadRequest);
+        }
+
+        IdentityResult identityResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        if(identityResult != IdentityResult.Success)
+        {
+            return Result<Unit>.Failure("Error during changing password", StatusCodeEnum.InternalServerError);
+        }
+
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Unauthorized);
+    }
+
     public async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
     {
         var user = request.Email != null
@@ -32,7 +68,6 @@ public class AuthService : IAuthService
         if (!passwordOk)
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
 
-        // ⬇️ TYLKO TERAZ generujesz JWT
         var token = await _jwtService.CreateJwtToken(user);
 
         return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);

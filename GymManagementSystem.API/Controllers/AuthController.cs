@@ -16,8 +16,10 @@ public class AuthController : BaseController
     }
 
     [HttpPost("login")]
-    
     public async Task<ActionResult<AuthenticationResponse>> Login([FromBody] SignInDto request) => HandleResult(await _authService.LoginAsync(request));
+
+    [HttpPost("change-password")]
+    public async Task<ActionResult> ChangePasswordForLoggedInUser([FromBody] ChangePasswordRequest request) => HandleResult(await _authService.ChangePasswordForLoggedInUserAsync(request));
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterDto request) => HandleResult(await _authService.RegisterAsync(request));
