@@ -15,7 +15,13 @@
               <label class="form-label text-white">Password</label>
               <input formControlName="password" type="password" class="form-control" >
             </div>
-
+    <div class="text-start mb-3">
+      <a
+        routerLink="/forgot-password"
+        class="text-light-gray small hover-green text-decoration-none">
+        Forgot password? <span class="text-green">Reset</span>
+      </a>
+    </div>
             <button [disabled]="loginForm.invalid" type="submit" class="button-green w-100 mb-3">
               Log in
             </button>

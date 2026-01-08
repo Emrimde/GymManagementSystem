@@ -7,6 +7,7 @@ import { Membership } from './components/membership/membership';
 import { authGuardGuard } from './guard/auth-guard-guard';
 import { BuyMembership } from './components/buy-membership/buy-membership';
 import { ChangePassword } from './components/client-zone/change-password/change-password';
+import { ForgotPassword } from './components/client-zone/forgot-password/forgot-password';
 
 export const routes: Routes = [
 {
@@ -30,8 +31,12 @@ export const routes: Routes = [
 {
     path: 'memberships',
     component: Membership
-}
-,
+},
+{
+    path: 'forgot-password',
+    component: ForgotPassword
+},
+
 {
     path: 'buy-membership/:id',
     component: BuyMembership,
