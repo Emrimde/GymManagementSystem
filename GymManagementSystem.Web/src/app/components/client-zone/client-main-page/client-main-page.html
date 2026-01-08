@@ -4,8 +4,6 @@
 
 <div class="container my-5">
   <div class="row g-4">
-    
-    
  <div class="col-lg-4">
   <div class="card shadow-sm">
     <div class="card-body">
@@ -14,42 +12,32 @@
        {{ clientResponse()?.firstName }} {{ clientResponse()?.lastName }}
       </h5>
 
-      <p class="mb-1"><strong>Email:</strong>{{ clientResponse()?.email }}</p>
-      <p class="mb-1"><strong>Telefon:</strong>{{ clientResponse()?.phoneNumber }}</p>
+      <p class="mb-1"><strong>Email:</strong> {{ clientResponse()?.email }}</p>
+      <p class="mb-1"><strong>Phone number:</strong> {{ clientResponse()?.phoneNumber }}</p>
       @if(clientResponse()?.membershipName == null){
 
-        <p class="mb-1"><strong>Członkostwo:</strong> No membership</p>
+        <p class="mb-1"><strong>Membership:</strong> No membership</p>
          <button class="btn button-green w-50">
         Buy membership online
       </button>
       }
       @else{
 
-        <p class="mb-1"><strong>Członkostwo:</strong>{{ clientResponse()?.membershipName }}</p>
+        <p class="mb-1"><strong>Membership:</strong> {{ clientResponse()?.membershipName }}</p>
       }
 
       <hr>
 
-     
-
-      
-
-      
-      <button class="btn button-green w-100">
-        Zmień hasło
+      <button class="btn button-green w-100" routerLink="/change-password">
+        Change password
       </button>
-
     </div>
   </div>
 </div>
 
-
-   
     <div class="col-lg-8">
       <div class="card shadow-sm">
         <div class="card-body">
-
-          
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
               <a (click)="activeTab='membership'" class="nav-link active" [class.active]="activeTab === 'membership'">My membership</a>
@@ -71,11 +59,8 @@
           @if(activeTab == 'personalTrainings'){
             <app-client-personal-training/>
           }
-
-          
         </div>
       </div>
     </div>
-
   </div>
 </div>

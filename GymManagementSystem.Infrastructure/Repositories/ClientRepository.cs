@@ -139,7 +139,7 @@ public class ClientRepository : IClientRepository
           FirstName = item.FirstName,
           PhoneNumber = item.PhoneNumber,
           LastName = item.LastName,
-          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType).FirstOrDefault() ?? null,
+          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType.ToString()).FirstOrDefault() ?? null,
           City = item.City,
           DateOfBirth = item.DateOfBirth,
           Street = item.StreetAddress

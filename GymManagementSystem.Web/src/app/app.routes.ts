@@ -6,6 +6,7 @@ import { ClientMainPage } from './components/client-zone/client-main-page/client
 import { Membership } from './components/membership/membership';
 import { authGuardGuard } from './guard/auth-guard-guard';
 import { BuyMembership } from './components/buy-membership/buy-membership';
+import { ChangePassword } from './components/client-zone/change-password/change-password';
 
 export const routes: Routes = [
 {
@@ -34,6 +35,11 @@ export const routes: Routes = [
 {
     path: 'buy-membership/:id',
     component: BuyMembership,
+    canActivate: [authGuardGuard]
+},
+{
+    path: 'change-password',
+    component: ChangePassword,
     canActivate: [authGuardGuard]
 }
 

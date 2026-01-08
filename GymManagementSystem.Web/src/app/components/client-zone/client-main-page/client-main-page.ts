@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ClientService } from '../../../services-api/client-service';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { ClientDetails } from '../../../dto/Client/client-details';
 import { SIGNAL } from '@angular/core/primitives/signals';
 import { ClientMembership } from './client-membership/client-membership';
@@ -9,7 +9,7 @@ import { ClientPersonalTraining } from './client-personal-training/client-person
 
 @Component({
   selector: 'app-client-main-page',
-  imports: [ClientMembership, ClientReservation,ClientPersonalTraining],
+  imports: [ClientMembership, ClientReservation, ClientPersonalTraining, RouterLink],
   templateUrl: './client-main-page.html',
   styleUrl: './client-main-page.css',
 })
