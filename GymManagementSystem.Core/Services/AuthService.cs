@@ -28,9 +28,7 @@ public class AuthService : IAuthService
 
     public async Task<Result<Unit>> ChangePasswordForLoggedInUserAsync(ChangePasswordRequest request)
     {
-        Console.WriteLine(_contextAccessor.HttpContext?.User.Claims);
         string? userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //string? userId = _contextAccessor.HttpContext?.User.FindFirst("sub")?.Value;
         if (userId == null)
         {
             return Result<Unit>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);

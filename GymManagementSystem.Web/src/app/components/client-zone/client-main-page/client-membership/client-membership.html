@@ -1,16 +1,42 @@
-<h3>Membership details</h3>
+<h3 class="text-green text-center mb-4">
+  Membership details
+</h3>
 
-@if(clientMembershipResponse() != null ){
+@if (clientMembershipResponse() != null) {
 
-  <div class="card">
-    <div></div>
-    <div>Start: {{ clientMembershipResponse()?.startDate }} </div>
-    <div>End: {{ clientMembershipResponse()?.endDate }} </div>
-      <span class="badge bg-success">Active</span>
+  <div class="card background-black shadow-sm p-4 mb-4">
+
+    <div class="row mb-2">
+      <div class="col text-white-bg">
+        <strong class="text-green">Start:</strong>
+        {{ clientMembershipResponse()?.startDate }}
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col text-white-bg">
+        <strong class="text-green">End:</strong>
+        {{ clientMembershipResponse()?.endDate ?? 'Unlimited' }}
+      </div>
+    </div>
+
+    <span class="badge bg-success align-self-start px-3 py-2">
+      Active
+    </span>
+
+  </div>
+
+} @else {
+
+  <div class="card background-black shadow-sm p-4 text-center">
+
+    <span class="badge bg-danger mb-3 px-3 py-2">
+      Inactive
+    </span>
+
+    <button class="btn button-green fw-bold">
+      Get membership online!
+    </button>
+
   </div>
 }
-@else{
-    <span class="badge bg-danger">Unacvtive</span>
-    <button>Get membership online!</button>
-}
-

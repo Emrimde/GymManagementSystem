@@ -63,5 +63,25 @@
 }
 
 .button-light-gray:hover {
-  background-color: #7a7a7a; /* ciemniejszy odcień szarości na hover */
+  background-color: #7a7a7a; 
+}
+
+
+.nav-tabs .nav-link {
+  color: var(--white);
+  background-color: transparent;
+  border: none;
+  font-weight: normal;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--white);
+  background-color: var(--green);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--green);
+  background-color: transparent;
+  border-bottom: 2px solid var(--green);
+  font-weight: 600;
 }

@@ -145,9 +145,9 @@ public class ClientMembershipRepository : IClientMembershipRepository
     {
         return await _dbContext.ClientMemberships.Where(item => item.ClientId == clientId && item.IsActive).Select(item => new ClientMembershipWebResponse()
         {
-            EndDate = item.EndDate,
+            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("dd.MM.yyyy") : "Indefinite time",
             Name = item.Membership.Name,
-            StartDate = item.EndDate,
+            StartDate = item.StartDate.ToString("dd.MM.yyyy"),
             IsActive = item.IsActive,
         }).FirstOrDefaultAsync();
     }

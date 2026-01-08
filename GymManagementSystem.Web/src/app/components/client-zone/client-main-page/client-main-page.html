@@ -1,66 +1,100 @@
-<div class="banner">
-  <img src="banner-client.jpg" alt="Client zone">
+<div class="banner mb-5">
+  <img src="banner-client.jpg" alt="Client zone" class="w-100">
 </div>
 
 <div class="container my-5">
   <div class="row g-4">
- <div class="col-lg-4">
-  <div class="card shadow-sm">
-    <div class="card-body">
 
-      <h5 class="fw-bold mb-3 text-center">
-       {{ clientResponse()?.firstName }} {{ clientResponse()?.lastName }}
-      </h5>
+    <div class="col-lg-4">
+      <div class="card background-black shadow-sm p-4 h-100">
 
-      <p class="mb-1"><strong>Email:</strong> {{ clientResponse()?.email }}</p>
-      <p class="mb-1"><strong>Phone number:</strong> {{ clientResponse()?.phoneNumber }}</p>
-      @if(clientResponse()?.membershipName == null){
+        <h5 class="fw-bold mb-3 text-center text-green">
+          {{ clientResponse()?.firstName }} {{ clientResponse()?.lastName }}
+        </h5>
 
-        <p class="mb-1"><strong>Membership:</strong> No membership</p>
-         <button class="btn button-green w-50">
-        Buy membership online
-      </button>
-      }
-      @else{
+        <p class="mb-1 text-white-bg">
+          <strong class="text-green">Email:</strong> {{ clientResponse()?.email }}
+        </p>
 
-        <p class="mb-1"><strong>Membership:</strong> {{ clientResponse()?.membershipName }}</p>
-      }
+        <p class="mb-3 text-white-bg">
+          <strong class="text-green">Phone number:</strong> {{ clientResponse()?.phoneNumber }}
+        </p>
 
-      <hr>
+        @if (clientResponse()?.membershipName == null) {
 
-      <button class="btn button-green w-100" routerLink="/change-password">
-        Change password
-      </button>
-    </div>
-  </div>
-</div>
+          <p class="mb-3 text-white-bg">
+            <strong class="text-green">Membership:</strong> No membership
+          </p>
 
-    <div class="col-lg-8">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <ul class="nav nav-tabs mb-3">
-            <li class="nav-item">
-              <a (click)="activeTab='membership'" class="nav-link active" [class.active]="activeTab === 'membership'">My membership</a>
-            </li>
-            <li class="nav-item">
-              <a (click)="activeTab='reservations'" class="nav-link" [class.active]="activeTab === 'reservations'" >My personal trainings</a>
-            </li>
-            <li class="nav-item">
-              <a (click)="activeTab='personalTrainings'" class="nav-link" [class.active]="activeTab === 'personalTrainings'" >Classes reservations</a>
-            </li>
-          </ul>
+          <button class="btn button-green w-100 mb-3 fw-bold">
+            Buy membership online
+          </button>
 
-          @if(activeTab == 'membership'){
-            <app-client-membership/>
-          }
-          @if(activeTab == 'reservations'){
-            <app-client-reservation/>
-          }
-          @if(activeTab == 'personalTrainings'){
-            <app-client-personal-training/>
-          }
-        </div>
+        } @else {
+
+          <p class="mb-3 text-white-bg">
+            <strong class="text-green">Membership:</strong> {{ clientResponse()?.membershipName }}
+          </p>
+
+        }
+
+        <hr class="text-white-bg my-3">
+
+        <button
+          class="btn button-green w-100 fw-bold"
+          routerLink="/change-password">
+          Change password
+        </button>
+
       </div>
     </div>
+
+    <div class="col-lg-8">
+      <div class="card background-black shadow-sm p-4 h-100">
+
+        <ul class="nav nav-tabs mb-4 justify-content-center">
+          <li class="nav-item">
+            <a
+              (click)="activeTab='membership'"
+              class="nav-link text-green"
+              [class.active]="activeTab === 'membership'">
+              My membership
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              (click)="activeTab='reservations'"
+              class="nav-link text-green" 
+              [class.active]="activeTab === 'reservations'">
+              My personal trainings
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              (click)="activeTab='personalTrainings'"
+              class="nav-link text-green"
+              [class.active]="activeTab === 'personalTrainings'">
+              Classes reservations
+            </a>
+          </li>
+        </ul>
+
+        @if (activeTab === 'membership') {
+          <app-client-membership />
+        }
+
+        @if (activeTab === 'reservations') {
+          <app-client-reservation />
+        }
+
+        @if (activeTab === 'personalTrainings') {
+          <app-client-personal-training />
+        }
+
+      </div>
+    </div>
+
   </div>
 </div>
