@@ -1,8 +1,10 @@
 ﻿using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.DTO.Auth;
+using GymManagementSystem.Core.DTO.Email;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.Auth;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,13 +19,15 @@ public class AuthService : IAuthService
     private readonly SignInManager<User> _signInManager;
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _contextAccessor;
+    private readonly IEmailService _emailService;
 
-    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor)
+    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor, IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _jwtService = jwtService;
         _contextAccessor = contextAccessor;
+        _emailService = emailService;
     }
 
     public async Task<Result<Unit>> ChangePasswordForLoggedInUserAsync(ChangePasswordRequest request)
@@ -51,6 +55,27 @@ public class AuthService : IAuthService
         }
 
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Unauthorized);
+    }
+
+    public async Task<Result<Unit>> ResetPasswordAsync(ForgotPasswordRequest request)
+    {
+        User? user = await _userManager.FindByEmailAsync(request.Email); 
+        if(user == null)
+        {
+           return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
+        }
+        string resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        string encodedToken = Uri.EscapeDataString(resetPasswordToken);
+        string userId = user.Id.ToString();
+        EmailRequest emailRequest = new EmailRequest
+        {
+            To = request.Email,
+            Body = $"Click the link to reset your password. If it's not you, ignore message <a href='https://yourfrontend.com/reset-password?token={encodedToken}&userId={userId}'>Reset Password</a>",
+            Subject = "Password Reset"
+        };
+
+        await _emailService.SendLink(emailRequest);
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
