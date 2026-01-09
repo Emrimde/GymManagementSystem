@@ -1,9 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GymManagementSystem.Core.WebDTO.PersonalBooking;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
@@ -15,4 +11,5 @@ public interface IPersonalBookingRepository
     Task<bool> DeletePersonalBookingAsync(Guid id);
     Task<PersonalBooking?> GetPersonalBookingAsync(Guid id);
     Task<PersonalBooking?> UpdatePersonalBooking(PersonalBooking personal);
+    Task<IEnumerable<PersonalBookingWebResponse>> GetAllPersonalBookingsByClientIdAsync(Guid clientId);
 }

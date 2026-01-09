@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,19 @@ public class PersonalBookingRepository : IPersonalBookingRepository
         int deleted = _db.SaveChanges();
         return deleted > 0;
     }
+
+    public async Task<IEnumerable<PersonalBookingWebResponse>> GetAllPersonalBookingsByClientIdAsync(Guid clientId)
+    {
+        return await _db.PersonalBookings.Where(item => item.ClientId == clientId)
+            .Select(item => new PersonalBookingWebResponse
+            {
+                TrainerFullName = item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName,
+                Date = item.Start.ToString("dd:MM:yyyy"),
+                StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}"
+            })
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<PersonalBooking>> GetForRangeAsync(
     Guid trainerId, DateOnly from, DateOnly to, CancellationToken ct)
     {

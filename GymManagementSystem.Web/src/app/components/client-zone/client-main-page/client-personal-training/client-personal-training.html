@@ -3,10 +3,11 @@
     <h4 class="text-green fw-bold mb-0">
       My personal trainings
     </h4>
-
-    <button class="btn button-green fw-bold">
-      + Add personal training
-    </button>
+@if(hasActiveMembership()){
+  <button class="btn button-green fw-bold">
+    + Add personal training
+  </button>
+}
   </div>
 
   <div class="row g-3 overflow-auto" style="max-height: 420px;">

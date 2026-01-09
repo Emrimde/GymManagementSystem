@@ -6,6 +6,10 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO;
+using GymManagementSystem.Core.WebDTO.PersonalBooking;
+using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -14,11 +18,13 @@ public class PersonalBookingService : IPersonalBookingService
     private readonly IPersonalBookingRepository _personalBookingRepo;
     private readonly ITrainerRepository _trainerRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
-    public PersonalBookingService(IPersonalBookingRepository personalBookingRepo, ITrainerRepository trainerRepo, ITrainerRateRepository trainerRateRepo)
+    private readonly IHttpContextAccessor _contextAccessor;
+    public PersonalBookingService(IPersonalBookingRepository personalBookingRepo, ITrainerRepository trainerRepo, ITrainerRateRepository trainerRateRepo, IHttpContextAccessor contextAccessor)
     {
         _personalBookingRepo = personalBookingRepo;
         _trainerRepo = trainerRepo;
         _trainerRateRepo = trainerRateRepo;
+        _contextAccessor = contextAccessor;
     }
     public async Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity)
     {
@@ -66,6 +72,19 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<bool>.Failure("Personal booking not deleted", StatusCodeEnum.InternalServerError);
         }
         return Result<bool>.Success(isDeleted, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<PersonalBookingWebResponse>>> GetAllPersonalBookingsByClientIdAsync()
+    {
+        string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+        if (!Guid.TryParse(claim, out var clientId))
+        {
+            return Result<IEnumerable<PersonalBookingWebResponse>>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+
+        IEnumerable<PersonalBookingWebResponse> personalBookings = await _personalBookingRepo.GetAllPersonalBookingsByClientIdAsync(clientId);
+
+        return Result<IEnumerable<PersonalBookingWebResponse>>.Success(personalBookings, StatusCodeEnum.Unauthorized);
     }
 
     public async Task<Result<PersonalBookingInfoResponse>> GetPersonalBookingAsync(Guid id)
