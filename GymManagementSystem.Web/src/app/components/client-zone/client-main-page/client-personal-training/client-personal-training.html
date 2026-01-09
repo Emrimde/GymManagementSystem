@@ -9,79 +9,24 @@
   </button>
 }
   </div>
-
   <div class="row g-3 overflow-auto" style="max-height: 420px;">
+@for(personalBooking of personalBookings(); track personalBooking.trainerFullName){
 
-    <div class="col-12">
-      <div class="card background-light-gray p-3 shadow-sm">
-        <h6 class="fw-bold text-white mb-2">
-          Trainer: John Smith
-        </h6>
-        <p class="mb-1 text-white">
-          <strong>Date:</strong> 12.01.2026
-        </p>
-        <p class="mb-0 text-white">
-          <strong>Time:</strong> 16:00 – 17:00
-        </p>
-      </div>
+  <div class="col-12">
+    <div class="card background-light-gray p-3 shadow-sm">
+      <h6 class="fw-bold text-white mb-2">
+        Trainer: {{ personalBooking.trainerFullName }}
+      </h6>
+      <p class="mb-1 text-white">
+        <strong>Date:</strong> {{ personalBooking.date }}
+      </p>
+      <p class="mb-0 text-white">
+        <strong>Time:</strong> {{ personalBooking.startEndTime }}
+      </p>
     </div>
+  </div>
+}
 
-    <div class="col-12">
-      <div class="card background-light-gray p-3 shadow-sm">
-        <h6 class="fw-bold text-white mb-2">
-          Trainer: Anna Kowalska
-        </h6>
-        <p class="mb-1 text-white">
-          <strong>Date:</strong> 08.01.2026
-        </p>
-        <p class="mb-0 text-white">
-          <strong>Time:</strong> 18:30 – 19:30
-        </p>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div class="card background-light-gray p-3 shadow-sm">
-        <h6 class="fw-bold text-white mb-2">
-          Trainer: Michael Brown
-        </h6>
-        <p class="mb-1 text-white">
-          <strong>Date:</strong> 04.01.2026
-        </p>
-        <p class="mb-0 text-white">
-          <strong>Time:</strong> 15:00 – 16:00
-        </p>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div class="card background-light-gray p-3 shadow-sm">
-        <h6 class="fw-bold text-white mb-2">
-          Trainer: Anna Kowalska
-        </h6>
-        <p class="mb-1 text-white">
-          <strong>Date:</strong> 28.12.2025
-        </p>
-        <p class="mb-0 text-white">
-          <strong>Time:</strong> 17:00 – 18:00
-        </p>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div class="card background-light-gray p-3 shadow-sm">
-        <h6 class="fw-bold text-white mb-2">
-          Trainer: John Smith
-        </h6>
-        <p class="mb-1 text-white">
-          <strong>Date:</strong> 20.12.2025
-        </p>
-        <p class="mb-0 text-white">
-          <strong>Time:</strong> 14:00 – 15:00
-        </p>
-      </div>
-    </div>
 
   </div>
-
 </div>
