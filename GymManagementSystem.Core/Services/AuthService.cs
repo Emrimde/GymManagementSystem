@@ -70,7 +70,9 @@ public class AuthService : IAuthService
         EmailRequest emailRequest = new EmailRequest
         {
             To = request.Email,
-            Body = $"Click the link to reset your password. If it's not you, ignore message <a href='https://yourfrontend.com/reset-password?token={encodedToken}&userId={userId}'>Reset Password</a>",
+            Body = $"Click the link to reset your password. If it's not you, ignore message <a href='https://yourfrontend.com/reset-password?token={encodedToken}&userId={userId}'>Reset Password</a> <br>" +
+            $"token = CfDJ8CGDZJLEgY9HruVUevfK%2FSeKneozyGZ8i3I7CDzd1UevaWm0u7RMCRLuzjf7VA6%2BjYCyqUl%2Bv%2FvN%2Fg4vnT778CxD2KiBU5J3g1FvZhPdD99zftSzbk10KCN5vBF7ffkidBapk4hcRPPfA6UchdwSai7g7zdB%2FSXfY6Vi%2B7PjpY33%2BK36h%2FDgYOv50C0gcACrKGrowMGBM4WP9fmSNC5J1Se1eHE6FCA6JQowTWGm78BR&userId=fe48d75f-4d8d-4aaa-8d68-b2efb12af6bc"
+            ,
             Subject = "Password Reset"
         };
 
@@ -125,5 +127,24 @@ public class AuthService : IAuthService
         }
 
         return Result<bool>.Success(true, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> ResetPasswordConfirmAsync(ConfirmResetPasswordRequest request)
+    {
+        var token = Uri.UnescapeDataString(request.Token);
+        User? user = await _userManager.FindByIdAsync(request.UserId);
+        if (user == null)
+        {
+            return Result<Unit>.Failure("Error", StatusCodeEnum.BadRequest);
+        }
+
+        IdentityResult result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            string errorMessage = string.Join(" , ", result.Errors.Select(item => item.Description));
+            return Result<Unit>.Failure($"{errorMessage}", StatusCodeEnum.BadRequest);
+        }
+
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
 }

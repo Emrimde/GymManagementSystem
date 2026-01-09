@@ -26,6 +26,9 @@ public class AuthController : BaseController
     [HttpPost("reset-password")]
     public async Task<ActionResult> ResetPassword([FromBody] ForgotPasswordRequest request) => HandleResult(await _authService.ResetPasswordAsync(request));
 
+    [HttpPost("reset-password-confirm")]
+    public async Task<ActionResult> ResetPasswordConfirm([FromBody] ConfirmResetPasswordRequest request) => HandleResult(await _authService.ResetPasswordConfirmAsync(request));
+
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterDto request) => HandleResult(await _authService.RegisterAsync(request));
 }
