@@ -8,6 +8,7 @@ import { authGuardGuard } from './guard/auth-guard-guard';
 import { BuyMembership } from './components/buy-membership/buy-membership';
 import { ChangePassword } from './components/client-zone/change-password/change-password';
 import { ForgotPassword } from './components/client-zone/forgot-password/forgot-password';
+import { AddPersonalBooking } from './components/personal-booking/add-personal-booking/add-personal-booking';
 
 export const routes: Routes = [
 {
@@ -45,6 +46,12 @@ export const routes: Routes = [
 {
     path: 'change-password',
     component: ChangePassword,
+    canActivate: [authGuardGuard]
+}
+,
+{
+    path: 'add-personal-booking',
+    component: AddPersonalBooking,
     canActivate: [authGuardGuard]
 }
 

@@ -3,10 +3,11 @@ import { ClientService } from '../../../../services-api/client-service';
 import { ClientMembershipInformationResponse } from '../../../../dto/Client/client-membership-information-response';
 import { PersonalBookingService } from '../../../../services-api/personal-booking-service';
 import { PersonalBookingResponse } from '../../../../dto/PersonalBooking/personal-booking-response';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-client-personal-training',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './client-personal-training.html',
   styleUrl: './client-personal-training.css',
 })
