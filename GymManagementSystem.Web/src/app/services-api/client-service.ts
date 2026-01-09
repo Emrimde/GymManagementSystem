@@ -19,4 +19,8 @@ export class ClientService {
   createClient(dto: ClientAddRequest){
     return this.httpClient.post(`${this.base}/create-account`, dto)
   }
+
+  getClientContext(){
+    return this.httpClient.get(`${this.base}/get-client-context`)
+  }
 }

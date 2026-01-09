@@ -3,20 +3,14 @@ using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
-using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -27,13 +21,15 @@ public class ClientService : IClientService
     private readonly UserManager<User> _userManager;
     private readonly IHttpContextAccessor _http;
     private readonly IUnitOfWork _unitOfWork;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork)
+    private readonly IClientMembershipRepository _clientMembershipRepository;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository)
     {
         _repository = repository;
         _visitRepo = visitRepository;
         _userManager = userManager;
         _http = http;
         _unitOfWork = unitOfWork;
+        _clientMembershipRepository = clientMembershipRepository;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
@@ -195,5 +191,27 @@ public class ClientService : IClientService
         await _repository.UpdateClientAsync(client);
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
+    }
+
+    public async Task<Result<ClientMembershipInformationResponse>> GetClientContextAsync()
+    {
+        string? claim = _http.HttpContext?.User.FindFirst("client_id")?.Value;
+        if (!Guid.TryParse(claim, out var clientId))
+        {
+            return Result<ClientMembershipInformationResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+        }
+        ClientMembership? clientMembership =  await _clientMembershipRepository.GetActiveClientMembershipByClientId(clientId);
+        ClientMembershipInformationResponse response = new ClientMembershipInformationResponse();
+        if (clientMembership == null)
+        {
+            response.HasActiveMembership = false;
+        }
+        else
+        {
+            response.HasActiveMembership = true;
+            response.EndDate = clientMembership.EndDate.HasValue ? clientMembership.EndDate?.ToString("dd.MM.yyyy") : "indefinite time";
+            response.StartDate = clientMembership.StartDate.ToString("dd.MM.yyyy");
+        }
+            return Result<ClientMembershipInformationResponse>.Success(response, StatusCodeEnum.Ok);
     }
 }

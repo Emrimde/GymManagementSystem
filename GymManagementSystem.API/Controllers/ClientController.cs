@@ -46,6 +46,12 @@ public class ClientController : BaseController
 
 
     [Authorize(Roles = "Member")]
+    [HttpGet("get-client-context")]
+    public async Task<ActionResult<ClientMembershipInformationResponse>> GetClientWebContext()
+        => HandleResult(await _clientService.GetClientContextAsync());
+
+
+    [Authorize(Roles = "Member")]
     [HttpPut("update-client")]
     public async Task<ActionResult> UpdateWebClientInfo([FromBody] ClientWebUpdateRequest updateRequest)
         => HandleResult(await _clientService.UpdateWebClientInfoAsync(updateRequest));

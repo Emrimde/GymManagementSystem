@@ -18,4 +18,5 @@ public interface IClientService
     Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest entity);
     Result<ClientAgeValidationResponse> ValidateClientAgeAsync(ClientAgeValidationRequest entity);
     Task<Result<Unit>> UpdateWebClientInfoAsync(ClientWebUpdateRequest updateRequest);
+    Task<Result<ClientMembershipInformationResponse>> GetClientContextAsync();
 }
