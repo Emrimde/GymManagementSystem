@@ -3,10 +3,11 @@ import { ClientService } from '../../../../services-api/client-service';
 import { ClientMembershipInformationResponse } from '../../../../dto/Client/client-membership-information-response';
 import { ClassBookingService } from '../../../../services-api/class-booking-service';
 import { ClassBookingResponse } from '../../../../dto/ClassBooking/class-booking-response';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-client-reservation',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './client-reservation.html',
   styleUrl: './client-reservation.css',
 })

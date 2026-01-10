@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6 mt-5 mb-5">
+
+    <div class="card background-black shadow-sm p-4">
+
+      <h5 class="fw-bold text-center text-green mb-4">
+        Book gym class
+      </h5>
+
+      <form>
+
+        <div class="mb-3">
+          <label class="form-label text-white-bg">Gym class</label>
+          <select formControlName="gymClassId"
+                  class="form-select background-white"
+                  >
+            <option value="">Select class</option>
+           
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label text-white-bg">Scheduled class</label>
+          <select formControlName="scheduledClassId"
+                  class="form-select background-white">
+            <option value="">Select date & time</option>
+           
+          </select>
+        </div>
+
+        <button class="btn button-green w-100 fw-bold">
+          Book class
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>

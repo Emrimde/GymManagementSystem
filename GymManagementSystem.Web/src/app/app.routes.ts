@@ -9,6 +9,7 @@ import { BuyMembership } from './components/buy-membership/buy-membership';
 import { ChangePassword } from './components/client-zone/change-password/change-password';
 import { ForgotPassword } from './components/client-zone/forgot-password/forgot-password';
 import { AddPersonalBooking } from './components/personal-booking/add-personal-booking/add-personal-booking';
+import { AddClassBooking } from './components/ClassBooking/add-class-booking/add-class-booking';
 
 export const routes: Routes = [
 {
@@ -16,6 +17,13 @@ export const routes: Routes = [
     component: MainPage, 
     
 },
+{
+    path: 'add-class-booking',
+    component: AddClassBooking,
+    canActivate: [authGuardGuard]
+},
+
+
 {
     path: 'login-client',
     component: ClientLogin
