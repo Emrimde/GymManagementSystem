@@ -6,10 +6,8 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using Microsoft.AspNetCore.Http;
-using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -62,6 +60,7 @@ public class PersonalBookingService : IPersonalBookingService
         personalBooking.Start = start;
         personalBooking.End = end;
         personalBooking.Price = trainerRate.RatePerSessions;
+
         if (entity.IsClientReservation)
         {
             string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
@@ -71,6 +70,7 @@ public class PersonalBookingService : IPersonalBookingService
             }
             personalBooking.ClientId = clientId;
         }
+
         else
         {
             personalBooking.ClientId = entity.ClientId;

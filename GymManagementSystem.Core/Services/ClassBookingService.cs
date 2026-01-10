@@ -6,6 +6,8 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Http;
+using System.Runtime.CompilerServices;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -15,13 +17,15 @@ public class ClassBookingService : IClassBookingService
     private readonly IClientMembershipRepository _clientMembershipRepo;
     private readonly IScheduledClassRepository _scheduledClassRepository;
     private readonly IGymClassRepository _gymClassRepo;
+    private readonly IHttpContextAccessor _contextAccessor;
     
-    public ClassBookingService(IClassBookingRepository classBookingRepo, IClientMembershipRepository clientMembershipRepo, IScheduledClassRepository scheduledClassRepository, IGymClassRepository gymClassRepo)
+    public ClassBookingService(IClassBookingRepository classBookingRepo, IClientMembershipRepository clientMembershipRepo, IScheduledClassRepository scheduledClassRepository, IGymClassRepository gymClassRepo, IHttpContextAccessor contextAccessor)
     {
         _classBookingRepo = classBookingRepo;
         _clientMembershipRepo = clientMembershipRepo;
         _scheduledClassRepository = scheduledClassRepository;
         _gymClassRepo = gymClassRepo;
+        _contextAccessor = contextAccessor;
     }
     public async Task<Result<ClassBookingInfoResponse>> CreateAsync(ClassBookingAddRequest request)
     {
@@ -54,9 +58,23 @@ public class ClassBookingService : IClassBookingService
         return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
     }
 
-    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllByClientIdAsync(Guid clientId)
+    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllByClientIdAsync(Guid? clientId)
     {
-        IEnumerable<ClassBookingReadModel> classBookings = await _classBookingRepo.GetAllClassBookingsByClientId(clientId);
+        IEnumerable<ClassBookingReadModel> classBookings = new List<ClassBookingReadModel> { };
+        if (clientId == null)
+        {
+            string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+            if(!Guid.TryParse(claim, out var parsedClientId))
+            {
+                return Result<IEnumerable<ClassBookingResponse>>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+            }
+
+         classBookings = await _classBookingRepo.GetAllClassBookingsByClientId(parsedClientId);
+        }
+        else
+        {
+            classBookings = await _classBookingRepo.GetAllClassBookingsByClientId(clientId.Value);
+        }
         return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
     }
 
