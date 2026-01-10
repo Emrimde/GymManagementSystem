@@ -33,7 +33,10 @@ public class PersonalBookingService : IPersonalBookingService
         {
             return Result<PersonalBookingInfoResponse>.Failure("Cannot find trainer rate", StatusCodeEnum.NotFound);
         }
-
+        if(entity.StartDay == DateTime.MinValue)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure("No date selected", StatusCodeEnum.BadRequest);
+        }
         DateTime start = entity.StartDay.Date + entity.StartHour;
         DateTime end = start + TimeSpan.FromMinutes(trainerRate.DurationInMinutes);
         start = DateTime.SpecifyKind(start, DateTimeKind.Utc);
@@ -50,7 +53,7 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<PersonalBookingInfoResponse>.Failure("Trainer contract is not valid, so you can't add personal training for this trainer", StatusCodeEnum.BadRequest);
         }
 
-        if(start <= DateTime.UtcNow - TimeSpan.FromHours(5))
+        if(start <  DateTime.UtcNow + TimeSpan.FromHours(5))
         {
             return Result<PersonalBookingInfoResponse>.Failure("Personal training must be registered at least 5 hours before", StatusCodeEnum.BadRequest);
         }
@@ -59,6 +62,19 @@ public class PersonalBookingService : IPersonalBookingService
         personalBooking.Start = start;
         personalBooking.End = end;
         personalBooking.Price = trainerRate.RatePerSessions;
+        if (entity.IsClientReservation)
+        {
+            string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
+            if (!Guid.TryParse(claim, out var clientId))
+            {
+                return Result<PersonalBookingInfoResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
+            }
+            personalBooking.ClientId = clientId;
+        }
+        else
+        {
+            personalBooking.ClientId = entity.ClientId;
+        }
 
         PersonalBooking createdPersonalBooking = await _personalBookingRepo.AddAsync(personalBooking);
         return Result<PersonalBookingInfoResponse>.Success(personalBooking.ToPersonalBookingInfoResponse(), StatusCodeEnum.Ok);

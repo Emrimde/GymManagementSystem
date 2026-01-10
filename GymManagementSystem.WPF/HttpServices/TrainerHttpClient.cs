@@ -156,7 +156,6 @@ public class TrainerHttpClient : BaseHttpClientService
             ObservableCollection<TrainerInfoResponse>? response = await _httpClient.GetFromJsonAsync<ObservableCollection<TrainerInfoResponse>>
             ($"personal-trainers");
             return Result<ObservableCollection<TrainerInfoResponse>>.Success(response ?? new ObservableCollection<TrainerInfoResponse>());
-
         }
         catch (HttpRequestException ex)
         {

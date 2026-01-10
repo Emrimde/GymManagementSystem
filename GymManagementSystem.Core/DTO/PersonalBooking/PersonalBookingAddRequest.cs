@@ -7,4 +7,5 @@ public class PersonalBookingAddRequest
     public Guid ClientId { get;  set; }
     public DateTime StartDay { get;  set; }
     public TimeSpan StartHour { get; set; }
+    public bool IsClientReservation { get; set; } = false;
 }

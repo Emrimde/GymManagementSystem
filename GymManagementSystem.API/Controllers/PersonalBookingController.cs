@@ -24,7 +24,7 @@ public class PersonalBookingController : BaseController
     public async Task<ActionResult<PersonalBookingInfoResponse>> GetWebAllPersonalBookingsByClientId() => HandleResult(await _personalBookingService.GetAllPersonalBookingsByClientIdAsync());
 
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<PersonalBookingWebResponse>>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _personalBookingService.CreatePersonalBookingAsync(entity));
+    public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _personalBookingService.CreatePersonalBookingAsync(entity));
 
     [HttpPatch("pay-client/{id:guid}")]
     public async Task<ActionResult<PersonalBookingInfoResponse>> SetStatusToPaid(Guid id) => HandleResult(await _personalBookingService.SetStatusToPaidAsync(id));

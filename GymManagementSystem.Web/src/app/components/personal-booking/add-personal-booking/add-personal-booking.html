@@ -7,38 +7,41 @@
         Book personal training
       </h5>
 
-      <form>
+      <form [formGroup]="personalBookingForm" (ngSubmit)="submit()">
 
         <div class="mb-3">
           <label class="form-label text-white-bg">Date</label>
-          <input type="date" class="form-control background-white">
+          <input formControlName="startDate" type="date" class="form-control background-white"  >
         </div>
 
         <div class="mb-3">
           <label class="form-label text-white-bg">Start time</label>
-          <select class="form-select background-white">
-            <option>Select time</option>
-            <option>08:00</option>
-            <option>09:00</option>
-            <option>10:00</option>
+          <select formControlName="startHour" class="form-select background-white">
+            <option>Select time</option >
+            @for(hour of timeSlots; track hour) 
+            {
+              <option value="{{hour}}">{{hour}}</option>
+            }
           </select>
         </div>
 
         <div class="mb-3">
           <label class="form-label text-white-bg">Personal trainer</label>
-          <select class="form-select background-white">
-            <option>Select trainer</option>
-            <option>John Doe</option>
-            <option>Anna Smith</option>
+          <select formControlName="trainerId" class="form-select background-white" (change)="loadTrainerRates($event)">
+            @for(trainer of trainerInfoResponse(); track trainer.id) 
+            {
+              <option value="{{trainer.id}}">{{trainer.fullName}}</option>
+            }
           </select>
         </div>
 
         <div class="mb-4">
           <label class="form-label text-white-bg">Training duration</label>
-          <select class="form-select background-white">
-            <option>60 min</option>
-            <option>90 min</option>
-            <option>120 min</option>
+          <select formControlName="trainerRateId" class="form-select background-white">
+            @for(trainerRate of trainerRateSelect(); track trainerRate.trainerRateId) 
+            {
+              <option value="{{trainerRate.trainerRateId}}">{{trainerRate.displayPriceDuration}}</option>
+            }
           </select>
         </div>
 

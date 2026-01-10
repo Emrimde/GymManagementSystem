@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Result;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
-using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -51,7 +50,6 @@ public class PersonalBookingHttpClient : BaseHttpClientService
             return Result<PersonalBookingInfoResponse>.Failure($"{ex.Message}");
         }
     }
-
 
     public async Task<Result<PersonalBookingResponse>> UpdateAsync(Guid id, PersonalBookingUpdateRequest dto)
     {

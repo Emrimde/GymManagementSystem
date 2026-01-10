@@ -14,7 +14,7 @@ public static class PersonalBookingMapper
         return new PersonalBooking()
         {
             TrainerContractId = personalBooking.TrainerId,
-            ClientId = personalBooking.ClientId,
+            
             Start = personalBooking.StartDay,
            
         };
