@@ -35,7 +35,7 @@ public static class ClassBookingMapper
     {
         return new ClassBooking()
         {
-            ClientId = request.ClientId,
+            //ClientId = request.ClientId,
             ScheduledClassId = request.ScheduledClassId,
         };
     }

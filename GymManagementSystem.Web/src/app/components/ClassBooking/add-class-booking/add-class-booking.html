@@ -7,23 +7,30 @@
         Book gym class
       </h5>
 
-      <form>
+      <form [formGroup]="gymClassForm" (ngSubmit)="submit()">
 
         <div class="mb-3">
           <label class="form-label text-white-bg">Gym class</label>
-          <select formControlName="gymClassId"
+          <select formControlName="gymClassId" (change)="gymClassChange($event)"
                   class="form-select background-white">
             <option value="">Select class</option>
-           
+            @for(gymClass of gymClasses(); track gymClass.name){
+              <option value="{{ gymClass.gymClassId }}">
+                {{ gymClass.name }}
+              </option>
+            }
           </select>
         </div>
 
         <div class="mb-4">
-          <label class="form-label text-white-bg">Scheduled class</label>
+          <label class="form-label text-white-bg">Select date</label>
           <select formControlName="scheduledClassId"
                   class="form-select background-white">
-            <option value="">Select date & time</option>
-           
+            @for(scheduledClass of scheduledClasses(); track scheduledClass.scheduledClassDetails){
+              <option value="{{ scheduledClass.scheduledClassId }}">
+                {{ scheduledClass.scheduledClassDetails }}
+              </option>
+            }
           </select>
         </div>
 
