@@ -11,10 +11,10 @@ public class GeneralGymDetail
     public string SecondColor { get; set; } = default!;
     public TimeSpan OpenTime { get; set; }
     public TimeSpan CloseTime { get; set; }
-
-    // Global cennik
     public decimal DefaultRate60 { get; set; }
     public decimal DefaultRate90 { get; set; }
     public decimal DefaultRate120 { get; set; }
     public decimal DefaultGroupClassRate { get; set; }
+    public string? LogoUrl { get; set; } 
+    public string AboutUs { get; set; } = default!;
 }

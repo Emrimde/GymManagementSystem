@@ -2,6 +2,7 @@
 
 public class GeneralGymUpdateRequest
 {
+    public Guid Id { get; set; }
     public string GymName { get; set; } = default!;
     public string Address { get; set; } = default!;
     public string ContactNumber { get; set; } = default!;
@@ -11,4 +12,6 @@ public class GeneralGymUpdateRequest
     public decimal DefaultRate60 { get; set; }
     public decimal DefaultRate90 { get; set; }
     public decimal DefaultRate120 { get; set; }
+    public string AboutUs { get; set; } = default!;
+    public string? LogoUrl { get; set; }
 }

@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,29 +15,5 @@ public class GeneralGymDetailsRepository : IGeneralGymRepository
     public async Task<GeneralGymDetail?> GetGeneralGymDetailsAsync()
     {
         return await _dbContext.GeneralGymDetails.FirstOrDefaultAsync();
-    }
-
-    public async Task<GeneralGymDetail?> UpdateSettingsAsync(GeneralGymUpdateRequest updatedGeneralSettings)
-    {
-        GeneralGymDetail? generalSettings = await _dbContext.GeneralGymDetails.FirstOrDefaultAsync();
-
-        if (generalSettings == null)
-        {
-            return null!;
-        }
-
-        generalSettings.GymName = updatedGeneralSettings.GymName;
-        generalSettings.ContactNumber = updatedGeneralSettings.ContactNumber;
-        generalSettings.Address = updatedGeneralSettings.Address;
-        generalSettings.BackgroundColor = updatedGeneralSettings.BackgroundColor;
-        generalSettings.PrimaryColor = updatedGeneralSettings.PrimaryColor;
-        generalSettings.SecondColor = updatedGeneralSettings.SecondColor;
-        int modified = await _dbContext.SaveChangesAsync();
-
-        if (modified < 0)
-        {
-            return null;
-        }
-        return generalSettings;
     }
 }

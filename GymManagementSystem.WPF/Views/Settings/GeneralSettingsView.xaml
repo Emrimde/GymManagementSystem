@@ -37,7 +37,7 @@
                         Foreground="#EEEEEE" 
                         VerticalAlignment="Center"
                         Margin="20,0,10,0"/>
-                        <TextBox Width="200" Text="{Binding GeneralGymDetails.GymName}"> 
+                        <TextBox Width="200" Text="{Binding GeneralGymDetailsUpdateRequest.GymName}"> 
 
                         </TextBox>
                     </StackPanel>
@@ -49,7 +49,7 @@
     Foreground="#EEEEEE" 
     VerticalAlignment="Center"
     Margin="20,0,10,0"/>
-                        <TextBox Width="200" Text="{Binding GeneralGymDetails.ContactNumber}">
+                        <TextBox Width="200" Text="{Binding GeneralGymDetailsUpdateRequest.ContactNumber}">
 
                         </TextBox>
                     </StackPanel>
@@ -61,11 +61,11 @@
                             Foreground="#EEEEEE" 
                             VerticalAlignment="Center"
                             Margin="20,0,10,0"/>
-                        <TextBox Width="200"  Text="{Binding GeneralGymDetails.Address}">
+                        <TextBox Width="200"  Text="{Binding GeneralGymDetailsUpdateRequest.Address}">
 
                         </TextBox>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                         <TextBlock 
                         Text="Background color" 
                         FontSize="20" 
@@ -74,8 +74,8 @@
                         VerticalAlignment="Center"
                         Margin="20,0,10,0"/>
                         <xctk:ColorPicker SelectedColor="{Binding GeneralGymDetails.BackgroundColor}" Width="100" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    </StackPanel>-->
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                         <TextBlock 
                             Text="Primary Color" 
                             FontSize="20" 
@@ -84,8 +84,8 @@
                             VerticalAlignment="Center"
                             Margin="20,0,10,0"/>
                         <xctk:ColorPicker SelectedColor="{Binding GeneralGymDetails.PrimaryColor}" Width="100" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    </StackPanel>-->
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                         <TextBlock 
                             Text="Second Color" 
                             FontSize="20" 
@@ -94,6 +94,18 @@
                             VerticalAlignment="Center"
                             Margin="20,0,10,0"/>
                         <xctk:ColorPicker SelectedColor="{Binding GeneralGymDetails.SecondColor}" Width="100" />
+                    </StackPanel>-->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock 
+                            Text="About us content:" 
+                            FontSize="20" 
+                            FontWeight="SemiBold" 
+                            Foreground="#EEEEEE" 
+                            VerticalAlignment="Center"
+                            Margin="20,0,10,0"/>
+                        <TextBox Width="200" Height="200"  Text="{Binding GeneralGymDetailsUpdateRequest.AboutUs}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto">
+                        </TextBox>
+                      
                     </StackPanel>
                 </StackPanel>
             </Grid>

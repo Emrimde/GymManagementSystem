@@ -13,4 +13,6 @@ public class GeneralGymResponse
     public decimal DefaultRate90 { get; set; }
     public decimal DefaultRate120 { get; set; }
     public decimal DefaultGroupClassRate { get; set; }
+    public string AboutUs { get; set; } = default!;
+    public string? LogoUrl { get; set; }
 }

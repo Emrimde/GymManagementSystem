@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
+using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
@@ -24,29 +25,25 @@ public class GeneralSettingsViewModel : ViewModel
     }
 
     public ICommand SaveGeneralSettingsCommand { get; }
-    public GeneralGymUpdateRequest GeneralGymDetails
+    public GeneralGymUpdateRequest GeneralGymDetailsUpdateRequest
     {
         get { return _generalSettingsUpdateRequest; }
         set { _generalSettingsUpdateRequest = value; OnPropertyChanged(); }
     }
-
-
-
-
 
     public GeneralSettingsViewModel(SidebarViewModel sidebarVm,GeneralGymDetailsHttpClient httpClient, INavigationService navigationService)
     {
         SidebarView = sidebarVm;
         Navigation = navigationService;
         _httpClient = httpClient;
-        GeneralGymDetails = new GeneralGymUpdateRequest();
+        GeneralGymDetailsUpdateRequest = new GeneralGymUpdateRequest();
         _ = LoadGeneralSettings();
         SaveGeneralSettingsCommand = new AsyncRelayCommand(UpdateGeneralSettings, item => true);
     }
 
     private async Task UpdateGeneralSettings(object arg)
     {
-        Result<GeneralGymResponse> result = await _httpClient.PutGeneralSettingsAsync(GeneralGymDetails);
+        Result<GeneralGymResponse> result = await _httpClient.PutGeneralSettingsAsync(GeneralGymDetailsUpdateRequest);
         if (result.IsSuccess)
         {
             MessageBox.Show($"General settings updated", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -65,7 +62,8 @@ public class GeneralSettingsViewModel : ViewModel
     }
     private async Task LoadGeneralSettings()
     {
-        GeneralGymUpdateRequest response = await _httpClient.GetGeneralGymSettingsAsync(); 
-        GeneralGymDetails = response;
+        GeneralGymResponse response = await _httpClient.GetGeneralGymSettingsAsync();
+        GeneralGymUpdateRequest generalGymUpdate = response.ToGeneralGymUpdateRequest();
+        GeneralGymDetailsUpdateRequest = generalGymUpdate;
     }
 }

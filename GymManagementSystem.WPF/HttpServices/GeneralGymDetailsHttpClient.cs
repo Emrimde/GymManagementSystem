@@ -11,19 +11,19 @@ public class GeneralGymDetailsHttpClient : BaseHttpClientService
     public GeneralGymDetailsHttpClient(HttpClient httpClient) : base(httpClient)
     {
     }
-    public async Task<GeneralGymUpdateRequest> GetGeneralGymSettingsAsync()
+    public async Task<GeneralGymResponse> GetGeneralGymSettingsAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync("");
         if (response.IsSuccessStatusCode)
         {
-            GeneralGymUpdateRequest? generalGymResponse = await response.Content.ReadFromJsonAsync<GeneralGymUpdateRequest>();
+            GeneralGymResponse? generalGymResponse = await response.Content.ReadFromJsonAsync<GeneralGymResponse>();
 
-            return generalGymResponse ?? new GeneralGymUpdateRequest();
+            return generalGymResponse ?? new GeneralGymResponse();
         }
         else
         {
             MessageBox.Show("Failed to load Gym setting.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new GeneralGymUpdateRequest();
+            return new GeneralGymResponse();
         }
     }
 

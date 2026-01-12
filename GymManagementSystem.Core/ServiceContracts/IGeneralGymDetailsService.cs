@@ -6,6 +6,6 @@ namespace GymManagementSystem.Core.ServiceContracts;
 
 public interface IGeneralGymDetailsService
 {
-    Task<Result<GeneralGymResponse>> GetSettingsByIdAsync(CancellationToken cancellationToken);
+    Task<Result<GeneralGymResponse>> GetSettingsByIdAsync();
     Task<Result<GeneralGymResponse>> UpdateSettingsAsync(GeneralGymUpdateRequest request);
 }

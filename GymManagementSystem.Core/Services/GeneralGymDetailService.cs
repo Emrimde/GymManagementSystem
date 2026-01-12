@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.Core.Enum;
@@ -12,12 +13,14 @@ namespace GymManagementSystem.Core.Services;
 public class GeneralGymDetailService : IGeneralGymDetailsService
 {
     private readonly IGeneralGymRepository _generalGymRepository;
-    public GeneralGymDetailService(IGeneralGymRepository generalGymRepository)
+    private readonly IUnitOfWork _unitOfWork;
+    public GeneralGymDetailService(IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork)
     {
         _generalGymRepository = generalGymRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<GeneralGymResponse>> GetSettingsByIdAsync(CancellationToken cancellationToken)
+    public async Task<Result<GeneralGymResponse>> GetSettingsByIdAsync()
     {
         GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
         if(generalGymDetail == null)
@@ -30,11 +33,14 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
 
     public async Task<Result<GeneralGymResponse>> UpdateSettingsAsync(GeneralGymUpdateRequest request)
     {
-        GeneralGymDetail? generalGymDetail = await _generalGymRepository.UpdateSettingsAsync(request);
-        if (generalGymDetail == null)
+        GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
+        if(generalGymDetail == null)
         {
-            return Result<GeneralGymResponse>.Failure("Failed to update settings", StatusCodeEnum.InternalServerError);
+            return Result<GeneralGymResponse>.Failure("General gym detail not found", StatusCodeEnum.NotFound);
         }
+
+        generalGymDetail.UpdateGeneralGymDetail(request);
+        await _unitOfWork.SaveChangesAsync();
         return Result<GeneralGymResponse>.Success(generalGymDetail.ToGeneralGymResponse(), StatusCodeEnum.Ok);
     }
 }

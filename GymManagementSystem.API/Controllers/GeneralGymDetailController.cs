@@ -13,7 +13,7 @@ public class GeneralGymDetailController : BaseController
         _generalGymDetailsService = generalGymDetailsService;
     }
     [HttpGet]
-    public async Task<ActionResult<GeneralGymResponse>> GetGeneralGymDetail(CancellationToken cancellationToken) =>  HandleResult(await _generalGymDetailsService.GetSettingsByIdAsync(cancellationToken));
+    public async Task<ActionResult<GeneralGymResponse>> GetGeneralGymDetail() =>  HandleResult(await _generalGymDetailsService.GetSettingsByIdAsync());
 
     [HttpPut]
     public async Task<ActionResult<GeneralGymResponse>> UpdateGeneralSettings([FromBody] GeneralGymUpdateRequest request) => HandleResult(await _generalGymDetailsService.UpdateSettingsAsync(request));

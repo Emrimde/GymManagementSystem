@@ -19,23 +19,24 @@ public static class GeneralGymDetailMapper
             DefaultRate90 = generalGymDetail.DefaultRate90,
             DefaultRate120 = generalGymDetail.DefaultRate120,
             DefaultRate60 = generalGymDetail.DefaultRate60,
-            DefaultGroupClassRate = generalGymDetail.DefaultGroupClassRate
+            DefaultGroupClassRate = generalGymDetail.DefaultGroupClassRate,
+            LogoUrl = generalGymDetail.LogoUrl,
+            AboutUs = generalGymDetail.AboutUs
         };
     }
 
-    public static GeneralGymDetail ToGeneralGymDetail(this GeneralGymUpdateRequest generalGymUpdateRequest)
+    public static void UpdateGeneralGymDetail(this GeneralGymDetail generalGymDetail, GeneralGymUpdateRequest generalUpdateRequest)
     {
-        return new GeneralGymDetail
-        {
-            GymName = generalGymUpdateRequest.GymName,
-            Address = generalGymUpdateRequest.Address,
-            ContactNumber = generalGymUpdateRequest.ContactNumber,
-            BackgroundColor = generalGymUpdateRequest.BackgroundColor,
-            PrimaryColor = generalGymUpdateRequest.PrimaryColor,
-            SecondColor = generalGymUpdateRequest.SecondColor,
-            DefaultRate60 = generalGymUpdateRequest.DefaultRate60,
-            DefaultRate120 = generalGymUpdateRequest.DefaultRate120,
-            DefaultRate90 = generalGymUpdateRequest.DefaultRate90
-        };
+            generalGymDetail.GymName = generalUpdateRequest.GymName;
+            generalGymDetail.Address = generalUpdateRequest.Address;
+            generalGymDetail.ContactNumber = generalUpdateRequest.ContactNumber;
+            generalGymDetail.BackgroundColor = generalUpdateRequest.BackgroundColor;
+            generalGymDetail.PrimaryColor = generalUpdateRequest.PrimaryColor;
+            generalGymDetail.SecondColor = generalUpdateRequest.SecondColor;
+            generalGymDetail.DefaultRate60 = generalUpdateRequest.DefaultRate60;
+            generalGymDetail.DefaultRate120 = generalUpdateRequest.DefaultRate120;
+            generalGymDetail.DefaultRate90 = generalUpdateRequest.DefaultRate90;
+            generalGymDetail.AboutUs = generalUpdateRequest.AboutUs;
+            generalGymDetail.LogoUrl = generalUpdateRequest.LogoUrl;
     }
 }

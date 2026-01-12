@@ -201,7 +201,7 @@ namespace GymManagementSystem.WPF
         protected async override void OnStartup(StartupEventArgs e)
         {
             GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
-            GeneralGymUpdateRequest gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
+            GeneralGymResponse gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
             Application.Current.Resources["GymName"] = gymDetails.GymName;
             Application.Current.Resources["Address"] = gymDetails.Address;
             Application.Current.Resources["ContactNumber"] = gymDetails.ContactNumber;
