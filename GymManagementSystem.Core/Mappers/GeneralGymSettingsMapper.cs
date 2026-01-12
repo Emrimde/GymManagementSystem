@@ -20,4 +20,21 @@ public static class GeneralGymSettingsMapper
             LogoUrl = settings.LogoUrl
         };
     }
+    public static GeneralGymUpdateRequest Clone(this GeneralGymUpdateRequest item)
+    {
+        return new GeneralGymUpdateRequest
+        {
+            GymName = item.GymName,
+            Address = item.Address,
+            ContactNumber = item.ContactNumber,
+            BackgroundColor = item.BackgroundColor,
+            PrimaryColor = item.PrimaryColor,
+            SecondColor = item.SecondColor,
+            DefaultRate60 = item.DefaultRate60,
+            DefaultRate90 = item.DefaultRate90,
+            DefaultRate120 = item.DefaultRate120,
+            AboutUs = item.AboutUs,
+            LogoUrl = item.LogoUrl
+        };
+    }
 }

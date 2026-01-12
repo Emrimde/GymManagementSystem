@@ -5,19 +5,22 @@ using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
-
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace GymManagementSystem.Core.Services;
 
 public class GeneralGymDetailService : IGeneralGymDetailsService
 {
     private readonly IGeneralGymRepository _generalGymRepository;
+    private readonly IWebHostEnvironment _env;
     private readonly IUnitOfWork _unitOfWork;
-    public GeneralGymDetailService(IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork)
+    public GeneralGymDetailService(IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork, IWebHostEnvironment env)
     {
         _generalGymRepository = generalGymRepository;
         _unitOfWork = unitOfWork;
+        _env = env;
     }
 
     public async Task<Result<GeneralGymResponse>> GetSettingsByIdAsync()
@@ -42,5 +45,25 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
         generalGymDetail.UpdateGeneralGymDetail(request);
         await _unitOfWork.SaveChangesAsync();
         return Result<GeneralGymResponse>.Success(generalGymDetail.ToGeneralGymResponse(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<string>> UploadLogoAsync(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return Result<string>.Failure("",StatusCodeEnum.BadRequest);
+
+        var ext = Path.GetExtension(file.FileName);
+        var fileName = $"logo_{Guid.NewGuid()}{ext}";
+
+        var folder = Path.Combine(_env.WebRootPath, "uploads", "logos");
+        Directory.CreateDirectory(folder);
+
+        var path = Path.Combine(folder, fileName);
+
+        using var stream = new FileStream(path, FileMode.Create);
+        await file.CopyToAsync(stream);
+
+        var url = $"/uploads/logos/{fileName}";
+        return Result<string>.Success(url, StatusCodeEnum.Ok);
     }
 }

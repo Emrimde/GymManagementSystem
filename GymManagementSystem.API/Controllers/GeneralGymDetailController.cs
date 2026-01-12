@@ -18,4 +18,7 @@ public class GeneralGymDetailController : BaseController
     [HttpPut]
     public async Task<ActionResult<GeneralGymResponse>> UpdateGeneralSettings([FromBody] GeneralGymUpdateRequest request) => HandleResult(await _generalGymDetailsService.UpdateSettingsAsync(request));
 
+    [HttpPost("logo")]
+    public async Task<ActionResult<string>> UploadLogo(IFormFile file) => HandleResult(await _generalGymDetailsService.UploadLogoAsync(file));
+
 }

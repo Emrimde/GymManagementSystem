@@ -4,9 +4,14 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using Microsoft.Win32;
+using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.WPF.ViewModels.Settings;
 
@@ -25,6 +30,9 @@ public class GeneralSettingsViewModel : ViewModel
     }
 
     public ICommand SaveGeneralSettingsCommand { get; }
+    public ICommand PickLogoCommand { get; }
+    public ImageSource? LogoPreview { get; set; }
+
     public GeneralGymUpdateRequest GeneralGymDetailsUpdateRequest
     {
         get { return _generalSettingsUpdateRequest; }
@@ -33,12 +41,36 @@ public class GeneralSettingsViewModel : ViewModel
 
     public GeneralSettingsViewModel(SidebarViewModel sidebarVm,GeneralGymDetailsHttpClient httpClient, INavigationService navigationService)
     {
+        PickLogoCommand = new AsyncRelayCommand(item => PickLogo(), item => true);
         SidebarView = sidebarVm;
         Navigation = navigationService;
         _httpClient = httpClient;
         GeneralGymDetailsUpdateRequest = new GeneralGymUpdateRequest();
         _ = LoadGeneralSettings();
         SaveGeneralSettingsCommand = new AsyncRelayCommand(UpdateGeneralSettings, item => true);
+    }
+
+    private async Task PickLogo()
+    {
+        OpenFileDialog dialog = new OpenFileDialog() { Filter = "Images|*.png;*.jpg;"};
+         if (dialog.ShowDialog() != true)
+         {
+             return;
+         }
+         LogoPreview = new BitmapImage(new Uri(dialog.FileName));
+         OnPropertyChanged(nameof(LogoPreview));
+         using var fs = System.IO.File.OpenRead(dialog.FileName);
+         var content = new MultipartFormDataContent();
+         content.Add(new StreamContent(fs), "file", Path.GetFileName(dialog.FileName));
+        Result<string> result = await _httpClient.UploadLogoAsync(content);
+        if(result.IsSuccess)
+        {
+            GeneralGymDetailsUpdateRequest.LogoUrl = result.Value!;
+        }
+        else
+        {
+            MessageBox.Show($"Error during logo upload: {result.ErrorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private async Task UpdateGeneralSettings(object arg)

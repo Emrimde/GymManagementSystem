@@ -41,4 +41,19 @@ public class GeneralGymDetailsHttpClient : BaseHttpClientService
             return Result<GeneralGymResponse>.Failure("Failed to update settings.");
         }
     }
+
+    public async Task<Result<string>> UploadLogoAsync(MultipartFormDataContent content)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsync("logo", content);
+        if (response.IsSuccessStatusCode)
+        {
+            string? url = await response.Content.ReadFromJsonAsync<string>();
+
+            return Result<string>.Success(url);
+        }
+        else
+        {
+            return Result<string>.Failure("Failed to update settings.");
+        }
+    }
 }

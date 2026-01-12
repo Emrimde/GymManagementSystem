@@ -23,4 +23,8 @@
     <ProjectReference Include="..\GymManagementSystem.Infrastructure\GymManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\logos\" />
+  </ItemGroup>
+
 </Project>

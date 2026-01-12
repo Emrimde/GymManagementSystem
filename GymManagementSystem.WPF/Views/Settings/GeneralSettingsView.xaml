@@ -107,6 +107,17 @@
                         </TextBox>
                       
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock 
+         Text="Logo" 
+         FontSize="20" 
+         FontWeight="SemiBold" 
+         Foreground="#EEEEEE" 
+         VerticalAlignment="Center"
+         Margin="20,0,10,0"/>
+                        <Button Content="Choose logo" Command="{Binding PickLogoCommand}" />
+                        <Image Source="{Binding LogoPreview}" Height="40"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
