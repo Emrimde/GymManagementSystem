@@ -30,6 +30,9 @@ gymClassChange($event: Event) {
 }
 
 async submit() {
+  if(this.gymClassForm.invalid) {
+    return;
+  }
   const formValue = this.gymClassForm.value;
   const classBookingAddRequest: ClassBookingAddRequest = {
     scheduledClassId: formValue.scheduledClassId,
@@ -65,7 +68,7 @@ async submit() {
   buildGymClassForm(): FormGroup {
     return this.fb.group({
       scheduledClassId: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      gymClassId: ['', [Validators.required]],
     });
   }
 }
