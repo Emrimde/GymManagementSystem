@@ -10,6 +10,7 @@ import { ChangePassword } from './components/client-zone/change-password/change-
 import { ForgotPassword } from './components/client-zone/forgot-password/forgot-password';
 import { AddPersonalBooking } from './components/personal-booking/add-personal-booking/add-personal-booking';
 import { AddClassBooking } from './components/ClassBooking/add-class-booking/add-class-booking';
+import { AboutUs } from './components/about-us/about-us';
 
 export const routes: Routes = [
 {
@@ -22,7 +23,10 @@ export const routes: Routes = [
     component: AddClassBooking,
     canActivate: [authGuardGuard]
 },
-
+{
+    path: 'about-us',
+    component: AboutUs,
+},
 
 {
     path: 'login-client',

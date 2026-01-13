@@ -1,0 +1,56 @@
+<section class="background-black py-5">
+  <div class="container">
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-12 col-lg-8 text-center">
+        <h2 class="text-white-bg fw-bold mb-3">
+          About us
+        </h2>
+        <p class="text-light-gray">
+          We are more than just a gym — we build strength, confidence and
+          discipline through smart training and consistency.
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 col-lg-8">
+        <div class="p-4 background-white rounded shadow-sm">
+          <h5 class="fw-bold text-black mb-3">
+            Our mission
+          </h5>
+          @if(aboutUsContent$ | async; as aboutUsContent) {
+          <p class="text-black mb-0">
+            {{ aboutUsContent.aboutUsContent }}
+          </p>
+        }
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 col-lg-8">
+        <div class="p-4 background-light-gray rounded shadow-sm">
+          <h5 class="fw-bold text-white mb-3">
+            Why choose us?
+          </h5>
+          <ul class="mb-0 ps-3 text-white">
+            <li>Certified and experienced trainers</li>
+            <li>Modern and clean gym environment</li>
+            <li>Individual training approach</li>
+            <li>Motivating and supportive community</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+      <div class="col-12 col-lg-6 text-center">
+        <button class="button-green fw-bold w-50" routerLink="/login-client">
+          Join us today
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
