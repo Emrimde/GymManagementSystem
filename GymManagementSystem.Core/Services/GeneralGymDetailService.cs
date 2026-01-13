@@ -76,7 +76,7 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
         using var stream = new FileStream(path, FileMode.Create);
         await file.CopyToAsync(stream);
 
-        var url = $"/uploads/logos/{fileName}";
+        var url = $"http://localhost:5105/uploads/logos/{fileName}";
         return Result<string>.Success(url, StatusCodeEnum.Ok);
     }
 }

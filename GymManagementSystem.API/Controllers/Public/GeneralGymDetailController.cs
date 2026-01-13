@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers.Public;
 
-[Route("api/public/generalGymDetail")]
+[Route("api/public/general-gym-detail")]
 public class GeneralGymDetailController : BaseController
 {
     private readonly IGeneralGymDetailsService _generalGymDetailsService;
@@ -15,9 +15,9 @@ public class GeneralGymDetailController : BaseController
     }
 
     [HttpGet("get-profile")]
-    public async Task<ActionResult<GeneralPublicProfileResponse?>> GetPublicGymProfile() => HandleResult(await _generalGymDetailsService.GetPublicGymProfileAsync());
+    public async Task<ActionResult<GeneralPublicProfileResponse?>> GetPublicGymProfile() =>HandleResult(await _generalGymDetailsService.GetPublicGymProfileAsync());
 
     [HttpGet("get-about-us")]
-    public async Task<ActionResult<GeneralPublicProfileResponse?>> GetAboutUs() => HandleResult(await _generalGymDetailsService.GetPublicAboutUsAsync());
+    public async Task<ActionResult<AboutUsResponse?>> GetAboutUs() => HandleResult(await _generalGymDetailsService.GetPublicAboutUsAsync());
 
 }

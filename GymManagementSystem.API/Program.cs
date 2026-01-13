@@ -102,6 +102,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseRouting();
+app.UseStaticFiles();
 app.UseCors("AllowAll");
 
 app.UseAuthentication();

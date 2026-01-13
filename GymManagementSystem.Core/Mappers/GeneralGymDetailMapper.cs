@@ -33,7 +33,6 @@ public static class GeneralGymDetailMapper
             Address = generalGymDetail.Address,
             ContactNumber = generalGymDetail.ContactNumber,
             LogoUrl = generalGymDetail.LogoUrl,
-            AboutUs = generalGymDetail.AboutUs,
         };
     }
 
