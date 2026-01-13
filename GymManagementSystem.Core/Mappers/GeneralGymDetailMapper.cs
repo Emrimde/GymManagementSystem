@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.GeneralGymDetail;
+using GymManagementSystem.Core.WebDTO.GeneralGymDetail;
 
 namespace GymManagementSystem.Core.Mappers;
 
@@ -22,6 +23,25 @@ public static class GeneralGymDetailMapper
             DefaultGroupClassRate = generalGymDetail.DefaultGroupClassRate,
             LogoUrl = generalGymDetail.LogoUrl,
             AboutUs = generalGymDetail.AboutUs
+        };
+    }
+    public static GeneralPublicProfileResponse ToGeneralPublicProfileResponse(this GeneralGymDetail generalGymDetail)
+    {
+        return new GeneralPublicProfileResponse
+        {
+            GymName = generalGymDetail.GymName,
+            Address = generalGymDetail.Address,
+            ContactNumber = generalGymDetail.ContactNumber,
+            LogoUrl = generalGymDetail.LogoUrl,
+            AboutUs = generalGymDetail.AboutUs,
+        };
+    }
+
+    public static AboutUsResponse ToAboutUsResponse(this GeneralGymDetail generalGymDetail)
+    {
+        return new AboutUsResponse
+        {
+            AboutUsContent = generalGymDetail.AboutUs,
         };
     }
 

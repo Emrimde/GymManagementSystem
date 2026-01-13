@@ -6,6 +6,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.GeneralGymDetail;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -21,6 +22,18 @@ public class GeneralGymDetailService : IGeneralGymDetailsService
         _generalGymRepository = generalGymRepository;
         _unitOfWork = unitOfWork;
         _env = env;
+    }
+
+    public async Task<Result<AboutUsResponse?>> GetPublicAboutUsAsync()
+    {
+        GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
+        return Result<AboutUsResponse?>.Success(generalGymDetail?.ToAboutUsResponse());
+    }
+
+    public async Task<Result<GeneralPublicProfileResponse?>> GetPublicGymProfileAsync()
+    {
+        GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
+        return Result<GeneralPublicProfileResponse?>.Success(generalGymDetail?.ToGeneralPublicProfileResponse());
     }
 
     public async Task<Result<GeneralGymResponse>> GetSettingsByIdAsync()
