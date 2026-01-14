@@ -79,10 +79,11 @@ public class ClientService : IClientService
         var createResult = await _userManager.CreateAsync(user, "example");
         if (!createResult.Succeeded)
         {
-            return Result<ClientInfoResponse>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
+            string error = string.Join('\n', createResult.Errors.Select(item => item.Description));
+            return Result<ClientInfoResponse>.Failure($"{error}", StatusCodeEnum.InternalServerError);
         }
         
-        await _userManager.AddToRoleAsync(user, "Member");
+        await _userManager.AddToRoleAsync(user, "Client");
         ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }

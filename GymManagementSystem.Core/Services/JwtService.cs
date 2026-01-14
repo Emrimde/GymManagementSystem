@@ -40,7 +40,7 @@ public class JwtService : IJwtService
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        if (roles.Contains("Member") && user.ClientId != null)
+        if (roles.Contains("Client") && user.ClientId != null)
         {
             claims.Add(new Claim("client_id", user.ClientId.ToString()!));
         }

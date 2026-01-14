@@ -34,6 +34,8 @@ public class ClientMembershipsController : BaseController
     public async Task<ActionResult<ClientMembershipInfoResponse>> Update(Guid id, ClientMembershipUpdateRequest entity)
         => HandleResult(await _clientMembershipService.UpdateAsync(id, entity));
 
+
+
     [HttpGet("get-client-membership-info")]
     public async Task<ActionResult<ClientMembershipWebResponse?>> GetClientMembershipWebInformation() => HandleResult(await _clientMembershipService.GetClientMembershipInfoAsync());
 

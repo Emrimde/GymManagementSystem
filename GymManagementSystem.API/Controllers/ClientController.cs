@@ -39,19 +39,19 @@ public class ClientController : BaseController
         => HandleResult(await _clientService.CreateAccountAsync(entity));
 
 
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Client")]
     [HttpGet("get-client-details")]
     public async Task<ActionResult<ClientDetailsWebResponse>> GetClientWebProfileInfo()
         => HandleResult(await _clientService.GetClientProfileInfoAsync());
 
 
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Client")]
     [HttpGet("get-client-context")]
     public async Task<ActionResult<ClientMembershipInformationResponse>> GetClientWebContext()
         => HandleResult(await _clientService.GetClientContextAsync());
 
 
-    [Authorize(Roles = "Member")]
+    [Authorize(Roles = "Client")]
     [HttpPut("update-client")]
     public async Task<ActionResult> UpdateWebClientInfo([FromBody] ClientWebUpdateRequest updateRequest)
         => HandleResult(await _clientService.UpdateWebClientInfoAsync(updateRequest));

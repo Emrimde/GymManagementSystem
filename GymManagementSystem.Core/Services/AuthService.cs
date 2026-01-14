@@ -5,10 +5,8 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.Auth;
-using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
@@ -16,7 +14,6 @@ namespace GymManagementSystem.Core.Services;
 public class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IEmailService _emailService;
@@ -24,7 +21,6 @@ public class AuthService : IAuthService
     public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor, IEmailService emailService)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
         _jwtService = jwtService;
         _contextAccessor = contextAccessor;
         _emailService = emailService;
