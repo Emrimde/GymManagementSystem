@@ -28,11 +28,6 @@ public class ClassBookingRepository : IClassBookingRepository
         return entity;
     }
 
-    public async Task<PageResult<ClassBookingResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)
     {
         return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow).Select(item => new ClassBookingReadModel()

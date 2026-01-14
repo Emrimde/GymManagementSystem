@@ -1,5 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Contract;
 using GymManagementSystem.Core.DTO.Membership;
+using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.WebDTO.Membership;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;

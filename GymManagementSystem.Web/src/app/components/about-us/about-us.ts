@@ -7,7 +7,7 @@ import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-about-us',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe,RouterLink],
   templateUrl: './about-us.html',
   styleUrl: './about-us.css',
 })

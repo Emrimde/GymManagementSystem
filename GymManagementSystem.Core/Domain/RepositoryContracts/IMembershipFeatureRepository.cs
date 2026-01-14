@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.MembershipFeature;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IMembershipFeatureRepository

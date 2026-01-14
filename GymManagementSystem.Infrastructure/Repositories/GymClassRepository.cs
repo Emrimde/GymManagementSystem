@@ -26,11 +26,6 @@ public class GymClassRepository : IGymClassRepository
         return await _dbContext.GymClasses.ToListAsync();  
     }
 
-    public Task<PageResult<GymClassResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<GymClass?> GetByIdAsync(Guid id)
     {
         return await _dbContext.GymClasses.FirstOrDefaultAsync(item => item.Id == id);

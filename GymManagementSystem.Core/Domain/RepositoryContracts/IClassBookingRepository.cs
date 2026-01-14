@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
+using GymManagementSystem.Core.Result;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 

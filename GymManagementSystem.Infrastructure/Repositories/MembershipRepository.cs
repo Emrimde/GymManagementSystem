@@ -23,44 +23,6 @@ public class MembershipRepository : IMembershipRepository
         return entity;
     }
 
-    public async Task<PageResult<MembershipResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
-    {
-        IQueryable<Membership> query = _dbContext.Memberships;
-
-        if (searchText != null)
-        {
-            string searchTextlower = searchText.ToLower();
-            string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string term in terms)
-            {
-                string pattern = $"%{term}%";
-                query = query.Where(item => item.Name.ToLower().Contains(term));
-                                                
-            }
-        }
-
-
-
-        int totalCount = await query.CountAsync();
-        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        List<MembershipResponse> list = await query.OrderBy(item => item.Name)
-                                                    .Skip((page - 1) * pageSize)
-                                                        .Take(pageSize)
-                                                            .Select(item => item.ToMembershipResponse())
-                                                                .ToListAsync();
-
-
-
-        return new PageResult<MembershipResponse>()
-        {
-            Items = list,
-            TotalCount = totalCount,
-            PageSize = pageSize,
-            TotalPages = totalPages,
-            CurrentPage = page
-        };
-    }
-
     public async Task<IEnumerable<MembershipResponse>> GetAllMemberships()
     {
         IQueryable<Membership> query = _dbContext.Memberships;
