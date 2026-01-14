@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Client\" />
     <Folder Include="Controllers\Admin\" />
     <Folder Include="wwwroot\uploads\logos\" />
   </ItemGroup>

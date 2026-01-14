@@ -3,6 +3,7 @@ using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -33,15 +34,4 @@ public class ClientMembershipsController : BaseController
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ClientMembershipInfoResponse>> Update(Guid id, ClientMembershipUpdateRequest entity)
         => HandleResult(await _clientMembershipService.UpdateAsync(id, entity));
-
-
-
-    [HttpGet("get-client-membership-info")]
-    public async Task<ActionResult<ClientMembershipWebResponse?>> GetClientMembershipWebInformation() => HandleResult(await _clientMembershipService.GetClientMembershipInfoAsync());
-
-    [HttpGet("get-client-membership-preview/{membershipId:guid}")]
-    public async Task<ActionResult<ClientMembershipWebPreviewResponse?>> GetClientMembershipWebPreview([FromRoute] Guid membershipId) => HandleResult(await _clientMembershipService.GetClientMembershipPreviewAsync(membershipId));
-    
-
-
 }

@@ -10,7 +10,7 @@ export class ClientMembershipService {
   createClientMembership(addDto: ClientMembershipAddRequest) {
     return this.httpClient.post(`${this.base}`, addDto)
   }
-  private readonly base = "http://localhost:5105/api/clientMemberships"
+  private readonly base = "http://localhost:5105/api/client/client-membership"
 
   getClientMembershipInfo() {
     return this.httpClient.get(`${this.base}/get-client-membership-info`)

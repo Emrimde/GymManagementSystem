@@ -2,10 +2,7 @@
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -37,25 +34,6 @@ public class ClientController : BaseController
     [HttpPost("create-account")]
     public async Task<ActionResult<Unit>> CreateAccount([FromBody] ClientWebAddRequest entity)
         => HandleResult(await _clientService.CreateAccountAsync(entity));
-
-
-    [Authorize(Roles = "Client")]
-    [HttpGet("get-client-details")]
-    public async Task<ActionResult<ClientDetailsWebResponse>> GetClientWebProfileInfo()
-        => HandleResult(await _clientService.GetClientProfileInfoAsync());
-
-
-    [Authorize(Roles = "Client")]
-    [HttpGet("get-client-context")]
-    public async Task<ActionResult<ClientMembershipInformationResponse>> GetClientWebContext()
-        => HandleResult(await _clientService.GetClientContextAsync());
-
-
-    [Authorize(Roles = "Client")]
-    [HttpPut("update-client")]
-    public async Task<ActionResult> UpdateWebClientInfo([FromBody] ClientWebUpdateRequest updateRequest)
-        => HandleResult(await _clientService.UpdateWebClientInfoAsync(updateRequest));
-
 
     [HttpPost("validate")]
     public ActionResult<ClientInfoResponse> ValidateClientAge([FromBody] ClientAgeValidationRequest entity)

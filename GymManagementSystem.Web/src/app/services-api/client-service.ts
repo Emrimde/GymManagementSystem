@@ -8,7 +8,7 @@ import { ClientUpdateRequest } from '../dto/Client/client-update-request';
 })
 export class ClientService {
   constructor(private httpClient: HttpClient){}
-  private readonly base = "http://localhost:5105/api/Client"
+  private readonly base = "http://localhost:5105/api/client/client"
   updateClient(dto: ClientUpdateRequest) {
     return this.httpClient.put(`${this.base}/update-client`, dto)
   }
