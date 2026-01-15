@@ -76,7 +76,6 @@ public class ClientHttpClient : BaseHttpClientService
         }
     }
 
-    //zwracam result bo umozliwia mi to  elastyczne zwracanie w   przypadku sukcesu obiektu a w przeciwnym razie bledy z api
     public async Task<Result<ClientInfoResponse>> PostClientAsync(ClientAddRequest request)
     {
         request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth,DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
