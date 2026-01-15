@@ -16,7 +16,7 @@ public class ClientHttpClient : BaseHttpClientService
 {
     public ClientHttpClient(HttpClient httpClient) : base(httpClient)
     {
-        
+
     }
 
     public async Task<Result<ClientAgeValidationResponse>> ValidateClientAgeAsync(
@@ -59,7 +59,7 @@ public class ClientHttpClient : BaseHttpClientService
         {
             return null;
         }
-        
+
     }
 
     public async Task<PageResult<ClientResponse>> GetAllClientsAsync(string? searchText, int page)
@@ -95,7 +95,7 @@ public class ClientHttpClient : BaseHttpClientService
 
     public async Task<Result<ClientInfoResponse>> PostClientAsync(ClientAddRequest request)
     {
-        request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth,DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
+        request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc); // był błąd z postgresql, strefy czasowe
         string json = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -109,7 +109,7 @@ public class ClientHttpClient : BaseHttpClientService
             {
                 PropertyNameCaseInsensitive = true
             };
-            ClientInfoResponse? client = JsonSerializer.Deserialize<ClientInfoResponse>(responseBody,options);
+            ClientInfoResponse? client = JsonSerializer.Deserialize<ClientInfoResponse>(responseBody, options);
             return Result<ClientInfoResponse>.Success(client!);
         }
         else
@@ -137,7 +137,6 @@ public class ClientHttpClient : BaseHttpClientService
 
     public async Task<Result<ClientInfoResponse>> PutClientAsync(ClientUpdateRequest request, Guid id)
     {
-        request.DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
         string json = JsonSerializer.Serialize(request);
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -147,7 +146,7 @@ public class ClientHttpClient : BaseHttpClientService
 
         if (response.IsSuccessStatusCode)
         {
-            var options = new JsonSerializerOptions // backend zwracał camelCase
+            var options = new JsonSerializerOptions 
             {
                 PropertyNameCaseInsensitive = true
             };
@@ -158,7 +157,17 @@ public class ClientHttpClient : BaseHttpClientService
         else
         {
             string errorMessage = responseBody;
+            ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(item => item.Value.Select(msg => $"{item.Key}: {msg}"));
 
+                string message = string.Join("\n", errors);
+
+                return Result<ClientInfoResponse>.Failure(message);
+            }
+            
             try
             {
                 var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
@@ -184,31 +193,91 @@ public class ClientHttpClient : BaseHttpClientService
 
         if (response.IsSuccessStatusCode)
         {
-           ClientDetailsResponse? client = await response.Content.ReadFromJsonAsync<ClientDetailsResponse>();
-           return Result<ClientDetailsResponse>.Success(client!) ?? Result<ClientDetailsResponse>.Failure("Client details not found");
+            ClientDetailsResponse? client = await response.Content.ReadFromJsonAsync<ClientDetailsResponse>();
+            return Result<ClientDetailsResponse>.Success(client!) ?? Result<ClientDetailsResponse>.Failure("Client details not found");
         }
 
         else
         {
             string errorMessage = responseBody;
+            ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(e => e.Value.Select(msg => $"{e.Key}: {msg}"));
 
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<ClientDetailsResponse>.Failure(errorMessage);
-                }
+                string message = string.Join("\n", errors);
+
+               return Result<ClientDetailsResponse>.Failure(message);
             }
-            catch (Exception ex)
+
+            else
             {
-                return Result<ClientDetailsResponse>.Failure($"Fatal rror {ex.Message}");
+                try
+                {
+                    var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                    if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                    {
+                        errorMessage = detailElement.GetString() ?? responseBody;
+                        return Result<ClientDetailsResponse>.Failure(errorMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Result<ClientDetailsResponse>.Failure($"Fatal rror {ex.Message}");
+                }
             }
 
             return Result<ClientDetailsResponse>.Failure(errorMessage);
         }
     }
+
+    public async Task<Result<ClientEditResponse>> GetClientForEditByClientIdAsync(Guid id)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"get-for-edit/{id}");
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            ClientEditResponse? client = await response.Content.ReadFromJsonAsync<ClientEditResponse>();
+            return Result<ClientEditResponse>.Success(client!) ?? Result<ClientEditResponse>.Failure("Client details not found");
+        }
+
+        else
+        {
+            string errorMessage = responseBody;
+            ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(e => e.Value.Select(msg => $"{e.Key}: {msg}"));
+
+                string message = string.Join("\n", errors);
+
+                return Result<ClientEditResponse>.Failure(message);
+            }
+
+            else
+            {
+                try
+                {
+                    var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                    if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                    {
+                        errorMessage = detailElement.GetString() ?? responseBody;
+                        return Result<ClientEditResponse>.Failure(errorMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Result<ClientEditResponse>.Failure($"Fatal rror {ex.Message}");
+                }
+            }
+
+            return Result<ClientEditResponse>.Failure(errorMessage);
+        }
+    }
+
 
     public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClients(string query, Guid? scheduledClassId)
     {

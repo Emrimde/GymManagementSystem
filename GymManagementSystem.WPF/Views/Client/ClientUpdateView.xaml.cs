@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using GymManagementSystem.WPF.ViewModels.Client;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views.Client
+namespace GymManagementSystem.WPF.Views.Client;
+
+/// <summary>
+/// Logika interakcji dla klasy ClientUpdateView.xaml
+/// </summary>
+public partial class ClientUpdateView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ClientUpdateView.xaml
-    /// </summary>
-    public partial class ClientUpdateView : UserControl
+    public ClientUpdateView()
     {
-        public ClientUpdateView()
+        Loaded += (_, _) =>
         {
-            InitializeComponent();
-        }
+            ((ClientUpdateViewModel)DataContext).LoadClientCommand.Execute(null);
+        };
+        InitializeComponent();
     }
 }

@@ -21,20 +21,12 @@ public static class ClientMapper
             City = client.City,
         };
     }
-    public static Client ToClient(this ClientUpdateRequest clientUpdateRequest)
+    public static void ModifyClient(this Client client,ClientUpdateRequest clientUpdateRequest)
     {
-        return new Client
-        {
-            FirstName = clientUpdateRequest.FirstName,
-            LastName = clientUpdateRequest.LastName,
-            Email = clientUpdateRequest.Email,
-            PhoneNumber = clientUpdateRequest.PhoneNumber,
-            DateOfBirth = clientUpdateRequest.DateOfBirth,
-            StreetAddress = clientUpdateRequest.Street,
-           
-            City = clientUpdateRequest.City,
-           
-        };
+        client.LastName = clientUpdateRequest.LastName;
+        client.PhoneNumber = clientUpdateRequest.PhoneNumber;
+        client.StreetAddress = clientUpdateRequest.Street;
+        client.City = clientUpdateRequest.City;
     }
     public static Client ToClient(this ClientWebUpdateRequest clientUpdateRequest)
     {

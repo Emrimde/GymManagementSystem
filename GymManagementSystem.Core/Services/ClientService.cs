@@ -45,16 +45,17 @@ public class ClientService : IClientService
         {
             return Result<ClientInfoResponse>.Failure("Invalid ID", StatusCodeEnum.BadRequest);
         }
-
-        Client client = request.ToClient();
-        Client? updatedClient = await _repository.UpdateAsync(id, client);
-
-        if (updatedClient == null)
+        Client? clientt = await _repository.GetByIdAsync(id);
+        if(clientt == null)
         {
-            return Result<ClientInfoResponse>.Failure("Client not found, updation failed", StatusCodeEnum.NotFound);
+            return Result<ClientInfoResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
         }
 
-        ClientInfoResponse clientResponse = updatedClient.ToClientInfoResponse();
+        clientt.ModifyClient(request);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        ClientInfoResponse clientResponse = clientt.ToClientInfoResponse();
 
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
@@ -215,5 +216,25 @@ public class ClientService : IClientService
             response.StartDate = clientMembership.StartDate.ToString("dd.MM.yyyy");
         }
             return Result<ClientMembershipInformationResponse>.Success(response, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<ClientEditResponse>> GetByIdForEditAsync(Guid id)
+    {
+       Client? client = await _repository.GetByIdAsync(id);
+       if (client == null)
+       {
+            return Result<ClientEditResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
+       }
+
+        ClientEditResponse clientEditResponse = new ClientEditResponse()
+        {
+            City = client.City,
+            Email = client.Email,   
+            LastName = client.LastName,
+            PhoneNumber = client.PhoneNumber,
+            Street = client.StreetAddress
+        };
+
+        return Result<ClientEditResponse>.Success(clientEditResponse, StatusCodeEnum.Ok);
     }
 }

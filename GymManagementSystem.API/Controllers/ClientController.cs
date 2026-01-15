@@ -24,6 +24,10 @@ public class ClientController : BaseController
     public async Task<ActionResult<ClientDetailsResponse>> GetById(Guid id)
         => HandleResult(await _clientService.GetByIdAsync(id));
 
+    [HttpGet("get-for-edit/{id:guid}")]
+    public async Task<ActionResult<ClientEditResponse>> GetByIdForEdit(Guid id)
+        => HandleResult(await _clientService.GetByIdForEditAsync(id));
+
     [HttpGet("name/{id:guid}")]
     public async Task<ActionResult<ClientInfoResponse>> GetClientFullNameById(Guid id)
         => HandleResult(await _clientService.GetClientFullNameByIdAsync(id));
