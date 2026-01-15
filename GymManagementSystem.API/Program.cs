@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using GymManagementSystem.Core;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Infrastructure;
@@ -5,7 +6,6 @@ using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -25,6 +25,8 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

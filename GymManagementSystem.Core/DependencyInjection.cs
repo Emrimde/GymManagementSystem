@@ -1,6 +1,9 @@
-﻿using GymManagementSystem.API.Controllers;
+﻿using FluentValidation;
+using GymManagementSystem.API.Controllers;
+using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.Services;
+using GymManagementSystem.Core.Validators.Client.QueryValidators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GymManagementSystem.Core;
@@ -32,7 +35,8 @@ public static class DependencyInjection
         services.AddScoped<IFeatureService, FeatureService>();
         services.AddScoped<IPersonService, PersonService>();
         services.AddScoped<IDashboardService, DashboardService>();
-       
+        services.AddValidatorsFromAssemblyContaining<GetClientQueryDtoValidator>();
+
         return services;
     }
 }

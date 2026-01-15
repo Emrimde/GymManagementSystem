@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
@@ -32,9 +33,9 @@ public class ClientService : IClientService
         _clientMembershipRepository = clientMembershipRepository;
     }
 
-    public async Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page)
+    public async Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query)
     {
-        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:searchText, page: page);
+        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:query.SearchText, page: query.Page);
         return clients;
     }
 

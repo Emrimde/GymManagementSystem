@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
@@ -10,7 +11,7 @@ public interface IClientService
 {
     Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest entity);
     Task<Result<ClientInfoResponse>> CreateAsync(ClientAddRequest entity);
-    Task<PageResult<ClientResponse>> GetAllAsync(string? searchText, int page);
+    Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query);
     Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id);
     Task<Result<ClientDetailsWebResponse>> GetClientProfileInfoAsync();
     Task<Result<ClientInfoResponse>> GetClientFullNameByIdAsync(Guid id);

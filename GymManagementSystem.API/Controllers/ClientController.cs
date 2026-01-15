@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.Client;
@@ -16,8 +17,8 @@ public class ClientController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] string? searchText, [FromQuery] int page)
-        => HandlePageResult(await _clientService.GetAllAsync(searchText, page));
+    public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] GetClientQueryDto query)
+        => HandlePageResult(await _clientService.GetAllAsync(query));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientDetailsResponse>> GetById(Guid id)

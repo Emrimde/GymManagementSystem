@@ -1,12 +1,14 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -69,9 +71,24 @@ public class ClientHttpClient : BaseHttpClientService
             PageResult<ClientResponse>? clients = await response.Content.ReadFromJsonAsync<PageResult<ClientResponse>>();
             return clients ?? new PageResult<ClientResponse>();
         }
-        else 
+        else
         {
-            MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(e => e.Value.Select(msg => $"{e.Key}: {msg}"));
+
+                string message = string.Join("\n", errors);
+
+                MessageBox.Show(message, "Validation error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                MessageBox.Show("Request failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             return new PageResult<ClientResponse>();
         }
     }
