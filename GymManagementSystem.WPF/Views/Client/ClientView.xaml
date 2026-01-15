@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="GymManagementSystem.WPF.Views.ClientView"
+﻿<UserControl x:Class="GymManagementSystem.WPF.Views.Client.ClientView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views"
+             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Client"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
@@ -74,38 +74,26 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-                                        Command="{Binding DataContext.      OpenClientDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
+                                        Command="{Binding DataContext.OpenClientDetailsCommand, RelativeSource={ RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding Id}">
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Header="Edit/Delete" Width="150">
+                        <DataGridTemplateColumn Header="Edit" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    
                                         <Button  
-                                    Width="40" 
-                                    Height="25" 
-                                    Background="#4CAF50" 
-                                    Foreground="White" FontSize="10"
-                                   Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}"
-                                     >
+                                            Width="40" 
+                                            Height="25" 
+                                            Background="#4CAF50" 
+                                             Foreground="White" FontSize="10"
+                                            Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                             CommandParameter="{Binding}">
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>
-
-                                        <Button
-                                     Width="40" 
-                                    Height="25" FontSize="10"
-                                    Background="#F44336" 
-                                    Foreground="White"
-                                    Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}" >
-                                            <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
-                                        </Button>
-                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

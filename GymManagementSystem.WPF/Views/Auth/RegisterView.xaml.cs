@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views
+namespace GymManagementSystem.WPF.Views.Auth
 {
     /// <summary>
-    /// Logika interakcji dla klasy DashboardView.xaml
+    /// Logika interakcji dla klasy RegisterView.xaml
     /// </summary>
-    public partial class DashboardView : UserControl
+    public partial class RegisterView : UserControl
     {
-        public DashboardView()
+        public RegisterView()
         {
             InitializeComponent();
         }

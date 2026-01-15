@@ -3,13 +3,12 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.Client;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace GymManagementSystem.WPF.ViewModels;
+namespace GymManagementSystem.WPF.ViewModels.Client;
 
 public class ClientViewModel : ViewModel
 {

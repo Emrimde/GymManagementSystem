@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views
+namespace GymManagementSystem.WPF.Views.Auth
 {
     /// <summary>
     /// Logika interakcji dla klasy LoginView.xaml

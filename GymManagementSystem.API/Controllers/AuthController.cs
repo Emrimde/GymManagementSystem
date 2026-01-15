@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Auth;
-using GymManagementSystem.Core.DTO.Email;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.Auth;
 using Microsoft.AspNetCore.Authorization;

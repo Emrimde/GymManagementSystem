@@ -5,11 +5,11 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Mappers;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.Services;
-using System.Net.Http;
+using GymManagementSystem.WPF.ViewModels.Dashboard;
 using System.Windows;
 using System.Windows.Input;
 
-namespace GymManagementSystem.WPF.ViewModels;
+namespace GymManagementSystem.WPF.ViewModels.Auth;
 
 public class LoginViewModel : ViewModel
 {

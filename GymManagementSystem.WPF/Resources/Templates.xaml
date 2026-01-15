@@ -8,6 +8,10 @@
                     xmlns:clientview="clr-namespace:GymManagementSystem.WPF.Views.Client"
                     xmlns:membershipview="clr-namespace:GymManagementSystem.WPF.Views.Membership"
                     xmlns:membershipvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Membership"
+                    xmlns:authview="clr-namespace:GymManagementSystem.WPF.Views.Auth"
+                    xmlns:authvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Auth"
+                    xmlns:dashboardview="clr-namespace:GymManagementSystem.WPF.Views.Dashboard"
+                    xmlns:dashboardvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Dashboard"
                     xmlns:contractvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Contract"
                     xmlns:contractvview="clr-namespace:GymManagementSystem.WPF.Views.Contract"
                     xmlns:settingsvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Settings"
@@ -46,14 +50,14 @@
                     xmlns:personalbookingview ="clr-namespace:GymManagementSystem.WPF.Views.PersonalBooking"
                     >
     
-                    <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
-                        <view:LoginView/>
+                    <DataTemplate DataType="{x:Type authvm:LoginViewModel}">
+                        <authview:LoginView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodel:RegisterViewModel}">
-                        <view:RegisterView/>
+                    <DataTemplate DataType="{x:Type authvm:RegisterViewModel}">
+                        <authview:RegisterView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodel:DashboardViewModel}">
-                        <view:DashboardView/>
+                    <DataTemplate DataType="{x:Type dashboardvm:DashboardViewModel}">
+                        <dashboardview:DashboardView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type clientvm:ClientAddViewModel}">
                         <clientview:ClientAddView/>
@@ -61,8 +65,8 @@
                     <DataTemplate DataType="{x:Type clientvm:ClientUpdateViewModel}">
                         <clientview:ClientUpdateView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodel:ClientViewModel}">
-                        <view:ClientView/>
+                    <DataTemplate DataType="{x:Type clientvm:ClientViewModel}">
+                        <clientview:ClientView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type clientvm:ClientDetailsViewModel}">
                         <clientview:ClientDetailsView/>

@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Auth;
-using GymManagementSystem.WPF.ViewModels;
+using GymManagementSystem.WPF.ViewModels.Auth;
 
 namespace GymManagementSystem.WPF.Mappers;
 

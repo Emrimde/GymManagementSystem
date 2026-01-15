@@ -3,18 +3,14 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using GymManagementSystem.WPF.ViewModels.Auth;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
 
-namespace GymManagementSystem.WPF.ViewModels;
+namespace GymManagementSystem.WPF.ViewModels.Dashboard;
 public class DashboardViewModel : ViewModel
 {
     private PlotModel _visitsModel;

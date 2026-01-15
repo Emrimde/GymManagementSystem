@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Auth;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels

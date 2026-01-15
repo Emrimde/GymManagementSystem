@@ -1,8 +1,11 @@
 ﻿using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Auth;
 using GymManagementSystem.WPF.ViewModels.ClassBooking;
+using GymManagementSystem.WPF.ViewModels.Client;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.Contract;
+using GymManagementSystem.WPF.ViewModels.Dashboard;
 using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.EmploymentTermination;
 using GymManagementSystem.WPF.ViewModels.GymClass;

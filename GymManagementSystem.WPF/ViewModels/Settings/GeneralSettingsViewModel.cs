@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Dashboard;
 using Microsoft.Win32;
 using System.IO;
 using System.Net.Http;
