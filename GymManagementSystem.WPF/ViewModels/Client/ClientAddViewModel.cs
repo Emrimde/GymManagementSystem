@@ -1,12 +1,12 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Collections.ObjectModel;
+using GymManagementSystem.WPF.ViewModels.Client.Models;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Automation.Provider;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Client;
@@ -17,8 +17,8 @@ public class ClientAddViewModel : ViewModel
     public SidebarViewModel SidebarView { get; set; }
     public ICommand AddClientCommand { get; }
 
-    private ClientAddRequest _clientAddRequest;
-    public ClientAddRequest ClientAddRequest
+    private ClientAddFormModel _clientAddRequest = new();
+    public ClientAddFormModel ClientAddRequest
     {
         get { return _clientAddRequest; }
 
@@ -31,28 +31,8 @@ public class ClientAddViewModel : ViewModel
             }
         }
     }
-    private INavigationService _navigation;
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value; OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; }
 
-    public ClientAddViewModel(SidebarViewModel sidebarView, ClientHttpClient httpClient, INavigationService navigation, MembershipHttpClient membershipHttpClient)
-    {
-        _httpClient = httpClient;
-        SidebarView = sidebarView;
-        Navigation = navigation;
-        ClientAddRequest = new ClientAddRequest()
-        {
-            DateOfBirth = DateTime.SpecifyKind(new DateTime(2000, 1, 1), DateTimeKind.Utc)
-        };
-        AddClientCommand = new AsyncRelayCommand(item => AddClientAsync(), item => true);
-
-    }
     private async Task AddClientAsync()
     {
 
@@ -60,7 +40,6 @@ public class ClientAddViewModel : ViewModel
         {
             DateOfBirth = ClientAddRequest.DateOfBirth
         };
-       
 
         var validationResult = await _httpClient.ValidateClientAgeAsync(validationRequest);
 
@@ -89,8 +68,18 @@ public class ClientAddViewModel : ViewModel
             return;
         }
       
+        ClientAddRequest request = new ClientAddRequest
+        {
+            FirstName = ClientAddRequest.FirstName,
+            LastName = ClientAddRequest.LastName,
+            Email = ClientAddRequest.Email,
+            PhoneNumber = ClientAddRequest.PhoneNumber,
+            DateOfBirth = ClientAddRequest.DateOfBirth,
+            Street = ClientAddRequest.Street,
+            City = ClientAddRequest.City
+        };
 
-        Result<ClientInfoResponse> addResult = await _httpClient.PostClientAsync(ClientAddRequest);
+        Result<ClientInfoResponse> addResult = await _httpClient.PostClientAsync(request);
 
         if (!addResult.IsSuccess)
         {
@@ -99,6 +88,13 @@ public class ClientAddViewModel : ViewModel
         }
 
         Navigation.NavigateTo<ClientDetailsViewModel>(addResult.Value!.Id);
+    }
+    public ClientAddViewModel(SidebarViewModel sidebarView, ClientHttpClient httpClient, INavigationService navigation, MembershipHttpClient membershipHttpClient)
+    {
+        _httpClient = httpClient;
+        SidebarView = sidebarView;
+        Navigation = navigation;
+        AddClientCommand = new AsyncRelayCommand(item => AddClientAsync(), item => true);
     }
 
 }

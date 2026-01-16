@@ -67,9 +67,6 @@
                         <DataGridTextColumn Header="Last name" Binding="{Binding LastName}"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
                         <DataGridTextColumn Header="PhoneNumber" Binding="{Binding PhoneNumber}"/>
-                        <DataGridTextColumn Header="DateOfBirth" Binding="{Binding DateOfBirth}"/>
-                        <DataGridTextColumn Header="Street" Binding="{Binding Street}"/>
-                        <DataGridTextColumn Header="City" Binding="{Binding City}"/>
 
                         <DataGridTemplateColumn Header="Details" Width="150">
                             <DataGridTemplateColumn.CellTemplate>

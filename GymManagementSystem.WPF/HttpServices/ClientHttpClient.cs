@@ -1,14 +1,11 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -52,12 +49,12 @@ public class ClientHttpClient : BaseHttpClientService
     {
         try
         {
-            ClientInfoResponse clientNameResponse = await _httpClient.GetFromJsonAsync<ClientInfoResponse>($"name/{clientId}");
+            ClientInfoResponse? clientNameResponse = await _httpClient.GetFromJsonAsync<ClientInfoResponse>($"name/{clientId}");
             return clientNameResponse ?? new ClientInfoResponse();
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
-            return null;
+            return null!;
         }
 
     }
@@ -116,6 +113,16 @@ public class ClientHttpClient : BaseHttpClientService
         {
 
             string errorMessage = responseBody;
+            ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(item => item.Value.Select(msg => $"{item.Key}: {msg}"));
+
+                string message = string.Join("\n", errors);
+
+                return Result<ClientInfoResponse>.Failure(message);
+            }
 
             try
             {

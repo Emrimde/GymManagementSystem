@@ -18,32 +18,37 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="250"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="250"/>
+                <RowDefinition Height="250"/>  
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Margin="0,70,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit client information" />
-            <Grid Grid.Row="1" >
+            <Grid Grid.Row="1" x:Name="FormRoot">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="Last name" Foreground="White"/>
-                        <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged , ValidatesOnDataErrors=True}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                        <TextBox Text="{Binding ClientEditFormModel.LastName, UpdateSourceTrigger=PropertyChanged , ValidatesOnDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150">
+                        </TextBox>
                     </StackPanel>
 
                     <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="Phone Number" Foreground="White"/>
-                        <TextBox Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged,  ValidatesOnDataErrors=True}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                        <TextBox Text="{Binding ClientEditFormModel.PhoneNumber, UpdateSourceTrigger=PropertyChanged,  ValidatesOnDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
                     <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="Street" Foreground="White"/>
-                        <TextBox Text="{Binding Street, UpdateSourceTrigger=PropertyChanged,  ValidatesOnDataErrors=True}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                        <TextBox Text="{Binding ClientEditFormModel.Street, UpdateSourceTrigger=PropertyChanged,  ValidatesOnDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
                     <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBlock FontSize="25" Text="City" Foreground="White"/>
-                        <TextBox Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                        <TextBox Text="{Binding ClientEditFormModel.City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Update client" Command="{Binding UpdateClientCommand }"/>
+                <Button Content="Update client" Command="{Binding UpdateClientCommand }" />
                 <Button Content="Cancel" Command="{Binding CancelCommand}"/>
             </StackPanel>
         </Grid>
