@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Result;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -12,46 +13,33 @@ public class EmployeeHttpClient : BaseHttpClientService
     {
     }
 
-    public async Task<Result<bool>> ValidateEmployee(EmployeeAddRequest request)
+    public async Task<Result<EmploymentContractPdfDto>> GetEmployeeContractAsync(
+      EmployeeContractRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("validate", request);
-        string responseBody = await response.Content.ReadAsStringAsync();
-        if (response.IsSuccessStatusCode)
-        {
-            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-            bool employee = JsonSerializer.Deserialize<bool>(responseBody);
+        HttpResponseMessage response =
+            await _httpClient.PostAsJsonAsync("get-employee-contract", request);
 
-            return Result<bool>.Success(employee);
+        if (!response.IsSuccessStatusCode)
+        {
+            var problem = await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+            return Result<EmploymentContractPdfDto>.Failure(
+                problem?.Detail ?? "Request failed.");
         }
 
-        Dictionary<string, JsonElement>? errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-        if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-        {
-            string errorMessage = detailElement.ToString();
-            return Result<bool>.Failure(errorMessage);
-        }
-        if (errorDict != null && errorDict.TryGetValue("errors", out var errorsElement))
-        {
-            List<string> allErrors = new List<string>();
-            foreach (var errorProp in errorsElement.EnumerateObject())
-            {
-                var messages = errorProp.Value.EnumerateArray();
-                foreach (var item in messages)
-                {
-                    string msg = item.ToString();
-                    allErrors.Add(msg);
-                }
-            }
-            return Result<bool>.Failure(string.Join("\n", allErrors));
-        }
+        var dto = await response.Content
+            .ReadFromJsonAsync<EmploymentContractPdfDto>();
 
-        return Result<bool>.Failure("Something went wrong.");
+        if (dto == null)
+            return Result<EmploymentContractPdfDto>.Failure("Empty response.");
+
+        return Result<EmploymentContractPdfDto>.Success(dto);
     }
+
 
     public async Task<Result<EmployeeInfoResponse>> PostEmployeeAsync(EmployeeAddRequest request)
     {
-        request.ValidFrom = request.ValidFrom?.ToUniversalTime();
-        request.ValidTo = request.ValidTo?.ToUniversalTime();
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);
         string responseBody = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)

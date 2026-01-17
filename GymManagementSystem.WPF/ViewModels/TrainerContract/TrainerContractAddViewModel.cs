@@ -154,7 +154,6 @@ public class TrainerContractAddViewModel : ViewModel, IParameterReceiver
             ContractTypeEnum.ContractOfMandate => "Umowa zlecenie",
             ContractTypeEnum.B2B => "Umowa B2B (umowa o świadczenie usług)",
             ContractTypeEnum.Probation => "Umowa (okres próbny)",
-            ContractTypeEnum.FixedTerm => "Umowa na czas określony",
             ContractTypeEnum.Permanent => "Umowa na czas nieokreślony",
             _ => "Umowa"
         };

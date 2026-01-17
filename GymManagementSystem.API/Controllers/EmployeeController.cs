@@ -4,6 +4,7 @@ using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GymManagementSystem.API.Controllers;
 
@@ -25,8 +26,8 @@ public class EmployeeController : BaseController
     [Authorize (Roles = "Manager")]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
     
-    [HttpPost("validate")]
-    public ActionResult<bool> ValidateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(_employeeService.ValidateEmployee(request));
+    [HttpPost("get-employee-contract")]
+    public async Task<ActionResult<EmploymentContractPdfDto>> BuildEmployeeContract([FromBody] EmployeeContractRequest request) => HandleResult( await _employeeService.BuildEmployeeContractAsync(request));
     
 }
 

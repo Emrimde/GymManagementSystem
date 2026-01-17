@@ -6,7 +6,6 @@ public enum ContractTypeEnum
 {
     Probation,
     Permanent,
-    FixedTerm,
     ContractOfMandate,
     B2B
 }

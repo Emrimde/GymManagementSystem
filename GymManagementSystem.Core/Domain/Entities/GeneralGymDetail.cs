@@ -6,6 +6,7 @@ public class GeneralGymDetail
     public string GymName { get; set; } = default!;
     public string Address { get; set; } = default!;
     public string ContactNumber { get; set; } = default!;
+    public string Nip { get; set; } = default!;
     public string PrimaryColor { get; set; } = default!;
     public string BackgroundColor { get; set; } = default!;
     public string SecondColor { get; set; } = default!;

@@ -1,8 +1,7 @@
 ﻿using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.DTO.Employee;
-
-public class EmployeeAddRequest
+public class EmployeeContractRequest
 {
     public Guid PersonId { get; set; }
     public decimal MonthlySalaryBrutto { get; set; }

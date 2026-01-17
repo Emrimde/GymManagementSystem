@@ -13,8 +13,6 @@ public static class EmployeeMapper
             Role = request.Role,
             ContractTypeEnum = request.ContractTypeEnum,
             MonthlySalaryBrutto = request.MonthlySalaryBrutto,
-            ValidFrom = request.ValidFrom ?? DateTime.UtcNow,
-            ValidTo = request.ValidTo,
         };
     }
 

@@ -1,11 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Contract;
-using GymManagementSystem.Core.Enum;
-using GymManagementSystem.Core.Mappers;
-using GymManagementSystem.Core.Mappers.ClientMapper;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
