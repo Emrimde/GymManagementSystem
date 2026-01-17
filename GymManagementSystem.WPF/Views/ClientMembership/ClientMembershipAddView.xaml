@@ -40,7 +40,7 @@
                             <TextBlock FontSize="25" Text="Membership" Foreground="White"/>
                             <ComboBox Margin="10,0,0,0" Width="Auto" 
                           
-                          ItemsSource="{Binding MembershipsComboBox}"
+                          ItemsSource="{Binding MembershipSelectItem}"
                           DisplayMemberPath="Name"
                           SelectedItem="{Binding SelectedMembership, Mode=TwoWay}" />
                         </StackPanel>

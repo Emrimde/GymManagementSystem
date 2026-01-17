@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.DTO.ClientMembership.Models;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
@@ -40,15 +41,15 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     public SidebarViewModel SidebarView { get; set; }
 
-    private ObservableCollection<MembershipResponse> _membershipsComboBox = new();
-    public ObservableCollection<MembershipResponse> MembershipsComboBox
+    private ObservableCollection<MembershipSelectItem> _membershipSelectItem = new();
+    public ObservableCollection<MembershipSelectItem> MembershipSelectItem
     {
-        get => _membershipsComboBox;
+        get => _membershipSelectItem;
         set
         {
-            if (_membershipsComboBox != value)
+            if (_membershipSelectItem != value)
             {
-                _membershipsComboBox = value;
+                _membershipSelectItem = value;
                 OnPropertyChanged();
             }
         }
@@ -60,8 +61,8 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
     public INavigationService Navigation { get; set; }
 
 
-    private MembershipResponse _selectedMembership = new();
-    public MembershipResponse SelectedMembership
+    private MembershipSelectItem _selectedMembership = new();
+    public MembershipSelectItem SelectedMembership
     {
         get => _selectedMembership;
         set
@@ -268,7 +269,13 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadMemberships()
     {
-        MembershipsComboBox = await _membershipHttpClient.GetAllMembershipsAsync();
+        ObservableCollection<MembershipResponse> response = await _membershipHttpClient.GetAllMembershipsAsync();
+        MembershipSelectItem = new ObservableCollection<MembershipSelectItem>(
+            response.Select(item => new MembershipSelectItem
+            {
+                Id = item.Id,
+                Name = item.Name,
+            }));
     }
 
     public void ReceiveParameter(object parameter)
