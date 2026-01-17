@@ -14,6 +14,7 @@ public class ClientAddViewModel : ViewModel
     private readonly ClientHttpClient _httpClient;
     public SidebarViewModel SidebarView { get; set; }
     public ICommand AddClientCommand { get; }
+    public ICommand CancelCommand { get; }
 
     private ClientAddFormModel _clientAddRequest = new();
     public ClientAddFormModel ClientAddRequest
@@ -95,6 +96,7 @@ public class ClientAddViewModel : ViewModel
         Navigation = navigation;
         AddClientCommand = new AsyncRelayCommand(item => AddClientAsync(),item => CanAddClient());
         ClientAddRequest.ErrorsChanged += (_, __) => ((AsyncRelayCommand)AddClientCommand).RaiseCanExecuteChanged();
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientViewModel>(),item => true);
     }
 
     private bool CanAddClient()

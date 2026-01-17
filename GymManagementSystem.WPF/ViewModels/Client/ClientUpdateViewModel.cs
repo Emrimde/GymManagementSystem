@@ -32,10 +32,6 @@ public class ClientUpdateViewModel : ViewModel , IParameterReceiver
     public Guid ClientId { get; set; }
     public SidebarViewModel SidebarView { get; set; }
 
-   
-
-
-
     private async Task LoadClientAsync(Guid clientId)
     {
         Result<ClientEditResponse> result = await _httpClient.GetClientForEditByClientIdAsync(clientId);
@@ -90,8 +86,14 @@ public class ClientUpdateViewModel : ViewModel , IParameterReceiver
         Navigation = navigation;
         SidebarView = sidebarViewModel;
         _httpClient = httpClient;
-        UpdateClientCommand = new AsyncRelayCommand(UpdateClientAsync, item => true);
+        UpdateClientCommand = new AsyncRelayCommand(UpdateClientAsync, item => CanUpdateClient());
+        ClientEditFormModel.ErrorsChanged += (_, __) => ((AsyncRelayCommand)UpdateClientCommand).RaiseCanExecuteChanged();
         LoadClientCommand = new AsyncRelayCommand(item => LoadClientAsync(ClientId), item => true);
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientViewModel>(), item => true);
+    }
+
+    private bool CanUpdateClient()
+    {
+       return !ClientEditFormModel.HasErrors && ClientEditFormModel.IsFormComplete;
     }
 }
