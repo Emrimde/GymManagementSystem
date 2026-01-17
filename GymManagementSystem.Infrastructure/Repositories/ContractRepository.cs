@@ -18,19 +18,12 @@ public class ContractRepository : IContractRepository
     {
         _dbContext = dbContext;
     }
-
-    public async Task<Contract?> GetActiveContractAsync(Guid clientId)
-    {
-        return await _dbContext.Contracts.FirstOrDefaultAsync(item => item.ContractStatus == ContractStatus.Draft);
-    }
-
     public async Task<Contract> CreateAsync(Contract entity)
     {
         _dbContext.Contracts.Add(entity);
         await _dbContext.SaveChangesAsync();
         return entity;
     }
-
     public async Task<Contract?> GetByIdAsync(Guid id)
     {
        return await _dbContext.Contracts.Include(item => item.ClientMembership).ThenInclude(item=> item.Membership).Include(item => item.ClientMembership!.Client).FirstOrDefaultAsync(item => item.Id == id);
@@ -43,10 +36,5 @@ public class ContractRepository : IContractRepository
         await _dbContext.SaveChangesAsync();
    
         return entity;
-    }
-
-    public async Task<Contract?> GetContractByClientMembershipIdAsync(Guid clientMembershipId)
-    {
-       return await _dbContext.Contracts.FirstOrDefaultAsync(item => item.ClientMembershipId == clientMembershipId);
     }
 }
