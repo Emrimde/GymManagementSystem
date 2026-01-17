@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.ClientMembership;
-using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.DTO.Client;
 

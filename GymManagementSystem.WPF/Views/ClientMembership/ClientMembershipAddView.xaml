@@ -33,8 +33,7 @@
                     <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Margin="0,20,0,60" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}">
                     <Run Text="Add membership for"/>
-                    <Run Text="{Binding Client.FirstName}"/>
-                    <Run Text="{Binding Client.LastName}"/>
+                    <Run Text="{Binding Client.FullName}"/>
                 </TextBlock>
 
                         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">

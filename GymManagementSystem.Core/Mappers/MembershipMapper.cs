@@ -10,7 +10,7 @@ public static class MembershipMapper
         return new MembershipResponse()
         {
             Id = membership.Id,
-            Name = membership.Name,
+            Name = membership.Name + " " + membership.MembershipType.ToString(),
             MembershipType = membership.MembershipType,
             Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m
         };

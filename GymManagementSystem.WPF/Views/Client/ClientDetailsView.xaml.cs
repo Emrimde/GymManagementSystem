@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymManagementSystem.WPF.ViewModels.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,10 @@ namespace GymManagementSystem.WPF.Views.Client
     {
         public ClientDetailsView()
         {
+            Loaded += (_, _) =>
+            {
+                ((ClientDetailsViewModel)DataContext).LoadClientDetailsCommand.Execute(null);
+            };
             InitializeComponent();
         }
     }

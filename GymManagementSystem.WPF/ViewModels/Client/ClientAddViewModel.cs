@@ -4,8 +4,6 @@ using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client.Models;
-using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -28,6 +26,7 @@ public class ClientAddViewModel : ViewModel
             {
                 _clientAddRequest = value;
                 OnPropertyChanged();
+                ((AsyncRelayCommand)AddClientCommand).RaiseCanExecuteChanged();
             }
         }
     }
@@ -89,12 +88,17 @@ public class ClientAddViewModel : ViewModel
 
         Navigation.NavigateTo<ClientDetailsViewModel>(addResult.Value!.Id);
     }
-    public ClientAddViewModel(SidebarViewModel sidebarView, ClientHttpClient httpClient, INavigationService navigation, MembershipHttpClient membershipHttpClient)
+    public ClientAddViewModel(SidebarViewModel sidebarView, ClientHttpClient httpClient, INavigationService navigation)
     {
         _httpClient = httpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
-        AddClientCommand = new AsyncRelayCommand(item => AddClientAsync(), item => true);
+        AddClientCommand = new AsyncRelayCommand(item => AddClientAsync(),item => CanAddClient());
+        ClientAddRequest.ErrorsChanged += (_, __) => ((AsyncRelayCommand)AddClientCommand).RaiseCanExecuteChanged();
     }
 
+    private bool CanAddClient()
+    {
+        return !ClientAddRequest.HasErrors && ClientAddRequest.IsFormComplete;
+    }
 }

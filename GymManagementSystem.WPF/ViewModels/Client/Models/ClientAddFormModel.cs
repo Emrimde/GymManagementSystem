@@ -1,10 +1,18 @@
 ﻿using GymManagementSystem.WPF.Core;
+using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace GymManagementSystem.WPF.ViewModels.Client.Models;
-public class ClientAddFormModel : ObservableObject, IDataErrorInfo
+
+public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
 {
+
+    private readonly Dictionary<string, List<string>> _errors = new();
+    public bool HasErrors => _errors.Any();
+
+    #region formProperties
+
     private string _firstName = string.Empty;
     public string FirstName
     {
@@ -12,9 +20,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _firstName = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(FirstName));
         }
     }
 
@@ -25,9 +31,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _lastName = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(LastName));
         }
     }
 
@@ -38,9 +42,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _email = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(Email));
         }
     }
 
@@ -51,9 +53,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _phoneNumber = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(PhoneNumber));
         }
     }
 
@@ -64,9 +64,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _dateOfBirth = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(DateOfBirth));
         }
     }
 
@@ -77,9 +75,7 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _street = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(Street));
         }
     }
 
@@ -90,99 +86,100 @@ public class ClientAddFormModel : ObservableObject, IDataErrorInfo
         set
         {
             _city = value;
-            IsTouched = true;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ShouldValidate));
+            TouchAndValidate(nameof(City));
         }
     }
+    #endregion
 
-    public bool IsTouched { get; set; }
-    public bool ShouldValidate => IsTouched;
 
-    public string this[string columnName]
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public IEnumerable GetErrors(string? propertyName)
     {
-        get
-        {
-            switch (columnName)
-            {
-                case nameof(FirstName):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(FirstName))
-                            return "First name is required.";
-                        if (FirstName.Length > 50)
-                            return "First name cannot exceed 50 characters.";
-                    }
-                    break;
+        if (propertyName != null && _errors.ContainsKey(propertyName))
+            return _errors[propertyName];
 
-                case nameof(LastName):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(LastName))
-                            return "Last name is required.";
-                        if (LastName.Length > 50)
-                            return "Last name cannot exceed 50 characters.";
-                    }
-                    break;
+        return Enumerable.Empty<string>();
+    }
+    public bool IsFormComplete =>
+      !string.IsNullOrWhiteSpace(FirstName) &&
+      !string.IsNullOrWhiteSpace(LastName) &&
+      !string.IsNullOrWhiteSpace(Email) &&
+      !string.IsNullOrWhiteSpace(PhoneNumber) &&
+      !string.IsNullOrWhiteSpace(Street) &&
+      !string.IsNullOrWhiteSpace(City) &&
+      DateOfBirth != DateTime.UtcNow;
 
-                case nameof(Email):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(Email))
-                            return "Email is required.";
-                        if (Email.Length > 60)
-                            return "Email cannot exceed 100 characters.";
-                        if (!Regex.IsMatch(
-                                Email,
-                                @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                            return "A valid email is required.";
-                    }
-                    break;
-
-                case nameof(PhoneNumber):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(PhoneNumber))
-                            return "Phone number is required.";
-                        if (!Regex.IsMatch(
-                                PhoneNumber,
-                                @"^\+?[1-9]\d{1,14}$"))
-                            return "A valid phone number is required.";
-                    }
-                    break;
-
-                case nameof(DateOfBirth):
-                    if (ShouldValidate)
-                    {
-                        if (DateOfBirth > DateTime.UtcNow.AddYears(-13))
-                            return "Client must be above 13.";
-                    }
-                    break;
-
-                case nameof(Street):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(Street))
-                            return "Street is required.";
-                        if (Street.Length > 60)
-                            return "Street cannot exceed 60 characters.";
-                    }
-                    break;
-
-                case nameof(City):
-                    if (ShouldValidate)
-                    {
-                        if (string.IsNullOrWhiteSpace(City))
-                            return "City is required.";
-                        if (City.Length > 50)
-                            return "City cannot exceed 50 characters.";
-                    }
-                    break;
-            }
-
-            return string.Empty;
-        }
+    private void TouchAndValidate(string propertyName)
+    { 
+        ValidateProperty(propertyName);
+        OnPropertyChanged(propertyName);
+        OnPropertyChanged(nameof(HasErrors));
     }
 
-    public string Error => null!;
+    private void ValidateProperty(string propertyName)
+    {
+        _errors.Remove(propertyName);
+
+        var errors = new List<string>();
+
+        switch (propertyName)
+        {
+            case nameof(FirstName):
+                if (string.IsNullOrWhiteSpace(FirstName))
+                    errors.Add("First name is required.");
+                else if (FirstName.Length > 50)
+                    errors.Add("First name cannot exceed 50 characters.");
+                break;
+
+            case nameof(LastName):
+                if (string.IsNullOrWhiteSpace(LastName))
+                    errors.Add("Last name is required.");
+                else if (LastName.Length > 50)
+                    errors.Add("Last name cannot exceed 50 characters.");
+                break;
+
+            case nameof(Email):
+                if (string.IsNullOrWhiteSpace(Email))
+                    errors.Add("Email is required.");
+                else if (Email.Length > 60)
+                    errors.Add("Email cannot exceed 60 characters.");
+                else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                    errors.Add("A valid email is required.");
+                break;
+
+            case nameof(PhoneNumber):
+                if (string.IsNullOrWhiteSpace(PhoneNumber))
+                    errors.Add("Phone number is required.");
+                else if (!Regex.IsMatch(PhoneNumber, @"^\+?[1-9]\d{1,14}$"))
+                    errors.Add("A valid phone number is required.");
+                break;
+
+            case nameof(DateOfBirth):
+                if (DateOfBirth > DateTime.UtcNow.AddYears(-13))
+                    errors.Add("Client must be above 13.");
+                break;
+
+            case nameof(Street):
+                if (string.IsNullOrWhiteSpace(Street))
+                    errors.Add("Street is required.");
+                else if (Street.Length > 60)
+                    errors.Add("Street cannot exceed 60 characters.");
+                break;
+
+            case nameof(City):
+                if (string.IsNullOrWhiteSpace(City))
+                    errors.Add("City is required.");
+                else if (City.Length > 50)
+                    errors.Add("City cannot exceed 50 characters.");
+                break;
+        }
+
+        if (errors.Any())
+            _errors[propertyName] = errors;
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+
+    
 }

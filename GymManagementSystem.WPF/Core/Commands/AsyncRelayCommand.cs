@@ -40,7 +40,7 @@ public class AsyncRelayCommand : ICommand
         }
     }
 
-    private void RaiseCanExecuteChanged()
+    public void RaiseCanExecuteChanged()
     {
         CommandManager.InvalidateRequerySuggested();
     }

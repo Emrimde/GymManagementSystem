@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
@@ -20,14 +19,18 @@ namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 
 public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 {
-    private ClientMembershipAddRequest _clientMembershipAddRequest;
+    private readonly ClientMembershipHttpClient _httpClient;
+    private readonly ClientHttpClient _clientHttpClient;
+    private readonly MembershipHttpClient _membershipHttpClient;
+
+    private ClientMembershipAddRequest _clientMembershipAddRequest = new();
     public Guid ClientId { get; set; }
     public ClientMembershipAddRequest ClientMembershipAddRequest
     {
         get { return _clientMembershipAddRequest; }
         set { _clientMembershipAddRequest = value; OnPropertyChanged(); }
     }
-    private ClientInfoResponse _client;
+    private ClientInfoResponse _client = new();
 
     public ClientInfoResponse Client
     {
@@ -37,7 +40,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     public SidebarViewModel SidebarView { get; set; }
 
-    private ObservableCollection<MembershipResponse> _membershipsComboBox;
+    private ObservableCollection<MembershipResponse> _membershipsComboBox = new();
     public ObservableCollection<MembershipResponse> MembershipsComboBox
     {
         get => _membershipsComboBox;
@@ -51,12 +54,13 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         }
     }
     public ICommand AddClientMembershipCommand { get; }
+    public ICommand LoadClientMembershipViewData { get; }
     public ICommand CancelCommand { get; }
 
     public INavigationService Navigation { get; set; }
 
 
-    private MembershipResponse _selectedMembership;
+    private MembershipResponse _selectedMembership = new();
     public MembershipResponse SelectedMembership
     {
         get => _selectedMembership;
@@ -67,13 +71,12 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                 _selectedMembership = value;
                 OnPropertyChanged(nameof(SelectedMembership));
                 ClientMembershipAddRequest.MembershipId = _selectedMembership.Id;
+                ((AsyncRelayCommand)AddClientMembershipCommand)
+                .RaiseCanExecuteChanged();
             }
         }
     }
 
-    private readonly ClientMembershipHttpClient _httpClient;
-    private readonly ClientHttpClient _clientHttpClient;
-    private readonly MembershipHttpClient _membershipHttpClient;
 
     public ClientMembershipAddViewModel(SidebarViewModel sidebarView, INavigationService navigation, ClientMembershipHttpClient httpClient, MembershipHttpClient membershipHttpClient, ClientHttpClient clientHttpClient)
     {
@@ -81,13 +84,21 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         _httpClient = httpClient;
-        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(Client.Id), item => true);
-        Client = new ClientInfoResponse();
-        ClientMembershipAddRequest = new ClientMembershipAddRequest();
         _membershipHttpClient = membershipHttpClient;
-        MembershipsComboBox = new ObservableCollection<MembershipResponse>();
-        AddClientMembershipCommand = new AsyncRelayCommand(item => AddClientMembershipAsync(), item => true);
-        _ = LoadMemberships();
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(Client.Id), item => true);
+        AddClientMembershipCommand = new AsyncRelayCommand(item => AddClientMembershipAsync(), item => CanAddClientMembership());
+        LoadClientMembershipViewData = new AsyncRelayCommand(item => LoadClientMembershipViewDataAsync(), item => true);
+    }
+
+    private bool CanAddClientMembership()
+    {
+        return ClientId != Guid.Empty && _clientMembershipAddRequest.MembershipId != Guid.Empty;
+    }
+
+    private async Task LoadClientMembershipViewDataAsync()
+    {
+        await LoadMemberships();
+        Client = await _clientHttpClient.GetClientNameById(ClientId);
     }
 
     private async Task AddClientMembershipAsync()
@@ -224,11 +235,6 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                             right.Item().PaddingTop(40).Text("_________________________");
                         });
                     });
-
-                    column.Item().PaddingTop(10)
-                        .Text("Dokument ma charakter poglądowy (PREVIEW) i nie stanowi zawartej umowy.")
-                        .Italic()
-                        .FontColor(Colors.Grey.Medium);
                 });
 
                 // ===== FOOTER =====
@@ -270,13 +276,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid clientId)
         {
             ClientId = clientId;
-            _ = LoadClientNameAsync(clientId);
             _clientMembershipAddRequest.ClientId = clientId;
         }
-    }
-
-    private async Task LoadClientNameAsync(Guid id)
-    {
-        Client = await _clientHttpClient.GetClientNameById(id);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
@@ -21,7 +20,6 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         : "No membership";
     private readonly VisitHttpClient _visitHttpClient;
 
-    private INavigationService _navigation;
     public ICommand CreateNewTerminationCommand { get; }
     public ICommand OpenVisitsHistoryCommand { get; }
     public ICommand OpenAddClassBooking { get; }
@@ -30,14 +28,11 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     public ICommand OpenAddClientMembershipViewCommand { get; }
     public ICommand OpenAllClientClassBookingCommand { get; }
     public ICommand OpenPersonalTrainingAddViewCommand { get; }
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public ICommand LoadClientDetailsCommand { get; }
+    public INavigationService Navigation { get; }
 
     public Guid ClientId { get; set; }
-    private ClientDetailsResponse _client;
+    private ClientDetailsResponse _client = new();
     public ClientDetailsResponse Client
     {
         get => _client;
@@ -48,28 +43,14 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    private TerminationAddRequest _terminationAdd;
-
-    public TerminationAddRequest TerminationAddRequest
-    {
-        get { return _terminationAdd; }
-        set
-        {
-            _terminationAdd = value;
-            OnPropertyChanged();
-        }
-    }
-
-
     private readonly ClientHttpClient _clienthttpClient;
     public SidebarViewModel SidebarView { get; }
 
     public ClientDetailsViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, ClientHttpClient clientHttpClient, VisitHttpClient visitHttpClient)
     {
         _clienthttpClient = clientHttpClient;
+        _visitHttpClient = visitHttpClient;
         Navigation = navigation;
-        Client = new ClientDetailsResponse();
-        TerminationAddRequest = new TerminationAddRequest();
         OpenVisitsHistoryCommand = new RelayCommand(item =>
             Navigation.NavigateTo<VisitViewModel>(ClientId), item => true);
 
@@ -79,27 +60,12 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
 
         RegisterVisitCommand = new AsyncRelayCommand(item => RegisterVisitAsync(), item => true);
         SidebarView = sidebarViewModel;
-        CreateNewTerminationCommand = new RelayCommand(item =>
-
-         OpenCreateNewTermination()
-        , item => true);
+        CreateNewTerminationCommand = new RelayCommand(item => OpenCreateNewTermination(), item => true);
         OpenAllClientClassBookingCommand = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(ClientId), item => true);
 
         OpenPersonalTrainingAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingAddViewModel>(ClientId), item => true);
-        OpenAddClientMembershipViewCommand = new RelayCommand(item =>
-        {
-            if (item is Guid id)
-            {
-                Navigation.NavigateTo<ClientMembershipAddViewModel>(item);
-            }
-            else
-            {
-                MessageBox.Show("Fail");
-            }
-
-        }
-           , item => true);
-        _visitHttpClient = visitHttpClient;
+        OpenAddClientMembershipViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipAddViewModel>(item!), item => true);
+        LoadClientDetailsCommand = new AsyncRelayCommand(item => LoadClientAsync(), item => true);
     }
 
     private async Task RegisterVisitAsync()
@@ -123,7 +89,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         {
             
 
-            await LoadClient();
+            await LoadClientAsync();
         }
         else
         {
@@ -131,7 +97,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    private async Task LoadClient()
+    private async Task LoadClientAsync()
     {
         Result<ClientDetailsResponse> result = await _clienthttpClient.GetClientById(ClientId);
         if (result.IsSuccess)
@@ -154,7 +120,6 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid id)
         {
             ClientId = id;
-            _ = LoadClient();
         }
     }
 
