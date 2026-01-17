@@ -16,10 +16,7 @@ public class ContractService : IContractService
         _repository = repository;
     }
 
-    public Task<Result<ContractResponse>> CreateAsync(ContractAddRequest entity)
-    {
-        throw new NotImplementedException();
-    }
+
 
     public async Task<Result<ContractDetailsResponse>> GetByIdAsync(Guid id)
     {

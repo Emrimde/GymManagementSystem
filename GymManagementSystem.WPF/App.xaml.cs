@@ -8,7 +8,6 @@ using GymManagementSystem.WPF.ViewModels.Auth;
 using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.Client;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
-using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.Dashboard;
 using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.EmploymentTermination;
@@ -28,7 +27,6 @@ using GymManagementSystem.WPF.ViewModels.TrainerRate;
 using GymManagementSystem.WPF.ViewModels.Visit;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Licensing;
-using Syncfusion.SfSkinManager;
 using System.Windows;
 using System.Windows.Media;
 
@@ -59,7 +57,6 @@ namespace GymManagementSystem.WPF
             services.AddTransient<ClientMembershipAddViewModel>();
             services.AddTransient<ClientViewModel>();
             services.AddTransient<TerminationAddViewModel>();
-            services.AddTransient<ContractDetailsViewModel>();
             services.AddTransient<MembershipViewModel>();
             services.AddTransient<ClientDetailsViewModel>();
             services.AddTransient<GeneralSettingsViewModel>();
@@ -117,12 +114,6 @@ namespace GymManagementSystem.WPF
             services.AddHttpClient<GeneralGymDetailsHttpClient>(options =>
             {
                 options.BaseAddress = new Uri("http://localhost:5105/api/generalGymDetail/");
-                options.DefaultRequestHeaders.Add("Accept", "application/json");
-            }).AddHttpMessageHandler<JwtHandler>(); ;
-
-            services.AddHttpClient<ContractHttpClient>(options =>
-            {
-                options.BaseAddress = new Uri("http://localhost:5105/api/contract/");
                 options.DefaultRequestHeaders.Add("Accept", "application/json");
             }).AddHttpMessageHandler<JwtHandler>(); ;
 

@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.Domain;
-using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Contract;
@@ -11,7 +10,6 @@ using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Http;
-using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -187,8 +185,4 @@ public class ClientMembershipService : IClientMembershipService
         return Result<ClientMembershipContractPreviewResponse>.Success(response);
     }
 
-    public Task<Result<ClientMembershipResponse>> UpdateAsync(Guid id, ClientMembershipUpdateRequest entity)
-    {
-        throw new NotImplementedException();
-    }
 }

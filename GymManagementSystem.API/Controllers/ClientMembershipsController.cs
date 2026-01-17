@@ -2,8 +2,6 @@
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.WebDTO.ClientMembership;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -31,8 +29,4 @@ public class ClientMembershipsController : BaseController
     [HttpPost]
     public async Task<ActionResult<ClientMembershipInfoResponse>> Create([FromBody] ClientMembershipAddRequest entity)
         => HandleResult(await _clientMembershipService.CreateAsync(entity));
-
-    [HttpPut("{id:guid}")]
-    public async Task<ActionResult<ClientMembershipInfoResponse>> Update(Guid id, ClientMembershipUpdateRequest entity)
-        => HandleResult(await _clientMembershipService.UpdateAsync(id, entity));
 }

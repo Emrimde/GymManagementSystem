@@ -1,21 +1,14 @@
 ﻿using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Auth;
-using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.Client;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
-using GymManagementSystem.WPF.ViewModels.Contract;
 using GymManagementSystem.WPF.ViewModels.Dashboard;
-using GymManagementSystem.WPF.ViewModels.Employee;
 using GymManagementSystem.WPF.ViewModels.EmploymentTermination;
 using GymManagementSystem.WPF.ViewModels.GymClass;
 using GymManagementSystem.WPF.ViewModels.Membership;
-using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using GymManagementSystem.WPF.ViewModels.Settings;
 using GymManagementSystem.WPF.ViewModels.Staff;
-using GymManagementSystem.WPF.ViewModels.Termination;
-using GymManagementSystem.WPF.ViewModels.Trainer;
-using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels;

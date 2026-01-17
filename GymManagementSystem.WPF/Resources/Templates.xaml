@@ -12,8 +12,6 @@
                     xmlns:authvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Auth"
                     xmlns:dashboardview="clr-namespace:GymManagementSystem.WPF.Views.Dashboard"
                     xmlns:dashboardvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Dashboard"
-                    xmlns:contractvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Contract"
-                    xmlns:contractvview="clr-namespace:GymManagementSystem.WPF.Views.Contract"
                     xmlns:settingsvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Settings"
                     xmlns:settingsview="clr-namespace:GymManagementSystem.WPF.Views.Settings"
                     xmlns:terminationvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Termination"
@@ -82,9 +80,6 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type membershipvm:MembershipDetailsViewModel}">
                         <membershipview:MembershipDetailsView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type contractvm:ContractDetailsViewModel}">
-                        <contractvview:ContractDetails/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type settingsvm:GeneralSettingsViewModel}">
                         <settingsview:GeneralSettingsView/>
