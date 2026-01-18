@@ -9,7 +9,7 @@ namespace GymManagementSystem.WPF.ViewModels.Employee;
 public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
 {
     private readonly EmployeeHttpClient _employeeHttpClient;
-    private EmployeeDetailsResponse _employee;
+    private EmployeeDetailsResponse _employee = new();
 
     public EmployeeDetailsResponse Employee
     {

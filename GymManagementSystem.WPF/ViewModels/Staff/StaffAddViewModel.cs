@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Staff.Models;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,13 +15,27 @@ public class StaffAddViewModel : ViewModel
         Navigation = navigation;
         _staffHttpClient = staffHttpClient;
         SidebarView = sidebarView;
-        PersonAdd = new PersonAddRequest();
-        AddPersonAsyncCommand = new AsyncRelayCommand(item => AddPersonAsync(), item => true);
+        AddPersonAsyncCommand = new AsyncRelayCommand(item => AddPersonAsync(), item => CanAddPerson());
+    }
+
+    private bool CanAddPerson()
+    {
+        return PersonAdd.IsFormComplete && !PersonAdd.HasErrors;
     }
 
     private async Task AddPersonAsync()
     {
-        Result<PersonInfoResponse> result = await _staffHttpClient.PostPersonToStaffAsync(PersonAdd);
+        PersonAddRequest request = new PersonAddRequest()
+        {
+            City = PersonAdd.City,
+            Email = PersonAdd.Email,
+            FirstName = PersonAdd.FirstName,
+            LastName = PersonAdd.LastName,
+            PhoneNumber = PersonAdd.PhoneNumber,
+            Street = PersonAdd.Street,
+        };
+
+        Result<PersonInfoResponse> result = await _staffHttpClient.PostPersonToStaffAsync(request);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");
@@ -29,12 +44,10 @@ public class StaffAddViewModel : ViewModel
         Navigation.NavigateTo<StaffViewModel>();
     }
 
-    public PersonAddRequest PersonAdd {  get; set; }
+    public PersonAddForm PersonAdd { get; set; } = new();
     public INavigationService Navigation { get; set; }
     public StaffHttpClient _staffHttpClient { get; set; }
     public SidebarViewModel SidebarView { get; set; }
     public ICommand AddPersonAsyncCommand { get; set; }
-
-
 
 }
