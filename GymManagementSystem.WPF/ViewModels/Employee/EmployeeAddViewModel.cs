@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.Employee;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
@@ -7,7 +8,9 @@ using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Staff;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -15,18 +18,9 @@ using System.Windows.Input;
 
 
 namespace GymManagementSystem.WPF.ViewModels.Employee;
-public class EmployeeAddViewModel : ViewModel, IParameterReceiver
+public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataErrorInfo
 {
     private readonly EmployeeHttpClient _employeeHttpClient;
-
-    private EmployeeAddRequest _employee = new();
-
-    public EmployeeAddRequest Employee
-    {
-        get { return _employee; }
-        set { _employee = value; OnPropertyChanged(); }
-    }
-
 
     public IEnumerable<ContractTypeEnum> AvailableContractsForEmployees =>
     [
@@ -35,9 +29,9 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
     ];
 
     public ObservableCollection<EmployeeRole> EmployeeRoles { get; set; }
-    private EmployeeRole _selectedEmployeeRole;
+    private EmployeeRole? _selectedEmployeeRole;
 
-    public EmployeeRole SelectedEmployeeRole
+    public EmployeeRole? SelectedEmployeeRole
     {
         get { return _selectedEmployeeRole; }
         set
@@ -51,9 +45,9 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
     }
 
 
-    private ContractTypeEnum _selectedContractType = ContractTypeEnum.Permanent;
+    private ContractTypeEnum? _selectedContractType;
 
-    public ContractTypeEnum SelectedContractType  
+    public ContractTypeEnum? SelectedContractType
     {
         get { return _selectedContractType; }
         set
@@ -61,19 +55,19 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
             if (_selectedContractType != value)
             {
                 _selectedContractType = value;
-                Employee.ContractTypeEnum = _selectedContractType;
+                //Employee.ContractTypeEnum = _selectedContractType;
                 OnPropertyChanged();
             }
         }
     }
 
-    public ICommand ReturnToStaffViewCommand { get;  }
+    public ICommand ReturnToStaffViewCommand { get; }
 
     public ObservableCollection<EmploymentType> EmploymentTypes { get; set; }
-    private EmploymentType _selectedEmploymentType;
 
+    private EmploymentType? _selectedEmploymentType;
 
-    public EmploymentType SelectedEmploymentType
+    public EmploymentType? SelectedEmploymentType
     {
         get { return _selectedEmploymentType; }
         set
@@ -81,11 +75,26 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
             if (_selectedEmploymentType != value)
             {
                 _selectedEmploymentType = value;
-                Employee.EmploymentType = _selectedEmploymentType;
+                //Employee.EmploymentType = _selectedEmploymentType;
                 OnPropertyChanged();
             }
         }
     }
+
+
+    private int? _monthlySalaryBrutto;
+
+    public int? MonthlySalaryBrutto
+    {
+        get { return _monthlySalaryBrutto; }
+        set
+        {
+            _monthlySalaryBrutto = value;
+            OnPropertyChanged();
+            ValidateMonthlySalary();
+        }
+    }
+
 
     public INavigationService Navigation { get; }
 
@@ -101,18 +110,23 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
         ReturnToStaffViewCommand = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
         EmploymentTypes = new ObservableCollection<EmploymentType>(Enum.GetValues<EmploymentType>().Cast<EmploymentType>());
         EmployeeRoles = new ObservableCollection<EmployeeRole>(Enum.GetValues<EmployeeRole>().Cast<EmployeeRole>());
-        AddEmployeeCommand = new AsyncRelayCommand(item => AddEmployeeAsync(), item => true);
+        AddEmployeeCommand = new AsyncRelayCommand(item => AddEmployeeAsync(), item => CanAddEmployee());
+    }
+
+    private bool CanAddEmployee()
+    {
+        return SelectedEmploymentType != null && SelectedEmployeeRole != null && SelectedContractType != null && !HasErrors;
     }
 
     private async Task AddEmployeeAsync()
     {
         EmployeeContractRequest contractRequest = new EmployeeContractRequest
         {
-            ContractTypeEnum = Employee.ContractTypeEnum,
-            EmploymentType = Employee.EmploymentType,
-            MonthlySalaryBrutto = Employee.MonthlySalaryBrutto,
-            PersonId = Employee.PersonId,
-            Role = Employee.Role
+            ContractTypeEnum = SelectedContractType!.Value,
+            EmploymentType = SelectedEmploymentType!.Value,
+            MonthlySalaryBrutto = MonthlySalaryBrutto!.Value,
+            PersonId = _personId,
+            Role = SelectedEmployeeRole!.Value
         };
 
         Result<EmploymentContractPdfDto> validationResult = await _employeeHttpClient.GetEmployeeContractAsync(contractRequest);
@@ -129,7 +143,16 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
 
             if (isSigned == MessageBoxResult.Yes)
             {
-                Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(Employee);
+                EmployeeAddRequest employeeAddRequest = new EmployeeAddRequest()
+                {
+                    ContractTypeEnum = employmentContractPdfDto.ContractType,
+                    EmploymentType = employmentContractPdfDto.EmploymentType,
+                    MonthlySalaryBrutto = MonthlySalaryBrutto.Value,
+                    PersonId = _personId,
+                    Role = employmentContractPdfDto.Role,
+                };
+
+                Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(employeeAddRequest);
                 if (result.IsSuccess)
                 {
                     Navigation.NavigateTo<StaffViewModel>();
@@ -254,12 +277,46 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver
         }
     }
 
-
+    private Guid _personId;
     public void ReceiveParameter(object parameter)
     {
-        if(parameter is Guid personId)
+        if (parameter is Guid personId)
         {
-            Employee.PersonId = personId;
+            _personId = personId;
         }
     }
+
+    private readonly Dictionary<string, List<string>> _errors = new();
+
+    public bool HasErrors => _errors.Any();
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (propertyName != null && _errors.ContainsKey(propertyName))
+            return _errors[propertyName];
+        return Enumerable.Empty<string>();
+    }
+
+    private void ValidateMonthlySalary()
+    {
+        _errors.Remove(nameof(MonthlySalaryBrutto));
+
+        if (MonthlySalaryBrutto == null || MonthlySalaryBrutto <= 0)
+        {
+            _errors[nameof(MonthlySalaryBrutto)] =
+            [
+                "Salary mu be bigger than 0"
+            ];
+        }
+
+        ErrorsChanged?.Invoke(this,
+            new DataErrorsChangedEventArgs(nameof(MonthlySalaryBrutto)));
+
+        ((AsyncRelayCommand)AddEmployeeCommand)
+                .RaiseCanExecuteChanged();
+    }
+
+
 }
+

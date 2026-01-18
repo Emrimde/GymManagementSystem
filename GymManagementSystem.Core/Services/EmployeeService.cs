@@ -79,16 +79,14 @@ public class EmployeeService : IEmployeeService
         }
         EmploymentContractPdfDto employmentContractPdfDto = new EmploymentContractPdfDto()
         {
-            ContractType = request.ContractTypeEnum.ToString(),
-            EmploymentType = request.EmploymentType.ToString(), 
+            ContractType = request.ContractTypeEnum,
+            EmploymentType = request.EmploymentType, 
             Salary = request.MonthlySalaryBrutto.ToString(),
-            Role = request.Role.ToString(),
+            Role = request.Role,
             ContactNumber = generalGymDetail.ContactNumber,
             GymAddress = generalGymDetail.Address,
             GymName = generalGymDetail.GymName,
             Nip = generalGymDetail.Nip,
-            
-
         };
         if(request.ContractTypeEnum == ContractTypeEnum.Probation)
         {
@@ -98,6 +96,6 @@ public class EmployeeService : IEmployeeService
         {
             employmentContractPdfDto.ValidTo = "Permanent";
         }
-        return Result<EmploymentContractPdfDto>.Success(employmentContractPdfDto, StatusCodeEnum.NotFound);
+        return Result<EmploymentContractPdfDto>.Success(employmentContractPdfDto, StatusCodeEnum.Ok);
     }
 }
