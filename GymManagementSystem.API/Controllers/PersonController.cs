@@ -17,6 +17,12 @@ public class PersonController : BaseController
     [HttpGet("{personId:guid}")]
     public async Task<ActionResult<IEnumerable<PersonDetailsResponse>>> GetPersonDetails([FromRoute] Guid personId) => HandleResult(await _personService.GetPersonDetailsAsync(personId));
 
+    [HttpGet("get-person-for-edit/{personId:guid}")]
+    public async Task<ActionResult<PersonForEditResponse>> GetPersonForEdit([FromRoute] Guid personId) => HandleResult(await _personService.GetPersonForEditAsync(personId));
+
     [HttpPost]
     public async Task<ActionResult<PersonInfoResponse>> AddPersonToStaff([FromBody] PersonAddRequest request) => HandleResult(await _personService.AddPersonToStaffAsync(request));
+
+    [HttpPut]
+    public async Task<ActionResult> UpdatePerson([FromBody] PersonUpdateRequest request) => HandleResult(await _personService.UpdatePersonAsync(request));
 }

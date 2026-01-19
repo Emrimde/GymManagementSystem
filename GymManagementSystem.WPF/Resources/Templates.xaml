@@ -180,6 +180,9 @@
                     <DataTemplate DataType="{x:Type staffvm:StaffDetailsViewModel}">
                         <staffview:StaffDetailsView />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type staffvm:StaffUpdateViewModel}">
+                        <staffview:StaffUpdateView />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingAddViewModel}">
                         <personalbookingview:PersonalBookingAddView />
                     </DataTemplate>

@@ -54,4 +54,11 @@ public static class PersonMapper
             City = personAddRequest.City,
         };
     }
+    public static void ModifyPerson(this Person person, PersonUpdateRequest request)
+    {
+        person.LastName = request.LastName;
+        person.PhoneNumber = request.PhoneNumber;
+        person.Street = request.Street;
+        person.City = request.City;
+    }
 }

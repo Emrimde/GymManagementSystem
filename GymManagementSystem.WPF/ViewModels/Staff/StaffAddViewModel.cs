@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Person;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -38,7 +38,7 @@ public class StaffAddViewModel : ViewModel
         Result<PersonInfoResponse> result = await _staffHttpClient.PostPersonToStaffAsync(request);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show(result.GetUserMessage());
             return;
         }
         Navigation.NavigateTo<StaffViewModel>();

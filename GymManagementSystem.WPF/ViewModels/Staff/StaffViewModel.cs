@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Person;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -23,6 +23,7 @@ public class StaffViewModel : ViewModel
 	public INavigationService Navigation {  get; set; }
 	private readonly StaffHttpClient _staffHttpClient;
     public ICommand OpenStaffAddView { get;  }
+    public ICommand OpenEditPersonCommand { get;  }
     public ICommand OpenPersonDetailsCommand { get; set; }
 
     public StaffViewModel(SidebarViewModel sidebarView, INavigationService navigation, StaffHttpClient staffHttpClient)
@@ -32,6 +33,7 @@ public class StaffViewModel : ViewModel
         _staffHttpClient = staffHttpClient;
         OpenStaffAddView = new RelayCommand(item => Navigation.NavigateTo<StaffAddViewModel>(), item => true);
         OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item), item => true);
+        OpenEditPersonCommand = new RelayCommand(item => Navigation.NavigateTo<StaffUpdateViewModel>(item!), item=> true);
 
         People = new ObservableCollection<PersonResponse>();
         _ = LoadPeopleAsync();

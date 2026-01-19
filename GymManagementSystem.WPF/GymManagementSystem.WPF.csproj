@@ -41,4 +41,10 @@
     <Resource Include="Resources\Strings.xaml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Staff\StaffUpdateView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

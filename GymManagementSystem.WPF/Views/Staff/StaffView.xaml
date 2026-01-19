@@ -86,8 +86,8 @@
                                  Height="25" 
                                  Background="#4CAF50" 
                                  Foreground="White" FontSize="10"
-                                Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                 CommandParameter="{Binding}"
+                                Command="{Binding DataContext.OpenEditPersonCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                 CommandParameter="{Binding Id}"
                                   >
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>

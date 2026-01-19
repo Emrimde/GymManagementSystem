@@ -44,4 +44,36 @@ public class PersonService : IPersonService
        return Result<PersonDetailsResponse>.Success(person.ToPersonDetailsResponse(), StatusCodeEnum.Ok);
        
     }
+
+    public async Task<Result<PersonForEditResponse>> GetPersonForEditAsync(Guid personId)
+    {
+        Person? person = await _personRepo.GetPersonByIdAsync(personId);
+        if (person == null)
+        {
+            return Result<PersonForEditResponse>.Failure("Person not found!", StatusCodeEnum.NotFound);
+        }
+
+        PersonForEditResponse personForEdit = new PersonForEditResponse()
+        {
+            City = person.City,
+            LastName = person.LastName,
+            PhoneNumber = person.PhoneNumber,
+            Street = person.Street,
+        };
+
+        return Result<PersonForEditResponse>.Success(personForEdit, StatusCodeEnum.NotFound);
+    }
+
+    public async Task<Result<Unit>> UpdatePersonAsync(PersonUpdateRequest request)
+    {
+        Person? person = await _personRepo.GetPersonByIdAsync(request.PersonId);
+        if (person == null)
+        {
+            return Result<Unit>.Failure("Person not found!", StatusCodeEnum.NotFound);
+        }
+        person.ModifyPerson(request);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
+    }
 }
