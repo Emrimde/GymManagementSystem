@@ -29,6 +29,10 @@ public class GymClassController : BaseController
     public async Task<ActionResult<GymClassInfoResponse>> Create([FromBody] GymClassAddRequest entity)
         => HandleResult(await _gymClassService.CreateAsync(entity));
 
+    [HttpPost("{gymCLassId:guid}")]
+    public async Task<ActionResult<Unit>> GenerateScheduledClasses([FromRoute] Guid gymClassId)
+        => HandleResult(await _gymClassService.GenerateNewScheduledClassesAsync(gymClassId));
+
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<GymClassInfoResponse>> Update(Guid id, GymClassUpdateRequest entity)
         => HandleResult(await _gymClassService.UpdateAsync(id, entity));

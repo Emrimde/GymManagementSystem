@@ -75,12 +75,6 @@ CommandParameter="{Binding Id}">
                         </DataGridTemplateColumn>
 
 
-
-
-
-
-
-
                         <DataGridTemplateColumn Header="Edit/Delete" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -96,7 +90,7 @@ CommandParameter="{Binding Id}">
 
                                         </Button>
 
-                                        <Button
+                                        <!--<Button
                                      Width="40" 
                                     Height="25" FontSize="10"
                                     Background="#F44336" 
@@ -104,7 +98,7 @@ CommandParameter="{Binding Id}">
                                     Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}" >
 
-                                        </Button>
+                                        </Button>-->
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -114,12 +108,6 @@ CommandParameter="{Binding Id}">
                 </DataGrid>
 
             </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
-                <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
-                <Button Content="Next" Width="100" Margin="10,0" />
-
-            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

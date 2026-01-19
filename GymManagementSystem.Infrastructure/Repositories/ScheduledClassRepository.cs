@@ -67,7 +67,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(Guid gymClassId, string? searchText = null)
     {
-        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId);
+        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId && item.Date >= DateTime.UtcNow);
 
         if (searchText != null)
         {

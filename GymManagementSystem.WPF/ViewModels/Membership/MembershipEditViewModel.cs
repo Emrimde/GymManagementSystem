@@ -16,6 +16,7 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
 
     private readonly MembershipHttpClient _httpClient;
     public ICommand UpdateMembershipCommand { get; }
+    public ICommand CancelCommand { get; }
 
     public MembershipUpdateRequest MembershipUpdateRequest
     {
@@ -41,6 +42,7 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
         Navigation = navigation;
         SidebarView = sidebarViewModel;
         MembershipUpdateRequest = new MembershipUpdateRequest();
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), item => true);
         _httpClient = httpClient;
         UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => true);
     }

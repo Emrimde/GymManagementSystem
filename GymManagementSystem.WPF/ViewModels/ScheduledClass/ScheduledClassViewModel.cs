@@ -21,6 +21,7 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
     }
 
     private readonly ScheduledClassHttpClient _scheduledClassHttpClient;
+    private readonly GymClassHtppClient _gymClassHttpCLient;
     public SidebarViewModel SidebarView { get; set; }
     private INavigationService _navigation;
 
@@ -43,15 +44,27 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
         set { _scheduledClasses = value; OnPropertyChanged(); }
     }
     public ICommand OpenScheduledClassDetails { get; }
+    public ICommand GenerateScheduledClass { get; }
 
-    public ScheduledClassViewModel(ScheduledClassHttpClient scheduledClassHttpClient, SidebarViewModel sidebarView, INavigationService navigation)
+    public ScheduledClassViewModel(ScheduledClassHttpClient scheduledClassHttpClient, SidebarViewModel sidebarView, INavigationService navigation,GymClassHtppClient gymClassHttpClient)
     {
         ScheduledClasses = new ObservableCollection<ScheduledClassResponse>();
         _scheduledClassHttpClient = scheduledClassHttpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
         OpenScheduledClassDetails = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassDetailsViewModel>(item), item => true);
+        GenerateScheduledClass = new AsyncRelayCommand(item => GenerateScheduledClassAsync(), item => true);
         SearchScheduledClassesCommand = new AsyncRelayCommand(item => SearchScheduledClasses(), item => true);
+        _gymClassHttpCLient = gymClassHttpClient;
+    }
+
+    private async Task GenerateScheduledClassAsync()
+    {
+        Result<Unit> result = await _gymClassHttpCLient.GenerateNewScheduledClasses(GymClassId);
+        if (result.IsSuccess)
+        {
+            Navigation.NavigateTo<ScheduledClassViewModel>(GymClassId);
+        }
     }
 
     private async Task SearchScheduledClasses()

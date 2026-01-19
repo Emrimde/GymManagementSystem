@@ -55,10 +55,10 @@ AutoGenerateColumns="false">
                         <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
                         <DataGridTextColumn Header="MembershipType" Binding="{Binding MembershipType}"/>
 
-                        <DataGridTemplateColumn Header="Edit/Delete" Width="150">
+                        <DataGridTemplateColumn Header="Edit" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                   
                                         <Button  
                                     Width="40" 
                                     Height="25" 
@@ -70,16 +70,8 @@ AutoGenerateColumns="false">
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>
 
-                                        <Button
-                                     Width="40" 
-                                    Height="25" FontSize="10"
-                                    Background="#F44336" 
-                                    Foreground="White"
-                                    Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}" >
-                                            <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
-                                        </Button>
-                                    </StackPanel>
+                                 
+                                   
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -99,12 +91,6 @@ AutoGenerateColumns="false">
                 </DataGrid>
 
             </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
-                <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
-                <Button Content="Next" Width="100" Margin="10,0" />
-
-            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

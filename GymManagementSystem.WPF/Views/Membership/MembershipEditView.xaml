@@ -20,36 +20,17 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
-            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit membership" />
-            <Grid Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Name" Foreground="White"/>
-                        <TextBox Text="{Binding MembershipUpdateRequest.Name}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Price" Foreground="White"/>
-                        <TextBox Text="{Binding MembershipUpdateRequest.Price}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="IsTrainerOnly" Foreground="White"/>
-                        <TextBox Text="{Binding MembershipUpdateRequest.IsTrainerOnly}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
-                    </StackPanel>
-                    
+            <TextBlock Margin="0,50,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit membership" />
+
+            <StackPanel Grid.Row="1"  Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontSize="25" Text="Name" Foreground="White"/>
+                    <TextBox Text="{Binding MembershipUpdateRequest.Name}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="400" HorizontalContentAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                    
-                    
-                    
-                </StackPanel>
-            </Grid>
-            <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Edit membership" Command="{Binding UpdateMembershipCommand }"/>
-                <Button Content="Cancel"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,0,30" Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button  Content="Edit membership" Command="{Binding UpdateMembershipCommand }"/>
+                <Button Command="{Binding CancelCommand}" Content="Cancel"/>
             </StackPanel>
         </Grid>
     </Grid>

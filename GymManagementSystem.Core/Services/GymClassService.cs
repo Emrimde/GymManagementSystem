@@ -76,6 +76,19 @@ public class GymClassService : IGymClassService
         throw new NotImplementedException();
     }
 
+    public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)
+    {
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
+
+        if (gymClass == null) {
+            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
+        }
+        List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(gymClass,14);
+        await _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
+    }
+
+    
     private List<ScheduledClass> GenerateScheduledClasses(GymClass gymClass, int daysAhead = 30)
     {
         List<ScheduledClass> result = new List<ScheduledClass>();

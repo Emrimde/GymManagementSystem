@@ -26,7 +26,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
+                <StackPanel Orientation="Horizontal">
+                    
                 <TextBlock 
         Grid.Column="0"
         Text="Scheduled classes" 
@@ -35,11 +36,13 @@
         
         VerticalAlignment="Center"
                     Width="300" Margin="40,0,0,0"/>
+                    <Button Width="Auto" Height="30" Command="{Binding GenerateScheduledClass}">Generate new </Button>
+                </StackPanel>
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <!--<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Button Content="Search:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding SearchScheduledClassesCommand}"/>
                 <TextBox Width="200" Height="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
-            </StackPanel>
+            </StackPanel>-->
             <Border Grid.Row="2" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ScheduledClasses}" x:Name="datagrid" CanUserAddRows="False"
                   AutoGenerateColumns="false">

@@ -14,6 +14,9 @@ public class EmploymentTerminationController : BaseController
     [HttpGet("{personId:guid}")]
     public async Task<ActionResult<EmploymentTerminationGenerateResponse>> GetEmploymentTerminationDetails([FromRoute] Guid personId) => HandleResult(await _employmentTerminationService.GetEmploymentTerminationDetailsAsync(personId));
 
+    [HttpGet("get-employment-termiantions/{personId:guid}")]
+    public async Task<ActionResult<EmploymentTerminationGenerateResponse>> GetEmployeeEmploymentTerminations([FromRoute] Guid personId) => HandleResult(await _employmentTerminationService.GetEmployeeEmploymentTerminationsAsync(personId));
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmploymentTerminationResponse>>> GetEmploymentTerminations() => HandleResult(await _employmentTerminationService.GetEmploymentTerminationsAsync());
 

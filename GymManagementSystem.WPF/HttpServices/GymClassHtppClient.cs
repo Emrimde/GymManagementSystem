@@ -118,4 +118,40 @@ public class GymClassHtppClient : BaseHttpClientService
             return Result<GymClassInfoResponse>.Failure(errorMessage);
         }
     }
+
+
+    public async Task<Result<Unit>> GenerateNewScheduledClasses(Guid gymClassId)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsync($"{gymClassId}", null!);
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return Result<Unit>.Success(new Unit());
+        }
+        else
+        {
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<Unit>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<Unit>.Failure($"Fatal error {ex.Message}");
+            }
+
+            return Result<Unit>.Failure(errorMessage);
+        }
+    }
 }
