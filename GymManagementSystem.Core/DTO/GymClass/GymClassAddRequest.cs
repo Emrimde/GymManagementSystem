@@ -4,7 +4,6 @@ namespace GymManagementSystem.Core.DTO.GymClass;
 public class GymClassAddRequest
 {
     public string Name { get; set; } = default!;
-    public Guid? TrainerId { get; set; }
     public Guid TrainerContractId { get; set; }
     public DaysOfWeekFlags DaysOfWeek { get; set; }
     public TimeSpan StartHour { get; set; }

@@ -9,5 +9,4 @@ public class GymClassUpdateRequest
     public TimeSpan StartHour { get; set; }
     public TimeSpan Duration { get; set; }
     public int MaxPeople { get; set; }
-    public decimal Price { get; set; }
 }

@@ -41,6 +41,7 @@ async submit() {
   this.classBookingService.createClassBooking(classBookingAddRequest).subscribe({
     next: (response: any) => {
       console.log('Class booked successfully:', response);
+      this.router.navigate(["client-main-page"])
     },
     error: (error:any) => {
       console.error('Error booking class:', error);

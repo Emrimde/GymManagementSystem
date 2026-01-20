@@ -91,7 +91,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId)
     {
-        return await _dbContext.ScheduledClasses.Where(item => item.GymClass.Id == gymClassId).Include(item => item.GymClass).Include(item => item.ClassBookings).ToListAsync();
+        return await _dbContext.ScheduledClasses.Where(item => item.GymClass.Id == gymClassId && item.Date >= DateTime.UtcNow).Include(item => item.GymClass).Include(item => item.ClassBookings).ToListAsync();
     }
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id)

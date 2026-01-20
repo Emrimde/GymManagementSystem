@@ -13,6 +13,5 @@ public class ScheduledClass
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<ClassBooking> ClassBookings { get; set; } = new List<ClassBooking>();
-
-    //public Guid? UpdatedById { get; set; }
+  
 }

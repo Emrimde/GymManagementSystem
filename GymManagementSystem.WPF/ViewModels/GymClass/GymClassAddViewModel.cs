@@ -5,6 +5,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.GymClass.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -16,34 +17,44 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
         private readonly GymClassHtppClient _httpClient;
         private readonly TrainerHttpClient _trainerHttpClient;
         public SidebarViewModel SidebarView { get; set; }
-        private INavigationService _navigation;
-        public ObservableCollection<TrainerContractInfoResponse> TrainerContracts {  get; set; }
+        
+        public ObservableCollection<TrainerContractInfoResponse> TrainerContracts { get; set; } = new();
 
-        private TrainerContractInfoResponse _selectedTrainerContract;
+        private TrainerContractInfoResponse? _selectedTrainerContract;
 
-        public TrainerContractInfoResponse SelectedTrainerContract
+        public TrainerContractInfoResponse? SelectedTrainerContract
         {
             get { return _selectedTrainerContract; }
             set {
                 _selectedTrainerContract = value;
-                GymClassAddRequest.TrainerContractId = _selectedTrainerContract.Id;
+                Form.TrainerContractId = value?.Id;
+                OnPropertyChanged();
+            }
+        }
+
+        private GymClassAddFormModel _form = new();
+
+        public GymClassAddFormModel Form
+        {
+            get { return _form; }
+            set { _form = value;
+
                 OnPropertyChanged();
             }
         }
 
 
-        public INavigationService Navigation
-        {
-            get { return _navigation; }
-            set { _navigation = value; OnPropertyChanged(); }
-        }
 
-        private GymClassAddRequest _gymClass;
-        public GymClassAddRequest GymClassAddRequest
-        {
-            get { return _gymClass; }
-            set { _gymClass = value; OnPropertyChanged(); }
-        }
+        public INavigationService Navigation { get; }
+        
+          
+
+        //private GymClassAddRequest _gymClass;
+        //public GymClassAddRequest GymClassAddRequest
+        //{
+        //    get { return _gymClass; }
+        //    set { _gymClass = value; OnPropertyChanged(); }
+        //}
 
         public ICommand AddGymClassCommand { get; }
 
@@ -56,11 +67,10 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
         public GymClassAddViewModel(GymClassHtppClient httpClient, SidebarViewModel sidebarView, INavigationService navigation, TrainerHttpClient trainerHttpClient)
         {
             _httpClient = httpClient;
-            GymClassAddRequest = new GymClassAddRequest();
             SidebarView = sidebarView;
             Navigation = navigation;
             _trainerHttpClient = trainerHttpClient;
-            TrainerContracts = new ObservableCollection<TrainerContractInfoResponse>();
+           
             _ = LoadTrainerContracts();
 
             // Tworzymy listę dni
@@ -71,8 +81,19 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
                     .Select(item => new DayItem { Day = item, IsSelected = false })
             );
 
-            AddGymClassCommand = new AsyncRelayCommand(item => AddGymClassAsync(), item => true);
-            
+            AddGymClassCommand = new AsyncRelayCommand(item => AddGymClassAsync(),item => !Form.HasErrors && Form.IsFormComplete && SelectedDays != DaysOfWeekFlags.None);
+
+            foreach (var day in DaysOfWeekItems)
+            {
+                day.PropertyChanged += (_, __) =>
+                {
+                    Form.DaysOfWeek = SelectedDays;
+                    ((AsyncRelayCommand)AddGymClassCommand).RaiseCanExecuteChanged();
+                };
+            }
+
+            Form.PropertyChanged += (_, __) =>
+            ((AsyncRelayCommand)AddGymClassCommand).RaiseCanExecuteChanged();
         }
 
         private async Task LoadTrainerContracts()
@@ -93,11 +114,19 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
 
         private async Task AddGymClassAsync()
         {
-            GymClassAddRequest.DaysOfWeek = SelectedDays;
-            //GymClassAddRequest.TrainerContractId = _selectedTrainerContractId;
+            Form.DaysOfWeek = SelectedDays;
             
 
-            Result<GymClassInfoResponse> result = await _httpClient.PostGymClassAsync(GymClassAddRequest);
+            GymClassAddRequest request = new GymClassAddRequest()
+            {
+                DaysOfWeek = Form.DaysOfWeek,
+                MaxPeople = Form.MaxPeople,
+                Name = Form.Name,
+                StartHour = Form.StartHour,
+                TrainerContractId = Form.TrainerContractId!.Value
+            };
+
+            Result<GymClassInfoResponse> result = await _httpClient.PostGymClassAsync(request);
 
             if (result.IsSuccess)
             {
