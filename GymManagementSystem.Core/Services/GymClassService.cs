@@ -131,4 +131,23 @@ public class GymClassService : IGymClassService
         };
         return (flags & bit) != 0;
     }
+
+    public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
+    {
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
+        if (gymClass == null) 
+        {
+            return Result<GymClassForEditResponse>.Failure("Gym class not found", StatusCodeEnum.NotFound);
+        }
+        GymClassForEditResponse response = new GymClassForEditResponse()
+        {
+            DaysOfWeek = gymClass.DaysOfWeek,
+            MaxPeople = gymClass.MaxPeople,
+            Name = gymClass.Name,
+            StartHour = gymClass.StartHour,
+            TrainerContractId = gymClass.TrainerContractId
+        };
+
+        return Result<GymClassForEditResponse>.Success(response, StatusCodeEnum.Ok);
+    }
 }

@@ -25,6 +25,10 @@ public class GymClassController : BaseController
     public async Task<ActionResult<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelect()
         => HandleListedResult(await _gymClassService.GetGymClassesForSelectAsync());
 
+    [HttpGet("get-gymclass-for-edit/{gymClassId:guid}")]
+    public async Task<ActionResult<GymClassForEditResponse>> GetGymClassForEdit([FromRoute] Guid gymClassId)
+        => HandleResult(await _gymClassService.GetGymClassForEditAsync(gymClassId));
+
     [HttpPost]
     public async Task<ActionResult<GymClassInfoResponse>> Create([FromBody] GymClassAddRequest entity)
         => HandleResult(await _gymClassService.CreateAsync(entity));

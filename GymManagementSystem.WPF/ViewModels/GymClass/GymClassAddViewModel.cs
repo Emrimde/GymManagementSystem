@@ -43,19 +43,8 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
             }
         }
 
-
-
         public INavigationService Navigation { get; }
         
-          
-
-        //private GymClassAddRequest _gymClass;
-        //public GymClassAddRequest GymClassAddRequest
-        //{
-        //    get { return _gymClass; }
-        //    set { _gymClass = value; OnPropertyChanged(); }
-        //}
-
         public ICommand AddGymClassCommand { get; }
 
         public ObservableCollection<DayItem> DaysOfWeekItems { get; }

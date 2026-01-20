@@ -94,6 +94,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<StaffUpdateViewModel>();
             services.AddTransient<EmployeeDetailsViewModel>();
             services.AddTransient<PersonalBookingAddViewModel>();
+            services.AddTransient<GymClassUpdateViewModel>();
             services.AddTransient<JwtHandler>();
 
             services.AddSingleton<INavigationService, NavigationService>();

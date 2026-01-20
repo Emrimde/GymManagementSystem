@@ -110,11 +110,14 @@
                     <DataTemplate DataType="{x:Type employeevm:EmployeeDecisionViewModel}">
                         <employeeview:EmployeeDecisionView/>
                     </DataTemplate>
-    <DataTemplate DataType="{x:Type trainervm:TrainerScheduleViewModel}">
-        <trainerview:TrainerScheduleView/>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
+                    <DataTemplate DataType="{x:Type trainervm:TrainerScheduleViewModel}">
+                        <trainerview:TrainerScheduleView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type gymclassvm:GymClassViewModel}">
                         <gymclassview:GymClassView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type gymclassvm:GymClassUpdateViewModel}">
+                        <gymclassview:GymClassUpdateView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type gymclassvm:GymClassAddViewModel}">
                         <gymclassview:GymClassAddView/>

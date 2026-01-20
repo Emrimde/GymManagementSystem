@@ -27,6 +27,7 @@ public class GymClassViewModel : ViewModel
 
     public ICommand OpenAddGymClassCommand { get; }
     public ICommand OpenScheduledClassesViewCommand { get; }
+    public ICommand OpenEditGymClassCommand { get; }
     public GymClassViewModel(GymClassHtppClient httpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {
         _httpClient = httpClient;
@@ -34,6 +35,7 @@ public class GymClassViewModel : ViewModel
         Navigation = navigation;
         OpenAddGymClassCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassAddViewModel>(), item => true);
         OpenScheduledClassesViewCommand = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(item), item => true);
+        OpenEditGymClassCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassUpdateViewModel>(item), item => true);
         GymClasses = new ObservableCollection<GymClassResponse>();
         _ = LoadGymClasses();
     }

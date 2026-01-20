@@ -83,6 +83,42 @@ public class GymClassHtppClient : BaseHttpClientService
         }
     }
 
+    public async Task<Result<GymClassForEditResponse>> GetGymClassForEdit(Guid gymClassId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"get-gymclass-for-edit/{gymClassId}");
+        string responseBody = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            GymClassForEditResponse? gymClasses = JsonSerializer.Deserialize<GymClassForEditResponse>(responseBody, jsonSerializerOptions);
+            return Result<GymClassForEditResponse>.Success(gymClasses) ?? Result<GymClassForEditResponse>.Failure("Unexpected error during load gym class");
+        }
+        else
+        {
+
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<GymClassForEditResponse>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<GymClassForEditResponse>.Failure($"Fatal error: {ex.Message}");
+            }
+
+            return Result<GymClassForEditResponse>.Failure(errorMessage);
+        }
+    }
+
     public async Task<Result<GymClassInfoResponse>> PostGymClassAsync(GymClassAddRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", request);
