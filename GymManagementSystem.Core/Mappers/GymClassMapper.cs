@@ -32,11 +32,19 @@ public static class GymClassMapper
         return new GymClass()
         {
             Name = gymClass.Name,
-    
+
             DaysOfWeek = gymClass.DaysOfWeek,
             StartHour = gymClass.StartHour,
             TrainerContractId = gymClass.TrainerContractId,
             MaxPeople = gymClass.MaxPeople,
         };
+    }
+    public static void ModfiyGymClass(this GymClass gymClass, GymClassUpdateRequest gymClassUpdate)
+    {
+        gymClass.Name = gymClassUpdate.Name;
+        gymClass.DaysOfWeek = gymClassUpdate.DaysOfWeek;
+        gymClass.StartHour = gymClassUpdate.StartHour;
+        gymClass.TrainerContractId = gymClassUpdate.TrainerId;
+        gymClass.MaxPeople = gymClassUpdate.MaxPeople;
     }
 }

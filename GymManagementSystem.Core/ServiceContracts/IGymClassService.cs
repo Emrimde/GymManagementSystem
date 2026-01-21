@@ -11,5 +11,5 @@ public interface IGymClassService
     Task<Result<GymClassDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync();
     Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId);
-    Task<Result<GymClassInfoResponse>> UpdateAsync(Guid id, GymClassUpdateRequest entity);
+    Task<Result<Unit>> UpdateAsync(GymClassUpdateRequest entity);
 }

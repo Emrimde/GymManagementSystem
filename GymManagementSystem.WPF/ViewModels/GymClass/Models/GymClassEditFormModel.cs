@@ -49,7 +49,7 @@ public class GymClassEditFormModel : ObservableObject, INotifyDataErrorInfo
                 break;
 
             case nameof(TrainerContractId):
-                if (!TrainerContractId.HasValue)
+                if (TrainerContractId == Guid.Empty)
                     errors.Add("Trainer must be selected.");
                 break;
 
@@ -79,9 +79,9 @@ public class GymClassEditFormModel : ObservableObject, INotifyDataErrorInfo
     }
 
 
-    private Guid? _trainerContractId;
+    private Guid _trainerContractId;
 
-    public Guid? TrainerContractId
+    public Guid TrainerContractId
     {
         get { return _trainerContractId; }
         set
@@ -135,7 +135,7 @@ public class GymClassEditFormModel : ObservableObject, INotifyDataErrorInfo
 
     public bool IsFormComplete =>
        !string.IsNullOrWhiteSpace(Name) &&
-       TrainerContractId.HasValue &&
+       TrainerContractId != Guid.Empty &&
        MaxPeople > 0 && StartHour != default;
 
 }

@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers;
+using GymManagementSystem.Core.Domain;
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.GymClass;
@@ -13,11 +14,13 @@ public class GymClassService : IGymClassService
     private readonly IGymClassRepository _gymClassRepo;
     private readonly IScheduledClassRepository _scheduledClassRepo;
     private readonly ITrainerRepository _trainerRepo;
-    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo)
+    private readonly IUnitOfWork _unitOfWork;
+    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo,IUnitOfWork unitOfWork)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;
         _trainerRepo = trainerRepo;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
@@ -71,9 +74,43 @@ public class GymClassService : IGymClassService
         return Result<IEnumerable<GymClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 
-    public Task<Result<GymClassInfoResponse>> UpdateAsync(Guid id, GymClassUpdateRequest entity)
+    public async Task<Result<Unit>> UpdateAsync(GymClassUpdateRequest entity)
     {
-        throw new NotImplementedException();
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(entity.GymClassId);
+        if (gymClass == null)
+        {
+            return Result<Unit>.Failure("Gym class not found",StatusCodeEnum.NotFound);
+        }
+        gymClass.ModfiyGymClass(entity);
+
+
+        IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
+
+        foreach (var item in scheduledClasses)
+        {
+            item.StartFrom = gymClass.StartHour;
+            item.StartTo = gymClass.StartHour + gymClass.Duration;
+            if (!IsDayIncluded(gymClass.DaysOfWeek, item.Date.DayOfWeek))
+            {
+                item.Date = GetNextValidDate(item.Date, gymClass.DaysOfWeek);
+            }
+        }
+
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
+    }
+
+    private DateTime GetNextValidDate(DateTime date, DaysOfWeekFlags daysOfWeek)
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            DateTime candidate = date.AddDays(i);
+            if (IsDayIncluded(daysOfWeek, candidate.DayOfWeek))
+                return candidate.Date;
+        }
+
+        throw new InvalidOperationException("No valid day in DaysOfWeekFlags");
     }
 
     public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)

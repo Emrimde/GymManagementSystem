@@ -7,6 +7,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.GymClass.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -68,7 +69,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         set
         {
             _selectedTrainerContract = value;
-            Form.TrainerContractId = value?.Id;
+            Form.TrainerContractId = value!.Id;
             OnPropertyChanged();
         }
     }
@@ -76,24 +77,91 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
     public INavigationService Navigation { get; }
 
     public ICommand LoadGymClassCommand { get; }
+    public ICommand CancelCommand { get; }
     public ICommand LoadTrainerContractsCommand { get; }
+    public ICommand EditGymClassCommand { get; }
     public GymClassUpdateViewModel(GymClassHtppClient gymHttpClient, SidebarViewModel sidebarView, INavigationService navigation, TrainerHttpClient trainerHttpClient)
     {
+        DaysOfWeekItems = new ObservableCollection<DayItem>(
+               Enum.GetValues(typeof(DaysOfWeekFlags))
+                   .Cast<DaysOfWeekFlags>()
+                   .Where(item => item != DaysOfWeekFlags.None)
+                   .Select(item => new DayItem { Day = item, IsSelected = false })
+           );
+
+        foreach (var item in DaysOfWeekItems)
+        {
+            item.PropertyChanged += DayItem_PropertyChanged;
+        }
         _gymHttpClient = gymHttpClient;
+        Navigation = navigation;
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
         LoadGymClassCommand = new AsyncRelayCommand(item => LoadGymClassAsync(_gymClassId), item => true);
         LoadTrainerContractsCommand = new AsyncRelayCommand(item => LoadTrainerContracts(), item => true);
+        EditGymClassCommand = new AsyncRelayCommand(item => UpdateGymClassAsync(), item => Form.IsFormComplete && !Form.HasErrors);
         SidebarView = sidebarView;
-        Navigation = navigation;
         _trainerHttpClient = trainerHttpClient;
+    }
+
+    private async Task UpdateGymClassAsync()
+    {
+        GymClassUpdateRequest gymClassUpdateRequest = new GymClassUpdateRequest()
+        {
+            DaysOfWeek = Form.DaysOfWeek,
+            MaxPeople = Form.MaxPeople, 
+            StartHour = Form.StartHour,
+            TrainerId = Form.TrainerContractId,
+            GymClassId = _gymClassId,
+            Name = Form.Name,
+        };
+       Result<Unit> result = await _gymHttpClient.PutGymClassAsync(gymClassUpdateRequest);
+        if (result.IsSuccess) 
+        {
+            Navigation.NavigateTo<GymClassViewModel>();
+        }
+        
+    }
+
+    private void DayItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DayItem.IsSelected))
+        {
+            var newValue = SelectedDays;
+            if (Form.DaysOfWeek != newValue)
+                Form.DaysOfWeek = newValue;
+        }
+    }
+
+
+    private void ApplyDaysFromFlags(DaysOfWeekFlags flags)
+    {
+        foreach (var item in DaysOfWeekItems)
+        {
+            item.IsSelected = flags.HasFlag(item.Day);
+        }
     }
 
     private async Task LoadGymClassAsync(Guid gymClassId)
     {
-       Result<GymClassForEditResponse> result = await _gymHttpClient.GetGymClassForEdit(gymClassId);
-        Form.StartHour = result.Value!.StartHour;
-        Form.TrainerContractId = result.Value.TrainerContractId;
-        Form.DaysOfWeek = result.Value.DaysOfWeek;
-        Form.MaxPeople = result.Value.MaxPeople;
-        Form.Name = result.Value.Name;
+        Result<GymClassForEditResponse> result =
+            await _gymHttpClient.GetGymClassForEdit(gymClassId);
+
+
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show(result.ErrorMessage);
+            return;
+        }
+
+        var dto = result.Value!;
+
+        Form.StartHour = dto.StartHour;
+        Form.TrainerContractId = dto.TrainerContractId;
+        Form.DaysOfWeek = dto.DaysOfWeek;
+        Form.MaxPeople = dto.MaxPeople;
+        Form.Name = dto.Name;
+
+        ApplyDaysFromFlags(dto.DaysOfWeek); // ⭐ klucz
     }
+
 }

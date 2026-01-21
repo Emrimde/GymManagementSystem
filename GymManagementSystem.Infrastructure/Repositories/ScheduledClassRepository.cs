@@ -99,6 +99,11 @@ public class ScheduledClassRepository : IScheduledClassRepository
         return await _dbContext.ScheduledClasses.Include(item => item.ClassBookings).FirstOrDefaultAsync(item => item.Id == id);
     }
 
+    public async Task<IEnumerable<ScheduledClass>> GetFutureUnbookedByGymClassId(Guid gymClassId)
+    {
+        return await _dbContext.ScheduledClasses.Where(item => !item.ClassBookings.Any() && item.Date >= DateTime.UtcNow && item.GymClassId == gymClassId).ToListAsync();
+    }
+
     public Task<ScheduledClass?> UpdateAsync(Guid id, ScheduledClass entity)
     {
         throw new NotImplementedException();

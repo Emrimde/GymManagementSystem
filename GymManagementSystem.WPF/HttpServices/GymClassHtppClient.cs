@@ -1,8 +1,11 @@
-﻿using GymManagementSystem.Core.DTO.GymClass;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.Result;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace GymManagementSystem.WPF.HttpServices;
@@ -172,6 +175,52 @@ public class GymClassHtppClient : BaseHttpClientService
         else
         {
             string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<Unit>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<Unit>.Failure($"Fatal error {ex.Message}");
+            }
+
+            return Result<Unit>.Failure(errorMessage);
+        }
+    }
+
+    public async Task<Result<Unit>> PutGymClassAsync(GymClassUpdateRequest gymClassUpdateRequest)
+    {
+        string json = JsonSerializer.Serialize(gymClassUpdateRequest);
+        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PutAsync("", content);
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Result<Unit>.Success(new Unit());
+        }
+
+        else
+        {
+            string errorMessage = responseBody;
+            ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+            if (problem?.Errors != null)
+            {
+                var errors = problem.Errors
+                    .SelectMany(item => item.Value.Select(msg => $"{item.Key}: {msg}"));
+
+                string message = string.Join("\n", errors);
+
+                return Result<Unit>.Failure(message);
+            }
 
             try
             {
