@@ -96,7 +96,6 @@ public class GymClassService : IGymClassService
             }
         }
 
-
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
