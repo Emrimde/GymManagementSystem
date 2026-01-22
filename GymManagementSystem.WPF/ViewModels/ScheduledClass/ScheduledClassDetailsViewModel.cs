@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using System.Windows;
 using System.Windows.Input;
 
@@ -41,7 +40,6 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         _scheduledHttpClient = scheduledHttpClient;
         SidebarView = sidebarView;
-        OpenClassBookingAddView = new RelayCommand(item => Navigation.NavigateTo<ClassBookingAddViewModel>(item), item => true);
     }
 
     public void ReceiveParameter(object parameter)

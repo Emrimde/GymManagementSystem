@@ -40,7 +40,6 @@ public static class ScheduledClassMapper
             Id = scheduledClass.Id,
             IsCancelled = scheduledClass.IsCancelled,
             MaxPeople = scheduledClass.MaxPeople,
-            CanBook = scheduledClass.MaxPeople > scheduledClass.ClassBookings.Count,
             StartFrom = scheduledClass.StartFrom,
             StartTo = scheduledClass.StartTo,
         };

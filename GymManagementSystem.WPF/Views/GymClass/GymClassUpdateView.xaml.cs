@@ -26,8 +26,7 @@ namespace GymManagementSystem.WPF.Views.GymClass
         {
             Loaded += (_, _) =>
             {
-                ((GymClassUpdateViewModel)DataContext).LoadGymClassCommand.Execute(null);
-                ((GymClassUpdateViewModel)DataContext).LoadTrainerContractsCommand.Execute(null);
+                ((GymClassUpdateViewModel)DataContext).LoadGymClassForEditCommand.Execute(null);
             };
             InitializeComponent();
         }

@@ -128,9 +128,6 @@
                     <DataTemplate DataType="{x:Type scheduledclassvm:ScheduledClassDetailsViewModel}">
                         <scheduledclassview:ScheduledClassDetailsView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type classbookingvm:ClassBookingAddViewModel}">
-                        <classbookingview:ClassBookingAddView/>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type classbookingvm:ClassBookingViewModel}">
                         <classbookingview:ClassBookingView/>
                     </DataTemplate>

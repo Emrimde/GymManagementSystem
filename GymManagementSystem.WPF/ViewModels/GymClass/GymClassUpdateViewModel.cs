@@ -40,7 +40,9 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
             foreach (var item in result.Value!)
             {
                 TrainerContracts.Add(item);
+                
             }
+            
         }
         else
         {
@@ -60,23 +62,23 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; set; }
     public ObservableCollection<TrainerContractInfoResponse> TrainerContracts { get; set; } = new();
 
-    private TrainerContractInfoResponse? _selectedTrainerContract;
-    private TrainerHttpClient _trainerHttpClient;
+    private TrainerContractInfoResponse _selectedTrainerContract;
+    private readonly TrainerHttpClient _trainerHttpClient;
 
-    public TrainerContractInfoResponse? SelectedTrainerContract
+    public TrainerContractInfoResponse SelectedTrainerContract
     {
         get { return _selectedTrainerContract; }
         set
         {
             _selectedTrainerContract = value;
-            Form.TrainerContractId = value!.Id;
+            Form.TrainerContractId = value.Id;
             OnPropertyChanged();
         }
     }
 
     public INavigationService Navigation { get; }
 
-    public ICommand LoadGymClassCommand { get; }
+    public ICommand LoadGymClassForEditCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand LoadTrainerContractsCommand { get; }
     public ICommand EditGymClassCommand { get; }
@@ -96,8 +98,8 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         _gymHttpClient = gymHttpClient;
         Navigation = navigation;
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(), item => true);
-        LoadGymClassCommand = new AsyncRelayCommand(item => LoadGymClassAsync(_gymClassId), item => true);
-        LoadTrainerContractsCommand = new AsyncRelayCommand(item => LoadTrainerContracts(), item => true);
+        LoadGymClassForEditCommand = new AsyncRelayCommand(item => LoadGymClassAsync(_gymClassId), item => true);
+        //LoadTrainerContractsCommand = new AsyncRelayCommand(item => LoadTrainerContracts(), item => true);
         EditGymClassCommand = new AsyncRelayCommand(item => UpdateGymClassAsync(), item => Form.IsFormComplete && !Form.HasErrors);
         SidebarView = sidebarView;
         _trainerHttpClient = trainerHttpClient;
@@ -143,6 +145,22 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadGymClassAsync(Guid gymClassId)
     {
+
+        Result<ObservableCollection<TrainerContractInfoResponse>> trainersResult = await _trainerHttpClient.GetInstructors();
+        if (trainersResult.IsSuccess)
+        {
+            foreach (var item in trainersResult.Value!)
+            {
+                TrainerContracts.Add(item);
+
+            }
+        }
+        else
+        {
+            MessageBox.Show($"{trainersResult.ErrorMessage}");
+        }
+
+
         Result<GymClassForEditResponse> result =
             await _gymHttpClient.GetGymClassForEdit(gymClassId);
 
@@ -160,6 +178,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         Form.DaysOfWeek = dto.DaysOfWeek;
         Form.MaxPeople = dto.MaxPeople;
         Form.Name = dto.Name;
+        SelectedTrainerContract = TrainerContracts.Where(item =>  item.Id == dto.TrainerContractId).FirstOrDefault();
 
         ApplyDaysFromFlags(dto.DaysOfWeek); // ⭐ klucz
     }

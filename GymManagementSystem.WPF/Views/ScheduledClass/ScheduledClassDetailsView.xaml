@@ -27,7 +27,7 @@
             </TextBlock>
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Duration:"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Duration: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
                         <Run Text="{Binding ScheduledClass.StartFrom}"/>
                         <Run Text="-"/>
@@ -48,24 +48,18 @@
                 
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Status"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Status: "/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.IsCancelled}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Updated At"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Updated At: "/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.UpdatedAt}"/>
                     </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Created at"/>
+                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Created at: "/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.CreatedAt}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Visibility="{Binding ScheduledClass.CanBook, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Button Foreground="{DynamicResource PrimaryColor}" Content="Add client to classes" Command="{Binding OpenClassBookingAddView}" CommandParameter="{Binding ScheduledClass.Id}"/>
-                    
-                </StackPanel>
-
             </StackPanel>
         </Grid>
-
     </Grid>
 </UserControl>

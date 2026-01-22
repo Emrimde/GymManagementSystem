@@ -70,7 +70,6 @@ namespace GymManagementSystem.WPF
             services.AddTransient<GymClassViewModel>();
             services.AddTransient<ScheduledClassViewModel>();
             services.AddTransient<ScheduledClassDetailsViewModel>();
-            services.AddTransient<ClassBookingAddViewModel>();
             services.AddTransient<ClassBookingViewModel>();
             services.AddTransient<EmployeeAddViewModel>();
             services.AddTransient<EmployeeDecisionViewModel>();
