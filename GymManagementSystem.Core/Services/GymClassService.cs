@@ -119,12 +119,17 @@ public class GymClassService : IGymClassService
         if (gymClass == null) {
             return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
+        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId);
+
+        HashSet<DateTime> occupiedDates = presentScheduleClass.Select(item => item.Date).ToHashSet();
+
         List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(gymClass,14);
-        await _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+        List<ScheduledClass> newScheduledClasses = scheduledClasses.Where(item => !occupiedDates.Contains(item.Date)).ToList();
+
+        await _scheduledClassRepo.AddRangeAsync(newScheduledClasses);
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
 
-    
     private List<ScheduledClass> GenerateScheduledClasses(GymClass gymClass, int daysAhead = 30)
     {
         List<ScheduledClass> result = new List<ScheduledClass>();
