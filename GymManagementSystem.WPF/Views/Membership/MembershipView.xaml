@@ -65,7 +65,7 @@ AutoGenerateColumns="false">
                                     Background="#4CAF50" 
                                     Foreground="White" FontSize="10"
                                    Command="{Binding DataContext.OpenEditMembershipCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}"
+                                    CommandParameter="{Binding Id}"
                                      >
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>

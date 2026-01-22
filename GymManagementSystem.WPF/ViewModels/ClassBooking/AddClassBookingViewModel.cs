@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.ClassBooking;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.DTO.ScheduledClass;
@@ -8,7 +9,6 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -24,8 +24,10 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     public ClassBookingAddRequest ClassBookingRequest { get; set; }
     public ICommand AddClassBookingCommand { get; }
     public ICommand CancelCommand { get; }
+    public ICommand LoadDataForAddClassBookingCommand { get; }
+    public ICommand LoadScheduledClassesCommand { get; }
     public Guid ClientId { get; set; }
-    private ObservableCollection<ScheduledClassComboBoxResponse> _scheduledClasses;
+    private ObservableCollection<ScheduledClassComboBoxResponse> _scheduledClasses = new();
 
     public ObservableCollection<ScheduledClassComboBoxResponse> ScheduledClasses
     {
@@ -37,24 +39,19 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
 
     public ScheduledClassComboBoxResponse? SelectedScheduledClass
     {
-        get { return _selectedScheduledClass; }
+        get => _selectedScheduledClass;
         set
         {
-            if (value == null)
-            {
-                _selectedScheduledClass = null;
-                return;
-                    }
-            if (value.ScheduledClassId != Guid.Empty)
-            {
+            _selectedScheduledClass = value;
 
-                _selectedScheduledClass = value;
+            if (value != null)
+                ClassBookingRequest.ScheduledClassId = value.ScheduledClassId;
 
-                ClassBookingRequest.ScheduledClassId = _selectedScheduledClass.ScheduledClassId;
-            }
+            OnPropertyChanged();
         }
     }
-    private ClientInfoResponse _client;
+
+    private ClientInfoResponse _client = new();
 
     public ClientInfoResponse Client
     {
@@ -63,7 +60,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     }
 
 
-    private ObservableCollection<GymClassComboBoxResponse> _gymClasses;
+    private ObservableCollection<GymClassComboBoxResponse> _gymClasses = new();
 
     public ObservableCollection<GymClassComboBoxResponse> GymClasses
     {
@@ -79,7 +76,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     }
 
 
-    private GymClassComboBoxResponse _selectedGymClass;
+    private GymClassComboBoxResponse _selectedGymClass = new();
 
     public GymClassComboBoxResponse SelectedGymClass
     {
@@ -88,27 +85,31 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         {
             _selectedGymClass = value;
             IsScheduledClassComboBoxVisible = true;
-            _ = LoadScheduledClassesComboBox();
+            ((AsyncRelayCommand)LoadScheduledClassesCommand)
+           .Execute(null);
             OnPropertyChanged();
         }
     }
     public AddClassBookingViewModel(SidebarViewModel sidebarView, INavigationService navigation, ClassBookingHttpClient classBookingHttpClient, GymClassHtppClient gymClassHttpClient, ScheduledClassHttpClient scheduledClassHttpClient, ClientHttpClient clientHttpClient)
     {
         IsScheduledClassComboBoxVisible = false;
-        //SelectedGymClass = new GymClassComboBoxResponse();
-        //SelectedScheduledClass = new ScheduledClassComboBoxResponse();
         ClassBookingRequest = new ClassBookingAddRequest();
-        ScheduledClasses = new ObservableCollection<ScheduledClassComboBoxResponse>();
-        GymClasses = new ObservableCollection<GymClassComboBoxResponse>();
         SidebarView = sidebarView;
         Navigation = navigation;
+        LoadScheduledClassesCommand = new AsyncRelayCommand(item => LoadScheduledClassesComboBox(Client.MembershipId!), item => true);
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item=> true);
+        LoadDataForAddClassBookingCommand = new AsyncRelayCommand(item => LoadAllAsync(ClientId), item=> true);
         _clientHttpClient = clientHttpClient;
         _classBookingHttpClient = classBookingHttpClient;
         _gymClassHttpClient = gymClassHttpClient;
         _scheduledClassHttpClient = scheduledClassHttpClient;
-        _ = LoadGymClassesAsync();
         AddClassBookingCommand = new AsyncRelayCommand(item => AddClassBookingAsync(), item => true);
+    }
+
+    private async Task LoadAllAsync(Guid clientId)
+    {
+        await LoadGymClassesAsync();
+        await LoadClientName(clientId);
     }
 
     private async Task AddClassBookingAsync()
@@ -121,14 +122,15 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
     }
 
-    private async Task LoadScheduledClassesComboBox()
+    private async Task LoadScheduledClassesComboBox(Guid membershipId)
     {
-        Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId);
+        Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");
         }
         ScheduledClasses = result.Value!;
+        SelectedScheduledClass = null;
     }
 
     private async Task LoadGymClassesAsync()
@@ -148,7 +150,6 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         {
             ClientId = clientId;
             ClassBookingRequest.ClientId = clientId;
-            _ = LoadClientName(clientId);
         }
     }
 

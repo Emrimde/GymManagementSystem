@@ -119,7 +119,7 @@ public class GymClassService : IGymClassService
         if (gymClass == null) {
             return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
-        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId);
+        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId, null);
 
         HashSet<DateTime> occupiedDates = presentScheduleClass.Select(item => item.Date).ToHashSet();
 

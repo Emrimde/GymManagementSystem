@@ -126,6 +126,7 @@ public class ClientRepository : IClientRepository
             .Select(item => new ClientInfoResponse
             {
                 Id = item.Id,
+                MembershipId = item.ClientMemberships.FirstOrDefault(item => item.IsActive)!.MembershipId,
                 FullName = item.FirstName + " " + item.LastName
             })
             .FirstOrDefaultAsync();

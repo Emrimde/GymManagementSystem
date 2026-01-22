@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymManagementSystem.WPF.ViewModels.ClassBooking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,10 @@ namespace GymManagementSystem.WPF.Views.ClassBooking
     {
         public AddClassBookingView()
         {
+            Loaded += (_, _) =>
+            {
+                ((AddClassBookingViewModel)DataContext).LoadDataForAddClassBookingCommand.Execute(null);
+            };
             InitializeComponent();
         }
     }

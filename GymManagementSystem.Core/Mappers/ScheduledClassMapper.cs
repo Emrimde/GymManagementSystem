@@ -22,10 +22,11 @@ public static class ScheduledClassMapper
     }
     public static ScheduledClassComboBoxResponse ToScheduledClassComboBoxResponse(this ScheduledClass scheduledClass)
     {
+        var end = scheduledClass.StartFrom + TimeSpan.FromHours(1);
         return new ScheduledClassComboBoxResponse()
         {
             ScheduledClassId = scheduledClass.Id,
-            ScheduledClassDetails = scheduledClass.Date.ToString("dd.MM") + " - " +  scheduledClass.StartFrom.ToString() + " - " + scheduledClass.StartTo.ToString() + " - Slots " +  scheduledClass.ClassBookings.Count.ToString() + " / " + scheduledClass.GymClass!.MaxPeople.ToString() ,
+            ScheduledClassDetails = scheduledClass.Date.ToString("dd.MM") + " - " +  scheduledClass.StartFrom.ToString(@"hh\:mm") + " - " + end.ToString(@"hh\:mm") + " - Slots " +  scheduledClass.ClassBookings.Count.ToString() + " / " + scheduledClass.GymClass!.MaxPeople.ToString()
         };
     }
 

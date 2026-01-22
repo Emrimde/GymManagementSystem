@@ -63,33 +63,38 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
             {
                 Id = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
                 Name = "Silver Membership",
-                IsVisibleOffer = true,
                 MembershipType = MembershipTypeEnum.Monthly,
-
+                ClassBookingDaysInAdvanceCount = 7,
+                FreeFriendEntryCountPerMonth = 3
             },
             new Membership
             {
                 Id = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
                 Name = "Gold Membership",
-                IsVisibleOffer = true,
                 MembershipType = MembershipTypeEnum.Monthly,
+                ClassBookingDaysInAdvanceCount = 14,
+                FreeFriendEntryCountPerMonth = 6
             },
               new Membership
               {
                   Id = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
                   Name = "Silver Membership",
-                  IsVisibleOffer = true,
                   MembershipType = MembershipTypeEnum.Annual,
-
+                  ClassBookingDaysInAdvanceCount = 7,
+                  FreeFriendEntryCountPerMonth = 3,
+                  FreePersonalTrainingSessions = 3
               },
             new Membership
             {
                 Id = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
                 Name = "Gold Membership",
-                IsVisibleOffer = true,
                 MembershipType = MembershipTypeEnum.Annual,
+                ClassBookingDaysInAdvanceCount = 14,
+                FreeFriendEntryCountPerMonth = 6,
+                FreePersonalTrainingSessions = 3
             }
         );
+
         builder.Entity<MembershipPrice>().HasData(
             new MembershipPrice
             {

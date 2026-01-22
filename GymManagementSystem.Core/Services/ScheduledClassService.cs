@@ -13,10 +13,13 @@ public class ScheduledClassService : IScheduledClassService
 {
     private readonly IScheduledClassRepository _schedulecClassRepo;
     private readonly IClassBookingRepository _classBookingRepo;
-    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo)
+    private readonly IMembershipRepository _memberhsipRepository;
+
+    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo, IMembershipRepository memberhsipRepository)
     {
         _schedulecClassRepo = schedulecClassRepo;
         _classBookingRepo = classBookingRepo;
+        _memberhsipRepository = memberhsipRepository;
     }
         
 
@@ -26,10 +29,16 @@ public class ScheduledClassService : IScheduledClassService
         return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymclassId)
+    public async Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymclassId, Guid membershipId)
     {
-        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId);
-        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClasses.Select(item => item.ToScheduledClassComboBoxResponse());
+        Membership? membership = await _memberhsipRepository.GetByIdAsync(membershipId);
+        if (membership == null)
+        {
+            return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Failure("Membership not found", StatusCodeEnum.NotFound);
+        }
+
+        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId, membership.ClassBookingDaysInAdvanceCount);
+        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClasses.OrderBy(item => item.Date).Select(item => item.ToScheduledClassComboBoxResponse());
         return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 

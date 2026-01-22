@@ -6,6 +6,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Windows;
 using System.Windows.Input;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace GymManagementSystem.WPF.ViewModels.Membership;
 
@@ -16,6 +17,7 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
 
     private readonly MembershipHttpClient _httpClient;
     public ICommand UpdateMembershipCommand { get; }
+    public ICommand LoadMembershipCommand { get; }
     public ICommand CancelCommand { get; }
 
     public MembershipUpdateRequest MembershipUpdateRequest
@@ -43,8 +45,14 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
         SidebarView = sidebarViewModel;
         MembershipUpdateRequest = new MembershipUpdateRequest();
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), item => true);
+        LoadMembershipCommand = new AsyncRelayCommand(item => LoadMembershipForEditByIdAsync(), item => true);
         _httpClient = httpClient;
         UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => true);
+    }
+
+    private async Task LoadMembershipForEditByIdAsync()
+    {
+      Result<MembershipResponse> result = await  _httpClient.GetMembershipByIdAsync(MembershipId);
     }
 
     private async Task UpdateMembershipAsync(object arg)
@@ -63,11 +71,9 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
 
     public void ReceiveParameter(object parameter)
     {
-        if (parameter is MembershipResponse membership)
+        if (parameter is Guid membershipId)
         {
-            MembershipId = membership.Id;
-            MembershipUpdateRequest.Name = membership.Name;
-            MembershipUpdateRequest.Price = membership.Price;
+            MembershipId = membershipId;
         }
     }
 }

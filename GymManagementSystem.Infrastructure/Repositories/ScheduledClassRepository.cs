@@ -89,9 +89,16 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     }
 
-    public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId)
+    public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId, int? classBookingDaysInAdvanceCount)
     {
-        return await _dbContext.ScheduledClasses.Where(item => item.GymClass.Id == gymClassId && item.Date >= DateTime.UtcNow).Include(item => item.GymClass).Include(item => item.ClassBookings).ToListAsync();
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow).Include(item => item.GymClass).Include(item => item.ClassBookings);
+
+        if(classBookingDaysInAdvanceCount != null)
+        {
+          scheduledClasses = scheduledClasses.Where(item => item.Date <= DateTime.UtcNow.AddDays(classBookingDaysInAdvanceCount.Value));
+        }
+
+        return await scheduledClasses.ToListAsync();
     }
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id)

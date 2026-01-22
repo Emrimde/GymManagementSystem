@@ -29,7 +29,7 @@ public static class MembershipMapper
         return new Membership()
         {
             Name = membership.Name,
-            MembershipType = membership.MembershipType,
+            //MembershipType = membership.MembershipType,
         };
     }
 }

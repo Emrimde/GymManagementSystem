@@ -46,9 +46,9 @@ public class ScheduledClassHttpClient : BaseHttpClientService
             return Result<ObservableCollection<ScheduledClassResponse>>.Failure(errorMessage);
         }
     }
-    public async Task<Result<ObservableCollection<ScheduledClassComboBoxResponse>>> GetScheduledClassesComboBox(Guid gymClassId)
+    public async Task<Result<ObservableCollection<ScheduledClassComboBoxResponse>>> GetScheduledClassesComboBox(Guid gymClassId, Guid membershipId)
     {
-        string queryString =  $"scheduledclasses/{gymClassId}";
+        string queryString =  $"scheduledclasses/{gymClassId}/{membershipId}";
         HttpResponseMessage response = await _httpClient.GetAsync(queryString);
         string responseBody = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
