@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GymManagementSystem.WPF.ViewModels.Membership;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,10 @@ namespace GymManagementSystem.WPF.Views.Membership
     {
         public MembershipDetailsView()
         {
+            Loaded += (_, _) =>
+            {
+                ((MembershipDetailsViewModel)DataContext).LoadMembershipDetailsCommand.Execute(null);
+            };
             InitializeComponent();
         }
     }

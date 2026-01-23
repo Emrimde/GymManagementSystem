@@ -2,7 +2,6 @@
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.Feature;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -48,7 +47,6 @@ public class MembershipViewModel : ViewModel
         _navigation = navigationService;
         SidebarView = sidebarView;
         _membershipHttpClient = membershipHttpClient;
-        OpenFeatureView = new RelayCommand(item => Navigation.NavigateTo<FeatureViewModel>(), item => true);
         Memberships = new ObservableCollection<MembershipResponse>();
         OpenMembershipDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(item), item => true);
         _ = LoadMembershipsAsync();

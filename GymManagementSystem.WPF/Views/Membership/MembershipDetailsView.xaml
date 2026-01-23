@@ -29,6 +29,27 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Class Booking Days In Advance Count: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                     <Run Text="{Binding Membership.ClassBookingDaysInAdvanceCount}"/>
+
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Free Friend Entry Count Per Month: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                     <Run Text="{Binding Membership.FreeFriendEntryCountPerMonth}"/>
+
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Free Personal Training Sessions per 6 months: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
+                     <Run Text="{Binding Membership.FreePersonalTrainingSessions}"/>
+
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="MembershipType: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
                      <Run Text="{Binding Membership.MembershipType}"/>

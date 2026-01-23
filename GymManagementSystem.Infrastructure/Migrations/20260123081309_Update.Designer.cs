@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260123081309_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,7 +344,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0f8d8085-4b27-429a-ad6d-dde455b1f18e"),
+                            Id = new Guid("a34d8bb9-60c8-42f1-9dd1-2393341bda26"),
                             AboutUs = "We are a place created for people who want to truly improve their health, physique, and well-being — not just “tick off” a workout. Our goal is to build a strong, capable, and mindful community where everyone, regardless of their level, feels welcome. We combine modern equipment with expert coaching to make training not only hard, but smart. We focus on quality of movement, steady progress, and safety, because long-term results matter more than quick fixes. We help our members set clear goals and achieve them step by step.\r\n\r\nWe don’t believe in shortcuts — we believe in building lasting habits and real lifestyle change. We create an environment where training becomes part of everyday life, not a burden. We believe that a strong body builds a strong mind. That’s why we support, motivate, and educate — not just count reps. Our gym is more than equipment; it’s people, atmosphere, and a shared drive to be better than yesterday.",
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
@@ -472,15 +475,17 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("FeatureDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("BenefitFrequency")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid?>("FeatureId")
+                    b.Property<Guid>("FeatureId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("MembershipId")
                         .HasColumnType("uuid");
+
+                    b.Property<int?>("Period")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -521,31 +526,31 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bc869aa-4f81-40d7-8a3a-b71b9de373f8"),
+                            Id = new Guid("1cfbded3-04e1-4d32-8ba4-04c82e55741c"),
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
                             Price = 100m,
-                            ValidFrom = new DateTime(2026, 1, 23, 8, 45, 36, 664, DateTimeKind.Utc).AddTicks(8507)
+                            ValidFrom = new DateTime(2026, 1, 23, 8, 13, 8, 554, DateTimeKind.Utc).AddTicks(9611)
                         },
                         new
                         {
-                            Id = new Guid("d2926983-1d35-493e-8724-f08480ef3bb1"),
+                            Id = new Guid("c18dc1eb-3187-469f-ad7a-37538ea8f869"),
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
                             Price = 150m,
-                            ValidFrom = new DateTime(2026, 1, 23, 8, 45, 36, 664, DateTimeKind.Utc).AddTicks(8512)
+                            ValidFrom = new DateTime(2026, 1, 23, 8, 13, 8, 554, DateTimeKind.Utc).AddTicks(9618)
                         },
                         new
                         {
-                            Id = new Guid("3f74150c-8c0b-4ab1-a37b-8a73275fbd26"),
+                            Id = new Guid("19142462-396a-442a-bb06-97ea12de5054"),
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
                             Price = 1000m,
-                            ValidFrom = new DateTime(2026, 1, 23, 8, 45, 36, 664, DateTimeKind.Utc).AddTicks(8514)
+                            ValidFrom = new DateTime(2026, 1, 23, 8, 13, 8, 554, DateTimeKind.Utc).AddTicks(9629)
                         },
                         new
                         {
-                            Id = new Guid("0d5e6670-f4b5-41af-aa07-ad5d364f04a4"),
+                            Id = new Guid("735ace4e-a6c9-4ad8-89b5-91ab579eef46"),
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
                             Price = 1500m,
-                            ValidFrom = new DateTime(2026, 1, 23, 8, 45, 36, 664, DateTimeKind.Utc).AddTicks(8516)
+                            ValidFrom = new DateTime(2026, 1, 23, 8, 13, 8, 554, DateTimeKind.Utc).AddTicks(9631)
                         });
                 });
 
@@ -1129,15 +1134,19 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipFeature", b =>
                 {
-                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Feature", null)
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Feature", "Feature")
                         .WithMany("MembershipFeatures")
-                        .HasForeignKey("FeatureId");
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.Membership", "Membership")
                         .WithMany("MembershipFeatures")
                         .HasForeignKey("MembershipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Feature");
 
                     b.Navigation("Membership");
                 });

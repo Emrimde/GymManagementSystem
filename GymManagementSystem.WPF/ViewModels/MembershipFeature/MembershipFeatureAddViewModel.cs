@@ -1,98 +1,101 @@
-﻿using GymManagementSystem.Core.DTO.Feature;
-using GymManagementSystem.Core.DTO.MembershipFeature;
-using GymManagementSystem.Core.Enum;
+﻿using GymManagementSystem.Core.DTO.MembershipFeature;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Collections.ObjectModel;
+using GymManagementSystem.WPF.ViewModels.Membership;
+using System.Collections;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.MembershipFeature;
-public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver
+public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver, INotifyDataErrorInfo
 {
-    public MembershipFeatureAddRequest MembershipFeatureAdd { get; set; }
+    private Guid _membershipId { get; set; }
+    public ICommand AddMembershipFeatureCommand { get;  }
+    public ICommand CancelCommand { get;  }
 
-    private ObservableCollection<FeatureResponse> _features;
+    private string _featureDescription = string.Empty;
 
-    public ObservableCollection<FeatureResponse> Features
+    public string FeatureDescription
     {
-        get { return _features; }
-        set { _features = value; OnPropertyChanged(); }
-    }
-
-    private FeatureResponse _selectedFeature ;
-
-    public FeatureResponse SelectedFeature
-    {
-        get { return  _selectedFeature; }
-        set {  _selectedFeature = value; 
-        MembershipFeatureAdd.FeatureId = value.FeatureId;
+        get { return _featureDescription; }
+        set { _featureDescription = value; OnPropertyChanged();
+            ValidateProperty(nameof(FeatureDescription));
         }
     }
 
-
-    public ICommand AddMembershipFeatureCommand { get;  }
-
-    private readonly FeatureHttpClient _featureHttpClient;
-    public INavigationService Navigation { get; set; }
-    public SidebarViewModel SidebarView { get; set; }
-    private readonly MembershipHttpClient _membershipHttpClient;
-    public IEnumerable<PeriodEnum> Periods => [PeriodEnum.Every3Months,PeriodEnum.Every6Months, PeriodEnum.None];
-
-
-    private PeriodEnum _selectedPeriod;
-
-    public PeriodEnum SelectedPeriod
+    private void ValidateProperty(string propertyName)
     {
-        get { return _selectedPeriod; }
-        set { _selectedPeriod = value; MembershipFeatureAdd.Period = value; }
+        _errors.Remove(propertyName);
+
+        var errors = new List<string>();
+
+        switch (propertyName)
+        {
+            case nameof(FeatureDescription):
+                if (string.IsNullOrWhiteSpace(FeatureDescription))
+                    errors.Add("Feature description is required.");
+                else if (FeatureDescription.Length < 10)
+                    errors.Add("Feature description name must have more than 10 letters");
+                break;
+        }
+
+        if (errors.Any())
+            _errors[propertyName] = errors;
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
     }
 
-    public MembershipFeatureAddViewModel(INavigationService navigation, SidebarViewModel sidebarView, MembershipHttpClient membershipHttpClient, FeatureHttpClient featureHttpClient)
+    public INavigationService Navigation { get; set; }
+    public SidebarViewModel SidebarView { get; set; }
+
+    public Dictionary<string, List<string>> _errors = new();
+    public bool HasErrors => _errors.Any();
+
+    private readonly MembershipHttpClient _membershipHttpClient;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public MembershipFeatureAddViewModel(INavigationService navigation, SidebarViewModel sidebarView, MembershipHttpClient membershipHttpClient)
     {
         Navigation = navigation;
         SidebarView = sidebarView;
         _membershipHttpClient = membershipHttpClient;
-        MembershipFeatureAdd = new MembershipFeatureAddRequest();
-        _featureHttpClient = featureHttpClient;
-        Features = new ObservableCollection<FeatureResponse>();
-        SelectedFeature = new FeatureResponse();
-        
-        AddMembershipFeatureCommand = new AsyncRelayCommand(item => AddMembershipFeatureAsync(), item => true);
+        AddMembershipFeatureCommand = new AsyncRelayCommand(item => AddMembershipFeatureAsync(), item => FeatureDescription.Length > 10);
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(_membershipId), item => true);
+
     }
     private async Task AddMembershipFeatureAsync()
     {
-        Result<Unit> result = await _membershipHttpClient.PostMembershipFeatureAsync(MembershipFeatureAdd);
+        MembershipFeatureAddRequest request = new MembershipFeatureAddRequest()
+        {
+            FeatureDescription = FeatureDescription,
+            MembershipId = _membershipId
+        };
+        Result<Unit> result = await _membershipHttpClient.PostMembershipFeatureAsync(request);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");
         }
-
+        Navigation.NavigateTo<MembershipFeatureViewModel>(_membershipId);
     }
 
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid id) 
         {
-            MembershipFeatureAdd.MembershipId = id;
-
-            _ = LoadFeatures();
-            
+            _membershipId = id; 
         }
     }
 
-    private async Task LoadFeatures()
+    public IEnumerable GetErrors(string? propertyName)
     {
-        Result<ObservableCollection<FeatureResponse>> result = await _featureHttpClient.GetFeaturesForSelect();
-        if (!result.IsSuccess)
+        if(propertyName != null && _errors.ContainsKey(propertyName))
         {
-            MessageBox.Show($"{result.ErrorMessage}");
-            return;
+            return _errors[propertyName];
         }
-
-        Features = result.Value!;
-
+        return Enumerable.Empty<string>();
     }
 }

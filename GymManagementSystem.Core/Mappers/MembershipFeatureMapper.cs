@@ -8,19 +8,15 @@ public static class MembershipFeatureMapper
     {
         return new MembershipFeature()
         {
-            BenefitFrequency = request.Frequency,
-            FeatureId = request.FeatureId,
+            FeatureDescription = request.FeatureDescription,
             MembershipId = request.MembershipId,
-            Period = request.Period,
         };
     }
     public static MembershipFeatureResponse ToMembershipFeatureResponse(this MembershipFeature request)
     {
         return new MembershipFeatureResponse()
         {
-            BenefitFrequency = request.BenefitFrequency.ToString() ?? "Not set",
-            BenefitDesciption = request.Feature!.BenefitDescription,
-            Period = request.Period.ToString() ?? "Not set",
+            FeatureDescription = request.FeatureDescription,
         };
     }
 }

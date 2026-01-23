@@ -49,10 +49,7 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
           AutoGenerateColumns="false">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Benefit Desciption:" Binding="{Binding BenefitDesciption}"/>
-                        <DataGridTextColumn Header="Benefit Frequency: " Binding="{Binding BenefitFrequency}"/>
-                        <DataGridTextColumn Header="Period" Binding="{Binding Period}"/>
-
+                        <DataGridTextColumn Header="Feature Desciption:" Binding="{Binding FeatureDescription}"/>
 
                         <DataGridTemplateColumn Header="Edit/Delete" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
@@ -81,16 +78,9 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-
                 </DataGrid>
-
             </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Previous" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
-                <TextBlock Text="{Binding CurrentPageDisplay}" FontSize="16" VerticalAlignment="Center" Foreground="White"/>
-                <Button Content="Next" Width="100" Margin="10,0" />
-
-            </StackPanel>
+                <Button Grid.Row="2" Content="Return" Command="{Binding ReturnCommand}" VerticalContentAlignment="Center" Width="100" Height="40" Margin="10,0" />
         </Grid>
     </Grid>
 </UserControl>

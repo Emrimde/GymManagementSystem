@@ -12,7 +12,10 @@ public static class MembershipMapper
             Id = membership.Id,
             Name = membership.Name + " " + membership.MembershipType.ToString(),
             MembershipType = membership.MembershipType,
-            Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m
+            Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m,
+            ClassBookingDaysInAdvanceCount = membership.ClassBookingDaysInAdvanceCount,
+            FreeFriendEntryCountPerMonth = membership.FreeFriendEntryCountPerMonth,
+            FreePersonalTrainingSessions = membership.FreePersonalTrainingSessions
         };
     }
     public static Membership ToMembership(this MembershipAddRequest membership)

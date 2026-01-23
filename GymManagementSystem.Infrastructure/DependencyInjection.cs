@@ -40,7 +40,6 @@ public static class DependencyInjection
         services.AddScoped<IEmploymentTerminationRepository, EmploymentTerminationRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IGymClassRepository, GymClassRepository>();
-        services.AddScoped<IFeatureRepository, FeatureRepository>();
         services.AddScoped<IClassBookingRepository, ClassBookingRepository>();
         
         return services;

@@ -35,7 +35,7 @@ public class MembershipRepository : IMembershipRepository
         {
             Id = item.Id,
             IsMonthly = item.MembershipType == Core.Enum.MembershipTypeEnum.Monthly ? true : false,
-            MembershipFeatures = item.MembershipFeatures.Select(item => item.Feature.BenefitDescription).ToList(),
+            MembershipFeatures = item.MembershipFeatures.Select(item => item.FeatureDescription).ToList(),
             MembershipName = item.Name,
             Price = item.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault(),
         }).ToListAsync();

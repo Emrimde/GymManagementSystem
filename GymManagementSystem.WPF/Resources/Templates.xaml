@@ -40,8 +40,6 @@
                     xmlns:membershippriceview="clr-namespace:GymManagementSystem.WPF.Views.MembershipPrice"
                     xmlns:membershipfeaturevm="clr-namespace:GymManagementSystem.WPF.ViewModels.MembershipFeature"
                     xmlns:membershipfeatureview="clr-namespace:GymManagementSystem.WPF.Views.MembershipFeature"
-                    xmlns:featurevm="clr-namespace:GymManagementSystem.WPF.ViewModels.Feature"
-                    xmlns:featureview="clr-namespace:GymManagementSystem.WPF.Views.Feature"
                     xmlns:staffvm="clr-namespace:GymManagementSystem.WPF.ViewModels.Staff"
                     xmlns:staffview="clr-namespace:GymManagementSystem.WPF.Views.Staff"
                     xmlns:personalbookingvm="clr-namespace:GymManagementSystem.WPF.ViewModels.PersonalBooking"
@@ -164,12 +162,6 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureViewModel}">
                         <membershipfeatureview:MembershipFeatureView />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type featurevm:FeatureViewModel}">
-                        <featureview:FeatureView />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type featurevm:FeatureAddViewModel}">
-                        <featureview:FeatureAddView />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type staffvm:StaffViewModel}">
                         <staffview:StaffView />
