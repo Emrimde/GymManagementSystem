@@ -27,9 +27,44 @@ public class MembershipFeatureService : IMembershipFeatureService
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
 
+    public async Task<Result<MembershipFeatureForEditResponse>> GetMembershipFeatureForEditAsync(Guid membershipFeatureId)
+    {
+        MembershipFeatureForEditResponse? response =  await _membershipFeatureRepo.GetMembershipFeatureForEditByIdAsync(membershipFeatureId);
+        if (response == null)
+        {
+            return Result<MembershipFeatureForEditResponse>.Failure("Membership feature not found", StatusCodeEnum.NotFound);
+        }
+
+        return Result<MembershipFeatureForEditResponse>.Success(response, StatusCodeEnum.Ok);
+    }
+
     public async Task<Result<IEnumerable<MembershipFeatureResponse>>> GetMembershipFeaturesByMembershipIdAsync(Guid membershipId)
     {
         IEnumerable<MembershipFeature> membershipFeatures = await _membershipFeatureRepo.GetMembershipFeaturesByMembershipId(membershipId);
         return Result<IEnumerable<MembershipFeatureResponse>>.Success(membershipFeatures.Select(item => item.ToMembershipFeatureResponse()), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> HardDeleteMembershipFeatureAsync(Guid id)
+    {
+        bool exists = _membershipFeatureRepo.MarkForHardDelete(id);
+        if (!exists)
+            return Result<Unit>.Failure("Not found", StatusCodeEnum.NotFound);
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
+    }
+
+    public async Task<Result<Unit>> UpdateMembershipFeatureAsync(MembershipFeatureUpdateRequest entity)
+    {
+        MembershipFeature? membershipFeature = await _membershipFeatureRepo.GetMembershipFeatureByIdAsync(entity.MembershipFeatureId);
+        if (membershipFeature == null)
+        {
+            return Result<Unit>.Failure("Membership feature not found", StatusCodeEnum.NotFound);
+        }
+
+        membershipFeature.ModifyMembershipFeature(entity);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 }
