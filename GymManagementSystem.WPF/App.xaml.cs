@@ -83,6 +83,7 @@ namespace GymManagementSystem.WPF
             services.AddTransient<MembershipPriceAddViewModel>();
             services.AddTransient<MembershipFeatureAddViewModel>();
             services.AddTransient<MembershipFeatureViewModel>();
+            services.AddTransient<MembershipFeatureUpdateViewModel>();
             services.AddTransient<AddClassBookingViewModel>();
             services.AddTransient<StaffViewModel>();
             services.AddTransient<StaffAddViewModel>();

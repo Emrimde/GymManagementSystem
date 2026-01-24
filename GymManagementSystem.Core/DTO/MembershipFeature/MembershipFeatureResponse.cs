@@ -1,8 +1,7 @@
-﻿using GymManagementSystem.Core.Enum;
-
-namespace GymManagementSystem.Core.DTO.MembershipFeature;
+﻿namespace GymManagementSystem.Core.DTO.MembershipFeature;
 
 public class MembershipFeatureResponse
 {
+    public Guid MembershipFeatureId { get; set; }
     public string FeatureDescription { get; set; } = default!;
 }

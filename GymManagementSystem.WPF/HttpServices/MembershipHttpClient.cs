@@ -46,6 +46,20 @@ public class MembershipHttpClient : BaseHttpClientService
             return new MembershipInfoResponse();
         }
     }
+    public async Task<Result<MembershipFeatureForEditResponse>> GetMembershipFeatureForEdit(Guid membershipFeatureId)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"get-membership-feature-for-edit/{membershipFeatureId}");
+        if (response.IsSuccessStatusCode)
+        {
+            MembershipFeatureForEditResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipFeatureForEditResponse>();
+
+            return Result<MembershipFeatureForEditResponse>.Success(memberships ?? new MembershipFeatureForEditResponse());
+        }
+        else
+        {
+            return Result<MembershipFeatureForEditResponse>.Failure("");
+        }
+    }
 
 
 
@@ -107,6 +121,60 @@ public class MembershipHttpClient : BaseHttpClientService
     }
 
 
+    public async Task<Result<Unit>> UpdateMembershipFeature(MembershipFeatureUpdateRequest membershipUpdateRequest)
+    {
+        string json = JsonSerializer.Serialize(membershipUpdateRequest);
+        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await _httpClient.PutAsync("update-membership-feature", content);
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            
+            return Result<Unit>.Success(Unit.Value);
+        }
+        else
+        {
+
+            string errorMessage = responseBody;
+
+            try
+            {
+                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                    return Result<Unit>.Failure(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
+            }
+
+            return Result<Unit>.Failure(errorMessage);
+        }
+    }
+
+    public async Task<Result<Unit>> DeleteMembershipFeatureAsync(Guid membershipFeatureId)
+    {
+        var requestUri = $"delete-membership-feature/{membershipFeatureId}";
+
+        HttpResponseMessage response =
+            await _httpClient.DeleteAsync(requestUri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            string error = await response.Content.ReadAsStringAsync();
+            return Result<Unit>.Failure(error);
+        }
+
+        return Result<Unit>.Success(Unit.Value);
+    }
+
+
     public async Task<Result<Unit>> PostMembershipFeatureAsync(MembershipFeatureAddRequest membershipFeatureAddRequest)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-membership-feature", membershipFeatureAddRequest);
@@ -160,7 +228,7 @@ public class MembershipHttpClient : BaseHttpClientService
         else
         {
 
-            string errorMessage = responseBody; 
+            string errorMessage = responseBody;
 
             try
             {

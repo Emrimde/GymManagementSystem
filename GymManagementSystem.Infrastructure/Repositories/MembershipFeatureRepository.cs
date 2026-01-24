@@ -22,9 +22,9 @@ public class MembershipFeatureRepository : IMembershipFeatureRepository
         return await _dbContext.MembershipFeatures.FirstOrDefaultAsync(item => item.Id == membershipFeatureId);
     }
 
-    public async Task<MembershipFeatureForEditResponse?> GetMembershipFeatureForEditByIdAsync(Guid membershipId)
+    public async Task<MembershipFeatureForEditResponse?> GetMembershipFeatureForEditByIdAsync(Guid membershipFeatureId)
     {
-        return await _dbContext.MembershipFeatures.Where(item => item.MembershipId == membershipId).Select(item => new MembershipFeatureForEditResponse()
+        return await _dbContext.MembershipFeatures.Where(item => item.Id == membershipFeatureId).Select(item => new MembershipFeatureForEditResponse()
         {
             FeatureDescription = item.FeatureDescription,
         }).FirstOrDefaultAsync();

@@ -163,6 +163,9 @@
                     <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureViewModel}">
                         <membershipfeatureview:MembershipFeatureView />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type membershipfeaturevm:MembershipFeatureUpdateViewModel}">
+                        <membershipfeatureview:MembershipFeatureUpdateView />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type staffvm:StaffViewModel}">
                         <staffview:StaffView />
                     </DataTemplate>

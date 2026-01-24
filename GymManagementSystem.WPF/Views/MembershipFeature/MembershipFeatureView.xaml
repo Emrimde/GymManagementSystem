@@ -60,8 +60,8 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
                             Height="25" 
                             Background="#4CAF50" 
                             Foreground="White" FontSize="10"
-                           Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}"
+                           Command="{Binding DataContext.OpenEditMembershipFeatureCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            CommandParameter="{Binding MembershipFeatureId}"
                              >
                                         </Button>
 
@@ -70,8 +70,8 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
                             Height="25" FontSize="10"
                             Background="#F44336" 
                             Foreground="White"
-                            Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}" >
+                            Command="{Binding DataContext.DeleteMembershipFeatureCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            CommandParameter="{Binding MembershipFeatureId}" >
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>

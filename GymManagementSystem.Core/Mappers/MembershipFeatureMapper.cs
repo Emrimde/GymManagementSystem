@@ -13,18 +13,9 @@ public static class MembershipFeatureMapper
         };
     }
 
-    public static MembershipFeature ToMembershipFeature(this MembershipFeatureUpdateRequest request)
-    {
-        return new MembershipFeature()
-        {
-            MembershipId = request.MembershipId,
-            FeatureDescription = request.FeatureDescription,
-        };
-    }
-
     public static void ModifyMembershipFeature(this MembershipFeature membershipFeature, MembershipFeatureUpdateRequest request)
     {
-        membershipFeature.MembershipId = request.MembershipId;
+        membershipFeature.Id = request.MembershipFeatureId;
         membershipFeature.FeatureDescription = request.FeatureDescription;
     }
 
@@ -32,6 +23,7 @@ public static class MembershipFeatureMapper
     {
         return new MembershipFeatureResponse()
         {
+            MembershipFeatureId = request.Id,
             FeatureDescription = request.FeatureDescription,
         };
     }
