@@ -74,6 +74,7 @@ AutoGenerateColumns="false">
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
                 Command="{Binding DataContext.      OpenMembershipDetailsCommand,                   RelativeSource=         { RelativeSource                   AncestorType=DataGrid}}"
                 CommandParameter="{Binding Id}">
+                                        <fa:ImageAwesome Icon="InfoCircle" Width="10" Height="25" Foreground="White"/>
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

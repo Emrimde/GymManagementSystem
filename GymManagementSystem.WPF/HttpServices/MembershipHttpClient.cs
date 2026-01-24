@@ -207,7 +207,7 @@ public class MembershipHttpClient : BaseHttpClientService
     }
 
 
-    public async Task<Result<MembershipResponse>> PutMembershipAsync(MembershipUpdateRequest membershipUpdateRequest, Guid membershipId)
+    public async Task<Result<Unit>> PutMembershipAsync(MembershipUpdateRequest membershipUpdateRequest, Guid membershipId)
     {
         string json = JsonSerializer.Serialize(membershipUpdateRequest);
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -218,12 +218,7 @@ public class MembershipHttpClient : BaseHttpClientService
 
         if (response.IsSuccessStatusCode)
         {
-            var options = new JsonSerializerOptions // backend zwracał camelCase
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            MembershipResponse? membership = JsonSerializer.Deserialize<MembershipResponse>(responseBody, options);
-            return Result<MembershipResponse>.Success(membership!);
+            return Result<Unit>.Success(Unit.Value);
         }
         else
         {
@@ -236,15 +231,15 @@ public class MembershipHttpClient : BaseHttpClientService
                 if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
                 {
                     errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<MembershipResponse>.Failure(errorMessage);
+                    return Result<Unit>.Failure(errorMessage);
                 }
             }
             catch (Exception ex)
             {
-                return Result<MembershipResponse>.Failure($"Fatal error: {ex.Message}");
+                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
             }
 
-            return Result<MembershipResponse>.Failure(errorMessage);
+            return Result<Unit>.Failure(errorMessage);
         }
     }
 

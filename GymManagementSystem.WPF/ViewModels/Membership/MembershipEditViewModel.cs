@@ -1,66 +1,151 @@
-﻿
-using GymManagementSystem.Core.DTO.Membership;
+﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using System.Collections;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace GymManagementSystem.WPF.ViewModels.Membership;
 
-public class MembershipEditViewModel : ViewModel,IParameterReceiver
+public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDataErrorInfo
 {
-    private INavigationService _navigation;
-    private MembershipUpdateRequest _membershipUpdateRequest;
 
     private readonly MembershipHttpClient _httpClient;
     public ICommand UpdateMembershipCommand { get; }
     public ICommand LoadMembershipCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public MembershipUpdateRequest MembershipUpdateRequest
+    private string _name = string.Empty;
+    private Dictionary<string, List<string>> _errors = new();
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public string Name
     {
-        get { return _membershipUpdateRequest; }
+        get { return _name; }
+        set { _name = value; OnPropertyChanged(); ValidateProperty(nameof(Name)); }
+    }
+
+    private int _classBookingDaysInAdvanceCount;
+    public int ClassBookingDaysInAdvanceCount
+    {
+        get => _classBookingDaysInAdvanceCount;
         set
         {
-            if (_membershipUpdateRequest != value)
-            {
-                _membershipUpdateRequest = value;
-                OnPropertyChanged();
-            }
+            if (_classBookingDaysInAdvanceCount == value) return;
+            _classBookingDaysInAdvanceCount = value;
+            OnPropertyChanged();
+            ValidateProperty(nameof(ClassBookingDaysInAdvanceCount));
         }
     }
-    public INavigationService Navigation
+
+    private int _freeFriendEntryCountPerMonth;
+    public int FreeFriendEntryCountPerMonth
     {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
+        get => _freeFriendEntryCountPerMonth;
+        set
+        {
+            if (_freeFriendEntryCountPerMonth == value) return;
+            _freeFriendEntryCountPerMonth = value;
+            OnPropertyChanged();
+            ValidateProperty(nameof(FreeFriendEntryCountPerMonth));
+        }
     }
+
+    private int _freePersonalTrainingSessions;
+    public int FreePersonalTrainingSessions
+    {
+        get => _freePersonalTrainingSessions;
+        set
+        {
+            if (_freePersonalTrainingSessions == value) return;
+            _freePersonalTrainingSessions = value;
+            OnPropertyChanged();
+            ValidateProperty(nameof(FreePersonalTrainingSessions));
+        }
+    }
+
+    private void ValidateProperty(string propertyName)
+    {
+        _errors.Remove(propertyName);
+
+        var errors = new List<string>();
+
+        switch (propertyName)
+        {
+            case nameof(Name):
+                if (string.IsNullOrWhiteSpace(Name))
+                    errors.Add("Name is required.");
+                else if (Name.Length > 50)
+                    errors.Add("Name cannot exceed 50 characters.");
+                else if(Name.Length < 10)
+                    errors.Add("Name cannot must have at least 10 characters.");
+                break;
+            case nameof(ClassBookingDaysInAdvanceCount):
+                if (ClassBookingDaysInAdvanceCount < 0)
+                    errors.Add("Value cannot be negative.");
+                break;
+
+            case nameof(FreeFriendEntryCountPerMonth):
+                if (FreeFriendEntryCountPerMonth < 0)
+                    errors.Add("Value cannot be negative.");
+                break;
+
+            case nameof(FreePersonalTrainingSessions):
+                if (FreePersonalTrainingSessions < 0)
+                    errors.Add("Value cannot be negative.");
+                break;
+        }
+
+        if (errors.Any())
+            _errors[propertyName] = errors;
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+
+   
+    public INavigationService Navigation { get; set; }
     public Guid MembershipId { get; private set; }
     public SidebarViewModel SidebarView { get; set; }
+
+    public bool HasErrors => _errors.Any();
+
     public MembershipEditViewModel(SidebarViewModel sidebarViewModel, INavigationService navigation, MembershipHttpClient httpClient)
     {
         Navigation = navigation;
         SidebarView = sidebarViewModel;
-        MembershipUpdateRequest = new MembershipUpdateRequest();
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), item => true);
         LoadMembershipCommand = new AsyncRelayCommand(item => LoadMembershipForEditByIdAsync(), item => true);
         _httpClient = httpClient;
-        UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => true);
+        UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => Name.Length < 50 &&  Name != string.Empty && Name.Length > 10 && ClassBookingDaysInAdvanceCount > 0 && FreeFriendEntryCountPerMonth > 0 && FreePersonalTrainingSessions > 0);
     }
 
     private async Task LoadMembershipForEditByIdAsync()
     {
-      Result<MembershipResponse> result = await  _httpClient.GetMembershipByIdAsync(MembershipId);
+        Result<MembershipResponse> result = await _httpClient.GetMembershipByIdAsync(MembershipId);
+        Name = result.Value!.Name;
+        ClassBookingDaysInAdvanceCount = result.Value!.ClassBookingDaysInAdvanceCount;
+        FreeFriendEntryCountPerMonth = result.Value!.FreeFriendEntryCountPerMonth;
+        FreePersonalTrainingSessions = result.Value!.FreePersonalTrainingSessions;
     }
 
     private async Task UpdateMembershipAsync(object arg)
     {
-        Result<MembershipResponse> result = await _httpClient.PutMembershipAsync(MembershipUpdateRequest, MembershipId);
+        MembershipUpdateRequest request = new MembershipUpdateRequest()
+        {
+            Name = Name,
+            ClassBookingDaysInAdvanceCount = ClassBookingDaysInAdvanceCount,
+            FreeFriendEntryCountPerMonth = FreeFriendEntryCountPerMonth,
+            FreePersonalTrainingSessions = FreePersonalTrainingSessions
+        };
+
+        Result<Unit> result = await _httpClient.PutMembershipAsync(request, MembershipId);
         if (result.IsSuccess)
         {
-            MessageBox.Show($"Membership {result.Value!.Name} is already edited!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Membership is already edited!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             Navigation.NavigateTo<MembershipViewModel>();
         }
         else
@@ -75,5 +160,14 @@ public class MembershipEditViewModel : ViewModel,IParameterReceiver
         {
             MembershipId = membershipId;
         }
+    }
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (propertyName != null && _errors.ContainsKey(propertyName))
+        {
+            return _errors[propertyName];
+        }
+        return Enumerable.Empty<string>();
     }
 }

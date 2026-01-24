@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Enum;
@@ -12,9 +13,11 @@ namespace GymManagementSystem.Core.Services;
 public class MembershipService : IMembershipService
 {
     private readonly IMembershipRepository _repository;
-    public MembershipService(IMembershipRepository repository)
+    private readonly IUnitOfWork _unitOfWork;
+    public MembershipService(IMembershipRepository repository, IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<MembershipResponse>> CreateAsync(MembershipAddRequest entity)
@@ -58,13 +61,16 @@ public class MembershipService : IMembershipService
         return Result<MembershipInfoResponse>.Success(dto, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<MembershipResponse>> UpdateAsync(Guid id, MembershipUpdateRequest entity)
+    public async Task<Result<Unit>> UpdateAsync(Guid id, MembershipUpdateRequest entity)
     {
-        Membership? membership = await _repository.UpdateAsync(id, entity.ToMembership());
+        Membership? membership = await _repository.GetByIdAsync(id);
         if (membership == null)
         {
-            return Result<MembershipResponse>.Failure($"Membership with id {id} not found");
+            return Result<Unit>.Failure($"Membership with id {id} not found");
         }
-        return Result<MembershipResponse>.Success(membership.ToMembershipResponse(), StatusCodeEnum.Ok);
+        membership.ModifyMembership(entity);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.MembershipFeature"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
     <Grid>
@@ -62,7 +63,9 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
                             Foreground="White" FontSize="10"
                            Command="{Binding DataContext.OpenEditMembershipFeatureCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             CommandParameter="{Binding MembershipFeatureId}"
+                                            
                              >
+                                            <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>
 
                                         <Button
@@ -72,6 +75,10 @@ HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddMembershi
                             Foreground="White"
                             Command="{Binding DataContext.DeleteMembershipFeatureCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             CommandParameter="{Binding MembershipFeatureId}" >
+                                            <fa:FontAwesome Icon="Trash"
+                     Foreground="White"
+                     Width="16"
+                     Height="16"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>

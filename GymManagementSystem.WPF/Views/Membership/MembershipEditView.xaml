@@ -22,12 +22,40 @@
             </Grid.RowDefinitions>
             <TextBlock Margin="0,50,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit membership" />
 
-            <StackPanel Grid.Row="1"  Orientation="Vertical" VerticalAlignment="Center">
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                     <TextBlock FontSize="25" Text="Name" Foreground="White"/>
-                    <TextBox Text="{Binding MembershipUpdateRequest.Name}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0" Width="400" HorizontalContentAlignment="Center"/>
+                    <TextBox Width="400" Margin="10,0,0,0" VerticalContentAlignment="Center"
+                 FontSize="20"
+                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <TextBlock FontSize="20" Text="Booking classes ahead(days in advance)" Foreground="White"/>
+                    <TextBox Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center"
+                 Text="{Binding ClassBookingDaysInAdvanceCount,
+                                UpdateSourceTrigger=PropertyChanged,
+                                ValidatesOnNotifyDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <TextBlock FontSize="20" Text="Free friend entries / month" Foreground="White"/>
+                    <TextBox Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center"
+                 Text="{Binding FreeFriendEntryCountPerMonth,
+                                UpdateSourceTrigger=PropertyChanged,
+                                ValidatesOnNotifyDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <TextBlock FontSize="20" Text="Free personal training sessions" Foreground="White" />
+                    <TextBox Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center"
+                 Text="{Binding FreePersonalTrainingSessions,
+                                UpdateSourceTrigger=PropertyChanged,
+                                ValidatesOnNotifyDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
+
             <StackPanel Margin="0,0,0,30" Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button  Content="Edit membership" Command="{Binding UpdateMembershipCommand }"/>
                 <Button Command="{Binding CancelCommand}" Content="Cancel"/>

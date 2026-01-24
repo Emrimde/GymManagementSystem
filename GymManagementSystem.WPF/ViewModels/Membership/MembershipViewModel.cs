@@ -51,13 +51,7 @@ public class MembershipViewModel : ViewModel
         OpenMembershipDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(item), item => true);
         _ = LoadMembershipsAsync();
         OpenAddMembershipView = new RelayCommand((item) => Navigation.NavigateTo<MembershipAddViewModel>(), item => true);
-        OpenEditMembershipCommand = new RelayCommand(
-    item =>
-    {
-        if (item is MembershipResponse membership)
-            _navigation.NavigateTo<MembershipEditViewModel>(membership);
-    },
-    item => true);
+        OpenEditMembershipCommand = new RelayCommand(item => _navigation.NavigateTo<MembershipEditViewModel>(item), item => true);
     }
 
     private async Task LoadMembershipsAsync()

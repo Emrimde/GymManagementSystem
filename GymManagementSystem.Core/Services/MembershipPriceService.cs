@@ -47,8 +47,7 @@ public class MembershipPriceService : IMembershipPriceService
 
     public async Task<Result<IEnumerable<MembershipPriceResponse>>> GetMembershipPricesByMembershipIdAsync(Guid membershipId)
     {
-        IEnumerable<MembershipPrice> membershipPrices = await _membershipPriceRepository.GetMembershipPricesByMembershipId(membershipId);
-        IEnumerable<MembershipPriceResponse> dto = membershipPrices.Select(item => item.ToMembershipPriceResponse());
-        return Result<IEnumerable<MembershipPriceResponse>>.Success(dto, StatusCodeEnum.Ok);
+        IEnumerable<MembershipPriceResponse> membershipPrices = await _membershipPriceRepository.GetMembershipPricesByMembershipId(membershipId);
+        return Result<IEnumerable<MembershipPriceResponse>>.Success(membershipPrices, StatusCodeEnum.Ok);
     }
 }

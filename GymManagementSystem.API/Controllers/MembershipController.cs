@@ -43,20 +43,17 @@ public class MembershipController : BaseController
         => HandleListedResult(await _membershipFeatureService.GetMembershipFeaturesByMembershipIdAsync(membershipId));
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<MembershipResponse>> UpdateMembership(Guid id, MembershipUpdateRequest entity)
+    public async Task<ActionResult<Unit>> UpdateMembership(Guid id, MembershipUpdateRequest entity)
         => HandleResult(await _membershipService.UpdateAsync(id, entity));
 
-    //
     [HttpGet("get-membership-feature-for-edit/{membershipFeatureId:guid}")]
     public async Task<ActionResult<MembershipFeatureForEditResponse>> GetMembershipFeatureForEdit([FromRoute] Guid membershipFeatureId)
         => HandleResult(await _membershipFeatureService.GetMembershipFeatureForEditAsync(membershipFeatureId));
 
-    //
     [HttpPut("update-membership-feature")]
     public async Task<ActionResult<Unit>> UpdateMembershipFeature([FromBody] MembershipFeatureUpdateRequest entity)
         => HandleResult(await _membershipFeatureService.UpdateMembershipFeatureAsync(entity));
 
-    //
     [HttpDelete("delete-membership-feature/{membershipFeatureId:guid}")]
     public async Task<ActionResult<Unit>> HardDeleteMembershipFeature([FromRoute] Guid membershipFeatureId)
         => HandleResult(await _membershipFeatureService.HardDeleteMembershipFeatureAsync(membershipFeatureId));

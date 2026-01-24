@@ -10,7 +10,7 @@ public static class MembershipMapper
         return new MembershipResponse()
         {
             Id = membership.Id,
-            Name = membership.Name + " " + membership.MembershipType.ToString(),
+            Name = membership.Name,
             MembershipType = membership.MembershipType,
             Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m,
             ClassBookingDaysInAdvanceCount = membership.ClassBookingDaysInAdvanceCount,
@@ -27,12 +27,11 @@ public static class MembershipMapper
         };
     }
 
-    public static Membership ToMembership(this MembershipUpdateRequest membership)
+    public static void ModifyMembership(this Membership membership, MembershipUpdateRequest membershipUpdateRequest)
     {
-        return new Membership()
-        {
-            Name = membership.Name,
-            //MembershipType = membership.MembershipType,
-        };
+        membership.Name = membershipUpdateRequest.Name;
+        membership.FreeFriendEntryCountPerMonth = membershipUpdateRequest.FreeFriendEntryCountPerMonth;
+        membership.FreePersonalTrainingSessions = membershipUpdateRequest.FreePersonalTrainingSessions;
+        membership.ClassBookingDaysInAdvanceCount = membershipUpdateRequest.ClassBookingDaysInAdvanceCount;
     }
 }

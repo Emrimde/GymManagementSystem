@@ -28,8 +28,16 @@ public class MembershipPriceRepository : IMembershipPriceRepository
         return await _dbContext.MembershipPrices.FirstOrDefaultAsync(item => item.MembershipId == membershipId && item.ValidTo == null);
     }
 
-    public async Task<IEnumerable<MembershipPrice>> GetMembershipPricesByMembershipId(Guid membershipId)
+    public async Task<IEnumerable<MembershipPriceResponse>> GetMembershipPricesByMembershipId(Guid membershipId)
     {
-        return await _dbContext.MembershipPrices.Where(item => item.MembershipId == membershipId).ToListAsync();
+        return await _dbContext.MembershipPrices.Where(item => item.MembershipId == membershipId).OrderByDescending(item => item.ValidFrom).Select(item => new MembershipPriceResponse()
+        {
+            LabelPrice = item.LabelPrice ?? "Regular",
+            Price = item.Price,
+            ValidFromLabel = item.ValidFrom.ToString("dd.MM.yyyy - HH:mm"),
+            ValidToLabel = item.ValidTo.HasValue
+                            ? item.ValidTo.Value.ToString("dd.MM.yyyy - HH:mm")
+                            : "Active price"
+        }).ToListAsync();
     }
 }

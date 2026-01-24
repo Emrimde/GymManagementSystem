@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.GymClass"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
     <Grid>
@@ -66,6 +68,7 @@
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
 Command="{Binding DataContext.OpenScheduledClassesViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
 CommandParameter="{Binding Id}">
+                                        <fa:ImageAwesome Icon="InfoCircle" Width="10" Height="25" Foreground="White"/>
                                     </Button>
 
 
@@ -75,7 +78,7 @@ CommandParameter="{Binding Id}">
                         </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn Header="Edit" Width="150">
+                        <DataGridTemplateColumn Header="Edit / Delete" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -87,18 +90,18 @@ CommandParameter="{Binding Id}">
                                    Command="{Binding DataContext.OpenEditGymClassCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding Id}"
                                      >
-
+                                            <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>
 
-                                        <!--<Button
+                                       <Button
                                      Width="40" 
                                     Height="25" FontSize="10"
                                     Background="#F44336" 
                                     Foreground="White"
                                     Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}" >
-
-                                        </Button>-->
+                                            <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
