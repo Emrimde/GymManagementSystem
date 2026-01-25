@@ -125,4 +125,34 @@ public class ScheduledClassHttpClient : BaseHttpClientService
             return Result<ScheduledClassDetailsResponse>.Failure(errorMessage);
         }
     }
+
+    public async Task<Result<Unit>> CancelScheduleClass(Guid scheduleClassId)
+    {
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"cancel-schedule-class/{scheduleClassId}");
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return Result<Unit>.Success(Unit.Value);
+        }
+        else
+        {
+            string errorMessage = responseBody;
+            try
+            {
+                Dictionary<string, JsonElement>? errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
+                {
+                    errorMessage = detailElement.GetString() ?? responseBody;
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
+            }
+
+            return Result<Unit>.Failure(errorMessage);
+        }
+    }
+
 }

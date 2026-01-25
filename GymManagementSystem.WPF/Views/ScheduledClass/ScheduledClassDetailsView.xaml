@@ -43,9 +43,7 @@
                         <Run Text="/"  />
                         <Run Text="{Binding ScheduledClass.MaxPeople}"  />
                     </TextBlock>
-                        
                     
-                
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Status: "/>
@@ -58,6 +56,9 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Created at: "/>
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.CreatedAt}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <Button Content="Cancel Schedule class" Command="{Binding CancelScheduledClassCommand}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

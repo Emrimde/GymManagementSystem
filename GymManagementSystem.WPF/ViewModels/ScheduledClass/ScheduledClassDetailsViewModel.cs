@@ -3,27 +3,18 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.GymClass;
 using System.Windows;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ScheduledClass;
 public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
 {
-    private INavigationService _navigation;
+    public INavigationService Navigation{ get; set;}
+    public ICommand CancelScheduledClassCommand { get; }
+    public ICommand LoadScheduledClassCommand { get; }
 
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public ICommand OpenClassBookingAddView { get;  }
-
-    private ScheduledClassDetailsResponse _scheduledClass;
+    private ScheduledClassDetailsResponse _scheduledClass = new();
 
     public ScheduledClassDetailsResponse ScheduledClass
     {
@@ -40,19 +31,38 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         _scheduledHttpClient = scheduledHttpClient;
         SidebarView = sidebarView;
+        CancelScheduledClassCommand = new AsyncRelayCommand(item => CancelScheduledClassAsync(), item => true);
+        LoadScheduledClassCommand = new AsyncRelayCommand(item => LoadScheduledClass(), item => true);
+        
     }
 
-    public void ReceiveParameter(object parameter)
+    private async Task CancelScheduledClassAsync()
     {
-        if(parameter is Guid id)
+        MessageBoxResult mbResult = MessageBox.Show("Are you sure to cancel schedule class?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (mbResult == MessageBoxResult.Yes)
         {
-            _ = LoadScheduledClass(id);
+            Result<Unit> result = await _scheduledHttpClient.CancelScheduleClass(_scheduledClassId);
+            if (!result.IsSuccess)
+            {
+                MessageBox.Show($"{result.ErrorMessage}");
+            }
+            Navigation.NavigateTo<ScheduledClassViewModel>(ScheduledClass.GymClassId);
         }
     }
 
-    private async Task LoadScheduledClass(Guid id)
+    private Guid _scheduledClassId;
+
+    public void ReceiveParameter(object parameter)
     {
-        Result<ScheduledClassDetailsResponse> result = await _scheduledHttpClient.GetScheduledClassById(id);
+        if (parameter is Guid id)
+        {
+            _scheduledClassId = id;
+        }
+    }
+
+    private async Task LoadScheduledClass()
+    {
+        Result<ScheduledClassDetailsResponse> result = await _scheduledHttpClient.GetScheduledClassById(_scheduledClassId);
         if (result.IsSuccess)
         {
             ScheduledClass = result.Value!;

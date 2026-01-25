@@ -23,17 +23,7 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
     private readonly ScheduledClassHttpClient _scheduledClassHttpClient;
     private readonly GymClassHtppClient _gymClassHttpCLient;
     public SidebarViewModel SidebarView { get; set; }
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value;
-            OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; set; }
     public Guid GymClassId { get; set; }
     public ICommand SearchScheduledClassesCommand { get; }
     private ObservableCollection<ScheduledClassResponse> _scheduledClasses;

@@ -1,6 +1,6 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
@@ -14,14 +14,33 @@ public class ScheduledClassService : IScheduledClassService
     private readonly IScheduledClassRepository _schedulecClassRepo;
     private readonly IClassBookingRepository _classBookingRepo;
     private readonly IMembershipRepository _memberhsipRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo, IMembershipRepository memberhsipRepository)
+    public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo, IMembershipRepository memberhsipRepository, IUnitOfWork unitOfWork)
     {
         _schedulecClassRepo = schedulecClassRepo;
         _classBookingRepo = classBookingRepo;
         _memberhsipRepository = memberhsipRepository;
+        _unitOfWork = unitOfWork;
     }
-        
+
+    public async Task<Result<Unit>> CancelScheduleClassAsync(Guid scheduleClassId)
+    {
+        ScheduledClass? scheduleClass = await _schedulecClassRepo.GetByIdAsync(scheduleClassId);
+        if(scheduleClass == null)
+        {
+            return Result<Unit>.Failure("Scheduled class not found", StatusCodeEnum.NotFound);
+        }
+        scheduleClass.IsActive = false;
+        foreach(ClassBooking classBooking in scheduleClass.ClassBookings)
+        {
+            classBooking.IsActive = false;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
+    }
+
 
     public async Task<Result<IEnumerable<ScheduledClassResponse>>> GetAllAsync(Guid gymClassId, string? searchText)
     {

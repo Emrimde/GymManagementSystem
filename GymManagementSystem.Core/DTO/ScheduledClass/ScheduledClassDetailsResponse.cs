@@ -3,6 +3,7 @@
 public class ScheduledClassDetailsResponse
 {
     public Guid Id { get; set; }
+    public Guid GymClassId { get; set; }
     public string Date { get; set; } = default!;
     public TimeSpan StartFrom { get; set; }
     public TimeSpan StartTo { get; set; }

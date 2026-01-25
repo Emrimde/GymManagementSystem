@@ -14,10 +14,10 @@ public static class ScheduledClassMapper
             Date = scheduledClass.Date.ToString("dd.MM.yyyy"),
             Name = scheduledClass.GymClass?.Name ?? string.Empty,
             Id = scheduledClass.Id,
-            IsCancelled = scheduledClass.IsCancelled,
+            IsActive = scheduledClass.IsActive ? "Active" : "Cancelled",
             MaxPeople = scheduledClass.MaxPeople,
-            StartFrom = scheduledClass.StartFrom,
-            StartTo = scheduledClass.StartTo,
+            StartFrom = scheduledClass.StartFrom.ToString(@"hh\:mm"),
+            StartTo = (scheduledClass.StartFrom + TimeSpan.FromMinutes(60)).ToString(@"hh\:mm"),
         };
     }
     public static ScheduledClassComboBoxResponse ToScheduledClassComboBoxResponse(this ScheduledClass scheduledClass)
@@ -39,6 +39,7 @@ public static class ScheduledClassMapper
             Date = scheduledClass.Date.ToString("dd.MM.yyyy"),
             AttendeesCount = scheduledClass.ClassBookings.Count,
             Id = scheduledClass.Id,
+            GymClassId = scheduledClass.GymClassId,
             IsCancelled = scheduledClass.IsCancelled,
             MaxPeople = scheduledClass.MaxPeople,
             StartFrom = scheduledClass.StartFrom,

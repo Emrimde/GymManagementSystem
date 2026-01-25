@@ -1,33 +1,15 @@
 ﻿using GymManagementSystem.WPF.ViewModels.Membership;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views.Membership
+namespace GymManagementSystem.WPF.Views.Membership;
+public partial class MembershipDetailsView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy MembershipDetailsView.xaml
-    /// </summary>
-    public partial class MembershipDetailsView : UserControl
+    public MembershipDetailsView()
     {
-        public MembershipDetailsView()
+        Loaded += (_, _) =>
         {
-            Loaded += (_, _) =>
-            {
-                ((MembershipDetailsViewModel)DataContext).LoadMembershipDetailsCommand.Execute(null);
-            };
-            InitializeComponent();
-        }
+            ((MembershipDetailsViewModel)DataContext).LoadMembershipDetailsCommand.Execute(null);
+        };
+        InitializeComponent();
     }
 }

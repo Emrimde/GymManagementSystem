@@ -30,7 +30,7 @@ public class ClassBookingRepository : IClassBookingRepository
 
     public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)
     {
-        return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow).Select(item => new ClassBookingReadModel()
+        return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow && item.IsActive).Select(item => new ClassBookingReadModel()
         {
             Id = item.Id,
             CreatedAt = item.CreatedAt,

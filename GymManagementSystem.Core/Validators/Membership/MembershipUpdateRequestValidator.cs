@@ -6,18 +6,18 @@ public class MembershipUpdateRequestValidator : AbstractValidator<MembershipUpda
 {
     public MembershipUpdateRequestValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(item => item.Name)
             .NotEmpty().WithMessage("Name is required.")
             .MinimumLength(10).WithMessage("Name must have at least 10 characters.")
             .MaximumLength(50).WithMessage("Name cannot exceed 50 characters.");
 
-        RuleFor(x => x.ClassBookingDaysInAdvanceCount)
+        RuleFor(item => item.ClassBookingDaysInAdvanceCount)
             .GreaterThanOrEqualTo(0).WithMessage("Value cannot be negative.");
 
-        RuleFor(x => x.FreeFriendEntryCountPerMonth)
+        RuleFor(item => item.FreeFriendEntryCountPerMonth)
             .GreaterThanOrEqualTo(0).WithMessage("Value cannot be negative.");
 
-        RuleFor(x => x.FreePersonalTrainingSessions)
+        RuleFor(item => item.FreePersonalTrainingSessions)
             .GreaterThanOrEqualTo(0).WithMessage("Value cannot be negative.");
     }
 }

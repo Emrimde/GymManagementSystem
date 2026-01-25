@@ -6,7 +6,6 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,19 +14,9 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
 {
     private readonly ClassBookingHttpClient _httpClient;
     private readonly ClientHttpClient _clientHttpClient;
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value;
-            OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; set; }
     public Guid ClientId { get; set; }
-    private ClientInfoResponse _client;
+    private ClientInfoResponse _client = new();
 
     public ClientInfoResponse Client
     {

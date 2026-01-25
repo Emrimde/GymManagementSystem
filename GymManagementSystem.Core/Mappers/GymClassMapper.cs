@@ -6,19 +6,20 @@ public static class GymClassMapper
 {
     public static GymClassResponse ToGymResponse(this GymClass gymClass)
     {
-        return new GymClassResponse()
+        return new GymClassResponse
         {
             Id = gymClass.Id,
-            CreatedAt = gymClass.CreatedAt.ToString("dd.MM.yyyy"),
-            UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy"),
-            Duration = gymClass.Duration,
-            EndTime = gymClass.StartHour + gymClass.Duration,
-            MaxPeople = gymClass.MaxPeople,
             Name = gymClass.Name,
-            StartHour = gymClass.StartHour,
-            Days = gymClass.DaysOfWeek.ToString()
+            StartHour = gymClass.StartHour.ToString(@"hh\:mm"), // TimeSpan – bez ToString
+            Duration = TimeSpan.FromMinutes(60).ToString(@"hh\:mm"),
+            EndTime = (gymClass.StartHour + TimeSpan.FromMinutes(60)).ToString(@"hh\:mm"),
+            MaxPeople = gymClass.MaxPeople,
+            Days = gymClass.DaysOfWeek.ToString(),
+            CreatedAt = gymClass.CreatedAt.ToString("dd.MM.yyyy"),
+            UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy")
         };
     }
+
     public static GymClassInfoResponse ToGymInfoResponse(this GymClass gymClass)
     {
         return new GymClassInfoResponse()

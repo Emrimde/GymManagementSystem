@@ -1,27 +1,22 @@
 ﻿using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 using System.Windows;
 
-namespace GymManagementSystem.WPF.Views.ScheduleWindows
+namespace GymManagementSystem.WPF.Views.ScheduleWindows;
+public partial class BookingDetailsDialog : Window
 {
-    /// <summary>
-    /// Logika interakcji dla klasy BookingDetailsDialog.xaml
-    /// </summary>
-    public partial class BookingDetailsDialog : Window
+    public BookingDetailsDialog()
     {
-        public BookingDetailsDialog()
+        InitializeComponent();
+        Loaded += (s, e) =>
         {
-            InitializeComponent();
-            Loaded += (s, e) =>
+            if (DataContext is BookingDetailsViewModel vm)
             {
-                if (DataContext is BookingDetailsViewModel vm)
+                vm.CloseRequested += result =>
                 {
-                    vm.CloseRequested += result =>
-                    {
-                        DialogResult = result;
-                        Close();
-                    };
-                }
-            };
-        }
+                    DialogResult = result;
+                    Close();
+                };
+            }
+        };
     }
 }

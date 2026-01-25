@@ -5,10 +5,10 @@ public class GymClassResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
-    public TimeSpan StartHour { get; set; }
-    public TimeSpan Duration { get; set; }
-    public TimeSpan EndTime { get; set; }
-    public string Days { get; set; }
+    public string StartHour { get; set; } = default!;
+    public string Duration { get; set; } = default!;
+    public string EndTime { get; set; } = default!;
+    public string Days { get; set; } = default!;
     public int MaxPeople { get; set; }
     public string CreatedAt { get; set; } = default!;
     public string UpdatedAt { get; set; } = default!;

@@ -1,20 +1,15 @@
 ﻿using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using System.Windows.Controls;
 
-namespace GymManagementSystem.WPF.Views.ClientMembership
+namespace GymManagementSystem.WPF.Views.ClientMembership;
+public partial class ClientMembershipAddView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ClientMembershipAddView.xaml
-    /// </summary>
-    public partial class ClientMembershipAddView : UserControl
+    public ClientMembershipAddView()
     {
-        public ClientMembershipAddView()
+        Loaded += (_, _) =>
         {
-            Loaded += (_, _) =>
-            {
-                ((ClientMembershipAddViewModel)DataContext).LoadClientMembershipViewData.Execute(null);
-            };
-            InitializeComponent();
-        }
+            ((ClientMembershipAddViewModel)DataContext).LoadClientMembershipViewData.Execute(null);
+        };
+        InitializeComponent();
     }
 }

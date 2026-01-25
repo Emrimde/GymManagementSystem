@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 
 namespace GymManagementSystem.WPF.Views.ScheduleWindows;
 

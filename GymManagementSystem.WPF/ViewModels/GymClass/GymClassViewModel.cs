@@ -1,12 +1,10 @@
 ﻿using GymManagementSystem.Core.DTO.GymClass;
-using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ScheduledClass;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,29 +13,21 @@ public class GymClassViewModel : ViewModel
 {
     private readonly GymClassHtppClient _httpClient;
     public SidebarViewModel SidebarView { get; set; }
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
-
-    private ObservableCollection<GymClassResponse> _gymClasses;
-
+    public INavigationService Navigation { get; set; }
+    private ObservableCollection<GymClassResponse> _gymClasses = new();
     public ICommand OpenAddGymClassCommand { get; }
     public ICommand OpenScheduledClassesViewCommand { get; }
     public ICommand OpenEditGymClassCommand { get; }
+    public ICommand LoadGymClassesCommand { get; }
     public GymClassViewModel(GymClassHtppClient httpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {
         _httpClient = httpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
         OpenAddGymClassCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassAddViewModel>(), item => true);
+        LoadGymClassesCommand = new AsyncRelayCommand(item => LoadGymClasses(), item => true);
         OpenScheduledClassesViewCommand = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(item), item => true);
         OpenEditGymClassCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassUpdateViewModel>(item), item => true);
-        GymClasses = new ObservableCollection<GymClassResponse>();
-        _ = LoadGymClasses();
     }
 
     private async Task LoadGymClasses()
@@ -58,5 +48,4 @@ public class GymClassViewModel : ViewModel
         get { return _gymClasses; }
         set { _gymClasses = value; OnPropertyChanged(); }
     }
-
 }

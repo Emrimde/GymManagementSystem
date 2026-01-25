@@ -1,33 +1,15 @@
 ﻿using GymManagementSystem.WPF.ViewModels.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace GymManagementSystem.WPF.Views.Client
+namespace GymManagementSystem.WPF.Views.Client;
+public partial class ClientDetailsView : UserControl
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ClientDetailsView.xaml
-    /// </summary>
-    public partial class ClientDetailsView : UserControl
+    public ClientDetailsView()
     {
-        public ClientDetailsView()
+        Loaded += (_, _) =>
         {
-            Loaded += (_, _) =>
-            {
-                ((ClientDetailsViewModel)DataContext).LoadClientDetailsCommand.Execute(null);
-            };
-            InitializeComponent();
-        }
+            ((ClientDetailsViewModel)DataContext).LoadClientDetailsCommand.Execute(null);
+        };
+        InitializeComponent();
     }
 }

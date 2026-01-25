@@ -2,10 +2,6 @@
 using System.Windows.Controls;
 
 namespace GymManagementSystem.WPF.Views.Client;
-
-/// <summary>
-/// Logika interakcji dla klasy ClientUpdateView.xaml
-/// </summary>
 public partial class ClientUpdateView : UserControl
 {
     public ClientUpdateView()

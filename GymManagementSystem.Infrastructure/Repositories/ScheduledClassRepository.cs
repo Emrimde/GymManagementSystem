@@ -67,7 +67,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(Guid gymClassId, string? searchText = null)
     {
-        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId && item.Date >= DateTime.UtcNow);
+        IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId && item.Date >= DateTime.UtcNow && item.IsActive);
 
         if (searchText != null)
         {
@@ -85,13 +85,11 @@ public class ScheduledClassRepository : IScheduledClassRepository
             .Include(item => item.GymClass).OrderBy(item => item.Date)
             .Select(item => item.ToScheduledClassResponse())
             .ToListAsync();
-
-
     }
 
     public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId, int? classBookingDaysInAdvanceCount)
     {
-        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow).Include(item => item.GymClass).Include(item => item.ClassBookings);
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow && item.IsActive).Include(item => item.GymClass).Include(item => item.ClassBookings);
 
         if(classBookingDaysInAdvanceCount != null)
         {
