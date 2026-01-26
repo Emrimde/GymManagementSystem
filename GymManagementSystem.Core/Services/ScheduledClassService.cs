@@ -48,7 +48,7 @@ public class ScheduledClassService : IScheduledClassService
         return Result<IEnumerable<ScheduledClassResponse>>.Success(scheduledClasses, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymclassId, Guid membershipId)
+    public async Task<Result<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId(Guid gymclassId, Guid membershipId,Guid clientId)
     {
         Membership? membership = await _memberhsipRepository.GetByIdAsync(membershipId);
         if (membership == null)
@@ -56,8 +56,11 @@ public class ScheduledClassService : IScheduledClassService
             return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Failure("Membership not found", StatusCodeEnum.NotFound);
         }
 
-        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId, membership.ClassBookingDaysInAdvanceCount);
-        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClasses.OrderBy(item => item.Date).Select(item => item.ToScheduledClassComboBoxResponse());
+        IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId, membership.ClassBookingDaysInAdvanceCount, true);
+
+        IEnumerable<ScheduledClass> scheduledClassesToDisplay = scheduledClasses.Where(item => !item.ClassBookings.Any(item => item.ClientId == clientId)).ToList();
+
+        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClassesToDisplay.OrderBy(item => item.Date).Select(item => item.ToScheduledClassComboBoxResponse());
         return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 

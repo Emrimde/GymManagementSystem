@@ -12,10 +12,10 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.ClassBooking;
 public class ClassBookingViewModel : ViewModel, IParameterReceiver
 {
-    private readonly ClassBookingHttpClient _httpClient;
+    private readonly ClassBookingHttpClient _classBookingHttpClient;
     private readonly ClientHttpClient _clientHttpClient;
     public INavigationService Navigation { get; set; }
-    public Guid ClientId { get; set; }
+    private Guid _clientId;
     private ClientInfoResponse _client = new();
 
     public ClientInfoResponse Client
@@ -24,24 +24,53 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
         set { _client = value; OnPropertyChanged(); }
     }
 
-    public ICommand PreviousPageCommand { get;  }
-    public ObservableCollection<ClassBookingResponse> ClassBookings { get; set; }
+    public ICommand PreviousPageCommand { get; }
+    public ICommand LoadClassBookingDataCommand { get; }
+    public ICommand DeleteClassBookingCommand { get; }
+    public ObservableCollection<ClassBookingResponse> ClassBookings { get; set; } = new();
     public SidebarViewModel SidebarView { get; }
-    public ClassBookingViewModel(ClassBookingHttpClient httpClient, INavigationService navigation,SidebarViewModel sidebarViewModel, ClientHttpClient clientHttpClient)
+    public ClassBookingViewModel(ClassBookingHttpClient httpClient, INavigationService navigation, SidebarViewModel sidebarViewModel, ClientHttpClient clientHttpClient)
     {
         SidebarView = sidebarViewModel;
-        _httpClient = httpClient;
+        _classBookingHttpClient = httpClient;
         _clientHttpClient = clientHttpClient;
         Navigation = navigation;
-        ClassBookings = new ObservableCollection<ClassBookingResponse>();
-        PreviousPageCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+        PreviousPageCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(_clientId), item => true);
+        LoadClassBookingDataCommand = new AsyncRelayCommand(item => LoadClassBookingDataAsync(), item => true);
+        DeleteClassBookingCommand = new AsyncRelayCommand(item => DeleteClassBookingAsync(item), item => true);
+
     }
 
-    private async Task LoadClassBookings(Guid clientId)
+    private async Task DeleteClassBookingAsync(object item)
     {
-        Result<ObservableCollection<ClassBookingResponse>> result = await _httpClient.GetClassBookingsByClientId(clientId);
+        if (item is Guid _classBookingId)
+        {
+            MessageBoxResult mbResult = MessageBox.Show("Are you sure to cancel classBooking for this client?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (mbResult == MessageBoxResult.Yes)
+            {
+                Result<Unit> result = await _classBookingHttpClient.DeleteClassBookingAsync(_classBookingId);
 
-        if (!result.IsSuccess) 
+                if (!result.IsSuccess)
+                {
+                    MessageBox.Show($"{result.ErrorMessage}");
+                }
+                await LoadClassBookingDataAsync();
+            }
+        }
+    }
+
+    private async Task LoadClassBookingDataAsync()
+    {
+        await LoadClientNameAsync();
+        await LoadClassBookingsAsync(_clientId);
+    }
+
+    private async Task LoadClassBookingsAsync(Guid clientId)
+    {
+        ClassBookings.Clear();
+        Result<ObservableCollection<ClassBookingResponse>> result = await _classBookingHttpClient.GetClassBookingsByClientId(clientId);
+
+        if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");
         }
@@ -53,16 +82,14 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
 
     public void ReceiveParameter(object parameter)
     {
-        if(parameter is Guid id)
+        if (parameter is Guid id)
         {
-            ClientId = id;
-            _ = LoadClientName();
-            _ = LoadClassBookings(id);
+            _clientId = id;
         }
     }
 
-    private async Task LoadClientName()
+    private async Task LoadClientNameAsync()
     {
-        Client = await _clientHttpClient.GetClientNameById(ClientId);
+        Client = await _clientHttpClient.GetClientNameById(_clientId);
     }
 }

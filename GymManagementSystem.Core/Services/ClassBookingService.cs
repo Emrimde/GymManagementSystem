@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
@@ -16,16 +17,18 @@ public class ClassBookingService : IClassBookingService
     private readonly IClassBookingRepository _classBookingRepo;
     private readonly IClientMembershipRepository _clientMembershipRepo;
     private readonly IScheduledClassRepository _scheduledClassRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IGymClassRepository _gymClassRepo;
     private readonly IHttpContextAccessor _contextAccessor;
 
-    public ClassBookingService(IClassBookingRepository classBookingRepo, IClientMembershipRepository clientMembershipRepo, IScheduledClassRepository scheduledClassRepository, IGymClassRepository gymClassRepo, IHttpContextAccessor contextAccessor)
+    public ClassBookingService(IClassBookingRepository classBookingRepo, IClientMembershipRepository clientMembershipRepo, IScheduledClassRepository scheduledClassRepository, IGymClassRepository gymClassRepo, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
     {
         _classBookingRepo = classBookingRepo;
         _clientMembershipRepo = clientMembershipRepo;
         _scheduledClassRepository = scheduledClassRepository;
         _gymClassRepo = gymClassRepo;
         _contextAccessor = contextAccessor;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<ClassBookingInfoResponse>> CreateAsync(ClassBookingAddRequest request)
     {
@@ -47,10 +50,6 @@ public class ClassBookingService : IClassBookingService
 
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(scheduledClass.GymClassId);
 
-        //if (clientMembership.MembershipStatus == MembershipStatusEnum.Upcoming)
-        //{
-        //    return Result<ClassBookingInfoResponse>.Failure("Client's memebrship status is upcoming", StatusCodeEnum.BadRequest);
-        //}
 
         int classBookingsCount = scheduledClass.ClassBookings.Count();
         if (classBookingsCount == gymClass!.MaxPeople)
@@ -75,6 +74,18 @@ public class ClassBookingService : IClassBookingService
 
         ClassBooking addedClassBooking = await _classBookingRepo.CreateAsync(classBooking);
         return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
+    }
+
+    public async Task<Result<Unit>> DeleteClassBookingAsync(Guid classBookingId)
+    {
+        bool exists = _classBookingRepo.DeleteClassBookingAsync(classBookingId);
+        if (!exists)
+        {
+            return Result<Unit>.Failure("Not Found", StatusCodeEnum.NotFound);
+        }
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 
     public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllByClientIdAsync(Guid? clientId)

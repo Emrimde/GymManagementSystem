@@ -63,8 +63,8 @@
                                 Height="25" FontSize="10"
                                 Background="#F44336" 
                                 Foreground="White"
-                                Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                CommandParameter="{Binding}" >
+                                Command="{Binding DataContext.DeleteClassBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding Id}" >
 
                                         </Button>
                                     </StackPanel>

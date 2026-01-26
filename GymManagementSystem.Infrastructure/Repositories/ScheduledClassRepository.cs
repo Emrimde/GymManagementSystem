@@ -1,6 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
@@ -87,13 +86,17 @@ public class ScheduledClassRepository : IScheduledClassRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId, int? classBookingDaysInAdvanceCount)
+    public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId, int? classBookingDaysInAdvanceCount, bool showActive)
     {
-        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow && item.IsActive).Include(item => item.GymClass).Include(item => item.ClassBookings);
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow ).Include(item => item.GymClass);
 
         if(classBookingDaysInAdvanceCount != null)
         {
           scheduledClasses = scheduledClasses.Where(item => item.Date <= DateTime.UtcNow.AddDays(classBookingDaysInAdvanceCount.Value));
+        }
+        if(showActive)
+        {
+          scheduledClasses = scheduledClasses.Where(item => item.IsActive).Include(item => item.ClassBookings);
         }
 
         return await scheduledClasses.ToListAsync();

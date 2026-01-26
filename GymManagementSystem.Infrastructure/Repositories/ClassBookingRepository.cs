@@ -1,9 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
-using GymManagementSystem.Core.Mappers;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +23,18 @@ public class ClassBookingRepository : IClassBookingRepository
         _dbContext.Add(entity);
         await _dbContext.SaveChangesAsync();
         return entity;
+    }
+
+    public bool DeleteClassBookingAsync(Guid classBookingId)
+    {
+        ClassBooking? classBooking = _dbContext.ClassBookings.Find(classBookingId);
+        if(classBooking == null)
+        {
+            return false;
+        }
+        _dbContext.ClassBookings.Remove(classBooking);
+
+        return true;
     }
 
     public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)

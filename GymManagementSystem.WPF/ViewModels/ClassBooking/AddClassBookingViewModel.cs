@@ -124,7 +124,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadScheduledClassesComboBox(Guid membershipId)
     {
-        Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId);
+        Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId, ClientId);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.ErrorMessage}");

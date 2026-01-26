@@ -25,4 +25,7 @@ public class ClassBookingController : BaseController
 
     [HttpPost]
     public async Task<ActionResult<ClassBookingInfoResponse>> Create(ClassBookingAddRequest request) => HandleResult(await _classBookingService.CreateAsync(request));
+
+    [HttpDelete("{classBookingId:guid}")]
+    public async Task<ActionResult<Unit>> DeleteClassBooking([FromRoute] Guid classBookingId) => HandleResult(await _classBookingService.DeleteClassBookingAsync(classBookingId));
 }

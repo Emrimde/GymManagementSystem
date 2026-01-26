@@ -11,6 +11,43 @@ public class ClassBookingHttpClient : BaseHttpClientService
     public ClassBookingHttpClient(HttpClient httpClient) : base(httpClient)
     {
     }
+    public async Task<Result<Unit>> DeleteClassBookingAsync(Guid classBookingId)
+    {
+        HttpResponseMessage response =
+            await _httpClient.DeleteAsync($"{classBookingId}");
+
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return Result<Unit>.Success(Unit.Value);
+
+        try
+        {
+            var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
+
+            if (errorDict != null)
+            {
+                if (errorDict.TryGetValue("detail", out var detail))
+                    return Result<Unit>.Failure(detail.GetString() ?? "Unknown error.");
+
+                if (errorDict.TryGetValue("errors", out var errorsElement))
+                {
+                    var errors = errorsElement.EnumerateObject()
+                        .SelectMany(e => e.Value.EnumerateArray().Select(x => x.GetString()))
+                        .Where(x => !string.IsNullOrEmpty(x));
+
+                    return Result<Unit>.Failure(string.Join("\n", errors));
+                }
+            }
+        }
+        catch
+        {
+
+        }
+
+        return Result<Unit>.Failure(response.ReasonPhrase ?? "Unknown error.");
+    }
+
 
     public async Task<Result<ClassBookingInfoResponse>> PostClassBookingAsync(ClassBookingAddRequest request)
     {
@@ -50,7 +87,6 @@ public class ClassBookingHttpClient : BaseHttpClientService
         }
         catch
         {
-            // ignorujemy parsing error
         }
 
         return Result<ClassBookingInfoResponse>.Failure(response.ReasonPhrase ?? "Unknown error.");
