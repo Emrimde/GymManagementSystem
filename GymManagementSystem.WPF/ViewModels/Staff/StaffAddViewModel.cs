@@ -35,7 +35,7 @@ public class StaffAddViewModel : ViewModel
             Street = PersonAdd.Street,
         };
 
-        Result<PersonInfoResponse> result = await _staffHttpClient.PostPersonToStaffAsync(request);
+        Result<Unit> result = await _staffHttpClient.PostPersonToStaffAsync(request);
         if (!result.IsSuccess)
         {
             MessageBox.Show(result.GetUserMessage());

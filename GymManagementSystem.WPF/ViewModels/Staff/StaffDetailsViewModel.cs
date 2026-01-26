@@ -17,7 +17,7 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
     public ICommand OpenAddTrainerViewCommand { get; }
     public ICommand OpenEmployeeViewCommand { get; }
 
-    private PersonDetailsResponse _person;
+    private PersonDetailsResponse _person = new();
 
     public StaffDetailsViewModel(StaffHttpClient staffHttpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {

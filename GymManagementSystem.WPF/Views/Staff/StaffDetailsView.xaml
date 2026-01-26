@@ -22,7 +22,6 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}">
-            <Run Text="UnActive: "/>
             <Run Text="{Binding Person.FirstName}"/>
             <Run Text="{Binding Person.LastName}"/>
             <Run Text=": details"/>
@@ -35,24 +34,18 @@
 
                     </TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Email: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Person.Email}" Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding Person.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="Role "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Role: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Person.Role}"/>
 
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Address"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-                        <Run Text="{Binding Person.City}"/>
-                        <Run Text="st."/>
-                        <Run Text="{Binding Person.Street}"/>
-                    </TextBlock>
-
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Status "  Foreground="{DynamicResource PrimaryColor}" FontSize="20" />
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding Client.Status}" />
+                    <TextBlock Text="Address: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Person.Address}" Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                 </StackPanel>
                 <TextBlock Text="Actions:" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Margin="0,30,0,10" />
                 <StackPanel Orientation="Horizontal" >

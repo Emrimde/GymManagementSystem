@@ -19,13 +19,12 @@ public class PersonService : IPersonService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<PersonInfoResponse>> AddPersonToStaffAsync(PersonAddRequest request)
+    public async Task<Result<Unit>> AddPersonToStaffAsync(PersonAddRequest request)
     {
         Person personAdd = request.ToPerson();
-        Guid personId = _personRepo.AddPersonToStaff(personAdd);
-        PersonInfoResponse personInfoResponse = new PersonInfoResponse() { PersonId  = personId };
+        _personRepo.AddPersonToStaff(personAdd);
         await _unitOfWork.SaveChangesAsync();
-        return Result<PersonInfoResponse>.Success(personInfoResponse, StatusCodeEnum.Ok);
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync()

@@ -33,12 +33,14 @@ public static class PersonMapper
             FirstName = person.FirstName,
             LastName = person.LastName,
             Id = person.Id,
+            Address = person.Street + ", " + person.City,
             //Role = personReadModel.EmployeeRole.ToString() ?? personReadModel.TrainerTypeEnum.ToString() ?? "No role",
-            Role = person.Employee != null ? person.Employee.Role.ToString() : person.TrainerContract != null ? person.TrainerContract.TrainerType.ToString() : "No role",
-            Status = person.IsActive ? "Active" : "Unactive",
+            //Role = person.Employee != null ? person.Employee.Role.ToString() : person.TrainerContract != null ? person.TrainerContract.TrainerType.ToString() : "No role",
+            Role = "No role",
+            //Status = person.IsActive ? "Active" : "Unactive",
             PhoneNumber = person.PhoneNumber,
-            ValidFrom = person.Employee != null ? person.Employee.ValidFrom.ToString("dd.MM.yyyy") : person.TrainerContract != null ? person.TrainerContract.ValidFrom.ToString("dd.MM.yyyy") : " - ",
-            ValidTo = person.Employee != null ? person.Employee.ValidTo?.ToString("dd.MM.yyyy") ?? "indefinite" : person.TrainerContract != null ? person.TrainerContract.ValidTo?.ToString("dd.MM.yyyy") ?? "indefinite" : " - ",
+            //ValidFrom = person.Employee != null ? person.Employee.ValidFrom.ToString("dd.MM.yyyy") : person.TrainerContract != null ? person.TrainerContract.ValidFrom.ToString("dd.MM.yyyy") : " - ",
+            //ValidTo = person.Employee != null ? person.Employee.ValidTo?.ToString("dd.MM.yyyy") ?? "indefinite" : person.TrainerContract != null ? person.TrainerContract.ValidTo?.ToString("dd.MM.yyyy") ?? "indefinite" : " - ",
             IsActive = person.IsActive
         };
     }

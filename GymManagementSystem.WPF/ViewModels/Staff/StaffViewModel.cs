@@ -12,7 +12,7 @@ namespace GymManagementSystem.WPF.ViewModels.Staff;
 
 public class StaffViewModel : ViewModel
 {
-	private ObservableCollection<PersonResponse> _people;
+	private ObservableCollection<PersonResponse> _people = new();
 
 	public ObservableCollection<PersonResponse> People
     {
@@ -25,6 +25,7 @@ public class StaffViewModel : ViewModel
     public ICommand OpenStaffAddView { get;  }
     public ICommand OpenEditPersonCommand { get;  }
     public ICommand OpenPersonDetailsCommand { get; set; }
+    public ICommand LoadPeopleCommand { get; set; }
 
     public StaffViewModel(SidebarViewModel sidebarView, INavigationService navigation, StaffHttpClient staffHttpClient)
     {
@@ -34,9 +35,7 @@ public class StaffViewModel : ViewModel
         OpenStaffAddView = new RelayCommand(item => Navigation.NavigateTo<StaffAddViewModel>(), item => true);
         OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item), item => true);
         OpenEditPersonCommand = new RelayCommand(item => Navigation.NavigateTo<StaffUpdateViewModel>(item!), item=> true);
-
-        People = new ObservableCollection<PersonResponse>();
-        _ = LoadPeopleAsync();
+        LoadPeopleCommand = new AsyncRelayCommand(item => LoadPeopleAsync(), item=> true);
     }
 
     private void OpenDetailsAsync(object parameter)

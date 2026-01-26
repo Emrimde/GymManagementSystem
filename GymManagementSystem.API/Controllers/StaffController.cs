@@ -4,10 +4,10 @@ using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
-public class PersonController : BaseController
+public class StaffController : BaseController
 {
     private readonly IPersonService _personService;
-    public PersonController(IPersonService personService)
+    public StaffController(IPersonService personService)
     {
         _personService = personService;
     }
@@ -21,7 +21,7 @@ public class PersonController : BaseController
     public async Task<ActionResult<PersonForEditResponse>> GetPersonForEdit([FromRoute] Guid personId) => HandleResult(await _personService.GetPersonForEditAsync(personId));
 
     [HttpPost]
-    public async Task<ActionResult<PersonInfoResponse>> AddPersonToStaff([FromBody] PersonAddRequest request) => HandleResult(await _personService.AddPersonToStaffAsync(request));
+    public async Task<ActionResult<Unit>> AddPersonToStaff([FromBody] PersonAddRequest request) => HandleResult(await _personService.AddPersonToStaffAsync(request));
 
     [HttpPut]
     public async Task<ActionResult> UpdatePerson([FromBody] PersonUpdateRequest request) => HandleResult(await _personService.UpdatePersonAsync(request));

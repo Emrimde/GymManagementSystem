@@ -173,7 +173,7 @@ public partial class App : Application
         }).AddHttpMessageHandler<JwtHandler>();
         services.AddHttpClient<StaffHttpClient>(options =>
         {
-            options.BaseAddress = new Uri("http://localhost:5105/api/person/");
+            options.BaseAddress = new Uri("http://localhost:5105/api/staff/");
         }).AddHttpMessageHandler<JwtHandler>();
         services.AddHttpClient<DashboardHttpClient>(options =>
         {

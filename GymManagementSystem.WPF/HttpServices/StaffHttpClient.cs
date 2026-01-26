@@ -20,8 +20,8 @@ public class StaffHttpClient : BaseHttpClientService
         => GetAsync<PersonDetailsResponse>($"{personId}");
 
     // POST: add person to staff
-    public Task<Result<PersonInfoResponse>> PostPersonToStaffAsync(PersonAddRequest request)
-        => PostAsync<PersonAddRequest, PersonInfoResponse>("", request);
+    public Task<Result<Unit>> PostPersonToStaffAsync(PersonAddRequest request)
+        => PostAsync<PersonAddRequest, Unit>("", request);
 
     public Task<Result<Unit>> PutPersonToStaffAsync(PersonUpdateRequest request)
         => PutAsync<PersonUpdateRequest, Unit>("", request);
