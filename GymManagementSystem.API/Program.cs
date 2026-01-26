@@ -40,6 +40,7 @@ builder.Services.AddIdentity<User, Role>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
+    
 
 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()

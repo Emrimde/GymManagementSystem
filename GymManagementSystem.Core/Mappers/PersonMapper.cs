@@ -2,12 +2,39 @@
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.DTO.Person;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
+using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.Mappers;
 public static class PersonMapper
 {
     public static PersonResponse ToPersonResponse(this PersonReadModel personReadModel)
     {
+        string role;
+
+        if (personReadModel.HasEmployee)
+        {
+            role = personReadModel.EmployeeRole switch
+            {
+                EmployeeRole.Receptionist => "Receptionist",
+                EmployeeRole.Manager => "Manager",
+                _ => "Employee"
+            };
+        }
+        else if (personReadModel.HasTrainer)
+        {
+            role = personReadModel.TrainerTypeEnum switch
+            {
+                TrainerTypeEnum.PersonalTrainer => "Personal trainer",
+                TrainerTypeEnum.GroupInstructor => "Group instructor",
+                _ => "Trainer"
+            };
+        }
+        else
+        {
+            role = "No role";
+        }
+
+
         return new PersonResponse()
         {
             
@@ -17,7 +44,7 @@ public static class PersonMapper
             LastName = personReadModel.LastName,
             Id = personReadModel.Id,
             //Role = personReadModel.EmployeeRole.ToString() ?? personReadModel.TrainerTypeEnum.ToString() ?? "No role",
-            Role = personReadModel.HasEmployee ? personReadModel.EmployeeRole.ToString() : personReadModel.HasTrainer ? personReadModel.TrainerTypeEnum.ToString() : "No role",
+            Role = role,
             EmployeeId = personReadModel.EmployeeId,
             TrainerContractId = personReadModel.TrainerContractId,
             IsActive = personReadModel.IsActive,

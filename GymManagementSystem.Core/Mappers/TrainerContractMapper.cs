@@ -11,13 +11,9 @@ public static class TrainerContractMapper
         return new TrainerContract()
         {
             ClubCommissionPercent = request.ClubCommissionPercent,
-            //CompanyAddress = request.CompanyAddress,
-            //CompanyName = request.CompanyName,
             ContractType = request.ContractType,
             TrainerType = request.TrainerType,
             PersonId = request.PersonId,
-            //TaxId = request?.TaxId
-            
         };
     }
 
@@ -41,26 +37,20 @@ public static class TrainerContractMapper
             PhoneNumber= trainerContract.Person?.PhoneNumber,
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType
-            
         };
     }
     public static TrainerContractDetailsResponse ToTrainerContractDetailsResponse(this TrainerContract trainerContract)
     {
         return new TrainerContractDetailsResponse()
         {
-            ContractType = trainerContract.ContractType,
+            ContractType = "Contract of mandate",
             FirstName = trainerContract.Person?.FirstName,
             LastName = trainerContract.Person?.LastName,
             PhoneNumber = trainerContract.Person?.PhoneNumber,
             Email = trainerContract.Person?.Email,
             ClubCommissionPercent = trainerContract.ClubCommissionPercent.ToString() + "%",
-            CompanyAddress = trainerContract.CompanyAddress,
-            CompanyName = trainerContract.CompanyName,
-            IsSigned = trainerContract.IsSigned ? "Signed" : "Unsigned",
-            TaxId = trainerContract.TaxId,
             Id = trainerContract.Id,
-            TrainerType = trainerContract.TrainerType,
-            //IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,
+            TrainerType = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? "Personal trainer" : "Group instructor",
             CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && trainerContract.ValidFrom <= DateTime.UtcNow && !(trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date <= DateTime.UtcNow.Date) ?? false),
             Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent"),
             PersonId = trainerContract.PersonId,

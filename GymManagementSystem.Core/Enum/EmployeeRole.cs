@@ -3,6 +3,5 @@
 public enum EmployeeRole
 {
     Receptionist,
-    Cleaner,
     Manager
 }

@@ -48,8 +48,9 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding Person.Address}" Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                 </StackPanel>
                 <TextBlock Text="Actions:" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Margin="0,30,0,10" />
-                <StackPanel Orientation="Horizontal" >
-                    <Button Content="Add trainer role" Command="{Binding OpenAddTrainerViewCommand}" />
+                <StackPanel Orientation="Vertical" >
+                    <Button Content="Add personal trainer role" Command="{Binding AddPersonalTrainerRoleCommand}" />
+                    <Button Content="Add group instructor role" Command="{Binding AddGroupTrainerRoleCommand}" />
                     <Button Content="Add employee role" Command="{Binding OpenEmployeeViewCommand}" />
                 </StackPanel>
             </StackPanel>

@@ -1,4 +1,4 @@
-﻿using GymManagementSystem.WPF.Result;
+﻿ using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

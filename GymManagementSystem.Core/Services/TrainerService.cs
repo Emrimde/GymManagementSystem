@@ -2,7 +2,6 @@
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
@@ -44,17 +43,15 @@ public class TrainerService : ITrainerService
             return Result<TrainerContractInfoResponse>.Failure("Person not found", StatusCodeEnum.InternalServerError);
         }
 
-        person.IsActive = true;
-        _personRepo.UpdatePerson(person);
-
         trainer.ValidFrom = DateTime.UtcNow;
         trainer.ValidTo = null;
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
 
         User user = new User()
         {
-            UserName = $"{person.FirstName + person.LastName}",
+            UserName = $"{person.FirstName}{person.LastName}".Replace(" ", "")
         };
+
         var createResult = await _userManager.CreateAsync(user, "trainer");
         if (!createResult.Succeeded)
         {

@@ -54,6 +54,7 @@ public class TrainerController : BaseController
     public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id));
 
 
+
     [HttpPost("trainer-rate")]
     public async Task<ActionResult<TrainerRateInfoResponse>> CreateTrainerRate([FromBody] TrainerRateAddRequest request) => HandleResult(await _trainerService.CreateTrainerRateAsync(request));
 
