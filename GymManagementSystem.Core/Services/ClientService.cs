@@ -7,6 +7,7 @@ using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;

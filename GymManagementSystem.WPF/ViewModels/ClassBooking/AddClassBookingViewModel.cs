@@ -3,7 +3,7 @@ using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.DTO.ScheduledClass;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -117,7 +117,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         Result<ClassBookingInfoResponse> result = await _classBookingHttpClient.PostClassBookingAsync(ClassBookingRequest);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
     }
@@ -127,7 +127,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId, ClientId);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage}");
         }
         ScheduledClasses = result.Value!;
         SelectedScheduledClass = null;
@@ -138,7 +138,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         Result<ObservableCollection<GymClassComboBoxResponse>> result = await _gymClassHttpClient.GetGymClassComboBoxResponses();
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage}");
         }
         GymClasses = result.Value!;
 
@@ -154,7 +154,13 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     }
 
     private async Task LoadClientName(Guid clientId)
-    {
-        Client = await _clientHttpClient.GetClientNameById(clientId);
+    { 
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(clientId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        Client = result.Value!;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.Core.Mappers;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -69,7 +69,7 @@ public class GeneralSettingsViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show($"Error during logo upload: {result.ErrorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error during logo upload: {result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -89,13 +89,13 @@ public class GeneralSettingsViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {result.GetUserMessage()}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
     private async Task LoadGeneralSettings()
     {
-        GeneralGymResponse response = await _httpClient.GetGeneralGymSettingsAsync();
-        GeneralGymUpdateRequest generalGymUpdate = response.ToGeneralGymUpdateRequest();
+        Result<GeneralGymResponse> response = await _httpClient.GetGeneralGymSettingsAsync();
+        GeneralGymUpdateRequest generalGymUpdate = response.Value!.ToGeneralGymUpdateRequest();
         GeneralGymDetailsUpdateRequest = generalGymUpdate;
     }
 }

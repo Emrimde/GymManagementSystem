@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Client.QueryDto;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.Client;
 using Microsoft.AspNetCore.Mvc;

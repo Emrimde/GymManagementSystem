@@ -26,7 +26,7 @@ public class PersonalBookingController : BaseController
     [HttpPost]
     public async Task<ActionResult<PersonalBookingInfoResponse>> CreatePersonalBooking([FromBody] PersonalBookingAddRequest entity) => HandleResult(await _personalBookingService.CreatePersonalBookingAsync(entity));
 
-    [HttpPatch("pay-client/{id:guid}")]
+    [HttpPut("pay-client/{id:guid}")]
     public async Task<ActionResult<PersonalBookingInfoResponse>> SetStatusToPaid(Guid id) => HandleResult(await _personalBookingService.SetStatusToPaidAsync(id));
     
 }

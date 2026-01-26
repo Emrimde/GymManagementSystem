@@ -4,7 +4,7 @@ using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 

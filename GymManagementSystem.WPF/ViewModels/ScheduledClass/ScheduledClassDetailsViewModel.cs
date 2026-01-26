@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.ScheduledClass;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -44,7 +44,7 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
             Result<Unit> result = await _scheduledHttpClient.CancelScheduleClass(_scheduledClassId);
             if (!result.IsSuccess)
             {
-                MessageBox.Show($"{result.ErrorMessage}");
+                MessageBox.Show($"{result.GetUserMessage()}");
             }
             Navigation.NavigateTo<ScheduledClassViewModel>(ScheduledClass.GymClassId);
         }
@@ -69,7 +69,7 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}");
+            MessageBox.Show($"Error: {result.GetUserMessage()}");
         }
     }
 }

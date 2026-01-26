@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -60,7 +60,7 @@ public class MembershipDetailsViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"Error loading membership details: {result.ErrorMessage}");
+            MessageBox.Show($"Error loading membership details: {result.GetUserMessage()}");
         }
     }
 }

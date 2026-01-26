@@ -2,6 +2,7 @@
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Mappers;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Net.Http;
 using System.Windows;
@@ -66,14 +67,10 @@ public class RegisterViewModel : ViewModel
     private async Task RegisterAsync(object arg)
     {
         RegisterDto registerDto = AuthMapper.ToRegisterDto(this);
-        HttpResponseMessage response =  await _authHttpClient.RegisterAsync(registerDto);
-        if (response.IsSuccessStatusCode)
+        Result<Unit> result =  await _authHttpClient.RegisterAsync(registerDto);
+        if (!result.IsSuccess)
         {
-            MessageBox.Show("lOGIN SUCCESSFUL");
-        }
-        else
-        {
-            MessageBox.Show("Login failed");
+            MessageBox.Show($"{result.GetUserMessage()}", "Registration failed", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         
     }

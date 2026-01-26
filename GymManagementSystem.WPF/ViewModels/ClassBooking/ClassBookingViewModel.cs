@@ -1,8 +1,9 @@
-﻿using GymManagementSystem.Core.DTO.ClassBooking;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client;
 using System.Collections.ObjectModel;
@@ -52,7 +53,7 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
 
                 if (!result.IsSuccess)
                 {
-                    MessageBox.Show($"{result.ErrorMessage}");
+                    MessageBox.Show($"{result.GetUserMessage()}");
                 }
                 await LoadClassBookingDataAsync();
             }
@@ -72,7 +73,7 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
 
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         foreach (ClassBookingResponse classBooking in result.Value!)
         {
@@ -90,6 +91,12 @@ public class ClassBookingViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClientNameAsync()
     {
-        Client = await _clientHttpClient.GetClientNameById(_clientId);
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(_clientId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        Client = result.Value!;
     }
 }

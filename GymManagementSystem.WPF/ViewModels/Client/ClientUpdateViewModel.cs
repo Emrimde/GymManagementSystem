@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -48,7 +48,7 @@ public class ClientUpdateViewModel : ViewModel , IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}", "Error during loading", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {result.GetUserMessage()}", "Error during loading", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -70,7 +70,7 @@ public class ClientUpdateViewModel : ViewModel , IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {result.GetUserMessage()}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

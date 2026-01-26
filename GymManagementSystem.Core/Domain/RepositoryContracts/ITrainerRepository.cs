@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 

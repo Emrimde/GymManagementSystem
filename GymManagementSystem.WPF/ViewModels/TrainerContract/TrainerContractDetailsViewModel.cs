@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.EmploymentTermination;
 using GymManagementSystem.Core.DTO.TrainerContract;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -62,7 +62,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         Result<TrainerContractDetailsResponse> result = await _trainerHttpClient.GetTrainerContractAsync(id, true);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         else
         {
@@ -99,7 +99,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
                 Result<EmploymentTerminationInfoResponse> additionResult = await _employmentTerminationHttpClient.CreateEmploymentTerminationAsync(request);
                 if (!additionResult.IsSuccess)
                 {
-                    MessageBox.Show($"{additionResult.ErrorMessage}");
+                    MessageBox.Show($"{additionResult.GetUserMessage()}");
                 }
             }
 
@@ -108,7 +108,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
     }
 

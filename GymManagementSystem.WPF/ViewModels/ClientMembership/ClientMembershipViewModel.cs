@@ -1,12 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
+﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 
@@ -50,7 +52,8 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClientMemberships(Guid id)
     {
-        ClientMemberships = await _httpClient.GetClientMembershipsHistoryAsync(id);
+        Result<ObservableCollection<ClientMembershipResponse>> result = await _httpClient.GetClientMembershipsHistoryAsync(id);
+        ClientMemberships = result.Value!;
     }
 
     public void ReceiveParameter(object parameter)
@@ -65,7 +68,13 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClientNameById(Guid id)
     {
-        Client = await _clientHttpClient.GetClientNameById(id);
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(id);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        Client = result.Value!;
     }
 
     public INavigationService Navigation

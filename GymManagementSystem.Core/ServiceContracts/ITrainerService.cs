@@ -4,6 +4,7 @@ using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 
 namespace GymManagementSystem.Core.ServiceContracts;
 

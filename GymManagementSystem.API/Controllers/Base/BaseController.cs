@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers.Base;

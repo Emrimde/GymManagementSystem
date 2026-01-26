@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 

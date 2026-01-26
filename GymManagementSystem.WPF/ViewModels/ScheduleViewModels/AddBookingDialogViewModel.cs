@@ -2,7 +2,7 @@
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.TrainerRate;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using System.Collections.ObjectModel;

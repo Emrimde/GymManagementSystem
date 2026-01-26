@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Termination;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -41,7 +41,7 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 		Result<TerminationResponse> result = await _httpClient.PostTerminationAsync(TerminationAddRequest);
 		if (!result.IsSuccess)
 		{
-			MessageBox.Show($"{result.ErrorMessage}");
+			MessageBox.Show($"{result.GetUserMessage()}");
 			return;
 		}
 		Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);

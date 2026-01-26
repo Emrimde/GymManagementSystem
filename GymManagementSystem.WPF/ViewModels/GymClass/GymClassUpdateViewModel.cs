@@ -1,7 +1,7 @@
 ﻿using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -46,7 +46,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
     }
 
@@ -157,7 +157,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"{trainersResult.ErrorMessage}");
+            MessageBox.Show($"{trainersResult.GetUserMessage()}");
         }
 
 
@@ -167,7 +167,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
 
         if (!result.IsSuccess)
         {
-            MessageBox.Show(result.ErrorMessage);
+            MessageBox.Show(result.GetUserMessage());
             return;
         }
 

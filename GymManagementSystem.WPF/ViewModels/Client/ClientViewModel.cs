@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -99,16 +100,16 @@ public class ClientViewModel : ViewModel
 
     private async Task SearchClientsAsync()
     {
-        PageResult<ClientResponse> pageResult = await _clientHttpClient.GetAllClientsAsync(SearchText, SelectedPage);
-        Clients = new ObservableCollection<ClientResponse>(pageResult.Items);
-        TotalPages = pageResult.TotalPages;
+        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(SearchText, SelectedPage);
+        Clients = new ObservableCollection<ClientResponse>(pageResult.Value!.Items);
+        TotalPages = pageResult.Value!.TotalPages;
     }
 
     private async Task GetAllClientsAsync()
     {
-        PageResult<ClientResponse> pageResult = await _clientHttpClient.GetAllClientsAsync(null, SelectedPage);
-        Clients = new ObservableCollection<ClientResponse>(pageResult.Items);
-        TotalPages = pageResult.TotalPages;
+        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(null, SelectedPage);
+        Clients = new ObservableCollection<ClientResponse>(pageResult.Value!.Items);
+        TotalPages = pageResult.Value!.TotalPages;
     }
     public ClientViewModel(INavigationService navigationService, SidebarViewModel sidebarView, ClientHttpClient clientHttpClient)
     {

@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.ClassBooking;
+using GymManagementSystem.Core.DTO.Person;
 using GymManagementSystem.Core.Enum;
 
 namespace GymManagementSystem.Core.Result;

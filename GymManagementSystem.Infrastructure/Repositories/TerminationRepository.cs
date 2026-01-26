@@ -5,6 +5,7 @@ using GymManagementSystem.Core.DTO.Termination;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 

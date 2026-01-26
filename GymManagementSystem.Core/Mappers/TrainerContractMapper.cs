@@ -11,12 +11,12 @@ public static class TrainerContractMapper
         return new TrainerContract()
         {
             ClubCommissionPercent = request.ClubCommissionPercent,
-            CompanyAddress = request.CompanyAddress,
-            CompanyName = request.CompanyName,
+            //CompanyAddress = request.CompanyAddress,
+            //CompanyName = request.CompanyName,
             ContractType = request.ContractType,
             TrainerType = request.TrainerType,
             PersonId = request.PersonId,
-            TaxId = request?.TaxId
+            //TaxId = request?.TaxId
             
         };
     }
@@ -60,7 +60,7 @@ public static class TrainerContractMapper
             TaxId = trainerContract.TaxId,
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType,
-            IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,
+            //IsB2B = trainerContract.ContractType == ContractTypeEnum.B2B ? true : false,
             CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && trainerContract.ValidFrom <= DateTime.UtcNow && !(trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date <= DateTime.UtcNow.Date) ?? false),
             Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent"),
             PersonId = trainerContract.PersonId,

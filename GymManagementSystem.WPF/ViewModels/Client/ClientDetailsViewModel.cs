@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -87,13 +87,11 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId);
         if(result.IsSuccess)
         {
-            
-
             await LoadClientAsync();
         }
         else
         {
-            MessageBox.Show($"Error registering visit: {result.ErrorMessage}");
+            MessageBox.Show($"Error registering visit: {result.GetUserMessage()}");
         }
     }
 
@@ -106,7 +104,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}");
+            MessageBox.Show($"Error: {result.GetUserMessage()}");
         }
     }
 

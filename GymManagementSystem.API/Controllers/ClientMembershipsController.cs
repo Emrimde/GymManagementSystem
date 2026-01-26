@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 

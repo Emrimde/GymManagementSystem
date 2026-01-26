@@ -1,7 +1,7 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.Enum;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -132,7 +132,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
         Result<EmploymentContractPdfDto> validationResult = await _employeeHttpClient.GetEmployeeContractAsync(contractRequest);
         if (!validationResult.IsSuccess)
         {
-            MessageBox.Show($"{validationResult.ErrorMessage}");
+            MessageBox.Show($"{validationResult.GetUserMessage()}");
         }
         else
         {
@@ -159,7 +159,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                 }
                 else
                 {
-                    MessageBox.Show($"{result.ErrorMessage}");
+                    MessageBox.Show($"{result.GetUserMessage()}");
                 }
             }
             else

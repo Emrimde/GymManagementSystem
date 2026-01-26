@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -45,7 +45,7 @@ public class ClientAddViewModel : ViewModel
 
         if (!validationResult.IsSuccess)
         {
-            MessageBox.Show(validationResult.ErrorMessage);
+            MessageBox.Show(validationResult.GetUserMessage());
             return;
         }
 
@@ -83,7 +83,7 @@ public class ClientAddViewModel : ViewModel
 
         if (!addResult.IsSuccess)
         {
-            MessageBox.Show(addResult.ErrorMessage);
+            MessageBox.Show(addResult.GetUserMessage());
             return;
         }
 

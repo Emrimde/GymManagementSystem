@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.MembershipFeature;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -48,7 +48,7 @@ public class MembershipFeatureViewModel : ViewModel, IParameterReceiver
                 Result<Unit> result = await _membershipHttpCLient.DeleteMembershipFeatureAsync(membershipFeatureId);
                 if (!result.IsSuccess)
                 {
-                    MessageBox.Show($"{result.ErrorMessage}", "Error during deleting", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{result.GetUserMessage()}", "Error during deleting", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 Navigation.NavigateTo<MembershipFeatureViewModel>(MembershipId);
             }
@@ -66,6 +66,11 @@ public class MembershipFeatureViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadMembershipFeatures(Guid id)
     {
-        MembershipFeatures = await _membershipHttpCLient.GetAllMembershipFeaturesByMembershipIdAsync(id);
+        Result<ObservableCollection<MembershipFeatureResponse>> result = await _membershipHttpCLient.GetAllMembershipFeaturesByMembershipIdAsync(id);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        MembershipFeatures = result.Value!;
     }
 }

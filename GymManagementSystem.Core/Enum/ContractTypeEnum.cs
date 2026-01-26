@@ -7,5 +7,4 @@ public enum ContractTypeEnum
     Probation,
     Permanent,
     ContractOfMandate,
-    B2B
 }

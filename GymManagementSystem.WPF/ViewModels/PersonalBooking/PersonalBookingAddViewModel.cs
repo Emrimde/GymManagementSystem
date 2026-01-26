@@ -1,7 +1,7 @@
 ﻿using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerRate;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -106,7 +106,7 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         Result<PersonalBookingInfoResponse> result = await _personalBookingHttpClient.CreateAsync(PersonalBookingAdd);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
             return;
         }
         Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);

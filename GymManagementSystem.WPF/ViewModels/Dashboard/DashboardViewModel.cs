@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Dashboard;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -74,7 +74,7 @@ public class DashboardViewModel : ViewModel
 
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
             return;
         }
 
@@ -153,7 +153,7 @@ public class DashboardViewModel : ViewModel
         Result<DashboardKpiResponse> result = await _dashboardHttpClient.GetAllDashboardKpiAsync();
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
             return;
         }
         DashboardKPI = result.Value!;

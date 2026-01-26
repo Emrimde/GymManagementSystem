@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.MembershipFeature;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -77,7 +77,7 @@ public class MembershipFeatureAddViewModel : ViewModel, IParameterReceiver, INot
         Result<Unit> result = await _membershipHttpClient.PostMembershipFeatureAsync(request);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         Navigation.NavigateTo<MembershipFeatureViewModel>(_membershipId);
     }

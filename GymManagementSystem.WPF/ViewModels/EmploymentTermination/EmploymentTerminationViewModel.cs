@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.EmploymentTermination;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using System.Collections.ObjectModel;
@@ -33,7 +33,7 @@ public class EmploymentTerminationViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

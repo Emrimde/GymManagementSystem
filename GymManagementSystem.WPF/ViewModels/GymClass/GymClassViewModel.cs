@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.GymClass;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -39,7 +39,7 @@ public class GymClassViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}");
+            MessageBox.Show($"Error: {result.GetUserMessage()}");
         }
     }
 

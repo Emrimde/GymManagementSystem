@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Employee;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -40,7 +40,7 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
         Result<EmployeeDetailsResponse> result = await _employeeHttpClient.GetEmployeeByIdAsync(employeeId);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         Employee = result.Value!;
     }

@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.Enum;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -77,7 +77,7 @@ public class MembershipAddViewModel : ViewModel
         }
         else
         {
-            MessageBox.Show($"{result.ErrorMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.ClientMembership;
-using GymManagementSystem.Core.Result;
+﻿using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.MembershipPrice;
 using System.Windows;
 using System.Windows.Input;
 
@@ -61,7 +59,7 @@ public class ClientMembershipDetailsViewModel : ViewModel, IParameterReceiver
         Result<ClientMembershipDetailsResponse> result = await _clientMembershipHttpClient.GetClientMembershipDetailsAsync(id);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
             return;
         }
         ClientMembership = result.Value!;

@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.MembershipPrice;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -35,7 +35,7 @@ public class MembershipPriceAddViewModel : ViewModel, IParameterReceiver
             }
             else
             {
-                MessageBox.Show($"{result.ErrorMessage}");
+                MessageBox.Show($"{result.GetUserMessage()}");
             }
         }
 
@@ -73,6 +73,11 @@ public class MembershipPriceAddViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadMembershipNameAsync(Guid membershipId)
     {
-        Membership = await _membershipHttpClient.GetMembershipNameAsync(membershipId);       
+        Result<MembershipInfoResponse> result = await _membershipHttpClient.GetMembershipNameAsync(membershipId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        Membership = result.Value!;     
     }
 }

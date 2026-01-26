@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.DTO;
 using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -56,7 +56,13 @@ public class VisitViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadClientNameAsync(Guid clientId)
     {
-        ClientName =  await _clientHttpClient.GetClientNameById(clientId);
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(clientId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        ClientName = result.Value!;
     }
 
     public void ReceiveParameter(object parameter)
@@ -78,7 +84,7 @@ public class VisitViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-           MessageBox.Show($"Error loading visits: {result.ErrorMessage}");
+           MessageBox.Show($"Error loading visits: {result.GetUserMessage()}");
         }
     }
 }

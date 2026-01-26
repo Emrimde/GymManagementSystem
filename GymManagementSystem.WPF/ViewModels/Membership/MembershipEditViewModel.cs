@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -150,7 +150,7 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
         }
         else
         {
-            MessageBox.Show($"Error: {result.ErrorMessage}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error: {result.GetUserMessage()}", "Error during edition", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

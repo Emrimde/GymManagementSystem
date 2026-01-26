@@ -3,6 +3,7 @@ using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Dashboard;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;

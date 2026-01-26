@@ -1,4 +1,4 @@
-﻿namespace GymManagementSystem.Core.Result;
+﻿namespace GymManagementSystem.Core.Resulttttt;
 public class PageResult<T>
 {
     public IEnumerable<T> Items { get; set; } = Enumerable.Empty<T>();

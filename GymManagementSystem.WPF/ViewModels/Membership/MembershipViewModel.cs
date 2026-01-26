@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -56,6 +57,7 @@ public class MembershipViewModel : ViewModel
 
     private async Task LoadMembershipsAsync()
     {
-        Memberships = (ObservableCollection<MembershipResponse>)await _membershipHttpClient.GetAllMembershipsAsync();
+        Result<ObservableCollection<MembershipResponse>> result = await _membershipHttpClient.GetAllMembershipsAsync();
+        Memberships = result.Value!;
     }
 }

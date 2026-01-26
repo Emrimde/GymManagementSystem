@@ -2,7 +2,7 @@
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.ClientMembership.Models;
 using GymManagementSystem.Core.DTO.Membership;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -99,20 +99,26 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
     private async Task LoadClientMembershipViewDataAsync()
     {
         await LoadMemberships();
-        Client = await _clientHttpClient.GetClientNameById(ClientId);
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(ClientId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        Client = result.Value!;
     }
 
     private async Task AddClientMembershipAsync()
     {
-        ClientMembershipContractPreviewResponse contractDetails = await _httpClient.GetContractPreviewDetailsAsync(_clientMembershipAddRequest.ClientId, _clientMembershipAddRequest.MembershipId);
-        await GenerateClientMembershipContractPdf(contractDetails);
+        Result<ClientMembershipContractPreviewResponse> contractDetails = await _httpClient.GetContractPreviewDetailsAsync(_clientMembershipAddRequest.ClientId, _clientMembershipAddRequest.MembershipId);
+        await GenerateClientMembershipContractPdf(contractDetails.Value!);
         MessageBoxResult messageBoxResult = MessageBox.Show("Is client signed a contract?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (messageBoxResult == MessageBoxResult.Yes)
         {
             Result<ClientMembershipInfoResponse> result = await _httpClient.PostClientMembershipAsync(_clientMembershipAddRequest);
             if (!result.IsSuccess)
             {
-                MessageBox.Show($"Error: {result.ErrorMessage}");
+                MessageBox.Show($"Error: {result.GetUserMessage()}");
                 return;
             }
         }
@@ -206,8 +212,8 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                         column.Item().Text(
                             $"1. Cena członkostwa w ramach karnetu miesięcznego wynosi comiesięcznie {contract.Price}$. Pierwsza opłata miesięczna za pierwszy miesiąc następuje w trakcie podpisywania umowy");
                     }
-                        column.Item().Text(
-                            "2. Opłata uprawnia Klienta do korzystania z infrastruktury klubu zgodnie z regulaminem.");
+                    column.Item().Text(
+                        "2. Opłata uprawnia Klienta do korzystania z infrastruktury klubu zgodnie z regulaminem.");
 
                     column.Item().PaddingTop(10).Text("§4 Prawa i obowiązki Klienta:");
                     column.Item().Text(
@@ -269,13 +275,20 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     private async Task LoadMemberships()
     {
-        ObservableCollection<MembershipResponse> response = await _membershipHttpClient.GetAllMembershipsAsync();
-        MembershipSelectItem = new ObservableCollection<MembershipSelectItem>(
-            response.Select(item => new MembershipSelectItem
-            {
-                Id = item.Id,
-                Name = item.Name,
-            }));
+        Result<ObservableCollection<MembershipResponse>> result = await _membershipHttpClient.GetAllMembershipsAsync();
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        else
+        {
+            MembershipSelectItem = new ObservableCollection<MembershipSelectItem>(
+                result.Value!.Select(item => new MembershipSelectItem
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                }));
+        }
     }
 
     public void ReceiveParameter(object parameter)

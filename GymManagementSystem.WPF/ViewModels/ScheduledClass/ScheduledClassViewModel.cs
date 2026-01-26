@@ -1,6 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ScheduledClass;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -66,7 +66,7 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show(result.ErrorMessage);
+            MessageBox.Show(result.GetUserMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
         }
         else
         {
-            MessageBox.Show(result.ErrorMessage);
+            MessageBox.Show(result.GetUserMessage());
         }
     }
 

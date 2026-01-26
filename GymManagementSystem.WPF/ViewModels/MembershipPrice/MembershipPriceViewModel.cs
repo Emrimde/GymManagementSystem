@@ -1,10 +1,12 @@
 ﻿using GymManagementSystem.Core.DTO.MembershipPrice;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Membership;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows;
 
 namespace GymManagementSystem.WPF.ViewModels.MembershipPrice;
 
@@ -53,7 +55,11 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
     private async Task LoadMembershipPrices(Guid id)
     {
 
-       
-        MembershipPrices = await _membershipPriceHttpClient.GetAllMembershipsPricesAsync(id);
+       Result<ObservableCollection<MembershipPriceResponse>> result = await _membershipPriceHttpClient.GetAllMembershipsPricesAsync(id);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        MembershipPrices = result.Value!;
     }
 }

@@ -2,7 +2,7 @@
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -199,16 +199,16 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
         if (dialog.ShowDialog() == true)
         {
-            Result<bool> deleteResult = null!;
+            //Result<bool> deleteResult = null!;
             Result<TrainerTimeOff> updateResult = null!;
 
             if (vm.ShouldDelete)
             {
-                deleteResult = await _trainerHttpClient.DeleteAsync(vm.TimeOffId);
+                Result<Unit> deleteResult = await _trainerHttpClient.DeleteAsync(vm.TimeOffId);
 
                 if (!deleteResult.IsSuccess)
                 {
-                    MessageBox.Show(deleteResult.ErrorMessage);
+                    MessageBox.Show(deleteResult.GetUserMessage());
                     return;
                 }
             }
@@ -219,7 +219,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
                 if (!updateResult.IsSuccess)
                 {
-                    MessageBox.Show(updateResult.ErrorMessage);
+                    MessageBox.Show(updateResult.GetUserMessage());
                     return;
                 }
             }
@@ -247,7 +247,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                 Result<PersonalBookingInfoResponse> result = await _bookingHttpClient.SetStatusToPaidAsync(vm.BookingId);
                 if (!result.IsSuccess)
                 {
-                    MessageBox.Show($"{result.ErrorMessage}");
+                    MessageBox.Show($"{result.GetUserMessage()}");
                 }
             }
             //else
@@ -282,7 +282,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
         var appointments = new ScheduleAppointmentCollection();
 
-        foreach (var day in schedule.Days)
+        foreach (var day in schedule.Value!.Days)
         {
             
             foreach (var item in day.Items)

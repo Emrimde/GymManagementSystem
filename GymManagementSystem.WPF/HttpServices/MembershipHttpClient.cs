@@ -1,260 +1,97 @@
 ﻿using GymManagementSystem.Core.DTO.Membership;
 using GymManagementSystem.Core.DTO.MembershipFeature;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-using System.Windows;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
 public class MembershipHttpClient : BaseHttpClientService
 {
-    public MembershipHttpClient(HttpClient httpClient) : base(httpClient)
+    public MembershipHttpClient(HttpClient httpClient)
+        : base(httpClient)
     {
     }
 
-    public async Task<ObservableCollection<MembershipResponse>> GetAllMembershipsAsync()
-    {
-        HttpResponseMessage response = await _httpClient.GetAsync("");
-        if (response.IsSuccessStatusCode)
-        {
-            ObservableCollection<MembershipResponse>? memberships = await response.Content.ReadFromJsonAsync<ObservableCollection<MembershipResponse>>();
+    // MEMBERSHIPS
 
-            return memberships ?? new ObservableCollection<MembershipResponse>();
-        }
-        else
-        {
-            MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new ObservableCollection<MembershipResponse>();
-        }
-    }
-    public async Task<MembershipInfoResponse> GetMembershipNameAsync(Guid membershipId)
+    public Task<Result<ObservableCollection<MembershipResponse>>> GetAllMembershipsAsync()
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"membership-name/{membershipId}");
-        if (response.IsSuccessStatusCode)
-        {
-            MembershipInfoResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipInfoResponse>();
-
-            return memberships ?? new MembershipInfoResponse();
-        }
-        else
-        {
-            MessageBox.Show("Failed to load clients.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new MembershipInfoResponse();
-        }
-    }
-    public async Task<Result<MembershipFeatureForEditResponse>> GetMembershipFeatureForEdit(Guid membershipFeatureId)
-    {
-        HttpResponseMessage response = await _httpClient.GetAsync($"get-membership-feature-for-edit/{membershipFeatureId}");
-        if (response.IsSuccessStatusCode)
-        {
-            MembershipFeatureForEditResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipFeatureForEditResponse>();
-
-            return Result<MembershipFeatureForEditResponse>.Success(memberships ?? new MembershipFeatureForEditResponse());
-        }
-        else
-        {
-            return Result<MembershipFeatureForEditResponse>.Failure("");
-        }
+        return GetAsync<ObservableCollection<MembershipResponse>>("");
     }
 
-
-
-    public async Task<ObservableCollection<MembershipFeatureResponse>> GetAllMembershipFeaturesByMembershipIdAsync(Guid membershipId)
+    public Task<Result<MembershipResponse>> GetMembershipByIdAsync(Guid membershipId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"get-membership-features/{membershipId}");
-        if (response.IsSuccessStatusCode)
-        {
-            ObservableCollection<MembershipFeatureResponse>? memberships = await response.Content.ReadFromJsonAsync<ObservableCollection<MembershipFeatureResponse>>();
-
-            return memberships ?? new ObservableCollection<MembershipFeatureResponse>();
-        }
-        else
-        {
-            MessageBox.Show("Failed to load membership features.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return new ObservableCollection<MembershipFeatureResponse>();
-        }
+        return GetAsync<MembershipResponse>($"{membershipId}");
     }
 
-    public async Task<Result<MembershipResponse>> PostMembershipAsync(MembershipAddRequest membershipAddRequest)
+    public Task<Result<MembershipInfoResponse>> GetMembershipNameAsync(Guid membershipId)
     {
-        string json = JsonSerializer.Serialize(membershipAddRequest);
-        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await _httpClient.PostAsync((string?)null, content);
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            var options = new JsonSerializerOptions // backend zwracał camelCase
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            MembershipResponse? membership = JsonSerializer.Deserialize<MembershipResponse>(responseBody, options);
-            return Result<MembershipResponse>.Success(membership!);
-        }
-        else
-        {
-
-            string errorMessage = responseBody;
-
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<MembershipResponse>.Failure(errorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result<MembershipResponse>.Failure($"Fatal error: {ex.Message}");
-            }
-
-            return Result<MembershipResponse>.Failure(errorMessage);
-        }
+        return GetAsync<MembershipInfoResponse>(
+            $"membership-name/{membershipId}"
+        );
     }
 
-
-    public async Task<Result<Unit>> UpdateMembershipFeature(MembershipFeatureUpdateRequest membershipUpdateRequest)
+    public Task<Result<MembershipResponse>> PostMembershipAsync(
+        MembershipAddRequest request)
     {
-        string json = JsonSerializer.Serialize(membershipUpdateRequest);
-        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await _httpClient.PutAsync("update-membership-feature", content);
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            
-            return Result<Unit>.Success(Unit.Value);
-        }
-        else
-        {
-
-            string errorMessage = responseBody;
-
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<Unit>.Failure(errorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
-            }
-
-            return Result<Unit>.Failure(errorMessage);
-        }
+        return PostAsync<MembershipAddRequest, MembershipResponse>(
+            "",
+            request
+        );
     }
 
-    public async Task<Result<Unit>> DeleteMembershipFeatureAsync(Guid membershipFeatureId)
+    public Task<Result<Unit>> PutMembershipAsync(
+        MembershipUpdateRequest request,
+        Guid membershipId)
     {
-        var requestUri = $"delete-membership-feature/{membershipFeatureId}";
-
-        HttpResponseMessage response =
-            await _httpClient.DeleteAsync(requestUri);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            string error = await response.Content.ReadAsStringAsync();
-            return Result<Unit>.Failure(error);
-        }
-
-        return Result<Unit>.Success(Unit.Value);
+        return PutAsync<MembershipUpdateRequest, Unit>(
+            $"{membershipId}",
+            request
+        );
     }
 
+    // FEATURES
 
-    public async Task<Result<Unit>> PostMembershipFeatureAsync(MembershipFeatureAddRequest membershipFeatureAddRequest)
+    public Task<Result<MembershipFeatureForEditResponse>> GetMembershipFeatureForEdit(
+        Guid membershipFeatureId)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-membership-feature", membershipFeatureAddRequest);
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            return Result<Unit>.Success(new Unit());
-        }
-        else
-        {
-            string errorMessage = responseBody;
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<Unit>.Failure(errorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
-            }
-
-            return Result<Unit>.Failure(errorMessage);
-        }
+        return GetAsync<MembershipFeatureForEditResponse>(
+            $"get-membership-feature-for-edit/{membershipFeatureId}"
+        );
     }
 
-
-    public async Task<Result<Unit>> PutMembershipAsync(MembershipUpdateRequest membershipUpdateRequest, Guid membershipId)
+    public Task<Result<ObservableCollection<MembershipFeatureResponse>>> GetAllMembershipFeaturesByMembershipIdAsync(
+        Guid membershipId)
     {
-        string json = JsonSerializer.Serialize(membershipUpdateRequest);
-        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await _httpClient.PutAsync($"{membershipId}", content);
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-
-        if (response.IsSuccessStatusCode)
-        {
-            return Result<Unit>.Success(Unit.Value);
-        }
-        else
-        {
-
-            string errorMessage = responseBody;
-
-            try
-            {
-                var errorDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(responseBody);
-                if (errorDict != null && errorDict.TryGetValue("detail", out var detailElement))
-                {
-                    errorMessage = detailElement.GetString() ?? responseBody;
-                    return Result<Unit>.Failure(errorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result<Unit>.Failure($"Fatal error: {ex.Message}");
-            }
-
-            return Result<Unit>.Failure(errorMessage);
-        }
+        return GetAsync<ObservableCollection<MembershipFeatureResponse>>(
+            $"get-membership-features/{membershipId}"
+        );
     }
 
-    public async Task<Result<MembershipResponse>> GetMembershipByIdAsync(Guid membershipId)
+    public Task<Result<Unit>> PostMembershipFeatureAsync(
+        MembershipFeatureAddRequest request)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"{membershipId}");
-        if (response.IsSuccessStatusCode)
-        {
-            MembershipResponse? memberships = await response.Content.ReadFromJsonAsync<MembershipResponse>();
+        return PostAsync<MembershipFeatureAddRequest, Unit>(
+            "create-membership-feature",
+            request
+        );
+    }
 
-            return Result<MembershipResponse>.Success(memberships ?? new MembershipResponse());
-        }
-        else
-        {
-            return Result<MembershipResponse>.Failure("Failed to load membership.");
-        }
+    public Task<Result<Unit>> UpdateMembershipFeature(
+        MembershipFeatureUpdateRequest request)
+    {
+        return PutAsync<MembershipFeatureUpdateRequest, Unit>(
+            "update-membership-feature",
+            request
+        );
+    }
+
+    public Task<Result<Unit>> DeleteMembershipFeatureAsync(
+        Guid membershipFeatureId)
+    {
+        return DeleteAsync(
+            $"delete-membership-feature/{membershipFeatureId}"
+        );
     }
 }

@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.Auth;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Mappers;
@@ -62,12 +62,11 @@ public class LoginViewModel : ViewModel
         Result<AuthenticationResponse> result = await _authHttpClient.LoginAsync(signInDto);
         if (!result.IsSuccess)
         {
-            MessageBox.Show("Login failed. Please check your credentials and try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"{result.GetUserMessage()}", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         else
         {
             _authService.SetProperty(result.Value!.Token!); // tutaj
-
             _navigation.NavigateTo<DashboardViewModel>();
         }
     }

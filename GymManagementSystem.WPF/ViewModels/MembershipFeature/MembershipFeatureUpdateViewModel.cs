@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.MembershipFeature;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
@@ -89,7 +89,7 @@ public class MembershipFeatureUpdateViewModel : ViewModel, IParameterReceiver, I
         Result<MembershipFeatureForEditResponse> result = await _membershipHttpClient.GetMembershipFeatureForEdit(_membershipFeatureId);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         FeatureDescription = result.Value!.FeatureDescription;
     }
@@ -105,7 +105,7 @@ public class MembershipFeatureUpdateViewModel : ViewModel, IParameterReceiver, I
         Result<Unit> result = await _membershipHttpClient.UpdateMembershipFeature(request);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.ErrorMessage}");
+            MessageBox.Show($"{result.GetUserMessage()}");
         }
         _navigation.NavigateTo<MembershipViewModel>();
     }

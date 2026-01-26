@@ -46,12 +46,18 @@ public abstract class BaseHttpClientService
         return await HandleResponse<TResponse>(response);
     }
 
-    // DELETE
-    //protected async Task<Result<Unit>> DeleteAsync(string url)
-    //{
-    //    var response = await _httpClient.DeleteAsync(url);
-    //    return await HandleResponse<Unit>(response);
-    //}
+    protected async Task<Result<Unit>> DeleteAsync(string url)
+    {
+        var response = await _httpClient.DeleteAsync(url);
+        return await HandleResponse<Unit>(response);
+    }
+
+
+    protected async Task<Result<TResponse>> PutAsync<TResponse>(string url)
+    {
+        var response = await _httpClient.PutAsync(url, null);
+        return await HandleResponse<TResponse>(response);
+    }
 
     // CORE
     private async Task<Result<T>> HandleResponse<T>(HttpResponseMessage response)

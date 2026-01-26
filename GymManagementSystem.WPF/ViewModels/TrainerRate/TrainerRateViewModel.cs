@@ -1,5 +1,5 @@
 ﻿using GymManagementSystem.Core.DTO.TrainerRate;
-using GymManagementSystem.Core.Result;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.ServiceContracts;
