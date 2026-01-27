@@ -128,4 +128,9 @@ public class TrainerRepository : ITrainerRepository
             Id  = item.Id
         }).ToListAsync();
     }
+
+    public void DeleteTrainer(TrainerContract trainerContract)
+    {
+        _dbContext.Remove(trainerContract);
+    }
 }

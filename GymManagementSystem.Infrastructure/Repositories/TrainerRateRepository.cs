@@ -18,7 +18,6 @@ public class TrainerRateRepository : ITrainerRateRepository
     public async Task AddRangeAsync(IEnumerable<TrainerRate> trainerRates)
     {
       await _dbContext.TrainerRates.AddRangeAsync(trainerRates);
-      await _dbContext.SaveChangesAsync();
     }
 
     public async Task<TrainerRateInfoResponse> AddTrainerRateAsync(TrainerRate trainerRate)

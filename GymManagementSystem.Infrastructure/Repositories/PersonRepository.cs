@@ -48,4 +48,18 @@ public class PersonRepository : IPersonRepository
     {
         return await _dbContext.People.Include(item => item.TrainerContract).Include(item => item.Employee).Include(item => item.EmploymentTerminations).FirstOrDefaultAsync(item => item.Id == personId);
     }
+
+    public async Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync()
+    {
+        DateTime now = DateTime.UtcNow;
+
+        IEnumerable<Person> people = await _dbContext.People
+            .Where(item => item.IsActive).Where(item =>
+            item.EmploymentTerminations
+                .Where(item => item.IsActive)
+                .Max(item => item.EffectiveDate.Date) <= now.Date
+            ).Include(item => item.TrainerContract).Include(item => item.Employee)
+            .ToListAsync();
+        return people;
+    }
 }

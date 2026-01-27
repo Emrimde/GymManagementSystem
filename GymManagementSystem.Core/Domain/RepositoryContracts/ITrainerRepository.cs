@@ -17,4 +17,5 @@ public interface ITrainerRepository
     Task<IEnumerable<TrainerContractInfoResponse>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken);
     Task<TrainerContract?> GetTrainerContractAsync(Guid id,bool includeDetails);
     Task<IEnumerable<TrainerInfoResponse>> GetAllPersonalTrainersAsync();
+    void DeleteTrainer(TrainerContract trainerContract);
 }

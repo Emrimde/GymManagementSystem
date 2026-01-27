@@ -9,4 +9,5 @@ public interface IPersonRepository
     Task<IEnumerable<PersonReadModel>> GetAllStaffAsync();
     void AddPersonToStaff(Person person);
     void UpdatePerson(Person person);
+    Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync();
 }

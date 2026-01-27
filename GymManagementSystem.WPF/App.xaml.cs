@@ -187,13 +187,13 @@ public partial class App : Application
     protected async override void OnStartup(StartupEventArgs e)
     {
         GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
-        Result<GeneralGymResponse> gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
-        Application.Current.Resources["GymName"] = gymDetails.Value!.GymName;
-        Application.Current.Resources["Address"] = gymDetails.Value!.Address;
-        Application.Current.Resources["ContactNumber"] = gymDetails.Value!.ContactNumber;
-        Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.PrimaryColor)!;
-        Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.SecondColor)!;
-        Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.BackgroundColor)!;
+        //Result<GeneralGymResponse> gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
+        //Application.Current.Resources["GymName"] = gymDetails.Value!.GymName;
+        //Application.Current.Resources["Address"] = gymDetails.Value!.Address;
+        //Application.Current.Resources["ContactNumber"] = gymDetails.Value!.ContactNumber;
+        //Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.PrimaryColor)!;
+        //Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.SecondColor)!;
+        //Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.BackgroundColor)!;
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
         base.OnStartup(e);

@@ -1,8 +1,11 @@
 using FluentValidation.AspNetCore;
+using GymManagementSystem.API.Jobs;
 using GymManagementSystem.Core;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Infrastructure;
 using GymManagementSystem.Infrastructure.DatabaseContext;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +28,27 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+builder.Services.AddHangfire(config =>
+{
+    config
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(
+            options =>
+            {
+                options.UseNpgsqlConnection(
+                    builder.Configuration.GetConnectionString("ConnectionString"));
+            },
+            new PostgreSqlStorageOptions
+            {
+                SchemaName = "hangfire"
+            });
+});
+
+builder.Services.AddHangfireServer();
+
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -78,12 +102,27 @@ builder.Services.AddCoreServices();
 
 
 var app = builder.Build();
+// apply job
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobs = scope.ServiceProvider
+        .GetRequiredService<IRecurringJobManager>();
+
+    recurringJobs.AddOrUpdate<DeactivateExpiredPersonsJob>(
+        "deactivate-expired-persons",
+        job => job.Run(),
+        Cron.Daily()
+    );
+}
+
+
+// Create roles and main starter account
 using (var scope = app.Services.CreateScope())
 {
     await IdentitySeeder.SeedAsync(scope.ServiceProvider);
 }
 
-
+app.UseHangfireDashboard();
 app.UseRouting();
 app.UseStaticFiles();
 app.UseCors("AllowAll");

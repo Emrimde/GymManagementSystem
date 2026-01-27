@@ -51,12 +51,12 @@ public static class TrainerContractMapper
             ClubCommissionPercent = trainerContract.ClubCommissionPercent.ToString() + "%",
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? "Personal trainer" : "Group instructor",
-            CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && trainerContract.ValidFrom <= DateTime.UtcNow && !(trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date <= DateTime.UtcNow.Date) ?? false),
-            Valid = trainerContract.ValidFrom.ToString("dd.MM:yyyy") + "-" + (trainerContract.ValidTo?.ToString("dd.MM:yyyy") ?? "Permanent"),
+            CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && (trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date >= DateTime.UtcNow.Date) ?? true),
+            Valid = trainerContract.ValidFrom.ToString("dd.MM.yyyy") + "-" + (trainerContract.ValidTo?.ToString("dd.MM:yyyy") ?? "Permanent"),
             PersonId = trainerContract.PersonId,
             CanTerminate = !(trainerContract.Person?
                                             .EmploymentTerminations
-                                            .Any(item => item.EffectiveDate > DateTime.UtcNow) ?? true),
+                                            .Any(item => item.IsActive) ?? false),
         };
     }
 }

@@ -31,4 +31,10 @@ public class EmploymentTerminationRepository : IEmploymentTerminationRepository
             EffectiveDate = item.EffectiveDate
         }).ToListAsync();
     }
+
+    public async Task<EmploymentTermination?> GetActiveEmploymentTerminationByPersonId(Guid personId)
+    {
+        return await _dbContext.EmploymentTerminations.Where(item => item.PersonId == personId && item.IsActive).FirstOrDefaultAsync();
+    }
+
 }

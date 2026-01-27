@@ -97,7 +97,7 @@ public class EmploymentTerminationService : IEmploymentTerminationService
         else if (person.TrainerContract != null)
         {
             termination.RequestedDate = DateTime.UtcNow;
-            termination.EffectiveDate = DateTime.UtcNow.AddDays(14);
+            termination.EffectiveDate = DateTime.UtcNow.AddMinutes(4);
         }
 
         else

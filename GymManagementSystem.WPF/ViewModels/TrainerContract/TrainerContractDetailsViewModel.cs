@@ -129,7 +129,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         };
 
         // Bezpieczna nazwa pliku
-        string safeFileName = $"{model.FirstName}_{model.LastName}_Wypowiedzenie_{model.ContractType}"
+        string safeFileName = $"{model.FirstName}_{model.LastName}_Wypowiedzenie_{Guid.NewGuid()}"
             .Replace(" ", "_")
             .Replace(":", "")
             .Replace("/", "_");

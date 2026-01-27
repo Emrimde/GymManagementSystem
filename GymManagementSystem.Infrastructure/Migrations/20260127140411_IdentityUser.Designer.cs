@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127140411_IdentityUser")]
+    partial class IdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,7 +211,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<DateTime>("EffectiveDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsSigned")
                         .HasColumnType("boolean");
 
                     b.Property<Guid>("PersonId")
@@ -291,7 +294,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3ba6b452-1354-4155-9b5c-f09c2f2e2300"),
+                            Id = new Guid("6a4693df-1194-4a21-b242-ec80948cb52b"),
                             AboutUs = "We are a place created for people who want to truly improve their health, physique, and well-being — not just “tick off” a workout. Our goal is to build a strong, capable, and mindful community where everyone, regardless of their level, feels welcome. We combine modern equipment with expert coaching to make training not only hard, but smart. We focus on quality of movement, steady progress, and safety, because long-term results matter more than quick fixes. We help our members set clear goals and achieve them step by step.\r\n\r\nWe don’t believe in shortcuts — we believe in building lasting habits and real lifestyle change. We create an environment where training becomes part of everyday life, not a burden. We believe that a strong body builds a strong mind. That’s why we support, motivate, and educate — not just count reps. Our gym is more than equipment; it’s people, atmosphere, and a shared drive to be better than yesterday.",
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
@@ -466,31 +469,31 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("80f3ac99-aaa2-4e63-a036-082ead3790fe"),
+                            Id = new Guid("7b943b2f-3850-4e40-85a7-6ef4b72c77f4"),
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
                             Price = 100m,
-                            ValidFrom = new DateTime(2026, 1, 27, 17, 3, 17, 774, DateTimeKind.Utc).AddTicks(5223)
+                            ValidFrom = new DateTime(2026, 1, 27, 14, 4, 11, 201, DateTimeKind.Utc).AddTicks(3774)
                         },
                         new
                         {
-                            Id = new Guid("fe6d488f-b0dc-4bc1-a7c4-2fc2dd3202aa"),
+                            Id = new Guid("83f3817c-be78-4a7c-9de1-ee9b7829b4a2"),
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
                             Price = 150m,
-                            ValidFrom = new DateTime(2026, 1, 27, 17, 3, 17, 774, DateTimeKind.Utc).AddTicks(5236)
+                            ValidFrom = new DateTime(2026, 1, 27, 14, 4, 11, 201, DateTimeKind.Utc).AddTicks(3778)
                         },
                         new
                         {
-                            Id = new Guid("5cd7f3c9-8016-4ca2-808e-3b0c7eaf0fae"),
+                            Id = new Guid("ce5599aa-cf8a-454e-986c-c50e78fb4f97"),
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
                             Price = 1000m,
-                            ValidFrom = new DateTime(2026, 1, 27, 17, 3, 17, 774, DateTimeKind.Utc).AddTicks(5238)
+                            ValidFrom = new DateTime(2026, 1, 27, 14, 4, 11, 201, DateTimeKind.Utc).AddTicks(3780)
                         },
                         new
                         {
-                            Id = new Guid("79da32ad-ea71-47b7-849b-427b22f165da"),
+                            Id = new Guid("80d6c57c-ce34-4423-a704-9f9a61eed58d"),
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
                             Price = 1500m,
-                            ValidFrom = new DateTime(2026, 1, 27, 17, 3, 17, 774, DateTimeKind.Utc).AddTicks(5240)
+                            ValidFrom = new DateTime(2026, 1, 27, 14, 4, 11, 201, DateTimeKind.Utc).AddTicks(3781)
                         });
                 });
 

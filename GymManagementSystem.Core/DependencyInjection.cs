@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IMembershipFeatureService, MembershipFeatureService>();
         services.AddScoped<IPersonService, PersonService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IPersonStatusService, PersonStatusService>();
         services.AddValidatorsFromAssemblyContaining<GetClientQueryDtoValidator>();
 
         return services;

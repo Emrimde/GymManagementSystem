@@ -38,6 +38,9 @@ public class EmployeeService : IEmployeeService
         if (person == null) {
             return Result<EmployeeInfoResponse>.Failure("Unexpected error during searching person data", StatusCodeEnum.InternalServerError);
         }
+
+        person.IsActive = true;
+
         User user = new User()
         {
             UserName = $"{person.FirstName + person.LastName}",

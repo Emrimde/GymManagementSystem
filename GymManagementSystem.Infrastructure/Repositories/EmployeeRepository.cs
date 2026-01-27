@@ -18,6 +18,11 @@ public class EmployeeRepository : IEmployeeRepository
         _dbContext.Employees.Add(employee);
     }
 
+    public void DeleteEmployee(Employee employee)
+    {
+        _dbContext.Remove(employee);
+    }
+
     public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null)
     {
         IQueryable<Employee> query = _dbContext.Employees.AsNoTracking();

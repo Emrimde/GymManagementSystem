@@ -164,7 +164,7 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
 
         // SAFE FILE NAME
         string safeFileName =
-            $"{Person.FirstName}_{Person.LastName}_TrainerContract"
+            $"{Person.FirstName}_{Person.LastName}_TrainerContract_{Guid.NewGuid()}"
                 .Replace(" ", "_");
 
         string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
