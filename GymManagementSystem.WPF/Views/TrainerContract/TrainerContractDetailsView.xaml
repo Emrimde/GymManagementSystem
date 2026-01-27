@@ -53,25 +53,6 @@
 
                         </TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Is signed: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding TrainerContract.IsSigned}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding  TrainerContract.IsB2B, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <TextBlock Text="Company address: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-              <Run Text="{Binding TrainerContract.CompanyAddress}"/>
-
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding  TrainerContract.IsB2B, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <TextBlock Text="Company name: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding TrainerContract.CompanyName}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Nip: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"  Visibility="{Binding  TrainerContract.IsB2B, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding TrainerContract.TaxId}" />
-                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Center"  >
@@ -81,11 +62,7 @@
                             <Run Text="{Binding TrainerContract.Valid}" />
                         </TextBlock>
                     </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Is signed: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding TrainerContract.IsSigned}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Contract type: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                             <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding TrainerContract.ContractType}" />
                         </StackPanel>

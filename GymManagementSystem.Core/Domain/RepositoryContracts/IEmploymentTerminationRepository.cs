@@ -5,6 +5,6 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
 public interface IEmploymentTerminationRepository
 {
-    Task<EmploymentTerminationInfoResponse> AddEmploymentTermination(EmploymentTermination employmentTermination);
+    void AddEmploymentTermination(EmploymentTermination employmentTermination);
     Task<IEnumerable<EmploymentTerminationResponse>> GetEmploymentTerminationsAsync();
 }

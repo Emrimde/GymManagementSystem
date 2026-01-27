@@ -21,5 +21,5 @@ public class EmploymentTerminationController : BaseController
     public async Task<ActionResult<IEnumerable<EmploymentTerminationResponse>>> GetEmploymentTerminations() => HandleResult(await _employmentTerminationService.GetEmploymentTerminationsAsync());
 
     [HttpPost]
-    public async Task<ActionResult<EmploymentTerminationGenerateResponse>> CreateEmploymentTerminationAsync([FromBody] EmploymentTerminationAddRequest request) => HandleResult(await _employmentTerminationService.CreateEmploymentTerminationAsync(request));
+    public async Task<ActionResult> CreateEmploymentTerminationAsync([FromBody] EmploymentTerminationAddRequest request) => HandleResult(await _employmentTerminationService.CreateEmploymentTerminationAsync(request));
 }

@@ -14,11 +14,9 @@ public class EmploymentTerminationRepository : IEmploymentTerminationRepository
            _dbContext = dbContext;
     }
 
-    public async Task<EmploymentTerminationInfoResponse> AddEmploymentTermination(EmploymentTermination employmentTermination)
+    public void AddEmploymentTermination(EmploymentTermination employmentTermination)
     {
         _dbContext.EmploymentTerminations.Add(employmentTermination);
-        await _dbContext.SaveChangesAsync();
-        return employmentTermination.ToEmploymentTerminationInfoResponse();
     }
 
     public async Task<IEnumerable<EmploymentTerminationResponse>> GetEmploymentTerminationsAsync()

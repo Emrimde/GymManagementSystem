@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers;
+using GymManagementSystem.Core.Domain;
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.EmploymentTermination;
@@ -12,17 +13,41 @@ public class EmploymentTerminationService : IEmploymentTerminationService
 {
     private readonly IEmploymentTerminationRepository _employmentTerminationRepository;
     private readonly IPersonRepository _personRepo;
-   
-    public EmploymentTerminationService(IEmploymentTerminationRepository employmentTerminationRepository, IPersonRepository personRepo)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public EmploymentTerminationService(IEmploymentTerminationRepository employmentTerminationRepository, IPersonRepository personRepo, IUnitOfWork unitOfWork)
     {
         _employmentTerminationRepository = employmentTerminationRepository;
         _personRepo = personRepo;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<EmploymentTerminationInfoResponse>> CreateEmploymentTerminationAsync(EmploymentTerminationAddRequest request)
+    public async Task<Result<Unit>> CreateEmploymentTerminationAsync(EmploymentTerminationAddRequest request)
     {
-        EmploymentTerminationInfoResponse employment =  await _employmentTerminationRepository.AddEmploymentTermination(request.ToEmploymentTermination());
-        return Result<EmploymentTerminationInfoResponse>.Success(employment, StatusCodeEnum.Created);
+        EmploymentTermination employmentTermination = request.ToEmploymentTermination();
+        _employmentTerminationRepository.AddEmploymentTermination(employmentTermination);
+
+        Person? person = await _personRepo.GetPersonByIdAsync(request.PersonId);
+        if (person == null)
+        {
+            return Result<Unit>.Failure("Person not found", StatusCodeEnum.NotFound);
+        }
+        if (person.Employee != null)
+        {
+            person.Employee.ValidTo = request.EffectiveDate;
+        }
+        else if (person.TrainerContract != null)
+        {
+            person.TrainerContract.ValidTo = request.EffectiveDate;
+        }
+        else
+        {
+            return Result<Unit>.Failure("Unexpected error", StatusCodeEnum.InternalServerError);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Created);
     }
 
     public async Task<Result<EmploymentTerminationGenerateResponse>> GetEmployeeEmploymentTerminationsAsync(Guid personId)
@@ -33,12 +58,12 @@ public class EmploymentTerminationService : IEmploymentTerminationService
     public async Task<Result<EmploymentTerminationGenerateResponse>> GetEmploymentTerminationDetailsAsync(Guid personId)
     {
         Person? person = await _personRepo.GetPersonByIdAsync(personId);
-        
-        if(person is null)
+
+        if (person is null)
         {
             return Result<EmploymentTerminationGenerateResponse>.Failure("Person not found", StatusCodeEnum.NotFound);
         }
-        
+
         EmploymentTermination termination = new EmploymentTermination();
         termination.PersonId = person.Id;
 
@@ -53,7 +78,7 @@ public class EmploymentTerminationService : IEmploymentTerminationService
             termination.RequestedDate = DateTime.UtcNow;
             if (validFrom.Day > DateTime.UtcNow.Day)
             {
-                months--; // odejmujemy niepełny miesiąc
+                months--;
             }
             if (months < 6)
             {
@@ -67,7 +92,6 @@ public class EmploymentTerminationService : IEmploymentTerminationService
             {
                 termination.EffectiveDate = DateTime.UtcNow.AddMonths(3);
             }
-            
         }
 
         else if (person.TrainerContract != null)
@@ -80,7 +104,7 @@ public class EmploymentTerminationService : IEmploymentTerminationService
         {
             return Result<EmploymentTerminationGenerateResponse>.Failure("Person does not have an employment or trainer contract", StatusCodeEnum.BadRequest);
         }
-        
+
         return Result<EmploymentTerminationGenerateResponse>.Success(termination.ToEmploymentGenerateResponseTermination(person), StatusCodeEnum.Ok);
     }
 

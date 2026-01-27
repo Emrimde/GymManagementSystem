@@ -26,8 +26,8 @@ public static class EmploymentTerminationMapper
         {
             ContractType = person.Employee?.ContractTypeEnum.ToString() ?? person.TrainerContract?.ContractType.ToString() ?? string.Empty,
             EmploymentType = person.Employee?.EmploymentType.ToString() ?? string.Empty,
-            FirstName = person.FirstName ?? string.Empty,
-            LastName = person.LastName ?? string.Empty,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
             EffectiveDate = request.EffectiveDate,
             RequestedDate = request.RequestedDate
         };

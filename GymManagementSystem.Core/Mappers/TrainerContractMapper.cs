@@ -52,12 +52,11 @@ public static class TrainerContractMapper
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? "Personal trainer" : "Group instructor",
             CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && trainerContract.ValidFrom <= DateTime.UtcNow && !(trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date <= DateTime.UtcNow.Date) ?? false),
-            Valid = trainerContract.ValidFrom.ToString("yyyy:MM:dd") + "-" + (trainerContract.ValidTo?.ToString("yyyy:MM:dd") ?? "Permanent"),
+            Valid = trainerContract.ValidFrom.ToString("dd.MM:yyyy") + "-" + (trainerContract.ValidTo?.ToString("dd.MM:yyyy") ?? "Permanent"),
             PersonId = trainerContract.PersonId,
             CanTerminate = !(trainerContract.Person?
                                             .EmploymentTerminations
                                             .Any(item => item.EffectiveDate > DateTime.UtcNow) ?? true),
-
         };
     }
 }

@@ -20,10 +20,10 @@ public class EmploymentTerminationHttpClient : BaseHttpClientService
         );
     }
 
-    public Task<Result<EmploymentTerminationInfoResponse>> CreateEmploymentTerminationAsync(
+    public Task<Result<Unit>> CreateEmploymentTerminationAsync(
         EmploymentTerminationAddRequest request)
     {
-        return PostAsync<EmploymentTerminationAddRequest, EmploymentTerminationInfoResponse>(
+        return PostAsync<EmploymentTerminationAddRequest, Unit>(
             "",
             request
         );

@@ -19,25 +19,14 @@ namespace GymManagementSystem.WPF.ViewModels.TrainerContract;
 public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
 {
     private readonly EmploymentTerminationHttpClient _employmentTerminationHttpClient;
-    private bool _isB2b;
-
-    public bool IsB2B
-    {
-        get { return _isB2b; }
-        set { _isB2b = value; OnPropertyChanged(); }
-    }
 
     private readonly TrainerHttpClient _trainerHttpClient;
     public SidebarViewModel SidebarView { get; }
-    private INavigationService _navigation;
 
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public INavigationService Navigation { get; set; }
 
-    private TrainerContractDetailsResponse _trainer;
+
+    private TrainerContractDetailsResponse _trainer = new();
 
     public ICommand GenerateTerminationCommand { get; }
     public TrainerContractDetailsResponse TrainerContract
@@ -75,7 +64,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         _trainerHttpClient = trainerHttpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
-        TrainerContract = new TrainerContractDetailsResponse();
         OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item), item => true);
         OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item), item => true);
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTermination(), item => true);
@@ -96,7 +84,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
                     EffectiveDate = result.Value!.EffectiveDate
                 };
 
-                Result<EmploymentTerminationInfoResponse> additionResult = await _employmentTerminationHttpClient.CreateEmploymentTerminationAsync(request);
+                Result<Unit> additionResult = await _employmentTerminationHttpClient.CreateEmploymentTerminationAsync(request);
                 if (!additionResult.IsSuccess)
                 {
                     MessageBox.Show($"{additionResult.GetUserMessage()}");
