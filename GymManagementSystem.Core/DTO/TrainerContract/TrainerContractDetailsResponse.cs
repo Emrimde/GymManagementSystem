@@ -6,7 +6,6 @@ public class TrainerContractDetailsResponse
     public string ContractType { get; set; } = default!;
     public string TrainerType { get; set; } = default!;
     public string ClubCommissionPercent { get; set; } = default!;
-    // --- Dane firmy do B2B ---
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
@@ -15,4 +14,4 @@ public class TrainerContractDetailsResponse
     public bool CanTerminate { get; set; }
     public string Valid { get; set; } = default!;
     public Guid PersonId { get; set; }
-    }
+}

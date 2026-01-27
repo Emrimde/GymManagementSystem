@@ -43,13 +43,11 @@ public static class PersonMapper
             FirstName = personReadModel.FirstName,
             LastName = personReadModel.LastName,
             Id = personReadModel.Id,
-            //Role = personReadModel.EmployeeRole.ToString() ?? personReadModel.TrainerTypeEnum.ToString() ?? "No role",
             Role = role,
             EmployeeId = personReadModel.EmployeeId,
             TrainerContractId = personReadModel.TrainerContractId,
             IsActive = personReadModel.IsActive,
             PhoneNumber = personReadModel.PhoneNumber,
-            UpdatedAt = personReadModel.UpdatedAt.ToString("dd.MM.yyyy")
         };
     }
     public static PersonDetailsResponse ToPersonDetailsResponse(this Person person)

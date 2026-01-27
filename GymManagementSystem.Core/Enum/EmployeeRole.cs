@@ -2,6 +2,7 @@
 
 public enum EmployeeRole
 {
+    None,
     Receptionist,
     Manager
 }

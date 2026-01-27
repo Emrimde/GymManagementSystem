@@ -10,6 +10,15 @@ public class EmploymentContractPdfDto
     public string ContactNumber { get; set; } = string.Empty;
     public string Nip { get; set; } = string.Empty;
 
+    public string FirstName { get; set; } = default!;
+    public string LastName { get; set; } = default!;
+    public string Email { get; set; } = default!;
+    public string PhoneNumber { get; set; } = default!;
+    public string Address { get; set; } = default!;
+
+
+
+
     // Contract
     public ContractTypeEnum ContractType { get; set; }
     public string ValidFrom { get; set; } = string.Empty;

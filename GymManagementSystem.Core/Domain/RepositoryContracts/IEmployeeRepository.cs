@@ -4,7 +4,7 @@ using GymManagementSystem.Core.DTO.Employee;
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IEmployeeRepository
 {
-    Task<EmployeeInfoResponse> CreateEmployeeAsync(Employee employee);
+    void CreateEmployee(Employee employee);
     Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null);
     Task<Employee?> GetEmployeeByIdAsync(Guid employeeId);
 }

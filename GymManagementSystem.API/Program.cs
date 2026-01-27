@@ -77,32 +77,12 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddCoreServices();
 
 
-//builder.Services.ConfigureApplicationCookie(options =>
-//{
-//    options.Events.OnRedirectToLogin = ctx =>
-//    {
-//        ctx.Response.StatusCode = 401;
-//        return Task.CompletedTask;
-//    };
-
-//    options.Events.OnRedirectToAccessDenied = ctx =>
-//    {
-//        ctx.Response.StatusCode = 403;
-//        return Task.CompletedTask;
-//    };
-//});
-
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-
-    string[] roles = { "Receptionist", "Trainer", "Manager", "Client", "Owner" };
-
-    foreach (var role in roles)
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new Role() {Name = role});
+    await IdentitySeeder.SeedAsync(scope.ServiceProvider);
 }
+
 
 app.UseRouting();
 app.UseStaticFiles();

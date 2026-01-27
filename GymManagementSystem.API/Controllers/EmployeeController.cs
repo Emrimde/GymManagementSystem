@@ -23,7 +23,7 @@ public class EmployeeController : BaseController
     public async Task<ActionResult<EmployeeDetailsResponse>> GetEmployeeById([FromRoute] Guid employeeId) => HandleResult(await _employeeService.GetEmployeeByIdAsync(employeeId));
 
     [HttpPost]
-    [Authorize (Roles = "Manager")]
+    [Authorize(Roles = "Manager,Owner")]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
     
     [HttpPost("get-employee-contract")]

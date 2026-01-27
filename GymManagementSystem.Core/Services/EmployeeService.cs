@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Employee;
@@ -15,13 +16,15 @@ public class EmployeeService : IEmployeeService
     private readonly IEmployeeRepository _employeeRepo;
     private readonly IGeneralGymRepository _generalGymRepository;
     private readonly IPersonRepository _personRepo;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<User> _userManager;
-    public EmployeeService(IEmployeeRepository employeeRepo, UserManager<User> userManager, IPersonRepository personRepo,IGeneralGymRepository generalGymRepository)
+    public EmployeeService(IEmployeeRepository employeeRepo, UserManager<User> userManager, IPersonRepository personRepo,IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork)
     {
         _employeeRepo = employeeRepo;
         _userManager = userManager;
         _personRepo = personRepo;
         _generalGymRepository = generalGymRepository;
+        _unitOfWork = unitOfWork;
     }
 
    
@@ -29,6 +32,8 @@ public class EmployeeService : IEmployeeService
     public async Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request)
     {
         Employee employee = request.ToEmployee();
+        employee.ContractTypeEnum = ContractTypeEnum.Permanent;
+
         Person? person = await _personRepo.GetPersonByIdAsync(employee.PersonId);
         if (person == null) {
             return Result<EmployeeInfoResponse>.Failure("Unexpected error during searching person data", StatusCodeEnum.InternalServerError);
@@ -44,9 +49,11 @@ public class EmployeeService : IEmployeeService
         }
         await _userManager.AddToRoleAsync(user, "Receptionist");
 
-        EmployeeInfoResponse response = await _employeeRepo.CreateEmployeeAsync(employee);
-        return Result<EmployeeInfoResponse>.Success(response, StatusCodeEnum.Ok);
+        _employeeRepo.CreateEmployee(employee);
+        await _unitOfWork.SaveChangesAsync();
+        EmployeeInfoResponse response = employee.ToEmployeeInfoResponse();
 
+        return Result<EmployeeInfoResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null)
@@ -61,15 +68,6 @@ public class EmployeeService : IEmployeeService
        return Result<EmployeeDetailsResponse>.Success(employee.ToEmployeeDetailsResponse(), StatusCodeEnum.Ok);
     }
 
-    public Result<bool> ValidateEmployee(EmployeeAddRequest request)
-    {
-        if (request.ContractTypeEnum == ContractTypeEnum.Probation)
-        {
-          
-        }
-        return Result<bool>.Success(true);
-    }
-
     public async Task<Result<EmploymentContractPdfDto>> BuildEmployeeContractAsync(EmployeeContractRequest request)
     {
         GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
@@ -77,25 +75,34 @@ public class EmployeeService : IEmployeeService
         {
             return Result<EmploymentContractPdfDto>.Failure("Gym details not found", StatusCodeEnum.NotFound);
         }
+
+        Person? person = await _personRepo.GetPersonByIdAsync(request.PersonId);
+        if (person == null)
+        {
+            return Result<EmploymentContractPdfDto>.Failure("Person not found", StatusCodeEnum.NotFound);
+        }
+
+
+
         EmploymentContractPdfDto employmentContractPdfDto = new EmploymentContractPdfDto()
         {
-            ContractType = request.ContractTypeEnum,
-            EmploymentType = request.EmploymentType, 
+            ContractType = ContractTypeEnum.Permanent,
+            EmploymentType = request.EmploymentType,
             Salary = request.MonthlySalaryBrutto.ToString(),
             Role = request.Role,
             ContactNumber = generalGymDetail.ContactNumber,
             GymAddress = generalGymDetail.Address,
             GymName = generalGymDetail.GymName,
             Nip = generalGymDetail.Nip,
+            ValidTo = "indefinite time",
+            ValidFrom = DateTime.UtcNow.Date.ToString("dd.MM.yyyy"),
+            Address = person.Street + ", " + person.City,
+            Email = person.Email,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            PhoneNumber = person.PhoneNumber    
         };
-        if(request.ContractTypeEnum == ContractTypeEnum.Probation)
-        {
-            employmentContractPdfDto.ValidTo = DateTime.UtcNow.AddMonths(3).ToString("dd:MM:yyyy");
-        }
-        else
-        {
-            employmentContractPdfDto.ValidTo = "Permanent";
-        }
+        
         return Result<EmploymentContractPdfDto>.Success(employmentContractPdfDto, StatusCodeEnum.Ok);
     }
 }

@@ -8,5 +8,4 @@ public class EmployeeAddRequest
     public decimal MonthlySalaryBrutto { get; set; }
     public EmployeeRole Role { get; set; }
     public EmploymentType EmploymentType { get; set; }
-    public ContractTypeEnum ContractTypeEnum { get; set; }
 }

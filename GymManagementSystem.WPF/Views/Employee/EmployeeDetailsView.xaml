@@ -22,7 +22,6 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}">
-        <Run Text="UnActive: "/>
         <Run Text="{Binding Employee.FirstName}"/>
         <Run Text="{Binding Employee.LastName}"/>
         <Run Text=": details"/>
@@ -54,11 +53,6 @@
                     <TextBlock VerticalAlignment="Center" Text="Status "  Foreground="{DynamicResource PrimaryColor}" FontSize="20" />
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding Client.Status}" />
                 </StackPanel>
-                <!--<TextBlock Text="Actions:" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Margin="0,30,0,10" />-->
-                <!--<StackPanel Orientation="Horizontal" >
-                    <Button Content="Add trainer role" Command="{Binding OpenAddTrainerViewCommand}" />
-                    <Button Content="Add employee role" Command="{Binding OpenEmployeeViewCommand}" />
-                </StackPanel>-->
             </StackPanel>
         </Grid>
     </Grid>

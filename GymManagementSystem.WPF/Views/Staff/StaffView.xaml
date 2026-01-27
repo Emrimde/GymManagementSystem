@@ -63,8 +63,6 @@
                         <DataGridTextColumn Header="PhoneNumber" Binding="{Binding PhoneNumber}"/>
                         <DataGridTextColumn Header="Role" Binding="{Binding Role}"/>
                         <DataGridTextColumn Header="Created at" Binding="{Binding CreatedAt}"/>
-                        <DataGridTextColumn Header="Updated at" Binding="{Binding UpdatedAt}"/>
-                        
 
                         <DataGridTemplateColumn Header="Details" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
@@ -78,7 +76,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Header="Edit/Delete" Width="150">
+                        <DataGridTemplateColumn Header="Edit" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -91,16 +89,6 @@
                                  CommandParameter="{Binding Id}"
                                   >
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
-                                        </Button>
-
-                                        <Button
-                                  Width="40" 
-                                 Height="25" FontSize="10"
-                                 Background="#F44336" 
-                                 Foreground="White"
-                                 Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                 CommandParameter="{Binding}" >
-                                            <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>

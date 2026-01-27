@@ -11,7 +11,6 @@ public static class EmployeeMapper
             PersonId = request.PersonId,
             EmploymentType = request.EmploymentType,
             Role = request.Role,
-            ContractTypeEnum = request.ContractTypeEnum,
             MonthlySalaryBrutto = request.MonthlySalaryBrutto,
         };
     }

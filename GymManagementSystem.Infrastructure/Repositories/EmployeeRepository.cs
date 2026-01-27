@@ -1,7 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
-using GymManagementSystem.Core.DTO.Employee;
-using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +13,9 @@ public class EmployeeRepository : IEmployeeRepository
         _dbContext = dbContext;
     }
 
-    public async Task<EmployeeInfoResponse> CreateEmployeeAsync(Employee employee)
+    public void CreateEmployee(Employee employee)
     {
         _dbContext.Employees.Add(employee);
-        await _dbContext.SaveChangesAsync();
-        return employee.ToEmployeeInfoResponse();
     }
 
     public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null)

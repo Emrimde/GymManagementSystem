@@ -22,13 +22,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
 {
     private readonly EmployeeHttpClient _employeeHttpClient;
 
-    public IEnumerable<ContractTypeEnum> AvailableContractsForEmployees =>
-    [
-        ContractTypeEnum.Probation,
-        ContractTypeEnum.Permanent
-    ];
-
-    public ObservableCollection<EmployeeRole> EmployeeRoles { get; set; }
+    public ObservableCollection<EmployeeRole> EmployeeRoles => [EmployeeRole.Manager, EmployeeRole.Receptionist];
     private EmployeeRole? _selectedEmployeeRole;
 
     public EmployeeRole? SelectedEmployeeRole
@@ -44,26 +38,9 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
         }
     }
 
-
-    private ContractTypeEnum? _selectedContractType;
-
-    public ContractTypeEnum? SelectedContractType
-    {
-        get { return _selectedContractType; }
-        set
-        {
-            if (_selectedContractType != value)
-            {
-                _selectedContractType = value;
-                //Employee.ContractTypeEnum = _selectedContractType;
-                OnPropertyChanged();
-            }
-        }
-    }
-
     public ICommand ReturnToStaffViewCommand { get; }
 
-    public ObservableCollection<EmploymentType> EmploymentTypes { get; set; }
+    public ObservableCollection<EmploymentType> EmploymentTypes => [EmploymentType.FullTime, EmploymentType.HalfTime , EmploymentType.QuarterTime];
 
     private EmploymentType? _selectedEmploymentType;
 
@@ -75,7 +52,6 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
             if (_selectedEmploymentType != value)
             {
                 _selectedEmploymentType = value;
-                //Employee.EmploymentType = _selectedEmploymentType;
                 OnPropertyChanged();
             }
         }
@@ -95,7 +71,6 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
         }
     }
 
-
     public INavigationService Navigation { get; }
 
     public SidebarViewModel SidebarView { get; set; }
@@ -108,21 +83,18 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
         SidebarView = sidebarView;
         Navigation = navigation;
         ReturnToStaffViewCommand = new RelayCommand(item => Navigation.NavigateTo<StaffViewModel>(), item => true);
-        EmploymentTypes = new ObservableCollection<EmploymentType>(Enum.GetValues<EmploymentType>().Cast<EmploymentType>());
-        EmployeeRoles = new ObservableCollection<EmployeeRole>(Enum.GetValues<EmployeeRole>().Cast<EmployeeRole>());
         AddEmployeeCommand = new AsyncRelayCommand(item => AddEmployeeAsync(), item => CanAddEmployee());
     }
 
     private bool CanAddEmployee()
     {
-        return SelectedEmploymentType != null && SelectedEmployeeRole != null && SelectedContractType != null && !HasErrors;
+        return SelectedEmploymentType != null && SelectedEmployeeRole != null && !HasErrors;
     }
 
     private async Task AddEmployeeAsync()
     {
         EmployeeContractRequest contractRequest = new EmployeeContractRequest
         {
-            ContractTypeEnum = SelectedContractType!.Value,
             EmploymentType = SelectedEmploymentType!.Value,
             MonthlySalaryBrutto = MonthlySalaryBrutto!.Value,
             PersonId = _personId,
@@ -145,7 +117,6 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
             {
                 EmployeeAddRequest employeeAddRequest = new EmployeeAddRequest()
                 {
-                    ContractTypeEnum = employmentContractPdfDto.ContractType,
                     EmploymentType = employmentContractPdfDto.EmploymentType,
                     MonthlySalaryBrutto = MonthlySalaryBrutto.Value,
                     PersonId = _personId,
@@ -174,6 +145,14 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
     {
         if (employee == null)
             throw new ArgumentNullException(nameof(employee));
+
+        string employmentTypeText = employee.EmploymentType switch
+        {
+            EmploymentType.FullTime => "pełny etat",
+            EmploymentType.HalfTime => "1/2 etatu",
+            EmploymentType.QuarterTime => "1/4 etatu",
+            _ => "-"
+        };
 
         string fileName = $"Umowa_{employee.ContractType}_{employee.Role}"
             .Replace(" ", "_")
@@ -207,10 +186,15 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                     column.Item().PaddingTop(10).Text("1. Strony umowy:");
 
                     column.Item().Text(
-                        $"a) Pracodawca: {employee.GymName}, {employee.GymAddress}, NIP: {employee.Nip}, tel: {employee.ContactNumber}");
+                        $"a) Pracodawca: {employee.GymName}, {employee.GymAddress}, " +
+                        $"NIP: {employee.Nip}, tel: {employee.ContactNumber}");
 
                     column.Item().Text(
-                        $"b) Pracownik: stanowisko {employee.Role}, forma zatrudnienia: {employee.EmploymentType}");
+                        $"b) Pracownik: {employee.FirstName} {employee.LastName}, " +
+                        $"adres: {employee.Address}, " +
+                        $"stanowisko: {employee.Role}, " +
+                        $"forma zatrudnienia: {employmentTypeText}, " +
+                        $"email: {employee.Email}, tel: {employee.PhoneNumber}");
 
                     column.Item().PaddingTop(10).Text("§1 Przedmiot umowy:");
                     column.Item().Text(
@@ -220,7 +204,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                     column.Item().Text(
                         string.IsNullOrWhiteSpace(employee.ValidTo)
                             ? $"Umowa zostaje zawarta od dnia {employee.ValidFrom}."
-                            : $"Umowa zostaje zawarta na okres od {employee.ValidFrom} do {employee.ValidTo}.");
+                            : $"Umowa zostaje zawarta na czas nieokreślony od {employee.ValidFrom}");
 
                     column.Item().PaddingTop(10).Text("§3 Wynagrodzenie:");
                     column.Item().Text(
@@ -254,6 +238,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                     .AlignCenter()
                     .Text(text =>
                     {
+                        text.Span($"{employee.Email} | {employee.PhoneNumber} | ");
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();
@@ -276,6 +261,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
             MessageBox.Show($"Błąd podczas generowania PDF: {ex.Message}");
         }
     }
+
 
     private Guid _personId;
     public void ReceiveParameter(object parameter)
