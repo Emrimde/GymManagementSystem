@@ -72,12 +72,12 @@ public class ClientService : IClientService
         }
 
         client.HasParentalConsent = age < 18 ? true : null;
-        Client createdClient = await _repository.CreateAsync(client);
+        _repository.CreateAsync(client);
         User user = new User()
         {
-            UserName = createdClient.FirstName + createdClient.LastName,
-            ClientId = createdClient.Id,
-            Email = createdClient.Email,
+            UserName = client.FirstName + client.LastName,
+            ClientId = client.Id,
+            Email = client.Email,
         };
         var createResult = await _userManager.CreateAsync(user, "example");
         if (!createResult.Succeeded)
@@ -87,7 +87,8 @@ public class ClientService : IClientService
         }
         
         await _userManager.AddToRoleAsync(user, "Client");
-        ClientInfoResponse clientResponse = createdClient.ToClientInfoResponse();
+        ClientInfoResponse clientResponse = client.ToClientInfoResponse();
+        await _unitOfWork.SaveChangesAsync();
         return Result<ClientInfoResponse>.Success(clientResponse, StatusCodeEnum.Ok);
     }
 
@@ -163,12 +164,12 @@ public class ClientService : IClientService
     public async Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest entity)
     {
         Client client = entity.ToClient();
-        Client createdClient = await _repository.CreateAsync(client);
+         _repository.CreateAsync(client);
         User user = new User()
         {
-            UserName = createdClient.FirstName + createdClient.LastName,
-            ClientId = createdClient.Id,
-            Email = createdClient.Email,
+            UserName = client.FirstName + client.LastName,
+            ClientId = client.Id,
+            Email = client.Email,
         };
         var createResult = await _userManager.CreateAsync(user,entity.Password);
         if (!createResult.Succeeded)
@@ -177,7 +178,7 @@ public class ClientService : IClientService
         }
 
         await _userManager.AddToRoleAsync(user, "Member");
-       
+        await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
 

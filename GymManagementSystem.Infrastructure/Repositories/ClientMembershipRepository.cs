@@ -20,11 +20,9 @@ public class ClientMembershipRepository : IClientMembershipRepository
         _dbContext = dbContext;
     }
 
-    public async Task<ClientMembership> CreateAsync(ClientMembership entity)
+    public void CreateAsync(ClientMembership entity)
     {
         _dbContext.ClientMemberships.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public async Task<ClientMembership?> GetActiveClientMembershipByClientId(Guid clientId)

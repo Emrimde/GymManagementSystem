@@ -20,11 +20,9 @@ public class TerminationRepository : IRepository<TerminationResponse,Termination
         _dbContext = dbContext;
     }
 
-    public async Task<Termination?> CreateAsync(Termination entity)
+    public void CreateAsync(Termination entity)
     {
        _dbContext.Terminations.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public async Task<PageResult<TerminationResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)

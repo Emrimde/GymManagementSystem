@@ -40,8 +40,8 @@ public class TerminationService : ITerminationService
         }
         activeMembership.EndDate = DateTime.UtcNow;
         Termination termination = entity.ToTermination(activeMembership.Id);
-        Termination createdTermination = await _terminationRepo.CreateAsync(termination);
-        //await _unitOfWork.SaveChangesAsync();  
-        return Result<TerminationResponse>.Success(createdTermination.ToTerminationResponse(), StatusCodeEnum.Ok);
+        _terminationRepo.CreateAsync(termination);
+        await _unitOfWork.SaveChangesAsync();  
+        return Result<TerminationResponse>.Success(termination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }
 }

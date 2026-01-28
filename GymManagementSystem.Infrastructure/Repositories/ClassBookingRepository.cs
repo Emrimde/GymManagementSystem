@@ -18,11 +18,9 @@ public class ClassBookingRepository : IClassBookingRepository
         return await _dbContext.ClassBookings.CountAsync(item => item.ScheduledClassId == scheduleClassId);
     }
 
-    public async Task<ClassBooking> CreateAsync(ClassBooking entity)
+    public void CreateAsync(ClassBooking entity)
     {
         _dbContext.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public bool DeleteClassBookingAsync(Guid classBookingId)

@@ -72,8 +72,9 @@ public class ClassBookingService : IClassBookingService
             classBooking.ClientId = request.ClientId;
         }
 
-        ClassBooking addedClassBooking = await _classBookingRepo.CreateAsync(classBooking);
-        return Result<ClassBookingInfoResponse>.Success(addedClassBooking.ToClassBookingInfo());
+        _classBookingRepo.CreateAsync(classBooking);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<ClassBookingInfoResponse>.Success(classBooking.ToClassBookingInfo());
     }
 
     public async Task<Result<Unit>> DeleteClassBookingAsync(Guid classBookingId)

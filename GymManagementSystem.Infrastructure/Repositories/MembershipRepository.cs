@@ -16,11 +16,9 @@ public class MembershipRepository : IMembershipRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<Membership> CreateAsync(Membership entity)
+    public void CreateAsync(Membership entity)
     {
         _dbContext.Memberships.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public async Task<IEnumerable<MembershipResponse>> GetAllMemberships()

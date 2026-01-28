@@ -14,11 +14,9 @@ public class GymClassRepository : IGymClassRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<GymClass> CreateAsync(GymClass entity)
+    public void CreateAsync(GymClass entity)
     {
         _dbContext.GymClasses.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public async Task<IEnumerable<GymClass>> GetAllAsync()

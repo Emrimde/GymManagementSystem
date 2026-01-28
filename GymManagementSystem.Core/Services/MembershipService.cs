@@ -24,15 +24,15 @@ public class MembershipService : IMembershipService
     {
         Membership membership = entity.ToMembership();
 
-        Membership response = await _repository.CreateAsync(membership);
-       
-        return Result<MembershipResponse>.Success(response.ToMembershipResponse());
+        _repository.CreateAsync(membership);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
     }
 
     public async Task<Result<IEnumerable<MembershipResponse>>> GetAllAsync()
     {
-       IEnumerable<MembershipResponse> memberships =  await _repository.GetAllMemberships();
-       return Result<IEnumerable<MembershipResponse>>.Success(memberships,StatusCodeEnum.Ok);
+        IEnumerable<MembershipResponse> memberships = await _repository.GetAllMemberships();
+        return Result<IEnumerable<MembershipResponse>>.Success(memberships, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<MembershipWebDetailsResponse>>> GetAllMembershipsWithFeaturesAsync()

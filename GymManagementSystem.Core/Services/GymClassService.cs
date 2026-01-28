@@ -51,11 +51,11 @@ public class GymClassService : IGymClassService
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-        GymClass addedGymClass = await _gymClassRepo.CreateAsync(gymClass);
-       List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(addedGymClass);
+        _gymClassRepo.CreateAsync(gymClass);
+       List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
        _scheduledClassRepo.AddRangeAsync(scheduledClasses);
        await _unitOfWork.SaveChangesAsync();
-       return Result<GymClassInfoResponse>.Success(addedGymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
+       return Result<GymClassInfoResponse>.Success(gymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)

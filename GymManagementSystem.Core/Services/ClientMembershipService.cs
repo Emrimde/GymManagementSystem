@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.DTO.Contract;
@@ -21,12 +22,13 @@ public class ClientMembershipService : IClientMembershipService
     private readonly IRepository<ContractResponse, Contract> _contractRepo;
     private readonly IMembershipRepository _membershipRepo;
     private readonly IMembershipPriceRepository _membershipPriceRepo;
+    private readonly IUnitOfWork _unitOfWork;
 
 
     private readonly IHttpContextAccessor _contextAccessor;
    
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo,IHttpContextAccessor contextAccessor)
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo,IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
@@ -34,6 +36,7 @@ public class ClientMembershipService : IClientMembershipService
         _clientRepository = clientRepository;
         _membershipPriceRepo = membershipPriceRepo;
         _contextAccessor = contextAccessor;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
@@ -70,16 +73,17 @@ public class ClientMembershipService : IClientMembershipService
             clientMembership.EndDate = null;
         }
 
-        ClientMembership addedClientMembership = await _clientMembershipRepository.CreateAsync(clientMembership);
+        _clientMembershipRepository.CreateAsync(clientMembership);
         Contract contract = new Contract()
         {
-            ClientMembershipId = addedClientMembership.Id,
-            CreatedAt = addedClientMembership.StartDate,
+            ClientMembershipId = clientMembership.Id,
+            CreatedAt = clientMembership.StartDate,
             ContractStatus = ContractStatus.Draft,
             IsActive = true
         };
-        Contract createdContract = await _contractRepo.CreateAsync(contract);
-        return Result<ClientMembershipInfoResponse>.Success(addedClientMembership.ToClientMembershipInfoResponse(createdContract.Id));
+         _contractRepo.CreateAsync(contract);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<ClientMembershipInfoResponse>.Success(clientMembership.ToClientMembershipInfoResponse(contract.Id));
     }
 
     public async Task<PageResult<ClientMembershipResponse>> GetAllAsync(string? searchText, int pageSize = 50, int page = 1)

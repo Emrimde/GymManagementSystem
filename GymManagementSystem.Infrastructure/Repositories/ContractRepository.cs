@@ -12,11 +12,9 @@ public class ContractRepository : IContractRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<Contract> CreateAsync(Contract entity)
+    public void CreateAsync(Contract entity)
     {
         _dbContext.Contracts.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
     public async Task<Contract?> GetByIdAsync(Guid id)
     {

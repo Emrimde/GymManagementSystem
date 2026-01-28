@@ -20,7 +20,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
         _dbContext.ScheduledClasses.AddRangeAsync(entities);
     }
 
-    public Task<ScheduledClass> CreateAsync(ScheduledClass entity)
+    public void CreateAsync(ScheduledClass entity)
     {
         throw new NotImplementedException();
     }

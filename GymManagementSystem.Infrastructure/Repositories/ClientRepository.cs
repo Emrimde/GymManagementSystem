@@ -18,11 +18,9 @@ public class ClientRepository : IClientRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Client> CreateAsync(Client entity)
+    public void CreateAsync(Client entity)
     {
         _dbContext.Clients.Add(entity);
-        await _dbContext.SaveChangesAsync();
-        return entity;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1,string? searchText = null)
