@@ -46,14 +46,51 @@
         Height="30"
         HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddClientView}" />
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Search:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding LoadClientsCommand}"/>
-                <TextBox Width="200" Height="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" >
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{Binding LoadClientsCommand}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
+            <StackPanel Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,5">
+
+                <!-- Status filter -->
+                <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="Status"
+                   FontSize="12"
+                   Foreground="#BBBBBB"
+                   Margin="2,0,0,2"/>
+                    <ComboBox Width="140"
+                  ItemsSource="{Binding StatusFilters}"
+                  DisplayMemberPath="Label"
+                  SelectedValuePath="Value"
+                  SelectedValue="{Binding SelectedIsActive}"/>
+                </StackPanel>
+
+                <!-- Search -->
+                <StackPanel>
+                    <TextBlock Text="Search"
+                   FontSize="12"
+                   Foreground="#BBBBBB"
+                   Margin="2,0,0,2"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="200"
+                     Height="25"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding LoadClientsCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+                        <Button Content="Search"
+                    Width="100"
+                    Height="30"
+                    Margin="10,0,0,0" VerticalContentAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding LoadClientsCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+
             </StackPanel>
+
 
 
             <Border Grid.Row="2" Background="#2B2B2B">

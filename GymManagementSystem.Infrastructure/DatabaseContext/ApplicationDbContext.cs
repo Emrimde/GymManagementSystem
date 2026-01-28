@@ -132,8 +132,8 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
             }
             );
 
-        builder.Entity<ScheduledClass>()
-    .HasIndex(item => new { item.GymClassId, item.Date })
-    .IsUnique();
+    //    builder.Entity<ScheduledClass>()
+    //.HasIndex(item => new { item.GymClassId, item.Date })
+    //.IsUnique();
     }
 }

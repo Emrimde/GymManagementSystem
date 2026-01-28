@@ -27,13 +27,20 @@ public class ClientHttpClient : BaseHttpClientService
 
     // GET paged list
     public Task<Result<PageResult<ClientResponse>>> GetAllClientsAsync(
-        string? searchText, int page)
+     string? searchText, int page, bool? selectedIsActive)
     {
-        string query = string.IsNullOrWhiteSpace(searchText)
-            ? $"?page={page}"
-            : $"?searchText={Uri.EscapeDataString(searchText)}&page={page}";
+        var query = new List<string>
+    {
+        $"page={page}"
+    };
 
-        return GetAsync<PageResult<ClientResponse>>(query);
+        if (!string.IsNullOrWhiteSpace(searchText))
+            query.Add($"searchText={Uri.EscapeDataString(searchText)}");
+
+        if (selectedIsActive.HasValue)
+            query.Add($"isActive={selectedIsActive.Value}");
+
+        return GetAsync<PageResult<ClientResponse>>($"?{string.Join("&", query)}");
     }
 
     // POST client

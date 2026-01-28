@@ -36,7 +36,7 @@ public class ClientService : IClientService
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query)
     {
-        PageResult<ClientResponse> clients = await _repository.GetAllAsync(searchText:query.SearchText, page: query.Page);
+        PageResult<ClientResponse> clients = await _repository.GetAllAsync(isActive:query.IsActive, searchText:query.SearchText, page: query.Page);
         return clients;
     }
 

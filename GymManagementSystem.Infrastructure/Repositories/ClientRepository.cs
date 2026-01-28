@@ -25,7 +25,7 @@ public class ClientRepository : IClientRepository
         return entity;
     }
 
-    public async Task<PageResult<ClientResponse>> GetAllAsync( int pageSize = 50, int page = 1,string? searchText = null)
+    public async Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1,string? searchText = null)
     {
         IQueryable<Client> query = _dbContext.Clients;
 
@@ -43,7 +43,10 @@ public class ClientRepository : IClientRepository
             }
         }
 
-
+        if (isActive.HasValue)
+        {
+            query = query.Where(item => item.IsActive == isActive);
+        }
     
         int totalCount = await query.CountAsync();
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);

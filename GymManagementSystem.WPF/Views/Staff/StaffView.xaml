@@ -50,7 +50,6 @@
             VerticalAlignment="Bottom"
             Margin="0,20">
 
-                <!-- Status -->
                 <Grid Margin="0,0,15,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -70,7 +69,6 @@
                   SelectedValue="{Binding SelectedIsActive}"/>
                 </Grid>
 
-                <!-- Search -->
                 <Grid Margin="0,0,15,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -96,7 +94,6 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Role -->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

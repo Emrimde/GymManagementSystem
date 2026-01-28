@@ -13,6 +13,7 @@ public class Client
     public string StreetAddress { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public User? User { get; set; }
+    public bool IsActive { get; set; } = false;
     public bool? HasParentalConsent { get; set; }
     //public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
     public ICollection<Visit> Visits { get; set; } = new List<Visit>();

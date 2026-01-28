@@ -2,5 +2,6 @@
 public class GetClientQueryDto
 {
     public string? SearchText { get; set; }
+    public bool? IsActive { get; set; }
     public int Page { get; set; }
 }

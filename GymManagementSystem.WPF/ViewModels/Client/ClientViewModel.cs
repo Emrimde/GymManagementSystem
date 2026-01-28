@@ -7,6 +7,7 @@ using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using GymManagementSystem.WPF.ViewModels.Staff.Models;
 
 namespace GymManagementSystem.WPF.ViewModels.Client;
 
@@ -14,6 +15,35 @@ public class ClientViewModel : ViewModel
 {
     private readonly ClientHttpClient _clientHttpClient;
     private INavigationService _navigation;
+
+    public ObservableCollection<StatusFilter> StatusFilters { get; } = new()
+    {
+        new StatusFilter()
+        {
+            Label = "All",
+            Value = null
+        },
+        new StatusFilter()
+        {
+            Label = "Active",
+            Value = true
+        },
+        new StatusFilter()
+        {
+            Label = "Unactive",
+            Value = false
+        }
+    };
+
+    private bool? _selectedIsActive = null ;
+
+    public bool? SelectedIsActive
+    {
+        get { return _selectedIsActive; }
+        set { _selectedIsActive = value; OnPropertyChanged(); LoadClientsCommand.Execute(this); }
+    }
+
+
     private int _totalPages;
 
     public int TotalPages
@@ -83,7 +113,7 @@ public class ClientViewModel : ViewModel
 
     public ICommand LoadClientsCommand { get; }
 
-    private ObservableCollection<ClientResponse> _clients;
+    private ObservableCollection<ClientResponse> _clients = new();
 
     public ObservableCollection<ClientResponse> Clients
     {
@@ -97,17 +127,16 @@ public class ClientViewModel : ViewModel
             }
         }
     }
-
     private async Task SearchClientsAsync()
     {
-        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(SearchText, SelectedPage);
+        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(SearchText, SelectedPage, SelectedIsActive);
         Clients = new ObservableCollection<ClientResponse>(pageResult.Value!.Items);
         TotalPages = pageResult.Value!.TotalPages;
     }
 
     private async Task GetAllClientsAsync()
     {
-        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(null, SelectedPage);
+        Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(null, SelectedPage, null);
         Clients = new ObservableCollection<ClientResponse>(pageResult.Value!.Items);
         TotalPages = pageResult.Value!.TotalPages;
     }
@@ -119,8 +148,6 @@ public class ClientViewModel : ViewModel
         _navigation = navigationService;
         SidebarView = sidebarView;
         _clientHttpClient = clientHttpClient;
-        Clients = new ObservableCollection<ClientResponse>();
-
         OpenAddClientView = new RelayCommand((item) => Navigation.NavigateTo<ClientAddViewModel>(), item => true);
         OpenEditClientCommand = new RelayCommand(item => _navigation.NavigateTo<ClientUpdateViewModel>(item!), item => true);
         LoadClientsCommand = new AsyncRelayCommand(item => LoadClientsAsync(item), item => true);
@@ -134,7 +161,7 @@ public class ClientViewModel : ViewModel
         {
             SelectedPage = selectedPage;
         }
-        if(string.IsNullOrEmpty(SearchText))
+        if(string.IsNullOrEmpty(SearchText) && SelectedIsActive == null)
         {
            await GetAllClientsAsync();
         }

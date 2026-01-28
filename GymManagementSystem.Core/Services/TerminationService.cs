@@ -10,11 +10,11 @@ namespace GymManagementSystem.Core.Services;
 
 public class TerminationService : ITerminationService
 {
-    private readonly IRepository<TerminationResponse,Termination> _terminationRepo;
+    private readonly IRepository<TerminationResponse, Termination> _terminationRepo;
     private readonly IContractRepository _contractRepo;
     private readonly IClientMembershipRepository _clientMembershipRepo;
     private readonly IUnitOfWork _unitOfWork;
-    public TerminationService(IRepository<TerminationResponse,Termination> terminationRepository, IContractRepository contractRepository,IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepo) 
+    public TerminationService(IRepository<TerminationResponse, Termination> terminationRepository, IContractRepository contractRepository, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepo)
     {
         _terminationRepo = terminationRepository;
         _contractRepo = contractRepository;
@@ -29,11 +29,15 @@ public class TerminationService : ITerminationService
         {
             return Result<TerminationResponse>.Failure("Error: Termination cannot be created because client doesn't have active membership");
         }
-        if(activeMembership.EndDate != null)
+        if (activeMembership.EndDate != null)
         {
             return Result<TerminationResponse>.Failure("Error: Termination cannot be created for yearly membership");
         }
         activeMembership.IsActive = false;
+        if (activeMembership.Client != null)
+        { 
+            activeMembership.Client.IsActive = false;
+        }
         activeMembership.EndDate = DateTime.UtcNow;
         Termination termination = entity.ToTermination(activeMembership.Id);
         Termination createdTermination = await _terminationRepo.CreateAsync(termination);
