@@ -36,7 +36,7 @@
      
      VerticalAlignment="Center"
                  Width="200" Margin="40,0,0,0"/>
-                
+
                 <Button 
      Grid.Column="1"
      Content="Add person"
@@ -44,10 +44,78 @@
      Height="35"
      HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenStaffAddView}" />
             </Grid>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Search:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding SearchStaffCommand}"/>
-                <TextBox Width="200" Height="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+            <StackPanel Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="0,20">
+
+                <!-- Status -->
+                <Grid Margin="0,0,15,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                   Text="Status"
+                   FontSize="12"
+                   Foreground="#BBBBBB"/>
+
+                    <ComboBox Grid.Row="1"
+                  Width="140"
+                              ItemsSource="{Binding StatusFilters}"
+                              DisplayMemberPath="Label"
+                              SelectedValuePath="Value"
+                  SelectedValue="{Binding SelectedIsActive}"/>
+                </Grid>
+
+                <!-- Search -->
+                <Grid Margin="0,0,15,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                   Text="Search"
+                   FontSize="12"
+                   Foreground="#BBBBBB"/>
+
+                    <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Bottom">
+                        <TextBox Width="200"
+                     Height="25"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Width="100"
+                    Height="auto"
+                    Margin="10,0,0,0"
+                    Content="Search"
+                    Command="{Binding SearchStaffCommand}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Role -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                   Text="Role"
+                   FontSize="12"
+                   Foreground="#BBBBBB"/>
+
+                    <ComboBox Grid.Row="1"
+                  Width="160"
+                  ItemsSource="{Binding StaffFilterTypes}"
+                  SelectedItem="{Binding SelectedStaffFilterType}"/>
+                </Grid>
+
             </StackPanel>
+
 
 
             <Border Grid.Row="2" Background="#2B2B2B">

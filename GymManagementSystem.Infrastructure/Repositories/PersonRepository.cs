@@ -1,7 +1,9 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Infrastructure.DatabaseContext;
+using GymManagementSystem.Infrastructure.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
@@ -23,7 +25,7 @@ public class PersonRepository : IPersonRepository
         _dbContext.People.Update(person);
     }
 
-    public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync(string? searchText)
+    public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync(string? searchText, bool? isTrainer, EmployeeRole? employeeRole, TrainerTypeEnum? trainerTypeEnum, bool? isActive)
     {
         IQueryable<Person> query = _dbContext.People.AsQueryable();
 
@@ -35,6 +37,27 @@ public class PersonRepository : IPersonRepository
             {
                 query = query.Where(item => item.FirstName.ToLower().Contains(term) || item.LastName.ToLower().Contains(term) || item.PhoneNumber.Contains(term) || item.Email.Contains(term));
             }
+        }
+
+        if (isTrainer.HasValue)
+        {
+            query = query.Where(item => (item.TrainerContract != null) == isTrainer.Value);
+            if (isTrainer == false)
+            {
+                query = query.Where(item => (item.Employee != null) == true);
+            }
+        }
+        if (isActive.HasValue)
+        {
+            query = query.Where(item => item.IsActive == isActive);
+        }
+        if (employeeRole.HasValue)
+        {
+            query = query.Where(item => item.Employee != null && item.Employee.Role == employeeRole.Value);
+        }
+        if (trainerTypeEnum.HasValue)
+        {
+            query = query.Where(item => item.TrainerContract != null && item.TrainerContract.TrainerType == trainerTypeEnum);
         }
 
         return await query.Select(item => new PersonReadModel()

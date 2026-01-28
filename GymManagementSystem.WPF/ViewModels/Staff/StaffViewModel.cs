@@ -1,20 +1,22 @@
 ﻿using GymManagementSystem.Core.DTO.Person;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Employee;
+using GymManagementSystem.WPF.ViewModels.Staff.Enum;
+using GymManagementSystem.WPF.ViewModels.Staff.Helper;
+using GymManagementSystem.WPF.ViewModels.Staff.Models;
 using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using GymManagementSystem.Core.DTO.ScheduledClass;
 
 namespace GymManagementSystem.WPF.ViewModels.Staff;
 
 public class StaffViewModel : ViewModel
 {
-	private ObservableCollection<PersonResponse> _people = new();
+    private ObservableCollection<PersonResponse> _people = new();
     private string _searchText = string.Empty;
 
     public string SearchText
@@ -23,17 +25,61 @@ public class StaffViewModel : ViewModel
         set { _searchText = value; OnPropertyChanged(); }
     }
 
+
+    public ObservableCollection<StatusFilter> StatusFilters { get; }
+       = new ObservableCollection<StatusFilter>
+   {
+    new() { Label = "All", Value = null },
+    new() { Label = "Active", Value = true },
+    new() { Label = "Inactive", Value = false }
+   };
+
+    public ObservableCollection<StaffFilterType> StaffFilterTypes { get; } = new ObservableCollection<StaffFilterType>()
+    {
+          StaffFilterType.All,
+          StaffFilterType.Employee,
+          StaffFilterType.Receptionist,
+          StaffFilterType.Manager,
+          StaffFilterType.Trainer,
+          StaffFilterType.PersonalTrainer,
+          StaffFilterType.GroupTrainer
+    };
+
+    private StaffFilterType _selectedStaffFilterType = StaffFilterType.All;
+
+    public StaffFilterType SelectedStaffFilterType
+    {
+        get { return _selectedStaffFilterType; }
+        set { _selectedStaffFilterType = value; OnPropertyChanged();
+            SearchStaffCommand.Execute(this);
+
+        }
+    }
+
+
+
+    private bool? _selectedIsActive = null;
+
+    public bool? SelectedIsActive
+    {
+        get { return _selectedIsActive; }
+        set { _selectedIsActive = value; OnPropertyChanged();
+            SearchStaffCommand.Execute(this);
+        }
+
+    }
+
     public ObservableCollection<PersonResponse> People
     {
-		get { return _people; }
-		set { _people = value; OnPropertyChanged(); }
-	}
-	public SidebarViewModel SidebarView { get; set; }
-	public INavigationService Navigation {  get; set; }
-	private readonly StaffHttpClient _staffHttpClient;
-    public ICommand OpenStaffAddView { get;  }
-    public ICommand SearchStaffCommand{ get;  }
-    public ICommand OpenEditPersonCommand { get;  }
+        get { return _people; }
+        set { _people = value; OnPropertyChanged(); }
+    }
+    public SidebarViewModel SidebarView { get; set; }
+    public INavigationService Navigation { get; set; }
+    private readonly StaffHttpClient _staffHttpClient;
+    public ICommand OpenStaffAddView { get; }
+    public ICommand SearchStaffCommand { get; }
+    public ICommand OpenEditPersonCommand { get; }
     public ICommand OpenPersonDetailsCommand { get; set; }
     public ICommand LoadPeopleCommand { get; set; }
 
@@ -43,15 +89,17 @@ public class StaffViewModel : ViewModel
         Navigation = navigation;
         _staffHttpClient = staffHttpClient;
         OpenStaffAddView = new RelayCommand(item => Navigation.NavigateTo<StaffAddViewModel>(), item => true);
-        OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item), item => true);
-        OpenEditPersonCommand = new RelayCommand(item => Navigation.NavigateTo<StaffUpdateViewModel>(item!), item=> true);
-        LoadPeopleCommand = new AsyncRelayCommand(item => LoadPeopleAsync(), item=> true);
-        SearchStaffCommand = new AsyncRelayCommand(item => SearchStaffAsync(), item=> true);
+        OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item!), item => true);
+        OpenEditPersonCommand = new RelayCommand(item => Navigation.NavigateTo<StaffUpdateViewModel>(item!), item => true);
+        LoadPeopleCommand = new AsyncRelayCommand(item => LoadPeopleAsync(), item => true);
+        SearchStaffCommand = new AsyncRelayCommand(item => SearchStaffAsync(), item => true);
     }
 
     private async Task SearchStaffAsync()
     {
-        Result<ObservableCollection<PersonResponse>> scheduledClassResponse = await _staffHttpClient.GetAllStaffAsync(SearchText);
+        StaffFilterRequest? staffFilterRequest = StatusFilterHelper.BuildFilterRequest(SelectedStaffFilterType);
+
+        Result<ObservableCollection<PersonResponse>> scheduledClassResponse = await _staffHttpClient.GetAllStaffAsync(SearchText, staffFilterRequest, SelectedIsActive);
         if (!scheduledClassResponse.IsSuccess)
         {
             MessageBox.Show($"{scheduledClassResponse.GetUserMessage()}");
@@ -68,7 +116,7 @@ public class StaffViewModel : ViewModel
             {
                 Navigation.NavigateTo<TrainerContractDetailsViewModel>(response.TrainerContractId);
             }
-            else if(response.EmployeeId != null) 
+            else if (response.EmployeeId != null)
             {
                 Navigation.NavigateTo<EmployeeDetailsViewModel>(response.EmployeeId);
             }
@@ -81,7 +129,7 @@ public class StaffViewModel : ViewModel
 
     private async Task LoadPeopleAsync()
     {
-        Result<ObservableCollection<PersonResponse>> result = await _staffHttpClient.GetAllStaffAsync(null);
+        Result<ObservableCollection<PersonResponse>> result = await _staffHttpClient.GetAllStaffAsync(null, null, null);
         if (!result.IsSuccess)
         {
             MessageBox.Show("Loading staff failed");

@@ -7,6 +7,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.Core.Services;
 public class PersonService : IPersonService
@@ -27,9 +28,10 @@ public class PersonService : IPersonService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync(string? searchText)
+    public async Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync(string? searchText, bool? isTrainer, EmployeeRole? employeeRole, TrainerTypeEnum? trainerTypeEnum,  bool? isActive)
     {
-        IEnumerable<PersonReadModel> readModels = await _personRepo.GetAllStaffAsync(searchText);
+        IEnumerable<PersonReadModel> readModels = await _personRepo.GetAllStaffAsync(searchText, isTrainer, employeeRole,
+            trainerTypeEnum, isActive);
         return Result<IEnumerable<PersonResponse>>.Success(readModels.Select(item => item.ToPersonResponse()), StatusCodeEnum.Ok);
     }
 

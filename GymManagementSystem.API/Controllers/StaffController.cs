@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Person;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ public class StaffController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAllStaff([FromQuery] string? searchText) => HandleListedResult(await _personService.GetAllStaffAsync(searchText));
+    public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAllStaff([FromQuery] string? searchText, [FromQuery] bool? isTrainer, [FromQuery] EmployeeRole? employeeRole , [FromQuery] TrainerTypeEnum? trainerType, [FromQuery] bool? isActive) => HandleListedResult(await _personService.GetAllStaffAsync(searchText, isTrainer, employeeRole, trainerType, isActive));
 
     [HttpGet("{personId:guid}")]
     public async Task<ActionResult<IEnumerable<PersonDetailsResponse>>> GetPersonDetails([FromRoute] Guid personId) => HandleResult(await _personService.GetPersonDetailsAsync(personId));
