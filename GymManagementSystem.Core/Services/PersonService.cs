@@ -27,9 +27,9 @@ public class PersonService : IPersonService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync()
+    public async Task<Result<IEnumerable<PersonResponse>>> GetAllStaffAsync(string? searchText)
     {
-        IEnumerable<PersonReadModel> readModels = await _personRepo.GetAllStaffAsync();
+        IEnumerable<PersonReadModel> readModels = await _personRepo.GetAllStaffAsync(searchText);
         return Result<IEnumerable<PersonResponse>>.Success(readModels.Select(item => item.ToPersonResponse()), StatusCodeEnum.Ok);
     }
 

@@ -6,7 +6,7 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IPersonRepository
 {
     Task<Person?> GetPersonByIdAsync(Guid personId);
-    Task<IEnumerable<PersonReadModel>> GetAllStaffAsync();
+    Task<IEnumerable<PersonReadModel>> GetAllStaffAsync(string? searchText);
     void AddPersonToStaff(Person person);
     void UpdatePerson(Person person);
     Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync();

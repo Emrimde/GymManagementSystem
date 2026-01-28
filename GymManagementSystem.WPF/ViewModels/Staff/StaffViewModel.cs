@@ -8,13 +8,22 @@ using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using GymManagementSystem.Core.DTO.ScheduledClass;
+
 namespace GymManagementSystem.WPF.ViewModels.Staff;
 
 public class StaffViewModel : ViewModel
 {
 	private ObservableCollection<PersonResponse> _people = new();
+    private string _searchText = string.Empty;
 
-	public ObservableCollection<PersonResponse> People
+    public string SearchText
+    {
+        get { return _searchText; }
+        set { _searchText = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<PersonResponse> People
     {
 		get { return _people; }
 		set { _people = value; OnPropertyChanged(); }
@@ -23,6 +32,7 @@ public class StaffViewModel : ViewModel
 	public INavigationService Navigation {  get; set; }
 	private readonly StaffHttpClient _staffHttpClient;
     public ICommand OpenStaffAddView { get;  }
+    public ICommand SearchStaffCommand{ get;  }
     public ICommand OpenEditPersonCommand { get;  }
     public ICommand OpenPersonDetailsCommand { get; set; }
     public ICommand LoadPeopleCommand { get; set; }
@@ -36,7 +46,19 @@ public class StaffViewModel : ViewModel
         OpenPersonDetailsCommand = new RelayCommand(item => OpenDetailsAsync(item), item => true);
         OpenEditPersonCommand = new RelayCommand(item => Navigation.NavigateTo<StaffUpdateViewModel>(item!), item=> true);
         LoadPeopleCommand = new AsyncRelayCommand(item => LoadPeopleAsync(), item=> true);
+        SearchStaffCommand = new AsyncRelayCommand(item => SearchStaffAsync(), item=> true);
     }
+
+    private async Task SearchStaffAsync()
+    {
+        Result<ObservableCollection<PersonResponse>> scheduledClassResponse = await _staffHttpClient.GetAllStaffAsync(SearchText);
+        if (!scheduledClassResponse.IsSuccess)
+        {
+            MessageBox.Show($"{scheduledClassResponse.GetUserMessage()}");
+        }
+        People = scheduledClassResponse.Value!;
+    }
+
 
     private void OpenDetailsAsync(object parameter)
     {
@@ -59,7 +81,7 @@ public class StaffViewModel : ViewModel
 
     private async Task LoadPeopleAsync()
     {
-        Result<ObservableCollection<PersonResponse>> result = await _staffHttpClient.GetAllStaffAsync();
+        Result<ObservableCollection<PersonResponse>> result = await _staffHttpClient.GetAllStaffAsync(null);
         if (!result.IsSuccess)
         {
             MessageBox.Show("Loading staff failed");

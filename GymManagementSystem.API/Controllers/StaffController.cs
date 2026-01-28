@@ -13,7 +13,8 @@ public class StaffController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAllStaff() => HandleListedResult(await _personService.GetAllStaffAsync());
+    public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAllStaff([FromQuery] string? searchText) => HandleListedResult(await _personService.GetAllStaffAsync(searchText));
+
     [HttpGet("{personId:guid}")]
     public async Task<ActionResult<IEnumerable<PersonDetailsResponse>>> GetPersonDetails([FromRoute] Guid personId) => HandleResult(await _personService.GetPersonDetailsAsync(personId));
 

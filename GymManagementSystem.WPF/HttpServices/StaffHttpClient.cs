@@ -12,9 +12,11 @@ public class StaffHttpClient : BaseHttpClientService
     {
     }
 
-    public Task<Result<ObservableCollection<PersonResponse>>> GetAllStaffAsync()
-        => GetAsync<ObservableCollection<PersonResponse>>("");
-
+    public Task<Result<ObservableCollection<PersonResponse>>> GetAllStaffAsync(string? searchText)
+       => GetAsync<ObservableCollection<PersonResponse>>(
+        $"?searchText={Uri.EscapeDataString(searchText ?? string.Empty)}"
+    );
+        
     public Task<Result<PersonDetailsResponse>> GetPersonDetailsAsync(
         Guid personId)
         => GetAsync<PersonDetailsResponse>($"{personId}");

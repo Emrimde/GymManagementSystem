@@ -23,9 +23,21 @@ public class PersonRepository : IPersonRepository
         _dbContext.People.Update(person);
     }
 
-    public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync()
+    public async Task<IEnumerable<PersonReadModel>> GetAllStaffAsync(string? searchText)
     {
-        return await _dbContext.People.Select(item => new PersonReadModel()
+        IQueryable<Person> query = _dbContext.People.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            string lowerCaseSearchText = searchText.ToLower();
+            string[] terms = lowerCaseSearchText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string term in terms)
+            {
+                query = query.Where(item => item.FirstName.ToLower().Contains(term) || item.LastName.ToLower().Contains(term) || item.PhoneNumber.Contains(term) || item.Email.Contains(term));
+            }
+        }
+
+        return await query.Select(item => new PersonReadModel()
         {
             EmployeeRole = item.Employee != null ? item.Employee.Role : null,
             TrainerTypeEnum = item.TrainerContract != null ? item.TrainerContract.TrainerType : null,
