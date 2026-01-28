@@ -1,7 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
-using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ScheduledClass;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +14,8 @@ public class ScheduledClassController : BaseController
     }
 
     [HttpGet("by-gymclass/{gymClassId:guid}")]
-    public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll([FromRoute] Guid gymClassId, [FromQuery] string? searchText = null)
-        => HandleListedResult(await _scheduledClassService.GetAllAsync(gymClassId,searchText));
+    public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll([FromRoute] Guid gymClassId)
+        => HandleListedResult(await _scheduledClassService.GetAllAsync(gymClassId));
 
     [HttpGet("scheduledclasses/{gymClassId:guid}/{membershipId:guid}/{clientId:guid}")]
     public async Task<ActionResult<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId([FromRoute] Guid gymClassId, [FromRoute] Guid membershipId, [FromRoute] Guid clientId)

@@ -13,13 +13,9 @@ public class ScheduledClassHttpClient : BaseHttpClientService
     }
 
     public Task<Result<ObservableCollection<ScheduledClassResponse>>> GetScheduledClasses(
-        string? searchText,
         Guid gymClassId)
     {
-        string url = string.IsNullOrWhiteSpace(searchText)
-            ? $"by-gymclass/{gymClassId}"
-            : $"by-gymclass/{gymClassId}?searchText={Uri.EscapeDataString(searchText)}";
-
+        string url = $"by-gymclass/{gymClassId}";
         return GetAsync<ObservableCollection<ScheduledClassResponse>>(url);
     }
 

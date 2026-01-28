@@ -63,21 +63,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         };
     }
 
-    public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(Guid gymClassId, string? searchText = null)
+    public async Task<IEnumerable<ScheduledClassResponse>> GetAllScheduledClasses(Guid gymClassId)
     {
         IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId && item.Date >= DateTime.UtcNow && item.IsActive);
-
-        if (searchText != null)
-        {
-            string searchTextlower = searchText.ToLower();
-            string[] terms = searchTextlower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string term in terms)
-            {
-                string pattern = $"%{term}%";
-                query = query.Where(item => item.GymClass!.Name.ToLower().Contains(term));
-
-            }
-        }
 
         return await query
             .Include(item => item.GymClass).OrderBy(item => item.Date)
