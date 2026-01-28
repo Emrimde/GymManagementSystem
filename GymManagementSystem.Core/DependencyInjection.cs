@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IPersonService, PersonService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IPersonStatusService, PersonStatusService>();
+        services.AddScoped<IScheduleGeneratorService, ScheduleGeneratorService>();
         services.AddValidatorsFromAssemblyContaining<GetClientQueryDtoValidator>();
 
         return services;

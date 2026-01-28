@@ -5,12 +5,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Staff;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 

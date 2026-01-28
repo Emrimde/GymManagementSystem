@@ -113,6 +113,11 @@ using (var scope = app.Services.CreateScope())
         job => job.Run(),
         Cron.Daily()
     );
+    recurringJobs.AddOrUpdate<GenerateNewScheduledClassesJob>(
+        "generate-new-scheduled-classes",
+        job => job.Run(),
+        Cron.Minutely()
+    );
 }
 
 

@@ -15,10 +15,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddRangeAsync(IEnumerable<ScheduledClass> entities)
+    public void AddRangeAsync(IEnumerable<ScheduledClass> entities)
     {
-        await _dbContext.ScheduledClasses.AddRangeAsync(entities);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.ScheduledClasses.AddRangeAsync(entities);
     }
 
     public Task<ScheduledClass> CreateAsync(ScheduledClass entity)
@@ -88,7 +87,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClassesByGymClassId(Guid gymClassId, int? classBookingDaysInAdvanceCount, bool showActive)
     {
-        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow ).Include(item => item.GymClass);
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.Id == gymClassId && item.Date >= DateTime.UtcNow).Include(item => item.GymClass);
 
         if(classBookingDaysInAdvanceCount != null)
         {
@@ -98,6 +97,13 @@ public class ScheduledClassRepository : IScheduledClassRepository
         {
           scheduledClasses = scheduledClasses.Where(item => item.IsActive).Include(item => item.ClassBookings);
         }
+
+        return await scheduledClasses.ToListAsync();
+    }
+
+    public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClasses()
+    {
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.IsActive && item.Date >= DateTime.UtcNow).Include(item => item.GymClass);
 
         return await scheduledClasses.ToListAsync();
     }

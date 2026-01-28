@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Enum;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace GymManagementSystem.Infrastructure.DatabaseContext;
 
@@ -130,5 +131,9 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 Price = 1500m
             }
             );
+
+        builder.Entity<ScheduledClass>()
+    .HasIndex(item => new { item.GymClassId, item.Date })
+    .IsUnique();
     }
 }

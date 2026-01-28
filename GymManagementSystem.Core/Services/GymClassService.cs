@@ -6,6 +6,7 @@ using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.ServiceContracts;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -15,19 +16,19 @@ public class GymClassService : IGymClassService
     private readonly IScheduledClassRepository _scheduledClassRepo;
     private readonly ITrainerRepository _trainerRepo;
     private readonly IUnitOfWork _unitOfWork;
-    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo,IUnitOfWork unitOfWork)
+    private readonly IScheduleGeneratorService _scheduleGeneratorService;
+    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo, IUnitOfWork unitOfWork, IScheduleGeneratorService scheduleGeneratorService)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;
         _trainerRepo = trainerRepo;
         _unitOfWork = unitOfWork;
+        _scheduleGeneratorService = scheduleGeneratorService;
     }
 
     public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
     {
         TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId,false);
-        
-
 
         if(trainerContract == null)
         {
@@ -51,9 +52,30 @@ public class GymClassService : IGymClassService
         }
 
         GymClass addedGymClass = await _gymClassRepo.CreateAsync(gymClass);
-       List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(addedGymClass);
-       await _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+       List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(addedGymClass);
+       _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+       await _unitOfWork.SaveChangesAsync();
        return Result<GymClassInfoResponse>.Success(addedGymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)
+    {
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
+
+        if (gymClass == null)
+        {
+            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
+        }
+        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId, null, false);
+
+        HashSet<DateTime> occupiedDates = presentScheduleClass.Select(item => item.Date).ToHashSet();
+
+        List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass, 14);
+        List<ScheduledClass> newScheduledClasses = scheduledClasses.Where(item => !occupiedDates.Contains(item.Date)).ToList();
+
+        _scheduledClassRepo.AddRangeAsync(newScheduledClasses);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
 
     public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
@@ -90,7 +112,7 @@ public class GymClassService : IGymClassService
         {
             item.StartFrom = gymClass.StartHour;
             item.StartTo = gymClass.StartHour + gymClass.Duration;
-            if (!IsDayIncluded(gymClass.DaysOfWeek, item.Date.DayOfWeek))
+            if (!_scheduleGeneratorService.IsDayIncluded(gymClass.DaysOfWeek, item.Date.DayOfWeek))
             {
                 item.Date = GetNextValidDate(item.Date, gymClass.DaysOfWeek);
             }
@@ -105,72 +127,11 @@ public class GymClassService : IGymClassService
         for (int i = 0; i < 7; i++)
         {
             DateTime candidate = date.AddDays(i);
-            if (IsDayIncluded(daysOfWeek, candidate.DayOfWeek))
+            if (_scheduleGeneratorService.IsDayIncluded(daysOfWeek, candidate.DayOfWeek))
                 return candidate.Date;
         }
 
         throw new InvalidOperationException("No valid day in DaysOfWeekFlags");
-    }
-
-    public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)
-    {
-        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
-
-        if (gymClass == null) {
-            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
-        }
-        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId, null, false);
-
-        HashSet<DateTime> occupiedDates = presentScheduleClass.Select(item => item.Date).ToHashSet();
-
-        List<ScheduledClass> scheduledClasses = GenerateScheduledClasses(gymClass,14);
-        List<ScheduledClass> newScheduledClasses = scheduledClasses.Where(item => !occupiedDates.Contains(item.Date)).ToList();
-
-        await _scheduledClassRepo.AddRangeAsync(newScheduledClasses);
-        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
-    }
-
-    private List<ScheduledClass> GenerateScheduledClasses(GymClass gymClass, int daysAhead = 30)
-    {
-        List<ScheduledClass> result = new List<ScheduledClass>();
-        DateTime today = DateTime.UtcNow.Date;
-
-        for (int i = 0; i < daysAhead; i++)
-        {
-            DateTime date = today.AddDays(i);
-            if (!IsDayIncluded(gymClass.DaysOfWeek, date.DayOfWeek))
-                continue;
-
-            result.Add(new ScheduledClass
-            {
-                GymClassId = gymClass.Id,
-                Date = date,
-                StartFrom = gymClass.StartHour,
-                StartTo = gymClass.StartHour + gymClass.Duration,
-                MaxPeople = gymClass.MaxPeople,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            });
-        }
-
-        return result;
-    }
-
-
-    private bool IsDayIncluded(DaysOfWeekFlags flags, DayOfWeek day)
-    {
-        DaysOfWeekFlags bit = day switch
-        {
-            DayOfWeek.Monday => DaysOfWeekFlags.Monday,
-            DayOfWeek.Tuesday => DaysOfWeekFlags.Tuesday,
-            DayOfWeek.Wednesday => DaysOfWeekFlags.Wednesday,
-            DayOfWeek.Thursday => DaysOfWeekFlags.Thursday,
-            DayOfWeek.Friday => DaysOfWeekFlags.Friday,
-            DayOfWeek.Saturday => DaysOfWeekFlags.Saturday,
-            DayOfWeek.Sunday => DaysOfWeekFlags.Sunday,
-            _ => DaysOfWeekFlags.None
-        };
-        return (flags & bit) != 0;
     }
 
     public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
