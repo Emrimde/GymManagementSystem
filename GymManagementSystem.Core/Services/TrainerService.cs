@@ -95,7 +95,7 @@ public class TrainerService : ITrainerService
             };
             TrainerRate trainerRate90 = new TrainerRate()
             {
-                TrainerContractId = trainerContract.Id,
+                TrainerContractId = trainerContract!.Id,
                 DurationInMinutes = 90,
                 RatePerSessions = generalGymDetail.DefaultRate60,
                 ValidFrom = trainerContract.ValidFrom,
@@ -103,7 +103,7 @@ public class TrainerService : ITrainerService
             };
             TrainerRate trainerRate120 = new TrainerRate()
             {
-                TrainerContractId = trainerContract.Id,
+                TrainerContractId = trainerContract!.Id,
                 DurationInMinutes = 120,
                 RatePerSessions = generalGymDetail.DefaultRate60,
                 ValidFrom = trainerContract.ValidFrom,

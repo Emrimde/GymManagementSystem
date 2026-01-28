@@ -18,7 +18,7 @@ public class EmployeeService : IEmployeeService
     private readonly IPersonRepository _personRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<User> _userManager;
-    public EmployeeService(IEmployeeRepository employeeRepo, UserManager<User> userManager, IPersonRepository personRepo,IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork)
+    public EmployeeService(IEmployeeRepository employeeRepo, UserManager<User> userManager, IPersonRepository personRepo, IGeneralGymRepository generalGymRepository, IUnitOfWork unitOfWork)
     {
         _employeeRepo = employeeRepo;
         _userManager = userManager;
@@ -27,7 +27,7 @@ public class EmployeeService : IEmployeeService
         _unitOfWork = unitOfWork;
     }
 
-   
+
 
     public async Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request)
     {
@@ -35,7 +35,8 @@ public class EmployeeService : IEmployeeService
         employee.ContractTypeEnum = ContractTypeEnum.Permanent;
 
         Person? person = await _personRepo.GetPersonByIdAsync(employee.PersonId);
-        if (person == null) {
+        if (person == null)
+        {
             return Result<EmployeeInfoResponse>.Failure("Unexpected error during searching person data", StatusCodeEnum.InternalServerError);
         }
 
@@ -68,13 +69,17 @@ public class EmployeeService : IEmployeeService
     public async Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId)
     {
         Employee? employee = await _employeeRepo.GetEmployeeByIdAsync(employeeId);
-       return Result<EmployeeDetailsResponse>.Success(employee.ToEmployeeDetailsResponse(), StatusCodeEnum.Ok);
+        if (employee == null)
+        {
+            Result<EmployeeDetailsResponse>.Failure("Employee not found", StatusCodeEnum.NotFound);
+        }
+        return Result<EmployeeDetailsResponse>.Success(employee!.ToEmployeeDetailsResponse(), StatusCodeEnum.Ok);
     }
 
     public async Task<Result<EmploymentContractPdfDto>> BuildEmployeeContractAsync(EmployeeContractRequest request)
     {
         GeneralGymDetail? generalGymDetail = await _generalGymRepository.GetGeneralGymDetailsAsync();
-        if(generalGymDetail == null)
+        if (generalGymDetail == null)
         {
             return Result<EmploymentContractPdfDto>.Failure("Gym details not found", StatusCodeEnum.NotFound);
         }
@@ -103,9 +108,9 @@ public class EmployeeService : IEmployeeService
             Email = person.Email,
             FirstName = person.FirstName,
             LastName = person.LastName,
-            PhoneNumber = person.PhoneNumber    
+            PhoneNumber = person.PhoneNumber
         };
-        
+
         return Result<EmploymentContractPdfDto>.Success(employmentContractPdfDto, StatusCodeEnum.Ok);
     }
 }

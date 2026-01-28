@@ -56,13 +56,13 @@ public static class TrainerMapper
     //    };
     //}
 
-    public static TrainerInfoResponse ToTrainerInfoResponse(this TrainerContract trainer)
-    {
-        return new TrainerInfoResponse()
-        {
-            Id = trainer.Id,
-            FirstName = trainer.Person?.FirstName,
-            LastName = trainer.Person?.LastName,
-        };
-    }
+    //public static TrainerInfoResponse ToTrainerInfoResponse(this TrainerContract trainer)
+    //{
+    //    return new TrainerInfoResponse()
+    //    {
+    //        Id = trainer.Id,
+    //        FirstName = trainer.Person?.FirstName,
+    //        LastName = trainer.Person?.LastName,
+    //    };
+    //}
 }

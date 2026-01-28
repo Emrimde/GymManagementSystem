@@ -2,7 +2,7 @@
 public class ClassBookingReadModel
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     public DateTime Date {  get; set; }
     public TimeSpan StartFrom { get; set; }
     public TimeSpan StartTo { get; set; }

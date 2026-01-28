@@ -19,30 +19,16 @@ public class SidebarViewModel : ViewModel
     public ICommand OpenRegisterViewCommand { get; }
     public ICommand OpenClientView { get; }
     public ICommand OpenDashboardView { get; }
-    public ICommand OpenContractView { get; }
     public ICommand OpenSettingsView { get; }
-    public ICommand OpenTerminationView { get;  }
-    public ICommand OpenClientMembershipView { get;  }
-    public ICommand OpenTrainersView { get;  }
-    public ICommand OpenGymClassesView { get;  }
-    public ICommand OpenEmployeesView { get; }
-    public ICommand OpenTrainerContractsView { get; }
+    public ICommand OpenClientMembershipView { get; }
+    public ICommand OpenGymClassesView { get; }
     public ICommand OpenEmploymentTerminationsViewCommand { get; }
     public ICommand OpenStaffView { get; }
-
-    private INavigationService _navigation;
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value; OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; set; }
 
     public SidebarViewModel(INavigationService navigationService)
     {
-        _navigation = navigationService;
+        Navigation = navigationService;
         OpenRegisterViewCommand = new RelayCommand(o => Navigation.NavigateTo<RegisterViewModel>(), o => true);
         OpenClientView = new RelayCommand(o => Navigation.NavigateTo<ClientViewModel>(), o => true);
         OpenDashboardView = new RelayCommand(item => Navigation.NavigateTo<DashboardViewModel>(), o => true);

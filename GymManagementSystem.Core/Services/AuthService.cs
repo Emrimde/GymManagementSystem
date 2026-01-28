@@ -80,7 +80,7 @@ public class AuthService : IAuthService
     {
         var user = request.Email != null
             ? await _userManager.FindByEmailAsync(request.Email)
-            : await _userManager.FindByNameAsync(request.Username);
+            : await _userManager.FindByNameAsync(request.Username!);
 
         if (user is null)
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
