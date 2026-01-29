@@ -114,10 +114,6 @@ public class EditingDialogWindowViewModel : ViewModel
         CloseRequested?.Invoke(false);
     }
 
-    // ============================================
-    //    DTO do UPDATE (NOWE START, END, REASON)
-    // ============================================
-
     public TrainerTimeOffUpdateRequest BuildDto()
     {
         var start = SelectedDate!.Value.Date + TimeSpan.Parse(SelectedStartSlot);
