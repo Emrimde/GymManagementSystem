@@ -164,19 +164,6 @@
                 </DataGrid>
 
             </Border>
-            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <ListBox ItemsSource="{Binding VisiblePages}"
-      SelectedItem="{Binding SelectedPage}"
-      Height="Auto"
-      Width="Auto" Background="{DynamicResource BackgoundColor}" Foreground="White">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-
-            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

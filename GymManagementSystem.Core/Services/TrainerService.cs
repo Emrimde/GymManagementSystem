@@ -133,16 +133,16 @@ public class TrainerService : ITrainerService
         await _trainerRateRepo.AddRangeAsync(rates);
     }
 
-    public async Task<Result<TrainerTimeOffInfoResponse>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
+    public async Task<Result<Unit>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
         bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null, entity.Start, entity.End);
         if (isOverlap)
         {
-            return Result<TrainerTimeOffInfoResponse>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
+            return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
 
         TrainerTimeOff addedTrainerAvailability = await _trainerRepo.CreateTrainerTimeOffAsync(entity.ToTrainerTimeOff());
-        return Result<TrainerTimeOffInfoResponse>.Success(addedTrainerAvailability.ToTrainerTimeOffInfoResponse(), StatusCodeEnum.Ok);
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
     public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50)

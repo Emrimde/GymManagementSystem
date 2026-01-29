@@ -5,7 +5,6 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.PdfGenerators;
 using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
-using GymManagementSystem.WPF.ViewModels.TrainerContract;
 using System.Windows;
 using System.Windows.Input;
 
@@ -29,7 +28,9 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTerminationAsync(), item => true);
+        LoadEmployeeCommand = new AsyncRelayCommand(item => LoadEmployeeAsync(), item => true);
         _employmentTerminationHttpClient = employmentTerminationHttpClient;
+        
     }
 
     private async Task GenerateEmploymentTerminationAsync()
@@ -67,18 +68,19 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; set; }
     public INavigationService Navigation {  get; set; }
     public ICommand GenerateTerminationCommand { get; }
-
+    public ICommand LoadEmployeeCommand { get; }
+    private Guid _employeeId;
     public void ReceiveParameter(object parameter)
     {
         if(parameter is Guid employeeId)
         {
-            _ = LoadEmployeeAsync(employeeId);
+            _employeeId = employeeId;
         }
     }
 
-    private async Task LoadEmployeeAsync(Guid employeeId)
+    private async Task LoadEmployeeAsync()
     {
-        Result<EmployeeDetailsResponse> result = await _employeeHttpClient.GetEmployeeByIdAsync(employeeId);
+        Result<EmployeeDetailsResponse> result = await _employeeHttpClient.GetEmployeeByIdAsync(_employeeId);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.GetUserMessage()}");

@@ -2,16 +2,13 @@
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
 using GymManagementSystem.WPF.Views.ScheduleWindows;
 using Syncfusion.UI.Xaml.Scheduler;
-using Syncfusion.Windows.Controls;
-using System;
-
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -38,7 +35,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         _trainerHttpClient = trainerHttpClient;
         _bookingHttpClient = bookingHttpClient;
         _clientHttpClient = clientHttpClient;
-        OpenEditorCommand = new RelayCommand(item => OpenEditor(item), item => true);
+        OpenEditorCommand = new RelayCommand(item => OpenEditor(item!), item => true);
     }
 
     public void ReceiveParameter(object parameter)
@@ -50,10 +47,8 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    // ---------------------------------
+    
     //          CORE LOGIC
-    // ---------------------------------
-
     private async void OpenEditor(object obj)
     {
         if (obj is not AppointmentEditorOpeningEventArgs e)
@@ -61,21 +56,19 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
         e.Cancel = true; // blokujemy default edytor Syncfusion
 
-        // 1. Kliknięto pusty slot → dodaj cos
+        // 1. Kliknieto pusty slot - dodaj 
         if (e.Appointment == null)
         {
             await HandleAddAction(e);
             return;
         }
 
-        // 2. Kliknięto istniejący event → edytuj coś
+        // 2. Kliknieto istniejacy event - edytuj
         await HandleEditAction(e);
     }
 
-    // ---------------------------------------
+    
     //            DODAWANIE
-    // ---------------------------------------
-
     private async Task HandleAddAction(AppointmentEditorOpeningEventArgs e)
     {
         var choiceDialog = new AddChoiceDialog();
@@ -86,96 +79,50 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         {
             await AddTimeOffAsync(e);
         }
-        else if (choiceDialog.Choice == "Booking")
-        {
-            await AddBookingAsync(e);
-        }
     }
 
     private DateTime ResolveStartFromEvent(AppointmentEditorOpeningEventArgs e)
     {
-        string[] props = { "SelectedDate", "Start", "StartTime", "SelectedDateTime" };
-
-        foreach (string name in props)
+        if (e.DateTime < DateTime.Now)
         {
-            System.Reflection.PropertyInfo propInfo = e.GetType().GetProperty(name);
-            if (propInfo == null)
-                continue;
-
-            object val = propInfo.GetValue(e);
-            if (val == null)
-                continue;
-
-            // jeśli to DateTime
-            if (val is DateTime dt)
-                return dt;
-
-            // jeśli to Nullable<DateTime> (boxed)
-            if (val.GetType() == typeof(DateTime?))
+            if (DateTime.Now.Minute % 15 != 0)
             {
-                var boxed = (DateTime?)val;
-                if (boxed.HasValue)
-                    return boxed.Value;
-                continue;
-            }
+                DateTime now = DateTime.Now;
+                int minutesToAdd = (15 - (now.Minute % 15)) % 15; 
 
-            // jeśli to DateTimeOffset
-            if (val is DateTimeOffset dto)
-                return dto.DateTime;
-
-            // jeśli to string (np. "2025-11-27T11:06:04Z"), spróbuj sparsować
-            if (val is string s)
-            {
-                if (DateTime.TryParse(s, out DateTime parsed))
-                    return parsed;
+                DateTime rounded = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0)
+                                   .AddMinutes(minutesToAdd);
+                return rounded;
             }
         }
-
-        // fallback — lokalny czas
-        return DateTime.Now;
+        return e.DateTime;
     }
 
 
 
     private async Task AddTimeOffAsync(AppointmentEditorOpeningEventArgs e)
     {
-        var start = ResolveStartFromEvent(e);
-        var end = start.AddHours(1);
+        DateTime start = ResolveStartFromEvent(e);
+        DateTime end = start.AddHours(1);
 
-        var vm = new AddingDialogWindowViewModel(
-    _trainerId,
-    _trainerHttpClient,
-    start,
-    end);
-        var dialog = new AddingDialogWindow { DataContext = vm };
+        AddingDialogWindowViewModel vm = new AddingDialogWindowViewModel(_trainerId,_trainerHttpClient,start,end);
+        AddingDialogWindow dialog = new AddingDialogWindow { DataContext = vm };
         if (dialog.ShowDialog() == true)
         {
-            var dto = vm.BuildDto();
-            await _trainerHttpClient.PostTrainerTimeOff(dto); // result-pattern method
-            await LoadAppointmentsAsync();
-        }
-    }
+            TrainerTimeOffAddRequest dto = vm.BuildDto();
+            Result<Unit> result = await _trainerHttpClient.PostTrainerTimeOff(dto);
+            if (!result.IsSuccess)
+            {
+                MessageBox.Show($"{result.GetUserMessage()}","Error",MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-    private async Task AddBookingAsync(AppointmentEditorOpeningEventArgs e)
-    {
-        var start = ResolveStartFromEvent(e);
-        var end = start.AddHours(1);
-
-        var vm = new AddBookingDialogViewModel(_trainerId, start, end, _bookingHttpClient, _clientHttpClient, _trainerHttpClient);
-        var dialog = new AddBookingDialog { DataContext = vm };
-        if (dialog.ShowDialog() == true)
-        {
-            var dto = vm.BuildDto();
-            await _bookingHttpClient.CreateAsync(dto); // result-pattern method
             await LoadAppointmentsAsync();
         }
     }
 
 
-    // ---------------------------------------
+   
     //               EDYCJA
-    // ---------------------------------------
-
     private async Task HandleEditAction(AppointmentEditorOpeningEventArgs e)
     {
         string type = GetTypeFromAppointment(e.Appointment);
@@ -192,14 +139,13 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
     private async Task EditTimeOffAsync(AppointmentEditorOpeningEventArgs e)
     {
-        var vm = new EditingDialogWindowViewModel(_trainerId);
-        var dialog = new EditingDialogWindow { DataContext = vm };
+        EditingDialogWindowViewModel vm = new EditingDialogWindowViewModel(_trainerId);
+        EditingDialogWindow dialog = new EditingDialogWindow { DataContext = vm };
         vm.LoadFromAppointment(e.Appointment);
 
 
         if (dialog.ShowDialog() == true)
         {
-            //Result<bool> deleteResult = null!;
             Result<TrainerTimeOff> updateResult = null!;
 
             if (vm.ShouldDelete)
@@ -231,8 +177,8 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
     private async Task EditBookingAsync(AppointmentEditorOpeningEventArgs e)
     {
-        var vm = new BookingDetailsViewModel(_bookingHttpClient);
-        var dialog = new BookingDetailsDialog { DataContext = vm };
+        BookingDetailsViewModel vm = new BookingDetailsViewModel(_bookingHttpClient);
+        BookingDetailsDialog dialog = new BookingDetailsDialog { DataContext = vm };
 
         vm.LoadFromAppointment(e.Appointment);
 
@@ -266,9 +212,8 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         byte g = (byte)_rng.Next(128, 256);
         byte b = (byte)_rng.Next(128, 256);
 
-        return Color.FromArgb(255, r, g, b); // 80% opacity (204)
+        return Color.FromArgb(255, r, g, b); 
     }
-    // ---------------------------------------
     private string GetTypeFromAppointment(ScheduleAppointment appt)
     {
         return appt.Notes ?? "Available";
@@ -293,8 +238,8 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                 }
                 var appt = new ScheduleAppointment
                 {
-                    StartTime = item.Start,
-                    EndTime = item.End,
+                    StartTime = item.Start.ToLocalTime(),
+                    EndTime = item.End.ToLocalTime(),
                     Subject = item.Type switch
                     {
                         TrainerScheduleItemType.Available => "Available",
@@ -309,7 +254,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                         _ => Guid.NewGuid()
                     },
 
-                    // 🔥 DODAJ TO — NIE RUSZAJ KOLORÓW
                     Notes = item.Type switch
                     {
                         TrainerScheduleItemType.TimeOff => "TimeOff",

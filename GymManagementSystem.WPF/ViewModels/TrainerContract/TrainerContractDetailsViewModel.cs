@@ -64,8 +64,8 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         _trainerHttpClient = trainerHttpClient;
         SidebarView = sidebarView;
         Navigation = navigation;
-        OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item), item => true);
-        OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item), item => true);
+        OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item!), item => true);
+        OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item!), item => true);
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTerminationAsync(), item => true);
     }
 

@@ -5,14 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduleWindows"
         mc:Ignorable="d"
-        Title="AddChoiceDialog" Height="450" Width="800">
+        Title="AddChoiceDialog" Height="300" Width="300">
     <StackPanel Margin="20">
         <Button Content="Add Time Off"
                 Margin="0 10 0 0"
                 Click="TimeOff_Click"/>
-
-        <Button Content="Add Booking"
-                Margin="0 10 0 0"
-                Click="Booking_Click"/>
     </StackPanel>
 </Window>

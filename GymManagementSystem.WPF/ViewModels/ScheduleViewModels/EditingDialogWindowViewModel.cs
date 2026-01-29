@@ -13,7 +13,6 @@ public class EditingDialogWindowViewModel : ViewModel
     public string Subject { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
-
     public bool ShouldDelete { get; private set; } = false;
 
     public ICommand SaveCommand { get; }

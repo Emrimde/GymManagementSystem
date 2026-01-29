@@ -19,10 +19,10 @@ public class TrainerHttpClient : BaseHttpClientService
 
     // TIME OFF
 
-    public Task<Result<TrainerTimeOff>> PostTrainerTimeOff(
+    public Task<Result<Unit>> PostTrainerTimeOff(
         TrainerTimeOffAddRequest request)
     {
-        return PostAsync<TrainerTimeOffAddRequest, TrainerTimeOff>(
+        return PostAsync<TrainerTimeOffAddRequest, Unit>(
             "timeoff",
             request
         );

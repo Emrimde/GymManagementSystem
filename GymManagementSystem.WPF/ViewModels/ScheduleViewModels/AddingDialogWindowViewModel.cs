@@ -9,7 +9,7 @@ public class AddingDialogWindowViewModel : ViewModel
     private readonly Guid _trainerId;
     private readonly TrainerHttpClient _trainerHttpClient;
 
-    public string Subject { get; set; }
+    public string? Reason { get; set; }
 
     public DateTime? SelectedDate { get; set; }
     public ObservableCollection<string> TimeSlots { get; set; }
@@ -37,7 +37,7 @@ public class AddingDialogWindowViewModel : ViewModel
         SelectedStartSlot = RoundTo15(start.TimeOfDay).ToString(@"hh\:mm");
         SelectedEndSlot = RoundTo15(end.TimeOfDay).ToString(@"hh\:mm");
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => true);
+        SaveCommand = new RelayCommand(item => Save(), item => true);
     }
 
     private TimeSpan RoundTo15(TimeSpan t)
@@ -71,9 +71,9 @@ public class AddingDialogWindowViewModel : ViewModel
         return new TrainerTimeOffAddRequest
         {
             TrainerId = _trainerId,
-            Start = DateTime.SpecifyKind(start, DateTimeKind.Utc),
-            End = DateTime.SpecifyKind(end, DateTimeKind.Utc),
-            Reason = Subject
+            Start = start.ToUniversalTime(), // Przelicza np. 15:00 -> 13:00
+            End = end.ToUniversalTime(),
+            Reason = Reason,
         };
     }
 }

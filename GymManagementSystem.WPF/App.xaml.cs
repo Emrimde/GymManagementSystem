@@ -1,7 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.GeneralGymDetail;
-using GymManagementSystem.WPF.Core;
+﻿using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.Services;
 using GymManagementSystem.WPF.ViewModels;
@@ -28,8 +26,6 @@ using GymManagementSystem.WPF.ViewModels.Visit;
 using Microsoft.Extensions.DependencyInjection;
 using Syncfusion.Licensing;
 using System.Windows;
-using System.Windows.Media;
-using static QuestPDF.Helpers.Colors;
 
 namespace GymManagementSystem.WPF;
 public partial class App : Application

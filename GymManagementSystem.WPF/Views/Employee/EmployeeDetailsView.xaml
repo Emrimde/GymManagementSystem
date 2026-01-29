@@ -35,15 +35,15 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding Person.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="Role "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Role: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Employee.Role}"/>
 
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Address"  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock Text="Address: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
                     <Run Text="{Binding Employee.City}"/>
-                    <Run Text="st."/>
+                    <Run Text=", st."/>
                     <Run Text="{Binding Employee.Street}"/>
                     </TextBlock>
 
