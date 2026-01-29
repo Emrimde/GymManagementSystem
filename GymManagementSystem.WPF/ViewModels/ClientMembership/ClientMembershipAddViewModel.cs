@@ -99,13 +99,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
     private async Task LoadClientMembershipViewDataAsync()
     {
         await LoadMemberships();
-        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(ClientId);
-        if (!result.IsSuccess)
-        {
-            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            return;
-        }
-        Client = result.Value!;
+        await LoadClientName();
     }
 
     private async Task AddClientMembershipAsync()
@@ -286,9 +280,19 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
                 result.Value!.Select(item => new MembershipSelectItem
                 {
                     Id = item.Id,
-                    Name = item.Name,
+                    Name = item.Name + " " + item.MembershipType,
                 }));
         }
+    }
+    private async Task LoadClientName()
+    {
+        Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(ClientId);
+        if (!result.IsSuccess)
+        {
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        Client = result.Value!;
     }
 
     public void ReceiveParameter(object parameter)

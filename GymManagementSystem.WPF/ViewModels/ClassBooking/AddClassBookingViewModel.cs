@@ -96,9 +96,9 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         ClassBookingRequest = new ClassBookingAddRequest();
         SidebarView = sidebarView;
         Navigation = navigation;
-        LoadScheduledClassesCommand = new AsyncRelayCommand(item => LoadScheduledClassesComboBox(Client.MembershipId!), item => true);
-        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item=> true);
-        LoadDataForAddClassBookingCommand = new AsyncRelayCommand(item => LoadAllAsync(ClientId), item=> true);
+        LoadScheduledClassesCommand = new AsyncRelayCommand(item => LoadScheduledClassesComboBox(Client.MembershipId), item => true);
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+        LoadDataForAddClassBookingCommand = new AsyncRelayCommand(item => LoadAllAsync(ClientId), item => true);
         _clientHttpClient = clientHttpClient;
         _classBookingHttpClient = classBookingHttpClient;
         _gymClassHttpClient = gymClassHttpClient;
@@ -122,15 +122,18 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
         Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
     }
 
-    private async Task LoadScheduledClassesComboBox(Guid membershipId)
+    private async Task LoadScheduledClassesComboBox(Guid? membershipId)
     {
-        Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId, ClientId);
-        if (!result.IsSuccess)
+        if (membershipId.HasValue)
         {
-            MessageBox.Show($"{result.GetUserMessage}");
+            Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId.Value, ClientId);
+            if (!result.IsSuccess)
+            {
+                MessageBox.Show($"{result.GetUserMessage}");
+            }
+            ScheduledClasses = result.Value!;
+            SelectedScheduledClass = null;
         }
-        ScheduledClasses = result.Value!;
-        SelectedScheduledClass = null;
     }
 
     private async Task LoadGymClassesAsync()
@@ -154,7 +157,7 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     }
 
     private async Task LoadClientName(Guid clientId)
-    { 
+    {
         Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(clientId);
         if (!result.IsSuccess)
         {

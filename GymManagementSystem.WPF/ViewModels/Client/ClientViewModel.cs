@@ -64,7 +64,7 @@ public class ClientViewModel : ViewModel
     private int start => Math.Max(1, SelectedPage - 2);
     private int end => Math.Min(TotalPages, SelectedPage + 2);
     private int count => end - start + 1;
-    public List<int> VisiblePages => Enumerable.Range(start, count).ToList();
+    public List<int> VisiblePages => Enumerable.Range(start, Math.Max(count,0)).ToList();
 
     public SidebarViewModel SidebarView { get; }
     public ICommand OpenAddClientView { get; }

@@ -128,7 +128,10 @@ public class ClientRepository : IClientRepository
             .Select(item => new ClientInfoResponse
             {
                 Id = item.Id,
-                MembershipId = item.ClientMemberships.FirstOrDefault(item => item.IsActive)!.MembershipId,
+                MembershipId = item.ClientMemberships
+                    .Where(item => item.IsActive)
+                    .Select(item => (Guid?)item.MembershipId)
+                    .FirstOrDefault(),
                 FullName = item.FirstName + " " + item.LastName
             })
             .FirstOrDefaultAsync();

@@ -13,8 +13,6 @@ public class MembershipHttpClient : BaseHttpClientService
     {
     }
 
-    // MEMBERSHIPS
-
     public Task<Result<ObservableCollection<MembershipResponse>>> GetAllMembershipsAsync()
     {
         return GetAsync<ObservableCollection<MembershipResponse>>("");

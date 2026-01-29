@@ -1,12 +1,11 @@
 ﻿using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerRate;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.Client;
-using Syncfusion.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -30,30 +29,40 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         }
     }
     private readonly PersonalBookingHttpClient _personalBookingHttpClient;
-    private TimeSpan _selectedStartSlot;
+    private TimeSpan? _selectedStartSlot = null;
 
-    public TimeSpan SelectedStartSlot
+    public TimeSpan? SelectedStartSlot
     {
         get { return _selectedStartSlot; }
         set
         {
             _selectedStartSlot = value;
-            PersonalBookingAdd.StartHour = _selectedStartSlot;
+            if (value != null)
+            {
+                PersonalBookingAdd.StartHour = value.Value;
+            }
+            OnPropertyChanged();
         }
     }
 
-    private TrainerRateSelectResponse _selectedTrainerRate;
+    private TrainerRateSelectResponse? _selectedTrainerRate = null;
 
-    public TrainerRateSelectResponse SelectedTrainerRate
+    public TrainerRateSelectResponse? SelectedTrainerRate
     {
         get { return _selectedTrainerRate; }
-        set { _selectedTrainerRate = value;
-            PersonalBookingAdd.TrainerRateId = value.TrainerRateId;
+        set
+        {
+            _selectedTrainerRate = value;
+            if (value != null)
+            {
+                PersonalBookingAdd.TrainerRateId = value.TrainerRateId;
+            }
+            OnPropertyChanged();
         }
     }
 
     public ICommand AddPersonalTrainingCommand { get; }
-    private ObservableCollection<TrainerInfoResponse> _personalTrainers;
+    private ObservableCollection<TrainerInfoResponse> _personalTrainers = new();
 
     public ObservableCollection<TrainerInfoResponse> PersonalTrainers
     {
@@ -61,20 +70,27 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         set { _personalTrainers = value; OnPropertyChanged(); }
     }
 
-    private TrainerInfoResponse _selectedPersonalTrainer;
+    private TrainerInfoResponse? _selectedPersonalTrainer = null;
 
-    public TrainerInfoResponse SelectedPersonalTrainer
+    public TrainerInfoResponse? SelectedPersonalTrainer
     {
         get { return _selectedPersonalTrainer; }
         set
         {
             _selectedPersonalTrainer = value;
-            PersonalBookingAdd.TrainerId = value.Id;
-            _ = LoadTrainerRatesAsync(_selectedPersonalTrainer.Id);
+            if (value != null)
+            {
+                PersonalBookingAdd.TrainerId = value.Id;
+            }
+            LoadTrainerRatesCommand.Execute(this);
+            OnPropertyChanged();
         }
     }
 
-    private ObservableCollection<TrainerRateSelectResponse> _trainerRates;
+    public ICommand LoadTrainerRatesCommand { get; }
+    public ICommand LoadPersonalTrainersCommand { get; }
+
+    private ObservableCollection<TrainerRateSelectResponse> _trainerRates = new();
     private DateTime selectedDate;
 
     public ObservableCollection<TrainerRateSelectResponse> TrainerRates
@@ -93,12 +109,14 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         SelectedDate = DateTime.UtcNow;
         PersonalTrainers = new ObservableCollection<TrainerInfoResponse>();
         AddPersonalTrainingCommand = new AsyncRelayCommand(item => AddPersonalTrainingAsync(), item => true);
+        LoadTrainerRatesCommand = new AsyncRelayCommand(item => LoadTrainerRatesAsync(), item => true);
+        LoadPersonalTrainersCommand = new AsyncRelayCommand(item => LoadPersonalTrainers(), item => true);
+        AddPersonalTrainingCommand = new AsyncRelayCommand(item => AddPersonalTrainingAsync(), item => SelectedPersonalTrainer != null && SelectedTrainerRate != null && SelectedStartSlot != null);
         TrainerRates = new ObservableCollection<TrainerRateSelectResponse>();
         SidebarView = sidebarView;
         TimeSlots = GenerateTimeSlots();
-        this._personalBookingHttpClient = personalBookingHttpClient;
+        _personalBookingHttpClient = personalBookingHttpClient;
         _trainerHttpClient = trainerHttpClient;
-        _ = LoadPersonalTrainers();
     }
 
     private async Task AddPersonalTrainingAsync()
@@ -106,7 +124,7 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         Result<PersonalBookingInfoResponse> result = await _personalBookingHttpClient.CreateAsync(PersonalBookingAdd);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.GetUserMessage()}");
+            MessageBox.Show($"{result.GetUserMessage()}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
             return;
         }
         Navigation.NavigateTo<ClientDetailsViewModel>(ClientId);
@@ -136,16 +154,20 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    private async Task LoadTrainerRatesAsync(Guid id)
+    private async Task LoadTrainerRatesAsync()
     {
-        Result<ObservableCollection<TrainerRateSelectResponse>> result = await _trainerHttpClient.GetTrainerRatesSelectAsync(id);
-        if (result.IsSuccess)
+        if (SelectedPersonalTrainer != null)
         {
-            TrainerRates = result.Value!;
+            Result<ObservableCollection<TrainerRateSelectResponse>> result = await _trainerHttpClient.GetTrainerRatesSelectAsync(SelectedPersonalTrainer.Id);
+            if (result.IsSuccess)
+            {
+                TrainerRates = result.Value!;
+            }
         }
     }
 
     public Guid ClientId { get; set; }
+
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid clientId)
@@ -154,4 +176,6 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
             PersonalBookingAdd.ClientId = clientId;
         }
     }
+
+
 }

@@ -131,9 +131,5 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 Price = 1500m
             }
             );
-
-    //    builder.Entity<ScheduledClass>()
-    //.HasIndex(item => new { item.GymClassId, item.Date })
-    //.IsUnique();
     }
 }

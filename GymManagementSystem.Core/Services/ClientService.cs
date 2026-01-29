@@ -140,7 +140,7 @@ public class ClientService : IClientService
         ClientInfoResponse? dto = await _repository.GetClientFullNameByIdAsync(id);
         if(dto == null)
         {
-            return Result<ClientInfoResponse>.Failure("Error during getting client data");
+            return Result<ClientInfoResponse>.Failure("Error during getting client data", StatusCodeEnum.NotFound);
         }
         return Result<ClientInfoResponse>.Success(dto, StatusCodeEnum.Ok);
     }
