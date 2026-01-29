@@ -69,35 +69,35 @@ public class EmploymentTerminationService : IEmploymentTerminationService
 
         if (person.Employee != null)
         {
-            var validFrom = person.Employee.ValidFrom;
+            var validFrom = person.Employee.ValidFrom.Date;
 
             int months =
                 ((DateTime.UtcNow.Year - validFrom.Year) * 12) +
                 (DateTime.UtcNow.Month - validFrom.Month);
 
-            termination.RequestedDate = DateTime.UtcNow;
+            termination.RequestedDate = DateTime.UtcNow.Date;
             if (validFrom.Day > DateTime.UtcNow.Day)
             {
                 months--;
             }
             if (months < 6)
             {
-                termination.EffectiveDate = DateTime.UtcNow.AddDays(14);
+                termination.EffectiveDate = DateTime.UtcNow.Date.AddDays(14);
             }
             else if (months < 36)
             {
-                termination.EffectiveDate = DateTime.UtcNow.AddMonths(1);
+                termination.EffectiveDate = DateTime.UtcNow.Date.AddDays(1);
             }
             else
             {
-                termination.EffectiveDate = DateTime.UtcNow.AddMonths(3);
+                termination.EffectiveDate = DateTime.UtcNow.Date.AddDays(3);
             }
         }
 
         else if (person.TrainerContract != null)
         {
             termination.RequestedDate = DateTime.UtcNow;
-            termination.EffectiveDate = DateTime.UtcNow.AddMinutes(4);
+            termination.EffectiveDate = DateTime.UtcNow.AddDays(14);
         }
 
         else

@@ -65,7 +65,8 @@ public class TrainerService : ITrainerService
         var createResult = await _userManager.CreateAsync(user, "trainer");
         if (!createResult.Succeeded)
         {
-            return Result<TrainerContractInfoResponse>.Failure($"Creating new trainer failed", StatusCodeEnum.InternalServerError);
+            string message = string.Join("\n", createResult.Errors.Select(item => item.Description));
+            return Result<TrainerContractInfoResponse>.Failure($"{message}", StatusCodeEnum.InternalServerError);
         }
 
         person.IdentityUserId = user.Id;

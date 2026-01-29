@@ -48,10 +48,13 @@
                     </TextBlock>
 
                 </StackPanel>
-
+                
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="Status "  Foreground="{DynamicResource PrimaryColor}" FontSize="20" />
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding Client.Status}" />
+                    <TextBlock VerticalAlignment="Center" Text="Contract valid from / to: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20" />
+                    <TextBlock FontSize="20" Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding Employee.Valid}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Button Content="Terminate" Command="{Binding GenerateTerminationCommand}" Visibility="{Binding Employee.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}"  />
                 </StackPanel>
             </StackPanel>
         </Grid>

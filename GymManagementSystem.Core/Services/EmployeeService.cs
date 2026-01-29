@@ -33,7 +33,7 @@ public class EmployeeService : IEmployeeService
     {
         Employee employee = request.ToEmployee();
         employee.ContractTypeEnum = ContractTypeEnum.Permanent;
-
+        employee.ValidFrom = DateTime.UtcNow.Date;
         Person? person = await _personRepo.GetPersonByIdAsync(employee.PersonId);
         if (person == null)
         {
@@ -42,15 +42,25 @@ public class EmployeeService : IEmployeeService
 
         person.IsActive = true;
 
-        User user = new User()
+        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        string? random = new string(
+            Enumerable.Range(0, 3)
+                .Select(_ => chars[Random.Shared.Next(chars.Length)])
+                .ToArray()
+        );
+
+        User user = new User
         {
-            UserName = $"{person.FirstName + person.LastName}",
+            UserName = $"{person.FirstName}{person.LastName}{random}"
+                .Replace(" ", "")
+                .ToLower()
         };
 
-        var createResult = await _userManager.CreateAsync(user, "employee");
+        IdentityResult createResult = await _userManager.CreateAsync(user, "employee");
         if (!createResult.Succeeded)
         {
-            return Result<EmployeeInfoResponse>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
+            string message = string.Join("\n", createResult.Errors.Select(item => item.Description));
+            return Result<EmployeeInfoResponse>.Failure($"{message}", StatusCodeEnum.InternalServerError);
         }
         await _userManager.AddToRoleAsync(user, "Receptionist");
 

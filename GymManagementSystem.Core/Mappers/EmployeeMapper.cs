@@ -40,16 +40,17 @@ public static class EmployeeMapper
     {
         return new EmployeeDetailsResponse()
         {
+            PersonId = employee.PersonId,
             Id = employee.Id,
             FirstName = employee.Person!.FirstName,
             LastName = employee.Person.LastName,
             PhoneNumber = employee.Person.PhoneNumber,
             Email = employee.Person.Email,
             Role = employee.Role.ToString(),
-            ValidFrom = employee.ValidFrom.ToString("dd.MM.yyyy"),
-            ValidTo = employee.ValidTo?.ToString("dd.MM.yyyy") ?? "permanent",
+            Valid = employee.ValidFrom.ToString("dd.MM.yyyy") + "-" + (employee.ValidTo?.ToString("dd.MM:yyyy") ?? "Permanent"),
             City = employee.Person.City,
-            Street = employee.Person.Street
+            Street = employee.Person.Street,
+            CanTerminate = !employee.Person.EmploymentTerminations.Any(item => item.IsActive)
         };
     }
 }

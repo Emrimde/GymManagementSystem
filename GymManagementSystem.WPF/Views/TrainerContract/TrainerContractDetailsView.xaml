@@ -79,15 +79,12 @@
                         <Button Content="Show Rates " Width="150"  Command="{Binding OpenTrainerRatesCommand}" CommandParameter="{Binding TrainerContract.Id}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Terminate" Width="150" Visibility="{Binding TrainerContract.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}" Command="{Binding GenerateTerminationCommand}" CommandParameter="{Binding TrainerContract.Id}"/>
+                        <Button Content="Terminate" Width="150" Visibility="{Binding TrainerContract.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}" Command="{Binding GenerateTerminationCommand}"/>
                     </StackPanel>
 
                 </StackPanel>
 
-
                 
-
-
 
             </Grid>
           
