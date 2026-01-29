@@ -98,15 +98,11 @@
                     <DataTemplate DataType="{x:Type clientMembershipvm:ClientMembershipAddViewModel}">
                         <clientMembershipview:ClientMembershipAddView/>
                     </DataTemplate>
-     
                     <DataTemplate DataType="{x:Type employeevm:EmployeeAddViewModel}">
                         <employeeview:EmployeeAddView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type employeevm:EmployeeDetailsViewModel}">
                         <employeeview:EmployeeDetailsView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type employeevm:EmployeeDecisionViewModel}">
-                        <employeeview:EmployeeDecisionView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type trainervm:TrainerScheduleViewModel}">
                         <trainerview:TrainerScheduleView/>
@@ -131,10 +127,6 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type classbookingvm:AddClassBookingViewModel}">
                         <classbookingview:AddClassBookingView/>
-                    </DataTemplate>
-                   
-                    <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractAddViewModel}">
-                        <trainercontractsview:TrainerContractAddView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type trainercontractsvm:TrainerContractDetailsViewModel}">
                         <trainercontractsview:TrainerContractDetailsView/>

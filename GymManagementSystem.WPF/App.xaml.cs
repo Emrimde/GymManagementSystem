@@ -69,8 +69,6 @@ public partial class App : Application
         services.AddTransient<ScheduledClassDetailsViewModel>();
         services.AddTransient<ClassBookingViewModel>();
         services.AddTransient<EmployeeAddViewModel>();
-        services.AddTransient<EmployeeDecisionViewModel>();
-        services.AddTransient<TrainerContractAddViewModel>();
         services.AddTransient<TrainerContractDetailsViewModel>();
         services.AddTransient<TrainerRateViewModel>();
         services.AddTransient<TrainerRateAddViewModel>();

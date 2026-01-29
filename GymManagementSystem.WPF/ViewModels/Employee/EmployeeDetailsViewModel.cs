@@ -38,7 +38,7 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
         if (result.IsSuccess)
         {
             EmploymentTerminationGenerateResponse employmentTerminationDetails = result.Value!;
-            await employmentTerminationDetails.GenerateEmploymentTerminationPdf();
+            employmentTerminationDetails.GenerateEmploymentTerminationPdf();
             MessageBoxResult messageResult = MessageBox.Show("Is termination signed?", "Is signed?", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (messageResult == MessageBoxResult.Yes)
             {
