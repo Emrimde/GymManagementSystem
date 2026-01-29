@@ -7,7 +7,4 @@ public class TrainerContractAddRequest
     public TrainerTypeEnum TrainerType { get; set; } // B2B / Zlecenie
     public Guid PersonId { get; set; }
     public decimal ClubCommissionPercent { get; set; }
-    //public string? CompanyName { get; set; }     // Nazwa działalności
-    //public string? TaxId { get; set; }           // NIP
-    //public string? CompanyAddress { get; set; }  // Adres firmy
 }

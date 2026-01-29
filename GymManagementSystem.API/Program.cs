@@ -8,6 +8,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -135,6 +136,24 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.Use(async (ctx, next) =>
+{
+    await next();
+
+    if (ctx.Response.StatusCode == 403)
+    {
+        ctx.Response.ContentType = "application/problem+json";
+        await ctx.Response.WriteAsJsonAsync(new ProblemDetails
+        {
+            Status = 403,
+            Title = "Forbidden",
+            Detail = "RequiredRole:Manager,Owner"
+        });
+    }
+});
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

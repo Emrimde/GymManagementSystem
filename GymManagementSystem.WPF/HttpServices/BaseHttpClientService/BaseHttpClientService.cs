@@ -1,4 +1,4 @@
-﻿ using GymManagementSystem.WPF.Result;
+﻿using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -81,7 +81,21 @@ public abstract class BaseHttpClientService
                 return Result<T>.ValidationFailure(validation);
         }
 
-        var problem =
+        // specjalne traktowanie autoryzacji
+        if ((response.StatusCode == HttpStatusCode.Forbidden ||
+        response.StatusCode == HttpStatusCode.Unauthorized)
+       && string.IsNullOrWhiteSpace(body))
+        {
+            return Result<T>.Failure(new ProblemDetails
+            {
+                Status = (int)response.StatusCode,
+                Title = response.StatusCode == HttpStatusCode.Forbidden
+                    ? "No persmission"
+                    : "Unauthorized"
+            });
+        }
+
+        var genericProblem =
             JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
             ?? new ProblemDetails
             {
@@ -89,7 +103,7 @@ public abstract class BaseHttpClientService
                 Title = "HTTP error"
             };
 
-        return Result<T>.Failure(problem);
+        return Result<T>.Failure(genericProblem);
     }
 
     private static JsonSerializerOptions JsonOptions() =>

@@ -126,7 +126,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                 Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(employeeAddRequest);
                 if (result.IsSuccess)
                 {
-                    Navigation.NavigateTo<StaffViewModel>();
+                    Navigation.NavigateTo<EmployeeDetailsViewModel>(result.Value!.EmployeeId);
                 }
                 else
                 {

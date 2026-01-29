@@ -46,6 +46,7 @@ public class EmployeeService : IEmployeeService
         {
             UserName = $"{person.FirstName + person.LastName}",
         };
+
         var createResult = await _userManager.CreateAsync(user, "employee");
         if (!createResult.Succeeded)
         {
