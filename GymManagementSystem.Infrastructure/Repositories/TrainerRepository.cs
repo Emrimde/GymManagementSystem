@@ -7,6 +7,7 @@ using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 
@@ -132,5 +133,21 @@ public class TrainerRepository : ITrainerRepository
     public void DeleteTrainer(TrainerContract trainerContract)
     {
         _dbContext.Remove(trainerContract);
+    }
+
+    public async Task<string?> GetTrainerTimeOffReasonAsync(Guid trainerTimeOffId)
+    {
+       return await _dbContext.TrainerTimeOff.Where(item => item.Id == trainerTimeOffId).Select(item => item.Reason).FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId)
+    {
+        TrainerTimeOff? trainerTimeOff = await _dbContext.TrainerTimeOff.FindAsync(trainerTimeOffId);
+        if (trainerTimeOff == null)
+        {
+            return false;
+        }
+        _dbContext.Remove(trainerTimeOff);
+        return true;
     }
 }

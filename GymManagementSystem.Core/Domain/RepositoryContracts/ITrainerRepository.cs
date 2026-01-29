@@ -18,4 +18,6 @@ public interface ITrainerRepository
     Task<TrainerContract?> GetTrainerContractAsync(Guid id,bool includeDetails);
     Task<IEnumerable<TrainerInfoResponse>> GetAllPersonalTrainersAsync();
     void DeleteTrainer(TrainerContract trainerContract);
+    Task<string?> GetTrainerTimeOffReasonAsync(Guid trainerTimeOffId);
+    Task<bool> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId);
 }

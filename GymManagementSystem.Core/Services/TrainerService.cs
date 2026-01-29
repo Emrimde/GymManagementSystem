@@ -140,6 +140,7 @@ public class TrainerService : ITrainerService
         {
             return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
+        
 
         TrainerTimeOff addedTrainerAvailability = await _trainerRepo.CreateTrainerTimeOffAsync(entity.ToTrainerTimeOff());
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
@@ -211,5 +212,26 @@ public class TrainerService : ITrainerService
     {
         IEnumerable<TrainerInfoResponse> dto = await _trainerRepo.GetAllPersonalTrainersAsync();
         return Result<IEnumerable<TrainerInfoResponse>>.Success(dto, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<TrainerTimeOffReasonResponse>> GetTimeOffReasonAsync(Guid trainerTimeOffId)
+    {
+        string? trainerTimeOffReason = await _trainerRepo.GetTrainerTimeOffReasonAsync(trainerTimeOffId);
+        TrainerTimeOffReasonResponse response = new TrainerTimeOffReasonResponse()
+        {
+            Reason = trainerTimeOffReason
+        };
+        return Result<TrainerTimeOffReasonResponse>.Success(response, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId)
+    {
+        bool isDeleted = await _trainerRepo.DeleteTrainerTimeOffAsync(trainerTimeOffId);
+        if(isDeleted == false)
+        {
+            return Result<Unit>.Failure("Unable to delete. Not found in database", StatusCodeEnum.NotFound);
+        }
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 }

@@ -15,10 +15,10 @@
     public class TrainerScheduleItem
     {
         public Guid? TimeOffId { get; set; }
+        public string? Reason { get; set; }
         public Guid? BookingId { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-
         public TrainerScheduleItemType Type { get; set; }
         public string? ClientName { get; set; } // tylko gdy booked
     }

@@ -68,43 +68,70 @@ public abstract class BaseHttpClientService
 
         if (response.IsSuccessStatusCode)
         {
-            var data = JsonSerializer.Deserialize<T>(body, JsonOptions());
+            var data = string.IsNullOrWhiteSpace(body) ? default(T) : JsonSerializer.Deserialize<T>(body, JsonOptions());
             return Result<T>.Success(data!);
         }
 
-        if (response.StatusCode == HttpStatusCode.BadRequest)
+        if (response.StatusCode == HttpStatusCode.BadRequest && !string.IsNullOrWhiteSpace(body))
         {
-            var validation =
-                JsonSerializer.Deserialize<ValidationProblemDetails>(body, JsonOptions());
-
+            var validation = JsonSerializer.Deserialize<ValidationProblemDetails>(body, JsonOptions());
             if (validation?.Errors?.Any() == true)
                 return Result<T>.ValidationFailure(validation);
         }
 
-        // specjalne traktowanie autoryzacji
-        if ((response.StatusCode == HttpStatusCode.Forbidden ||
-        response.StatusCode == HttpStatusCode.Unauthorized)
-       && string.IsNullOrWhiteSpace(body))
+        // --- specjalne: uwierzytelnianie / autoryzacja ---
+        if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+        {
+            // pusty body -> utwórz prosty ProblemDetails
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return Result<T>.Failure(new ProblemDetails
+                {
+                    Status = (int)response.StatusCode,
+                    Title = response.StatusCode == HttpStatusCode.Forbidden ? "Brak uprawnień" : "Nieautoryzowany"
+                });
+            }
+
+            // jeśli body jest, spróbuj zdeserializować i ewentualnie wyciągnąć requiredRole
+            var pd = JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
+                     ?? new ProblemDetails { Status = (int)response.StatusCode };
+
+            pd.Title ??= response.StatusCode == HttpStatusCode.Forbidden ? "Brak uprawnień" : "Nieautoryzowany";
+
+            // parse "RequiredRole:Owner,Manager" w Detail albo Extensions["requiredRole"]
+            if (!string.IsNullOrWhiteSpace(pd.Detail) && pd.Detail.Contains("RequiredRole:", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var part = pd.Detail.Split(new[] { "RequiredRole:" }, StringSplitOptions.RemoveEmptyEntries)[0].Length == 0
+                        ? pd.Detail.Split("RequiredRole:")[1]
+                        : pd.Detail.Split("RequiredRole:")[1];
+                    var roles = part.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(r => r.Trim()).ToArray();
+                    if (roles.Any()) pd.Extensions["requiredRole"] = roles;
+                }
+                catch { /* toleruj błędy parsowania */ }
+            }
+
+            return Result<T>.Failure(pd);
+        }
+
+        // jeśli body puste dla innych błędów -> generuj prosty ProblemDetails
+        if (string.IsNullOrWhiteSpace(body))
         {
             return Result<T>.Failure(new ProblemDetails
             {
                 Status = (int)response.StatusCode,
-                Title = response.StatusCode == HttpStatusCode.Forbidden
-                    ? "No persmission"
-                    : "Unauthorized"
+                Title = response.ReasonPhrase ?? "HTTP error"
             });
         }
 
-        var genericProblem =
-            JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
-            ?? new ProblemDetails
-            {
-                Status = (int)response.StatusCode,
-                Title = "HTTP error"
-            };
+        var problem = JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
+                      ?? new ProblemDetails { Status = (int)response.StatusCode, Title = "HTTP error" };
 
-        return Result<T>.Failure(genericProblem);
+        return Result<T>.Failure(problem);
     }
+
 
     private static JsonSerializerOptions JsonOptions() =>
         new() { PropertyNameCaseInsensitive = true };

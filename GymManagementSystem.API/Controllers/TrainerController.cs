@@ -33,8 +33,14 @@ public class TrainerController : BaseController
      [HttpGet("timeoffs")]
     public async Task<ActionResult<TrainerInfoResponse>> GetTrainerTimeOffs(CancellationToken cancellationToken) => HandleResult(await _trainerService.GetTrainerTimeOffs(cancellationToken));
 
+     [HttpGet("get-timeoff-reason/{trainerTimeOffId:guid}")]
+    public async Task<ActionResult<TrainerTimeOffReasonResponse>> GetTimeOffReason([FromRoute] Guid trainerTimeOffId) => HandleResult(await _trainerService.GetTimeOffReasonAsync(trainerTimeOffId));
+
     [HttpPost("trainercontract")]
     public async Task<ActionResult<TrainerContractInfoResponse>> CreateTrainerContract([FromBody] TrainerContractAddRequest entity) => HandleResult(await _trainerService.CreateTrainerContractAsync(entity));
+
+    [HttpDelete("trainer-time-off-delete/{trainerTimeOffId:guid}")]
+    public async Task<ActionResult> DeleteTrainerTimeOff([FromRoute] Guid trainerTimeOffId) => HandleResult(await _trainerService.DeleteTrainerTimeOffAsync(trainerTimeOffId));
 
     [HttpGet("trainercontracts")]
     public async Task<ActionResult<PageResult<TrainerContractInfoResponse>>> GetAllTrainerContracts( [FromQuery] int page = 1, [FromQuery] string? searchText = null, [FromQuery] int pageSize = 50) => HandlePageResult(await _trainerService.GetAllTrainerContractsAsync(page,searchText,pageSize));

@@ -1,25 +1,46 @@
 ﻿<Window x:Class="GymManagementSystem.WPF.Views.ScheduleWindows.EditingDialogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduleWindows"
-        mc:Ignorable="d"
-        Title="Edit event" Height="450" Width="800">
-    <StackPanel Margin="20" VerticalAlignment="Center" >
+        Title="Edit time off"
+        Height="420"
+        Width="380"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
 
-        <TextBlock Text="Subject:" />
-        <TextBox Text="{Binding Subject}" />
+    <StackPanel Margin="20">
 
-        <TextBlock Text="Start Time:" />
-        <TextBox Text="{Binding StartTime}" />
+        <TextBlock Text="Reason:" />
+        <TextBox Text="{Binding Reason}"
+                 Margin="0 5 0 10"
+                 Height="30"
+                 VerticalContentAlignment="Center"/>
 
-        <TextBlock Text="End Time:" />
-        <TextBox Text="{Binding EndTime}" />
+        <TextBlock Text="Date:" />
+        <DatePicker SelectedDate="{Binding SelectedDate}"
+                    Margin="0 5 0 10"/>
 
-        <Button Content="Save"
-              Width="120"
-              HorizontalAlignment="Center"
-              Command="{Binding SaveCommand}" />
+        <TextBlock Text="Start time:" />
+        <ComboBox Width="120"
+                  ItemsSource="{Binding TimeSlots}"
+                  SelectedItem="{Binding SelectedStartSlot}"
+                  Margin="0 5 0 10"/>
+
+        <TextBlock Text="End time:" />
+        <ComboBox Width="120"
+                  ItemsSource="{Binding TimeSlots}"
+                  SelectedItem="{Binding SelectedEndSlot}"
+                  Margin="0 5 0 20"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Save"
+                    Width="80"
+                    Margin="5"
+                    Command="{Binding SaveCommand}" />
+            <Button Content="Delete"
+                    Width="80"
+                    Margin="5"
+                    Command="{Binding DeleteCommand}" />
+        </StackPanel>
+
     </StackPanel>
 </Window>

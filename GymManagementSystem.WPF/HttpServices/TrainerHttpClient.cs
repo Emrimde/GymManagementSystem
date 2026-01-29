@@ -5,6 +5,7 @@ using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.WPF.Result;
+using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 
@@ -41,6 +42,10 @@ public class TrainerHttpClient : BaseHttpClientService
     public Task<Result<Unit>> DeleteAsync(Guid id)
     {
         return DeleteAsync($"{id}");
+    }
+    public Task<Result<Unit>> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId)
+    {
+        return DeleteAsync($"trainer-time-off-delete/{trainerTimeOffId}");
     }
 
     // SCHEDULE
@@ -128,5 +133,12 @@ public class TrainerHttpClient : BaseHttpClientService
         return GetAsync<ObservableCollection<TrainerContractInfoResponse>>(
             "instructors"
         );
+    }
+
+    public Task<Result<TrainerTimeOffReasonResponse>> GetReasonTimeOffAsync(Guid timeOffId)
+    {
+        return GetAsync<TrainerTimeOffReasonResponse>(
+            $"get-timeoff-reason/{timeOffId}"
+       );
     }
 }

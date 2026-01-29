@@ -66,7 +66,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         // 2. Kliknieto istniejacy event - edytuj
         await HandleEditAction(e);
     }
-
     
     //            DODAWANIE
     private async Task HandleAddAction(AppointmentEditorOpeningEventArgs e)
@@ -98,8 +97,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         return e.DateTime;
     }
 
-
-
     private async Task AddTimeOffAsync(AppointmentEditorOpeningEventArgs e)
     {
         DateTime start = ResolveStartFromEvent(e);
@@ -120,7 +117,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         }
     }
 
-
    
     //               EDYCJA
     private async Task HandleEditAction(AppointmentEditorOpeningEventArgs e)
@@ -139,7 +135,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
     private async Task EditTimeOffAsync(AppointmentEditorOpeningEventArgs e)
     {
-        EditingDialogWindowViewModel vm = new EditingDialogWindowViewModel(_trainerId);
+        EditingDialogWindowViewModel vm = new EditingDialogWindowViewModel(_trainerId, _trainerHttpClient);
         EditingDialogWindow dialog = new EditingDialogWindow { DataContext = vm };
         vm.LoadFromAppointment(e.Appointment);
 
@@ -150,7 +146,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
 
             if (vm.ShouldDelete)
             {
-                Result<Unit> deleteResult = await _trainerHttpClient.DeleteAsync(vm.TimeOffId);
+                Result<Unit> deleteResult = await _trainerHttpClient.DeleteTrainerTimeOffAsync(vm.TimeOffId);
 
                 if (!deleteResult.IsSuccess)
                 {
