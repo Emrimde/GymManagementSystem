@@ -5,5 +5,7 @@
     <SolidColorBrush x:Key="BackgoundColor" Color="#363740"/>
     <SolidColorBrush x:Key="PrimaryColor" Color="#EEEEEE"/>
     <SolidColorBrush x:Key="SecondColor" Color="#9AAD00"/>
-    
+
+
+
 </ResourceDictionary>

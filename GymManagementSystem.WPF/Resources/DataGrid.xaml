@@ -30,7 +30,7 @@
     </Style>
 
     <!-- DataGrid main style -->
-    <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
+    <!--<Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="{StaticResource BackgoundColor}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderBrush" Value="#FF688CAF"/>
@@ -42,7 +42,7 @@
 
         <Setter Property="Template">
             <Setter.Value>
-                <!-- pełny ControlTemplate DataGrid (twój oryginalny) -->
+                --><!-- pełny ControlTemplate DataGrid (twój oryginalny) --><!--
                 <ControlTemplate TargetType="{x:Type DataGrid}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
@@ -89,7 +89,7 @@
                 <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
             </MultiTrigger>
         </Style.Triggers>
-    </Style>
+    </Style>-->
 
     <!-- Column header gripper -->
     <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
@@ -146,7 +146,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
 
-    <Style TargetType="DataGridRow">
+    <!--<Style TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource BackgoundColor}"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
 
@@ -187,7 +187,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 
 </ResourceDictionary>
