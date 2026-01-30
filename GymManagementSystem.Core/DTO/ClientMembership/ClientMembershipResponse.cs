@@ -8,6 +8,4 @@ public class ClientMembershipResponse
     public bool IsActive { get; set; }
     public string StartDate { get; set; } = default!;
     public string? EndDate { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

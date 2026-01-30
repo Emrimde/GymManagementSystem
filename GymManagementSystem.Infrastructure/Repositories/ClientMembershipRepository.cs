@@ -116,9 +116,12 @@ public class ClientMembershipRepository : IClientMembershipRepository
             IsActive = item.IsActive,
             StartDate = item.StartDate.ToString("yyyy.MM.dd"),
             EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy.MM.dd") : "Permanent",
-            CreatedAt = item.StartDate,
-            DeletedAt = item.DeletedAt
         }).ToListAsync();
+    }
+
+    public async Task<IEnumerable<ClientMembership>> GetAllClientMembershipsWithActiveTermination()
+    {
+        return await _dbContext.ClientMemberships.Where(item => item.Termination != null && item.Termination.IsActive && item.IsActive).Include(item => item.Termination).Include(item => item.Client).ToListAsync();
     }
 
     public async Task<ClientMembership?> GetByIdAsync(Guid id)

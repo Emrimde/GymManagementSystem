@@ -17,4 +17,5 @@ public interface IClientMembershipRepository : IRepository<ClientMembershipRespo
     Task<List<PointResponse>> GetAllClientMembershipsOverTime();
     Task<ClientMembershipWebResponse?> GetClientMembershipByClientIdAsync(Guid clientId);
     Task<PageResult<ClientMembershipResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null);
+    Task<IEnumerable<ClientMembership>> GetAllClientMembershipsWithActiveTermination();
 }

@@ -74,7 +74,7 @@
                 </StackPanel>
                 <TextBlock Margin="0,50,0,0" HorizontalAlignment="Center" Text="Actions" Foreground="{DynamicResource PrimaryColor}" FontSize="25"/>
 
-                <Button Width="200" Content="Book classes" Command="{Binding OpenAddClassBooking}" />
+                <Button Width="200" Content="Book classes" Command="{Binding OpenAddClassBooking}" Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}" />
                 <Button Content="Singular entry" Width="200"
                         Visibility="{Binding Client.IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                         Command="{Binding RegisterVisitCommand}"/>
@@ -88,7 +88,7 @@
                 
                     <Button Width="200" Content="Memberships history" Command="{Binding OpenClientMembershipsHistory}" />
                     <Button Width="200" Content="Visits history" Command="{Binding OpenVisitsHistoryCommand}" />
-                    <Button Width="200" Content="All class bookings" Command="{Binding OpenAllClientClassBookingCommand}" />
+                <Button Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}" Width="200" Content="All class bookings" Command="{Binding OpenAllClientClassBookingCommand}" />
             </StackPanel>
         </Grid>
     </Grid>

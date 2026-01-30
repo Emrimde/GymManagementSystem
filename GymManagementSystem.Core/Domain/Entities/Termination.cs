@@ -7,5 +7,5 @@ public class Termination
     public ClientMembership? ClientMembership { get; set; }
     public string? Reason { get; set; }
     public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
-    public string? IsSigned { get; set; }
+    public bool IsActive { get; set; } = true;
 }

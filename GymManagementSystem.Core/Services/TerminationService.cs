@@ -31,17 +31,21 @@ public class TerminationService : ITerminationService
         }
         if (activeMembership.EndDate != null)
         {
+            return Result<TerminationResponse>.Failure("Error: Membership already terminated");
+        }
+        if (activeMembership.Membership?.MembershipType == MembershipTypeEnum.Annual)
+        {
             return Result<TerminationResponse>.Failure("Error: Termination cannot be created for yearly membership");
         }
-        activeMembership.IsActive = false;
-        if (activeMembership.Client != null)
-        { 
-            activeMembership.Client.IsActive = false;
-        }
-        activeMembership.EndDate = DateTime.UtcNow;
+
+        DateTime now = DateTime.UtcNow.Date;
+
+        DateTime nextMonth = new DateTime(now.Year, now.Month, 1).AddMonths(2);
+        nextMonth = DateTime.SpecifyKind(nextMonth, DateTimeKind.Utc);
+        activeMembership.EndDate = nextMonth.AddDays(-1);
         Termination termination = entity.ToTermination(activeMembership.Id);
         _terminationRepo.CreateAsync(termination);
-        await _unitOfWork.SaveChangesAsync();  
+        await _unitOfWork.SaveChangesAsync();
         return Result<TerminationResponse>.Success(termination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }
 }

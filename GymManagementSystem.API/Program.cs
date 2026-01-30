@@ -117,7 +117,12 @@ using (var scope = app.Services.CreateScope())
     recurringJobs.AddOrUpdate<GenerateNewScheduledClassesJob>(
         "generate-new-scheduled-classes",
         job => job.Run(),
-        Cron.Minutely()
+        Cron.Daily()
+    );
+    recurringJobs.AddOrUpdate<DeactivateTerminatedClientMembershipsJob>(
+        "deactivate-terminated-client-memberships",
+        job => job.Run(),
+        Cron.Hourly()
     );
 }
 

@@ -69,10 +69,52 @@ public class ClientRepository : IClientRepository
     public async Task<Client?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Clients
-    .Include(c => c.ClientMemberships)
-        .ThenInclude(cm => cm.Membership)
-    .FirstOrDefaultAsync(c => c.Id == id);
+    .Include(item => item.ClientMemberships)
+        .ThenInclude(item => item.Membership)
+    .FirstOrDefaultAsync(item => item.Id == id);
     }
+
+
+    public async Task<ClientDetailsResponse?> GetClientDetailsAsync(Guid clientId)
+    {
+        return await _dbContext.Clients
+            .Where(item => item.Id == clientId)
+            .Select(item => new ClientDetailsResponse
+            {
+                Id = item.Id,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Email = item.Email,
+                PhoneNumber = item.PhoneNumber,
+                DateOfBirth = item.DateOfBirth.ToString("dd.MM.yyyy"),
+                Street = item.StreetAddress,
+                City = item.City,
+                IsActive = item.IsActive,
+
+                ClientMembershipName = item.ClientMemberships
+                    .Where(item => item.IsActive)
+                    .Select(item => item.Membership!.Name + " " + item.Membership.MembershipType.ToString())
+                    .FirstOrDefault(),
+
+                CanTerminate = item.ClientMemberships
+                    .Any(item =>
+                        item.IsActive &&
+                        item.Termination == null
+                    ),
+
+                TotalVisits = item.Visits.Count,
+
+                LastVisitDate = item.Visits
+                    .OrderByDescending(item => item.VisitDate)
+                    .Select(item => item.VisitDate.ToString("dd.MM.yyyy"))
+                    .FirstOrDefault(),
+
+                Valid = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.StartDate.ToString("dd.MM.yyyy") + " - " + (item.EndDate.HasValue ? item.EndDate.Value : "Indefinite"))
+               .FirstOrDefault()
+            })
+            .FirstOrDefaultAsync();
+    }
+
 
     public async Task<Client?> UpdateAsync(Guid id, Client entity)
     {

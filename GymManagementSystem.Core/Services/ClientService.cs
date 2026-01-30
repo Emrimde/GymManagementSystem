@@ -128,7 +128,7 @@ public class ClientService : IClientService
             return Result<ClientDetailsResponse>.Failure("Invalid id", StatusCodeEnum.BadRequest);
         }
 
-        Client? client = await _repository.GetByIdAsync(id);
+        ClientDetailsResponse? client = await _repository.GetClientDetailsAsync(id);
 
         if (client == null)
         {
@@ -138,12 +138,7 @@ public class ClientService : IClientService
         int visitsCount = await _visitRepo.GetTotalVisitsByClientId(id);
         DateTime lastVisit = await _visitRepo.GetLastVisitDateByClientId(id);
 
-        ClientDetailsResponse clientResponse = client.ToClientDetailsResponse();
-        clientResponse.LastVisitDate = lastVisit == DateTime.MinValue ? "0 visits" : lastVisit.ToString("dd.MM.yyyy - HH:mm");
-        clientResponse.TotalVisits = visitsCount;
-
-
-        return Result<ClientDetailsResponse>.Success(clientResponse, StatusCodeEnum.Ok);
+        return Result<ClientDetailsResponse>.Success(client, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null)
