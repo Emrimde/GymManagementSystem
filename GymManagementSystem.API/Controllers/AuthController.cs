@@ -22,6 +22,9 @@ public class AuthController : BaseController
     [HttpPost("change-password")]
     public async Task<ActionResult> ChangePasswordForLoggedInUser([FromBody] ChangePasswordRequest request) => HandleResult(await _authService.ChangePasswordForLoggedInUserAsync(request));
 
+    [HttpPost("activate-client-account")]
+    public async Task<ActionResult> ActivateClientAccount([FromBody] ActivateAccountRequest request) => HandleResult(await _authService.ActivateClientAccountAsync(request));
+
     [HttpPost("reset-password")]
     public async Task<ActionResult> ResetPassword([FromBody] ForgotPasswordRequest request) => HandleResult(await _authService.ResetPasswordAsync(request));
 

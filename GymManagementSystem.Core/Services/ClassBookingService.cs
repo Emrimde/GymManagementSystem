@@ -40,12 +40,16 @@ public class ClassBookingService : IClassBookingService
                 return Result<ClassBookingInfoResponse>.Failure("Unable to book class for client because he doesn't have active membership", StatusCodeEnum.BadRequest);
             }
 
-
         }
         ScheduledClass? scheduledClass = await _scheduledClassRepository.GetByIdAsync(request.ScheduledClassId);
         if (scheduledClass == null)
         {
             return Result<ClassBookingInfoResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound);
+        }
+
+        if (scheduledClass.ClassBookings.Any(item => item.Client!.Id == request.ClientId)) 
+        {
+            return Result<ClassBookingInfoResponse>.Failure("Client booked for this classes", StatusCodeEnum.BadRequest);
         }
 
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(scheduledClass.GymClassId);

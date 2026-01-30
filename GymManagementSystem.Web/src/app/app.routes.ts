@@ -11,6 +11,7 @@ import { ForgotPassword } from './components/client-zone/forgot-password/forgot-
 import { AddPersonalBooking } from './components/personal-booking/add-personal-booking/add-personal-booking';
 import { AddClassBooking } from './components/ClassBooking/add-class-booking/add-class-booking';
 import { AboutUs } from './components/about-us/about-us';
+import { ActivateAccount } from './components/client-zone/activate-account/activate-account';
 
 export const routes: Routes = [
 {
@@ -65,6 +66,10 @@ export const routes: Routes = [
     path: 'add-personal-booking',
     component: AddPersonalBooking,
     canActivate: [authGuardGuard]
+},
+{
+    path: 'activate-account', 
+    component:ActivateAccount
 }
 
 ];

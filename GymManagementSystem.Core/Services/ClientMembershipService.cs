@@ -26,9 +26,9 @@ public class ClientMembershipService : IClientMembershipService
 
 
     private readonly IHttpContextAccessor _contextAccessor;
-   
 
-    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo,IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
+
+    public ClientMembershipService(IClientMembershipRepository clientMembershipRepository, IRepository<ContractResponse, Contract> contractRepo, IMembershipRepository membershipRepo, IClientRepository clientRepository, IMembershipPriceRepository membershipPriceRepo, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
     {
         _clientMembershipRepository = clientMembershipRepository;
         _contractRepo = contractRepo;
@@ -41,6 +41,7 @@ public class ClientMembershipService : IClientMembershipService
     public async Task<Result<ClientMembershipInfoResponse>> CreateAsync(ClientMembershipAddRequest entity)
     {
         ClientMembership clientMembership = entity.ToClientMembership();
+        Client? client = new();
         if (entity.IsFromWeb)
         {
             string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
@@ -49,10 +50,21 @@ public class ClientMembershipService : IClientMembershipService
                 return Result<ClientMembershipInfoResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
             }
             clientMembership.ClientId = clientId;
+            client = await _clientRepository.GetByIdAsync(clientId);
         }
+        else
+        {
+            client = await _clientRepository.GetByIdAsync(entity.ClientId);
+        }
+
+        if(client == null)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
+        }
+
         ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(entity.ClientId);
 
-        if(activeMembership != null)
+        if (activeMembership != null)
         {
             return Result<ClientMembershipInfoResponse>.Failure("You can't add membership for this client - client has membership", StatusCodeEnum.BadRequest);
         }
@@ -60,8 +72,9 @@ public class ClientMembershipService : IClientMembershipService
         Membership? membership = await _membershipRepo.GetByIdAsync(entity.MembershipId);
         if (membership == null)
         {
-            return Result<ClientMembershipInfoResponse>.Failure("Membership not found");
+            return Result<ClientMembershipInfoResponse>.Failure("Membership not found",StatusCodeEnum.NotFound);
         }
+
 
         if (membership.MembershipType == MembershipTypeEnum.Annual)
         {
@@ -74,6 +87,7 @@ public class ClientMembershipService : IClientMembershipService
         }
 
         _clientMembershipRepository.CreateAsync(clientMembership);
+        client.IsActive = true;
         Contract contract = new Contract()
         {
             ClientMembershipId = clientMembership.Id,
@@ -81,7 +95,7 @@ public class ClientMembershipService : IClientMembershipService
             ContractStatus = ContractStatus.Draft,
             IsActive = true
         };
-         _contractRepo.CreateAsync(contract);
+        _contractRepo.CreateAsync(contract);
         await _unitOfWork.SaveChangesAsync();
         return Result<ClientMembershipInfoResponse>.Success(clientMembership.ToClientMembershipInfoResponse(contract.Id));
     }
@@ -111,7 +125,7 @@ public class ClientMembershipService : IClientMembershipService
     public async Task<Result<ClientMembershipWebResponse?>> GetClientMembershipInfoAsync()
     {
         string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
-        if(!Guid.TryParse(claim, out var clientId))
+        if (!Guid.TryParse(claim, out var clientId))
         {
             return Result<ClientMembershipWebResponse?>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
         }
@@ -130,7 +144,7 @@ public class ClientMembershipService : IClientMembershipService
         }
 
         MembershipPrice? membershipPrice = await _membershipPriceRepo.GetActiveMembershipPriceByMembershipId(membershipId);
-        if(membershipPrice == null)
+        if (membershipPrice == null)
         {
             return Result<ClientMembershipWebPreviewResponse>.Failure("No price found", StatusCodeEnum.InternalServerError);
         }
@@ -153,7 +167,7 @@ public class ClientMembershipService : IClientMembershipService
             Email = client.Email,
             FirstName = client.FirstName,
             LastName = client.LastName,
-            MembershipName  = membershipInfo.MembershipName,
+            MembershipName = membershipInfo.MembershipName,
             Price = membershipPrice.Price.ToString(),
             PhoneNumber = client.PhoneNumber,
             Street = client.Street,
@@ -167,7 +181,7 @@ public class ClientMembershipService : IClientMembershipService
         Client? client = await _clientRepository.GetByIdAsync(clientId);
         Membership? membership = await _membershipRepo.GetByIdAsync(membershipId);
         MembershipPrice? actualPrice = await _membershipPriceRepo.GetActiveMembershipPriceByMembershipId(membershipId);
-        if(actualPrice == null)
+        if (actualPrice == null)
         {
             return Result<ClientMembershipContractPreviewResponse>.Failure("Error during loading actual price", StatusCodeEnum.InternalServerError);
         }

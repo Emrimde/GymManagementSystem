@@ -18,6 +18,8 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     Client.IsActive
         ? $"{Client.ClientMembership?.Membership?.Name} {Client.ClientMembership?.Membership?.MembershipType}"
         : "No membership";
+
+
     private readonly VisitHttpClient _visitHttpClient;
 
     public ICommand CreateNewTerminationCommand { get; }

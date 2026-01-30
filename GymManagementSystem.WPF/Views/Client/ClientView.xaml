@@ -11,14 +11,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- SIDEBAR -->
         <Border Grid.Column="0"
                 Background="#2F3038"
                 Padding="8">
             <ContentControl Content="{Binding SidebarView}"/>
         </Border>
 
-        <!-- MAIN -->
         <Grid Grid.Column="1" Margin="24">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -27,7 +25,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- HEADER -->
             <Grid Grid.Row="0" Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -130,7 +127,6 @@
                 </DataGrid>
             </materialDesign:Card>
 
-            <!-- PAGINATION -->
             <StackPanel Grid.Row="3"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"

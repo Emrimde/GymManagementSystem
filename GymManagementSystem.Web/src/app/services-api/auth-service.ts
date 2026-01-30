@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationResponse } from '../dto/AuthDto/authentication-response';
 import { ChangePasswordRequest } from '../dto/AuthDto/change-password-request';
 import { ResetPasswordRequest } from '../dto/AuthDto/reset-password-request';
+import { ActivateAccountRequest } from '../dto/AuthDto/activate-account-request';
 
 @Injectable({
   providedIn: 'root',
@@ -22,5 +23,9 @@ export class AuthService {
   
   changePassword(changePasswordRequest: ChangePasswordRequest) {
     return this.httpClient.post(`${this.base}/change-password`, changePasswordRequest)
+  }
+
+  activateAccount(changePasswordRequest: ActivateAccountRequest) {
+    return this.httpClient.post(`${this.base}/activate-client-account`, changePasswordRequest)
   }
 }

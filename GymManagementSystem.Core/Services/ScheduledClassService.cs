@@ -12,14 +12,12 @@ namespace GymManagementSystem.Core.Services;
 public class ScheduledClassService : IScheduledClassService
 {
     private readonly IScheduledClassRepository _schedulecClassRepo;
-    private readonly IClassBookingRepository _classBookingRepo;
     private readonly IMembershipRepository _memberhsipRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ScheduledClassService(IScheduledClassRepository schedulecClassRepo, IClassBookingRepository classBookingRepo, IMembershipRepository memberhsipRepository, IUnitOfWork unitOfWork)
     {
         _schedulecClassRepo = schedulecClassRepo;
-        _classBookingRepo = classBookingRepo;
         _memberhsipRepository = memberhsipRepository;
         _unitOfWork = unitOfWork;
     }
@@ -58,9 +56,9 @@ public class ScheduledClassService : IScheduledClassService
 
         IEnumerable<ScheduledClass> scheduledClasses = await _schedulecClassRepo.GetAllScheduledClassesByGymClassId(gymclassId, membership.ClassBookingDaysInAdvanceCount, true);
 
-        IEnumerable<ScheduledClass> scheduledClassesToDisplay = scheduledClasses.Where(item => !item.ClassBookings.Any(item => item.ClientId == clientId)).ToList();
+        //IEnumerable<ScheduledClass> scheduledClassesToDisplay = scheduledClasses.Where(item => !item.ClassBookings.Any(item => item.ClientId == clientId)).ToList();
 
-        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClassesToDisplay.OrderBy(item => item.Date).Select(item => item.ToScheduledClassComboBoxResponse());
+        IEnumerable<ScheduledClassComboBoxResponse> dto = scheduledClasses.OrderBy(item => item.Date).Select(item => item.ToScheduledClassComboBoxResponse());
         return Result<IEnumerable<ScheduledClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 

@@ -143,4 +143,31 @@ public class AuthService : IAuthService
 
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<Unit>> ActivateClientAccountAsync(ActivateAccountRequest request)
+    {
+        User? user = await _userManager.FindByIdAsync(request.UserId);
+        if (user == null)
+        {
+            return Result<Unit>.Failure("User not found", StatusCodeEnum.NotFound);
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Result<Unit>.Failure("Account already activated", StatusCodeEnum.BadRequest);
+        }
+
+        IdentityResult result = await _userManager.ResetPasswordAsync(user,request.Token,request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            string error = string.Join('\n', result.Errors.Select(item => item.Description));
+            return Result<Unit>.Failure(error, StatusCodeEnum.BadRequest);
+        }
+
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
+    }
 }

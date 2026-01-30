@@ -98,7 +98,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<ScheduledClass?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.ScheduledClasses.Include(item => item.ClassBookings).FirstOrDefaultAsync(item => item.Id == id);
+        return await _dbContext.ScheduledClasses.Include(item => item.ClassBookings).ThenInclude(item => item.Client).FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<IEnumerable<ScheduledClass>> GetFutureUnbookedByGymClassId(Guid gymClassId)

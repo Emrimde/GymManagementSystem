@@ -4,6 +4,7 @@ using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Client.QueryDto;
+using GymManagementSystem.Core.DTO.Email;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
@@ -13,6 +14,7 @@ using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -24,7 +26,9 @@ public class ClientService : IClientService
     private readonly IHttpContextAccessor _http;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IClientMembershipRepository _clientMembershipRepository;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository)
+    private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository,IConfiguration configuration, IEmailService emailService)
     {
         _repository = repository;
         _visitRepo = visitRepository;
@@ -32,6 +36,8 @@ public class ClientService : IClientService
         _http = http;
         _unitOfWork = unitOfWork;
         _clientMembershipRepository = clientMembershipRepository;
+        _configuration = configuration;
+        _emailService = emailService;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query)
@@ -73,19 +79,42 @@ public class ClientService : IClientService
 
         client.HasParentalConsent = age < 18 ? true : null;
         _repository.CreateAsync(client);
+        await _unitOfWork.SaveChangesAsync();
         User user = new User()
         {
-            UserName = client.FirstName + client.LastName,
+            UserName = client.Email,
             ClientId = client.Id,
             Email = client.Email,
+            EmailConfirmed = false
         };
-        var createResult = await _userManager.CreateAsync(user, "example");
+        IdentityResult createResult = await _userManager.CreateAsync(user);
         if (!createResult.Succeeded)
         {
             string error = string.Join('\n', createResult.Errors.Select(item => item.Description));
             return Result<ClientInfoResponse>.Failure($"{error}", StatusCodeEnum.InternalServerError);
         }
-        
+
+        string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        string encodedToken = Uri.EscapeDataString(token);
+
+        string link =
+            $"{_configuration["App:WebUrl"]}/activate-account" +
+            $"?userId={user.Id}&token={encodedToken}";
+
+        EmailRequest emailRequest = new EmailRequest
+        {
+            To = user.Email,
+            Subject = "Activate your account",
+            Body = $@"
+        <p>Click the link below to activate your account.</p>
+        <p>
+            <a href='{link}'>Activate account</a>
+        </p>
+        <p>If this wasn't you, ignore this message.</p>"
+        };
+
+        await _emailService.SendLink(emailRequest);
+
         await _userManager.AddToRoleAsync(user, "Client");
         ClientInfoResponse clientResponse = client.ToClientInfoResponse();
         await _unitOfWork.SaveChangesAsync();
