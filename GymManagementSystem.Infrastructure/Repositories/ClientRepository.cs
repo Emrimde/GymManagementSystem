@@ -109,7 +109,7 @@ public class ClientRepository : IClientRepository
                     .Select(item => item.VisitDate.ToString("dd.MM.yyyy"))
                     .FirstOrDefault(),
 
-                Valid = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.StartDate.ToString("dd.MM.yyyy") + " - " + (item.EndDate.HasValue ? item.EndDate.Value : "Indefinite"))
+                Valid = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.StartDate.ToString("dd.MM.yyyy") + " - " + (item.EndDate.HasValue ? item.EndDate.Value.ToString("dd.MM.yyyy") : "Indefinite"))
                .FirstOrDefault()
             })
             .FirstOrDefaultAsync();

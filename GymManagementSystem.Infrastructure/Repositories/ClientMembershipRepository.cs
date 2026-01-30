@@ -108,20 +108,29 @@ public class ClientMembershipRepository : IClientMembershipRepository
 
     public async Task<IEnumerable<ClientMembershipResponse>> GetAllClientMemberships(Guid id)
     {
-        return await _dbContext.ClientMemberships.Where(item => item.ClientId == id).Select(item => new ClientMembershipResponse
+        return await _dbContext.ClientMemberships.AsNoTracking().Where(item => item.ClientId == id).Select(item => new ClientMembershipResponse
         {
             Id = item.Id,
             Name = item.Membership!.Name,
             MembershipType = item.Membership.MembershipType.ToString(),
             IsActive = item.IsActive,
-            StartDate = item.StartDate.ToString("yyyy.MM.dd"),
-            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("yyyy.MM.dd") : "Permanent",
+            StartDate = item.StartDate.ToString("dd.MM.yyyy"),
+            EndDate = item.EndDate.HasValue ? item.EndDate.Value.ToString("dd.MM.yyyy") : "Permanent",
+            RequestedDate = item.Termination != null ? item.Termination.RequestedAt.ToString("dd.MM.yyyy") : null,
         }).ToListAsync();
     }
 
-    public async Task<IEnumerable<ClientMembership>> GetAllClientMembershipsWithActiveTermination()
+    public async Task<IEnumerable<ClientMembership>> GetMembershipsToDeactivate()
     {
-        return await _dbContext.ClientMemberships.Where(item => item.Termination != null && item.Termination.IsActive && item.IsActive).Include(item => item.Termination).Include(item => item.Client).ToListAsync();
+        return await _dbContext.ClientMemberships
+        .Where(item =>
+            item.IsActive &&
+            item.EndDate != null &&
+            item.EndDate <= DateTime.UtcNow.Date
+        )
+        .Include(item => item.Termination)
+        .Include(item => item.Client)
+        .ToListAsync();
     }
 
     public async Task<ClientMembership?> GetByIdAsync(Guid id)

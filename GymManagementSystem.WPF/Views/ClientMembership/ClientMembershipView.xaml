@@ -47,7 +47,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Start date of membership" Binding="{Binding StartDate}"/>
                         <DataGridTextColumn Header="End date of membership" Binding="{Binding EndDate}"/>
-                        <DataGridTextColumn Header="Requested at" Binding="{Binding CreatedAt}"/>
+                        <DataGridTextColumn Header="Requested date" Binding="{Binding RequestedDate}"/>
                         <DataGridTextColumn Header="Membership Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Membership Name" Binding="{Binding MembershipType}"/>
 

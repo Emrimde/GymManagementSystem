@@ -14,16 +14,24 @@ public class ClientMembershipTerminationCronService : IClientMembershipTerminati
     }
     public async Task DeactivateExpiredClientMemberships()
     {
-        IEnumerable<ClientMembership> clientMemberships = await _clientMembershipRepository.GetAllClientMembershipsWithActiveTermination();
-        foreach (ClientMembership clientMembership in clientMemberships)
+        IEnumerable<ClientMembership> memberships = await _clientMembershipRepository
+            .GetMembershipsToDeactivate();
+
+        foreach (var item in memberships)
         {
-            if (clientMembership.EndDate!.Value.Date <= DateTime.UtcNow.Date)
+            item.IsActive = false;
+
+            if (item.Termination != null)
             {
-                clientMembership.IsActive = false;
-                clientMembership.Termination!.IsActive = false;
-                clientMembership.Client!.IsActive = false;
+                item.Termination.IsActive = false;
+            }
+
+            if (item.Client != null)
+            {
+                item.Client.IsActive = false;
             }
         }
+
         await _unitOfWork.SaveChangesAsync();
     }
 }

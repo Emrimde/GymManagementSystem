@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.Client;
+﻿using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
@@ -16,7 +15,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 {
     public Guid ClientId { get; set; }
     public ICommand OpenClientMembershipDetails { get; }
-    private ClientInfoResponse _client;
+    private ClientInfoResponse _client = new();
 
     public ClientInfoResponse Client
     {
@@ -26,8 +25,9 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
 
     private readonly ClientMembershipHttpClient _httpClient;
     private readonly ClientHttpClient _clientHttpClient;
-    private ObservableCollection<ClientMembershipResponse> _clientMemberships;
+    private ObservableCollection<ClientMembershipResponse> _clientMemberships = new();
     public ICommand ReturnToClientDetailsViewCommand { get;  }
+    public ICommand LoadClientMembershipsDataCommand { get;  }
 
     public ObservableCollection<ClientMembershipResponse> ClientMemberships
     {
@@ -36,7 +36,6 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         set { _clientMemberships = value; OnPropertyChanged(); }
     }
 
-    public INavigationService _navigation;
 
     public ClientMembershipViewModel(ClientMembershipHttpClient httpClient, INavigationService navigation, SidebarViewModel sidebarView, ClientHttpClient clientHttpClient)
     {
@@ -48,6 +47,13 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         _clientHttpClient = clientHttpClient;
         OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item), item => true);
         ReturnToClientDetailsViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+        LoadClientMembershipsDataCommand = new AsyncRelayCommand(item => LoadClientMembershipsDataAsync(), item => true);
+    }
+
+    private async Task LoadClientMembershipsDataAsync()
+    {
+        await LoadClientMemberships(ClientId);
+        await LoadClientNameById(ClientId);
     }
 
     private async Task LoadClientMemberships(Guid id)
@@ -61,8 +67,6 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         if(parameter is Guid id)
         {
             ClientId = id;
-           _ = LoadClientMemberships(id);
-            _ = LoadClientNameById(id);
         }
     }
 
@@ -77,13 +81,8 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         Client = result.Value!;
     }
 
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public INavigationService Navigation { get; set; }
+
     public SidebarViewModel SidebarView { get; }
-
     
-
 }

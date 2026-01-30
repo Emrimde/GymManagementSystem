@@ -53,11 +53,16 @@
                     <TextBlock Text="Total visits: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.TotalVisits}"/>
 
-                </StackPanel><StackPanel Orientation="Horizontal">
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Last visit date: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
                     <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.LastVisitDate}"/>
 
-                </StackPanel> 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Membership valid from / to:  "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Client.Valid}" Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Active Membership: " />
                     <TextBlock Foreground="{DynamicResource PrimaryColor}" VerticalAlignment="Center" Text="{Binding ActiveMembershipName}" />

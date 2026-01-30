@@ -1,4 +1,4 @@
-﻿    using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 
@@ -45,20 +45,6 @@ public static class ClientMembershipMapper
             WasTerminated = request.Termination != null,
             TerminationReason = request.Termination?.Reason,
             TerminationDate = request.Termination?.RequestedAt.ToString("dd.MM.yyyy")
-        };
-    }
-
-    public static ClientMembershipShortResponse ToClientMembershipShortResponse(this ClientMembership request)
-    {
-        return new ClientMembershipShortResponse()
-        {
-            Id = request.Id,
-            Membership = request.Membership != null ? request.Membership.ToMembershipResponse() : null,
-            StartDate = request.StartDate,
-            EndDate = request.EndDate,
-            IsActive = request.IsActive,
-            ContractId = request.Contract != null && request.Contract.IsActive ? request.Contract.Id : Guid.Empty,
-            MembershipStatus = request.MembershipStatus
         };
     }
 

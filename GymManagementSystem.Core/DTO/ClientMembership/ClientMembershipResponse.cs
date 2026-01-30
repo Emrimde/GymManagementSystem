@@ -8,4 +8,5 @@ public class ClientMembershipResponse
     public bool IsActive { get; set; }
     public string StartDate { get; set; } = default!;
     public string? EndDate { get; set; }
+    public string? RequestedDate { get; set; }
 }
