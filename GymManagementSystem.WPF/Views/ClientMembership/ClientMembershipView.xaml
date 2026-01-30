@@ -1,79 +1,95 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.ClientMembership.ClientMembershipView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ClientMembership"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1200" Background="{DynamicResource BackgoundColor}">
+             Background="{DynamicResource BackgoundColor}">
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
+
+        <Border Grid.Column="0"
+                Background="#2F3038"
+                Padding="8">
             <ContentControl Content="{Binding SidebarView}"/>
         </Border>
-        <Grid Grid.Column="1">
+
+        <Grid Grid.Column="1" Margin="24">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="0,20,0,0">
+
+            <Grid Grid.Row="0" Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock 
-        Grid.Column="0"
-        
-        FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                    HorizontalAlignment="Center"
-        
-        VerticalAlignment="Center"
-                    Width="400" Margin="40,0,0,0">
-                    <Run Text="History - "/>
+                <TextBlock FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryColor}"
+                           VerticalAlignment="Center">
+                    <Run Text="Membership history – "/>
                     <Run Text="{Binding Client.FullName}"/>
                 </TextBlock>
 
-             
+                <Button Grid.Column="1"
+                        Content="RETURN"
+                        Height="40"
+                        Padding="24,0"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ReturnToClientDetailsViewCommand}"/>
             </Grid>
-            <Border Grid.Row="1" Background="#2B2B2B">
-                <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ClientMemberships}" x:Name="datagrid" CanUserAddRows="False"
-                  AutoGenerateColumns="false">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Start date of membership" Binding="{Binding StartDate}"/>
-                        <DataGridTextColumn Header="End date of membership" Binding="{Binding EndDate}"/>
-                        <DataGridTextColumn Header="Requested date" Binding="{Binding RequestedDate}"/>
-                        <DataGridTextColumn Header="Membership Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Membership Name" Binding="{Binding MembershipType}"/>
 
-                        <DataGridTemplateColumn Header="Details" Width="150">
+            <materialDesign:Card Grid.Row="1"
+                                 Padding="0"
+                                 Background="#2F3038"
+                                 UniformCornerRadius="10">
+
+                <DataGrid ItemsSource="{Binding ClientMemberships}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          Style="{StaticResource MaterialDesignDataGrid}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Start date"
+                                            Binding="{Binding StartDate}"/>
+
+                        <DataGridTextColumn Header="End date"
+                                            Binding="{Binding EndDate}"/>
+
+                        <DataGridTextColumn Header="Requested date"
+                                            Binding="{Binding RequestedDate}"/>
+
+                        <DataGridTextColumn Header="Membership name"
+                                            Binding="{Binding Name}"/>
+
+                        <DataGridTextColumn Header="Membership type"
+                                            Binding="{Binding MembershipType}"/>
+
+                        <DataGridTemplateColumn Header="Details" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                        <Button  
-                                    Width="40" 
-                                    Height="25" 
-                                    Background="#4CAF50" 
-                                    Foreground="White" FontSize="10"
-                                   Command="{Binding DataContext.OpenClientMembershipDetails, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding Id}"
-                                     >
-                                            <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
-                                        </Button>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            Command="{Binding DataContext.OpenClientMembershipDetails,
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding Id}">
+                                        <materialDesign:PackIcon Kind="InformationOutline"/>
+                                    </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
 
                 </DataGrid>
+            </materialDesign:Card>
 
-            </Border>
-                <Button  Grid.Row="2" Content="Return" Width="100" Height="50" Margin="10,0" Command="{Binding ReturnToClientDetailsViewCommand}"/>
-         
+            <Grid Grid.Row="2" Height="16"/>
 
         </Grid>
     </Grid>

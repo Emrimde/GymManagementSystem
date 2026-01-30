@@ -1,56 +1,122 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.Client.ClientUpdateView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Client"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800" Background="{StaticResource BackgoundColor}">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{StaticResource BackgoundColor}">
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
-            <ContentControl Content="{Binding SidebarView}"/>
-        </Border>
+
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
+
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="250"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="250"/>  
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Margin="0,70,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Edit client information" />
-            <Grid Grid.Row="1" x:Name="FormRoot">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Last name" Foreground="White"/>
-                        <TextBox Text="{Binding ClientEditFormModel.LastName, UpdateSourceTrigger=PropertyChanged , ValidatesOnNotifyDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150">
-                        </TextBox>
+
+            <TextBlock Grid.Row="0"
+                       Margin="0,24,0,32"
+                       HorizontalAlignment="Center"
+                       FontSize="28"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource PrimaryColor}"
+                       Text="Edit client information"/>
+
+            <Grid Grid.Row="1"
+                  VerticalAlignment="Center"
+                  Margin="48,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Last name"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <TextBox Height="40" FontSize="17"
+Foreground="{DynamicResource PrimaryColor}"
+                                 Text="{Binding ClientEditFormModel.LastName,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                ValidatesOnNotifyDataErrors=True}"
+                                 ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                                                   RelativeSource={RelativeSource Self}}"/>
                     </StackPanel>
 
-                    <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Phone Number" Foreground="White"/>
-                        <TextBox Text="{Binding ClientEditFormModel.PhoneNumber, UpdateSourceTrigger=PropertyChanged,  ValidatesOnNotifyDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+                    <StackPanel>
+                        <TextBlock Text="Phone number"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <TextBox Height="40" FontSize="17"
+Foreground="{DynamicResource PrimaryColor}"
+                                 Text="{Binding ClientEditFormModel.PhoneNumber,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                ValidatesOnNotifyDataErrors=True}"
+                                 ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                                                   RelativeSource={RelativeSource Self}}"/>
                     </StackPanel>
-                    <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Street" Foreground="White"/>
-                        <TextBox Text="{Binding ClientEditFormModel.Street, UpdateSourceTrigger=PropertyChanged,  ValidatesOnNotifyDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Margin="32,0,0,0">
+
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Street"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <TextBox Height="40" FontSize="17"
+Foreground="{DynamicResource PrimaryColor}"
+                                 Text="{Binding ClientEditFormModel.Street,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                ValidatesOnNotifyDataErrors=True}"
+                                 ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                                                   RelativeSource={RelativeSource Self}}"/>
                     </StackPanel>
-                    <StackPanel Width="300" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="City" Foreground="White"/>
-                        <TextBox Text="{Binding ClientEditFormModel.City, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                      RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+
+                    <StackPanel>
+                        <TextBlock Text="City"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <TextBox Height="40"  FontSize="17"
+Foreground="{DynamicResource PrimaryColor}"
+                                 Text="{Binding ClientEditFormModel.City,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                ValidatesOnNotifyDataErrors=True}"
+                                 ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                                                   RelativeSource={RelativeSource Self}}"/>
                     </StackPanel>
+
                 </StackPanel>
             </Grid>
-            <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Update client" Command="{Binding UpdateClientCommand }" />
-                <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,32,48,24">
+
+                <Button Content="Update client"
+                        Height="40"
+                        MinWidth="160"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Command="{Binding UpdateClientCommand}"/>
+
+                <Button Content="Cancel"
+                        Height="40"
+                        MinWidth="120"
+                        Margin="0,0,12,0"
+                        Command="{Binding CancelCommand}"/>
             </StackPanel>
+
         </Grid>
     </Grid>
 </UserControl>
