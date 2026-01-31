@@ -77,6 +77,16 @@ public class ClientService : IClientService
             age--;
         }
 
+        IEnumerable<ClientContactResponse> clientContactResponse = await _repository.GetClientContactsAsync();
+
+        HashSet<string> hashSet = clientContactResponse.Select(item => (item.Email + "#" + item.PhoneNumber)).ToHashSet();
+        
+        if(hashSet.Contains(client.Email + "#" + client.PhoneNumber))
+        {
+            return Result<ClientInfoResponse>.Failure("Client existing in database",StatusCodeEnum.BadRequest);
+        }  
+
+
         client.HasParentalConsent = age < 18 ? true : null;
         _repository.CreateAsync(client);
         await _unitOfWork.SaveChangesAsync();
@@ -87,6 +97,8 @@ public class ClientService : IClientService
             Email = client.Email,
             EmailConfirmed = false
         };
+
+
         IdentityResult createResult = await _userManager.CreateAsync(user);
         if (!createResult.Succeeded)
         {

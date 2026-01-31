@@ -66,6 +66,15 @@ public class ClientRepository : IClientRepository
         };
     }
 
+    public async Task<IEnumerable<ClientContactResponse>> GetClientContactsAsync()
+    {
+        return await _dbContext.Clients.AsNoTracking().Select(item => new ClientContactResponse()
+        {
+            Email = item.Email,
+            PhoneNumber = item.PhoneNumber
+        }).ToListAsync();
+    } 
+
     public async Task<Client?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Clients

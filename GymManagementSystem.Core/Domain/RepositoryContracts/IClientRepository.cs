@@ -14,4 +14,5 @@ public interface IClientRepository : IRepository<ClientResponse,Client>
     Task<IEnumerable<Client>> LookUpClientsAsync(string query, Guid? scheduledClassId = null);
     Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1, string? searchText = null);
     Task<ClientDetailsResponse?> GetClientDetailsAsync(Guid clientId);
+    Task<IEnumerable<ClientContactResponse>> GetClientContactsAsync();
 }
