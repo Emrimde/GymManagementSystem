@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.DTO.GymClass;
+﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.WPF.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -12,9 +13,10 @@ public class GymClassHtppClient : BaseHttpClientService
     {
     }
 
-    public Task<Result<ObservableCollection<GymClassResponse>>> GetGymClasses()
+    public Task<Result<ObservableCollection<GymClassResponse>>> GetGymClasses(bool? selectedStatusFilter)
     {
-        return GetAsync<ObservableCollection<GymClassResponse>>("");
+        string query = selectedStatusFilter.HasValue ? $"?isActive={selectedStatusFilter}" : "";
+        return GetAsync<ObservableCollection<GymClassResponse>>(query);
     }
 
     public Task<Result<ObservableCollection<GymClassComboBoxResponse>>> GetGymClassComboBoxResponses()
@@ -53,5 +55,15 @@ public class GymClassHtppClient : BaseHttpClientService
             "",
             gymClassUpdateRequest
         );
+    }
+
+    public Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId)
+    {
+        return DeleteAsync($"{gymClassId}");
+    }
+
+    public  Task<Result<Unit>> RestoreGymClassAsync(Guid gymClassId)
+    {
+        return PutAsync<Unit>($"restore/{gymClassId}");
     }
 }

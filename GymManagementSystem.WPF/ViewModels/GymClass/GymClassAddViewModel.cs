@@ -46,6 +46,7 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
         public INavigationService Navigation { get; }
         
         public ICommand AddGymClassCommand { get; }
+        public ICommand CancelCommand { get; }
 
         public ObservableCollection<DayItem> DaysOfWeekItems { get; }
 
@@ -62,7 +63,6 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
            
             _ = LoadTrainerContracts();
 
-            // Tworzymy listę dni
             DaysOfWeekItems = new ObservableCollection<DayItem>(
                 Enum.GetValues(typeof(DaysOfWeekFlags))
                     .Cast<DaysOfWeekFlags>()
@@ -71,6 +71,7 @@ namespace GymManagementSystem.WPF.ViewModels.GymClass
             );
 
             AddGymClassCommand = new AsyncRelayCommand(item => AddGymClassAsync(),item => !Form.HasErrors && Form.IsFormComplete && SelectedDays != DaysOfWeekFlags.None);
+            CancelCommand = new RelayCommand(item => Navigation.NavigateTo<GymClassViewModel>(),item => !Form.HasErrors && Form.IsFormComplete && SelectedDays != DaysOfWeekFlags.None);
 
             foreach (var day in DaysOfWeekItems)
             {

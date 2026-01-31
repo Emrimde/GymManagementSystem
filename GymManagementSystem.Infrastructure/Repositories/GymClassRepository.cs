@@ -19,14 +19,24 @@ public class GymClassRepository : IGymClassRepository
         _dbContext.GymClasses.Add(entity);
     }
 
-    public async Task<IEnumerable<GymClass>> GetAllAsync()
+    public async Task<IEnumerable<GymClass>> GetAllAsync(bool? isActive)
     {
-        return await _dbContext.GymClasses.ToListAsync();  
+        IQueryable<GymClass> query = _dbContext.GymClasses;
+
+        if (isActive.HasValue)
+        {
+            query = query.Where(item => item.IsActive == isActive);
+        }
+        return await query.ToListAsync();  
     }
 
     public async Task<GymClass?> GetByIdAsync(Guid id)
     {
         return await _dbContext.GymClasses.FirstOrDefaultAsync(item => item.Id == id);
+    }
+    public async Task<GymClass?> GetGymClassWithScheduledClassesAsync(Guid id)
+    {
+        return await _dbContext.GymClasses.Include(item => item.ScheduledClasses).ThenInclude(item => item.ClassBookings).FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassesForSelectAsync()

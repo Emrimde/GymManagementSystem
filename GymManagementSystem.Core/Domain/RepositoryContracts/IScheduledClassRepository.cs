@@ -13,4 +13,5 @@ public interface IScheduledClassRepository : IRepository<ScheduledClassResponse,
     Task<PageResult<ScheduledClassResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null);
     Task<IEnumerable<ScheduledClass>> GetFutureUnbookedByGymClassId(Guid gymClassId);
     Task<IEnumerable<ScheduledClass>> GetAllScheduledClasses();
+    void DeleteScheduledClassList(IEnumerable<ScheduledClass> entity);
 }

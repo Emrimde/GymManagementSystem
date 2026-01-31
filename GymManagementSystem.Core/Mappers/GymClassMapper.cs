@@ -16,7 +16,9 @@ public static class GymClassMapper
             MaxPeople = gymClass.MaxPeople,
             Days = gymClass.DaysOfWeek.ToString(),
             CreatedAt = gymClass.CreatedAt.ToString("dd.MM.yyyy"),
-            UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy")
+            UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy"),
+            IsActive = gymClass.IsActive,
+            CanActivate = !gymClass.IsActive
         };
     }
 

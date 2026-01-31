@@ -8,6 +8,9 @@
              
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
@@ -19,7 +22,8 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="7*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="6*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0,20,0,0">
@@ -44,7 +48,14 @@
         Height="30"
         HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddGymClassCommand}" />
             </Grid>
-            <Border Grid.Row="1" Background="#2B2B2B">
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <ComboBox  ItemsSource="{Binding StatusFilters}" SelectedValue="{Binding SelectedStatusFilter}" SelectedValuePath="Value"
+                           DisplayMemberPath="Label" Width="100" Foreground="{StaticResource PrimaryColor}" 
+                           />
+
+            </StackPanel>
+            <Border Grid.Row="2" Background="#2B2B2B">
                 <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding GymClasses}" x:Name="datagrid" CanUserAddRows="False"
                   AutoGenerateColumns="false">
 
@@ -67,7 +78,7 @@
 
                                     <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
 Command="{Binding DataContext.OpenScheduledClassesViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-CommandParameter="{Binding Id}">
+CommandParameter="{Binding Id}" Visibility="{Binding IsActive ,Converter={StaticResource BoolToVisibilityConverter}}" >
                                         <fa:ImageAwesome Icon="InfoCircle" Width="10" Height="25" Foreground="White"/>
                                     </Button>
 
@@ -78,11 +89,12 @@ CommandParameter="{Binding Id}">
                         </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn Header="Edit / Delete" Width="150">
+
+                        <DataGridTemplateColumn Header="Edit / Delete" Width="150" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button  
+                                        <Button Visibility="{Binding IsActive ,Converter={StaticResource BoolToVisibilityConverter}}"
                                     Width="40" 
                                     Height="25" 
                                     Background="#4CAF50" 
@@ -93,17 +105,32 @@ CommandParameter="{Binding Id}">
                                             <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
                                         </Button>
 
-                                       <Button
+                                       <Button Visibility="{Binding IsActive ,Converter={StaticResource BoolToVisibilityConverter}}"
                                      Width="40" 
                                     Height="25" FontSize="10"
                                     Background="#F44336" 
                                     Foreground="White"
-                                    Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding}" >
+                                    Command="{Binding DataContext.DeleteGymClassCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding Id}" >
                                             <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Activate" Width="150" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+
+                                    <Button  Visibility="{Binding CanActivate, Converter={StaticResource BoolToVisibilityConverter}}" Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
+Command="{Binding DataContext.ActivateGymClassCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+CommandParameter="{Binding Id}">
+                                        <fa:ImageAwesome Icon="InfoCircle" Width="10" Height="25" Foreground="White"/>
+                                    </Button>
+
+
+                                </DataTemplate>
+
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>

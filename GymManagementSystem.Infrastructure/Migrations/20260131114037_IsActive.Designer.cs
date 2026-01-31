@@ -3,6 +3,7 @@ using System;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131114037_IsActive")]
+    partial class IsActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1114,7 +1117,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.ScheduledClass", b =>
                 {
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.GymClass", "GymClass")
-                        .WithMany("ScheduledClasses")
+                        .WithMany()
                         .HasForeignKey("GymClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1259,11 +1262,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("Contract");
 
                     b.Navigation("Termination");
-                });
-
-            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.GymClass", b =>
-                {
-                    b.Navigation("ScheduledClasses");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Membership", b =>

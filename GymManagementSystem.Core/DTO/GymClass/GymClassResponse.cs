@@ -12,4 +12,6 @@ public class GymClassResponse
     public int MaxPeople { get; set; }
     public string CreatedAt { get; set; } = default!;
     public string UpdatedAt { get; set; } = default!;
+    public bool IsActive { get; set; } = default!;
+    public bool CanActivate { get; set; } = default!;
 }

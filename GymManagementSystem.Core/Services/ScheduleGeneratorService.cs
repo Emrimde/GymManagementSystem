@@ -25,7 +25,7 @@ public class ScheduleGeneratorService : IScheduleGeneratorService
         DateTime today = DateTime.UtcNow.Date;
         DateTime horizon = today.AddDays(30);
 
-        IEnumerable<GymClass> gymClasses = await _gymClassRepo.GetAllAsync();
+        IEnumerable<GymClass> gymClasses = await _gymClassRepo.GetAllAsync(true);
         IEnumerable<ScheduledClass> scheduled = await _scheduledClassRepo.GetAllScheduledClasses();
 
         Dictionary<Guid, DateTime> grouped =

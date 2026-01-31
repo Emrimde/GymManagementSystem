@@ -3,7 +3,7 @@ public class ScheduledClass
 {
     public  Guid Id { get; set; }
     public Guid GymClassId { get; set; }
-    public GymClass? GymClass { get; set; }
+    public GymClass GymClass { get; set; } = null!;
     public DateTime Date { get; set; }
     public TimeSpan StartFrom { get; set; }
     public TimeSpan StartTo { get; set; }

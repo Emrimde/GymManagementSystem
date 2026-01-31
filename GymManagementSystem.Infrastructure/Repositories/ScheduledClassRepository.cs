@@ -25,6 +25,11 @@ public class ScheduledClassRepository : IScheduledClassRepository
         throw new NotImplementedException();
     }
 
+    public void DeleteScheduledClassList(IEnumerable<ScheduledClass> entity)
+    {
+        _dbContext.ScheduledClasses.RemoveRange(entity);
+    }
+
     public async Task<PageResult<ScheduledClassResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)
     {
         IQueryable<ScheduledClass> query = _dbContext.ScheduledClasses;
@@ -91,7 +96,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
 
     public async Task<IEnumerable<ScheduledClass>> GetAllScheduledClasses()
     {
-        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass!.IsActive && item.Date >= DateTime.UtcNow).Include(item => item.GymClass);
+        IQueryable<ScheduledClass> scheduledClasses = _dbContext.ScheduledClasses.Where(item => item.GymClass.IsActive && item.Date >= DateTime.UtcNow).Include(item => item.GymClass);
 
         return await scheduledClasses.ToListAsync();
     }

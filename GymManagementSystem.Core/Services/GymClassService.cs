@@ -17,13 +17,15 @@ public class GymClassService : IGymClassService
     private readonly ITrainerRepository _trainerRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IScheduleGeneratorService _scheduleGeneratorService;
-    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo, IUnitOfWork unitOfWork, IScheduleGeneratorService scheduleGeneratorService)
+    private readonly IClassBookingRepository _classBookingRepository;
+    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo, IUnitOfWork unitOfWork, IScheduleGeneratorService scheduleGeneratorService, IClassBookingRepository classBookingRepository)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;
         _trainerRepo = trainerRepo;
         _unitOfWork = unitOfWork;
         _scheduleGeneratorService = scheduleGeneratorService;
+        _classBookingRepository = classBookingRepository;
     }
 
     public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
@@ -44,7 +46,7 @@ public class GymClassService : IGymClassService
         gymClass.Duration = new TimeSpan(0, 59, 59);
         TimeSpan endTime = gymClass.StartHour + gymClass.Duration;
 
-        List<GymClass> gymClasses = (List<GymClass>)await _gymClassRepo.GetAllAsync();
+        IEnumerable<GymClass> gymClasses = await _gymClassRepo.GetAllAsync(true);
 
         if(gymClasses.Any(item => (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 && endTime > item.StartHour && gymClass.StartHour < item.StartHour + item.Duration))
         {
@@ -78,11 +80,11 @@ public class GymClassService : IGymClassService
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
 
-    public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(bool? isActive)
     {
-        IEnumerable<GymClass> gymCLasses = await _gymClassRepo.GetAllAsync();
-
-        return Result<IEnumerable<GymClassResponse>>.Success(gymCLasses.Select(item => item.ToGymResponse()),StatusCodeEnum.Ok);
+        IEnumerable<GymClass> gymCLasses = await _gymClassRepo.GetAllAsync(isActive);
+        IEnumerable<GymClassResponse> response = gymCLasses.Select(item => item.ToGymResponse());
+        return Result<IEnumerable<GymClassResponse>>.Success(response, StatusCodeEnum.Ok);
     }
 
     public Task<Result<GymClassDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -151,5 +153,46 @@ public class GymClassService : IGymClassService
         };
 
         return Result<GymClassForEditResponse>.Success(response, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId)
+    {
+        GymClass? gymClass = await _gymClassRepo.GetGymClassWithScheduledClassesAsync(gymClassId);
+        if(gymClass == null)
+        {
+            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
+        }
+        gymClass.IsActive = false;
+        _scheduledClassRepo.DeleteScheduledClassList(gymClass.ScheduledClasses);
+        
+        foreach(ScheduledClass scheduledClass in gymClass.ScheduledClasses)
+        {
+            _classBookingRepository.DeleteClassBookingList(scheduledClass.ClassBookings);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
+    }
+
+    public async Task<Result<Unit>> RestoreGymClassAsync(Guid gymClassId)
+    {
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
+        if(gymClass == null || gymClass.IsActive == true)
+        {
+            return Result<Unit>.Failure("Gym class not found or already active", StatusCodeEnum.BadRequest);
+        }
+        TimeSpan endTime = gymClass.StartHour + gymClass.Duration;
+
+        IEnumerable<GymClass> gymClasses = await _gymClassRepo.GetAllAsync(true);
+
+        if (gymClasses.Any(item => (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 && item.Id != gymClass.Id && endTime > item.StartHour && gymClass.StartHour < item.StartHour + item.Duration))
+        {
+            return Result<Unit>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
+        }
+
+        gymClass.IsActive = true;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 }

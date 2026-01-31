@@ -14,8 +14,8 @@ public class GymClassController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GymClassResponse>>> GetAll(CancellationToken cancellationToken)
-       => HandleListedResult(await _gymClassService.GetAllAsync(cancellationToken));
+    public async Task<ActionResult<IEnumerable<GymClassResponse>>> GetAll([FromQuery] bool? isActive)
+       => HandleListedResult(await _gymClassService.GetAllAsync(isActive));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<GymClassDetailsResponse>> GetById(Guid id, [FromQuery] bool isActiveOnly, CancellationToken cancellationToken)
@@ -40,4 +40,13 @@ public class GymClassController : BaseController
     [HttpPut]
     public async Task<ActionResult<Unit>> Update(GymClassUpdateRequest gymClassUpdateRequest)
         => HandleResult(await _gymClassService.UpdateAsync(gymClassUpdateRequest));
+
+    [HttpPut("restore/{gymClassId:guid}")]
+    public async Task<ActionResult<Unit>> RestoreGymClass([FromRoute] Guid gymClassId)
+        => HandleResult(await _gymClassService.RestoreGymClassAsync(gymClassId));
+
+
+    [HttpDelete("{gymClassId:guid}")]
+    public async Task<ActionResult<Unit>> DeleteGymClass([FromRoute] Guid gymClassId)
+        => HandleResult(await _gymClassService.DeleteGymClassAsync(gymClassId));
 }
