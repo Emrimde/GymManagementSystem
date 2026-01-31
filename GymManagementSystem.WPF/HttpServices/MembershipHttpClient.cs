@@ -30,15 +30,6 @@ public class MembershipHttpClient : BaseHttpClientService
         );
     }
 
-    public Task<Result<MembershipResponse>> PostMembershipAsync(
-        MembershipAddRequest request)
-    {
-        return PostAsync<MembershipAddRequest, MembershipResponse>(
-            "",
-            request
-        );
-    }
-
     public Task<Result<Unit>> PutMembershipAsync(
         MembershipUpdateRequest request,
         Guid membershipId)

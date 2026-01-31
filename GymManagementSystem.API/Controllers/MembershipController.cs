@@ -30,10 +30,6 @@ public class MembershipController : BaseController
     public async Task<ActionResult<MembershipResponse>> GetMembershipById(Guid membershipId)
         => HandleResult(await _membershipService.GetByIdAsync(membershipId));
 
-    [HttpPost]
-    public async Task<ActionResult<MembershipResponse>> CreateMembership([FromBody] MembershipAddRequest entity)
-        => HandleResult(await _membershipService.CreateAsync(entity));
-
     [HttpPost("create-membership-feature")]
     public async Task<ActionResult> CreateMembershipFeature([FromBody] MembershipFeatureAddRequest entity)
         => HandleResult(await _membershipFeatureService.CreateMembershipFeatureAsync(entity));

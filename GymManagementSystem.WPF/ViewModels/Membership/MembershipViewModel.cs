@@ -51,7 +51,6 @@ public class MembershipViewModel : ViewModel
         Memberships = new ObservableCollection<MembershipResponse>();
         OpenMembershipDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(item), item => true);
         _ = LoadMembershipsAsync();
-        OpenAddMembershipView = new RelayCommand((item) => Navigation.NavigateTo<MembershipAddViewModel>(), item => true);
         OpenEditMembershipCommand = new RelayCommand(item => _navigation.NavigateTo<MembershipEditViewModel>(item), item => true);
     }
 

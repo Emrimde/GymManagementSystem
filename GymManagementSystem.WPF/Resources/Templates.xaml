@@ -67,13 +67,10 @@
                     <DataTemplate DataType="{x:Type clientvm:ClientDetailsViewModel}">
                         <clientview:ClientDetailsView/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type membershipvm:MembershipViewModel}">
-                        <membershipview:MembershipView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type membershipvm:MembershipAddViewModel}">
-                        <membershipview:MembershipAddView/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type membershipvm:MembershipEditViewModel}">
+    <DataTemplate DataType="{x:Type membershipvm:MembershipViewModel}">
+        <membershipview:MembershipView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type membershipvm:MembershipEditViewModel}">
                         <membershipview:MembershipEditView/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type membershipvm:MembershipDetailsViewModel}">

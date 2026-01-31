@@ -58,7 +58,7 @@
                     <StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="HomeMapMarker"
+                            <materialDesign:PackIcon Kind="HomeMapMarker" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Address"/>
@@ -71,7 +71,7 @@
                         </StackPanel>
                         
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="Email"
+                            <materialDesign:PackIcon Kind="Email" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Email"/>
@@ -80,7 +80,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="Phone"
+                            <materialDesign:PackIcon Kind="Phone" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Phone number"/>
@@ -89,7 +89,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="CakeVariant"
+                            <materialDesign:PackIcon Kind="CakeVariant" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Date of birth"/>
@@ -98,7 +98,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="Counter"
+                            <materialDesign:PackIcon Kind="Counter" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Total visits"/>
@@ -107,7 +107,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="CalendarCheck"
+                            <materialDesign:PackIcon Kind="CalendarCheck" Foreground="{StaticResource PrimaryColor}"
                                                      Style="{StaticResource HorizontalItem}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Last visit"/>
@@ -119,7 +119,7 @@
                                     Style="{StaticResource VerticalItem}"
                                     Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
                             <materialDesign:PackIcon Kind="CardAccountDetails"
-                                                     Style="{StaticResource HorizontalItem}"/>
+                                                     Style="{StaticResource HorizontalItem}" Foreground="{StaticResource PrimaryColor}"/>
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Membership valid"/>
                                 <TextBlock Text="{Binding Client.Valid}"/>

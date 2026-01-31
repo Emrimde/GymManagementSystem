@@ -53,7 +53,6 @@ public partial class App : Application
         services.AddTransient<MembershipViewModel>();
         services.AddTransient<ClientDetailsViewModel>();
         services.AddTransient<GeneralSettingsViewModel>();
-        services.AddTransient<MembershipAddViewModel>();
         services.AddTransient<MembershipEditViewModel>();
         services.AddTransient<ClientUpdateViewModel>();
         services.AddSingleton<LoginViewModel>();
