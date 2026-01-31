@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.Enum;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace GymManagementSystem.Infrastructure.DatabaseContext;
 
@@ -39,7 +38,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
         builder.Entity<GeneralGymDetail>()
             .HasData(new GeneralGymDetail
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("65893784-DA50-4C63-AE01-9704C5D5EDA3"),
                 GymName = "NextLevelGym",
                 Address = "123 Fitness St, Muscle City",
                 ContactNumber = "123456789",
@@ -100,33 +99,33 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
         builder.Entity<MembershipPrice>().HasData(
             new MembershipPrice
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("0D29E7B7-A940-4187-8A74-76BA99AF8B1F"),
                 MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
-                ValidFrom = DateTime.UtcNow,
+                ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 ValidTo = null,
                 Price = 100m
             },
             new MembershipPrice
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("1260207E-C0E3-4503-BB31-A5EF13E5CEE8"),
                 MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
-                ValidFrom = DateTime.UtcNow,
+                ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 ValidTo = null,
                 Price = 150m
             },
             new MembershipPrice
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("F23A5317-8F53-4FC2-BFBA-661728098038"),
                 MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
-                ValidFrom = DateTime.UtcNow,
+                ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 ValidTo = null,
                 Price = 1000m
             },
             new MembershipPrice
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("6707ECBD-F2C1-49EE-AE24-8CE497A4F501"),
                 MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
-                ValidFrom = DateTime.UtcNow,
+                ValidFrom = new DateTime(2026, 1, 1,0,0,0,DateTimeKind.Utc),
                 ValidTo = null,
                 Price = 1500m
             }

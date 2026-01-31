@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.MembershipPrice;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 public class MembershipPriceRepository : IMembershipPriceRepository
@@ -33,10 +34,10 @@ public class MembershipPriceRepository : IMembershipPriceRepository
         return await _dbContext.MembershipPrices.Where(item => item.MembershipId == membershipId).OrderByDescending(item => item.ValidFrom).Select(item => new MembershipPriceResponse()
         {
             LabelPrice = item.LabelPrice ?? "Regular",
-            Price = item.Price,
-            ValidFromLabel = item.ValidFrom.ToString("dd.MM.yyyy - HH:mm"),
+            Price = item.Price.ToString("0.0", CultureInfo.InvariantCulture),
+            ValidFromLabel = item.ValidFrom.ToString("dd.MM.yyyy"),
             ValidToLabel = item.ValidTo.HasValue
-                            ? item.ValidTo.Value.ToString("dd.MM.yyyy - HH:mm")
+                            ? item.ValidTo.Value.ToString("dd.MM.yyyy")
                             : "Active price"
         }).ToListAsync();
     }

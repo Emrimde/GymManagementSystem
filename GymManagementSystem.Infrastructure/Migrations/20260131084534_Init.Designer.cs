@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251217174409_MembershipPrice")]
-    partial class MembershipPrice
+    [Migration("20260131084534_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<bool?>("HasParentalConsent")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -107,9 +110,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -179,7 +179,7 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<int>("EmploymentType")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsSigned")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<decimal>("MonthlySalaryBrutto")
@@ -211,13 +211,10 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("DocumentPath")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("EffectiveDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsSigned")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<Guid>("PersonId")
@@ -238,6 +235,10 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("AboutUs")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -270,6 +271,14 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nip")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<TimeSpan>("OpenTime")
                         .HasColumnType("interval");
 
@@ -288,16 +297,19 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7f1dade8-0315-41b5-be2e-696c71205666"),
+                            Id = new Guid("65893784-da50-4c63-ae01-9704c5d5eda3"),
+                            AboutUs = "We are a place created for people who want to truly improve their health, physique, and well-being — not just “tick off” a workout. Our goal is to build a strong, capable, and mindful community where everyone, regardless of their level, feels welcome. We combine modern equipment with expert coaching to make training not only hard, but smart. We focus on quality of movement, steady progress, and safety, because long-term results matter more than quick fixes. We help our members set clear goals and achieve them step by step.\r\n\r\nWe don’t believe in shortcuts — we believe in building lasting habits and real lifestyle change. We create an environment where training becomes part of everyday life, not a burden. We believe that a strong body builds a strong mind. That’s why we support, motivate, and educate — not just count reps. Our gym is more than equipment; it’s people, atmosphere, and a shared drive to be better than yesterday.",
                             Address = "123 Fitness St, Muscle City",
                             BackgroundColor = "#363740",
                             CloseTime = new TimeSpan(0, 22, 0, 0, 0),
                             ContactNumber = "123456789",
-                            DefaultGroupClassRate = 0m,
+                            DefaultGroupClassRate = 60m,
                             DefaultRate120 = 150m,
                             DefaultRate60 = 100m,
                             DefaultRate90 = 120m,
                             GymName = "NextLevelGym",
+                            LogoUrl = "http://localhost:5105/uploads/logos/logo_d8faf809-8917-4ddd-b78e-618df23cf5c8.png",
+                            Nip = "123456789",
                             OpenTime = new TimeSpan(0, 7, 0, 0, 0),
                             PrimaryColor = "#EEEEEE",
                             SecondColor = "#9AAD00"
@@ -351,8 +363,14 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("IsVisibleOffer")
-                        .HasColumnType("boolean");
+                    b.Property<int>("ClassBookingDaysInAdvanceCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FreeFriendEntryCountPerMonth")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FreePersonalTrainingSessions")
+                        .HasColumnType("integer");
 
                     b.Property<int>("MembershipType")
                         .HasColumnType("integer");
@@ -364,6 +382,64 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Memberships");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
+                            ClassBookingDaysInAdvanceCount = 7,
+                            FreeFriendEntryCountPerMonth = 3,
+                            FreePersonalTrainingSessions = 1,
+                            MembershipType = 0,
+                            Name = "Silver Membership"
+                        },
+                        new
+                        {
+                            Id = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
+                            ClassBookingDaysInAdvanceCount = 14,
+                            FreeFriendEntryCountPerMonth = 6,
+                            FreePersonalTrainingSessions = 2,
+                            MembershipType = 0,
+                            Name = "Gold Membership"
+                        },
+                        new
+                        {
+                            Id = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
+                            ClassBookingDaysInAdvanceCount = 7,
+                            FreeFriendEntryCountPerMonth = 3,
+                            FreePersonalTrainingSessions = 1,
+                            MembershipType = 1,
+                            Name = "Silver Membership"
+                        },
+                        new
+                        {
+                            Id = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
+                            ClassBookingDaysInAdvanceCount = 14,
+                            FreeFriendEntryCountPerMonth = 6,
+                            FreePersonalTrainingSessions = 2,
+                            MembershipType = 1,
+                            Name = "Gold Membership"
+                        });
+                });
+
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FeatureDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("MembershipId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipId");
+
+                    b.ToTable("MembershipFeatures");
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipPrice", b =>
@@ -374,9 +450,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<string>("LabelPrice")
                         .HasColumnType("text");
-
-                    b.Property<Guid>("MemberhsipId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("MembershipId")
                         .HasColumnType("uuid");
@@ -395,6 +468,36 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasIndex("MembershipId");
 
                     b.ToTable("MembershipPrices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0d29e7b7-a940-4187-8a74-76ba99af8b1f"),
+                            MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
+                            Price = 100m,
+                            ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("1260207e-c0e3-4503-bb31-a5ef13e5cee8"),
+                            MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
+                            Price = 150m,
+                            ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("f23a5317-8f53-4fc2-bfba-661728098038"),
+                            MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
+                            Price = 1000m,
+                            ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            Id = new Guid("6707ecbd-f2c1-49ee-ae24-8ce497a4f501"),
+                            MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
+                            Price = 1500m,
+                            ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Person", b =>
@@ -402,6 +505,13 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -414,6 +524,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("IdentityUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -424,6 +537,13 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -517,8 +637,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<Guid>("ClientMembershipId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("IsSigned")
-                        .HasColumnType("text");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Reason")
                         .HasColumnType("text");
@@ -543,15 +663,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<decimal>("ClubCommissionPercent")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("CompanyAddress")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContractDocumentPath")
-                        .HasColumnType("text");
-
                     b.Property<int>("ContractType")
                         .HasColumnType("integer");
 
@@ -560,12 +671,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("SignedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("TaxId")
-                        .HasColumnType("text");
 
                     b.Property<Guid?>("TrainerProfileId")
                         .HasColumnType("uuid");
@@ -717,6 +822,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("ClientId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -762,6 +870,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -958,6 +1069,17 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("Trainer");
                 });
 
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipFeature", b =>
+                {
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Membership", "Membership")
+                        .WithMany("MembershipFeatures")
+                        .HasForeignKey("MembershipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Membership");
+                });
+
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.MembershipPrice", b =>
                 {
                     b.HasOne("GymManagementSystem.Core.Domain.Entities.Membership", "Membership")
@@ -1064,6 +1186,13 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("GymManagementSystem.Core.Domain.Identity.User", b =>
+                {
+                    b.HasOne("GymManagementSystem.Core.Domain.Entities.Client", null)
+                        .WithOne("User")
+                        .HasForeignKey("GymManagementSystem.Core.Domain.Identity.User", "ClientId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("GymManagementSystem.Core.Domain.Identity.Role", null)
@@ -1123,6 +1252,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Navigation("PersonalBookings");
 
+                    b.Navigation("User");
+
                     b.Navigation("Visits");
                 });
 
@@ -1135,6 +1266,8 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagementSystem.Core.Domain.Entities.Membership", b =>
                 {
+                    b.Navigation("MembershipFeatures");
+
                     b.Navigation("MembershipPrices");
                 });
 

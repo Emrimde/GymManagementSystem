@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.Membership;
+using System.Globalization;
 
 namespace GymManagementSystem.Core.Mappers;
 
@@ -12,7 +13,7 @@ public static class MembershipMapper
             Id = membership.Id,
             Name = membership.Name,
             MembershipType = membership.MembershipType,
-            Price = membership.MembershipPrices != null ? membership.MembershipPrices.Where(item => item.ValidTo == null).Select(item => item.Price).FirstOrDefault() : 0m,
+            Price = membership.MembershipPrices?.Where(item => item.ValidTo == null).Select(item => item.Price.ToString("0.0",CultureInfo.InvariantCulture)).FirstOrDefault() ?? "0.0" ,
             ClassBookingDaysInAdvanceCount = membership.ClassBookingDaysInAdvanceCount,
             FreeFriendEntryCountPerMonth = membership.FreeFriendEntryCountPerMonth,
             FreePersonalTrainingSessions = membership.FreePersonalTrainingSessions

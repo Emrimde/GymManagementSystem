@@ -3,7 +3,6 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Infrastructure.DatabaseContext;
-using GymManagementSystem.Infrastructure.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Infrastructure.Repositories;

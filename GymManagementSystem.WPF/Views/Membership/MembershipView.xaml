@@ -45,7 +45,7 @@ AutoGenerateColumns="false">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
                         <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
-                        <DataGridTextColumn Header="MembershipType" Binding="{Binding MembershipType}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding MembershipType}"/>
 
                         <DataGridTemplateColumn Header="Edit" Width="150">
                             <DataGridTemplateColumn.CellTemplate>

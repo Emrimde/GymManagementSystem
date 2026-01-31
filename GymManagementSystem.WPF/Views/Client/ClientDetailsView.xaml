@@ -46,7 +46,6 @@
                            FontWeight="Bold"
                            Margin="0,0,0,24">
                     <Run Text="{Binding Client.FirstName}"/>
-                    <Run Text=" "/>
                     <Run Text="{Binding Client.LastName}"/>
                     <Run Text=" — details"/>
                 </TextBlock>
@@ -68,6 +67,15 @@
                                     <Run Text=", "/>
                                     <Run Text="{Binding Client.City}"/>
                                 </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
+                            <materialDesign:PackIcon Kind="Email"
+                                                     Style="{StaticResource HorizontalItem}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="Email"/>
+                                <TextBlock Text="{Binding Client.Email}"/>
                             </StackPanel>
                         </StackPanel>
 

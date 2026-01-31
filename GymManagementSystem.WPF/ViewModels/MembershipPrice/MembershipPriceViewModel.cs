@@ -14,9 +14,8 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
 {
     private readonly MembershipPriceHttpClient _membershipPriceHttpClient;
     public SidebarViewModel SidebarView { get; }
-    private INavigationService _navigation;
 
-    private ObservableCollection<MembershipPriceResponse> _membershipPrices;
+    private ObservableCollection<MembershipPriceResponse> _membershipPrices = new();
 
     public MembershipPriceViewModel(MembershipPriceHttpClient membershipPriceHttpClient, SidebarViewModel sidebarView, INavigationService navigation)
     {
@@ -26,6 +25,7 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
         MembershipPrices = new ObservableCollection<MembershipPriceResponse>();
         ReturnCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(MembershipId), item => true);
         OpenAddMembershipPriceViewCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipPriceAddViewModel>(MembershipId), item => true);
+        LoadMembershipPricesCommand = new AsyncRelayCommand(item => LoadMembershipPrices(), item => true);
     }
 
     public ObservableCollection<MembershipPriceResponse> MembershipPrices
@@ -37,25 +37,22 @@ public class MembershipPriceViewModel : ViewModel, IParameterReceiver
 
     public ICommand ReturnCommand { get; }
     public ICommand OpenAddMembershipPriceViewCommand { get; }
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public ICommand LoadMembershipPricesCommand { get; }
+    public INavigationService Navigation { get; set; }
+    
 
     public void ReceiveParameter(object parameter)
     {
         if(parameter is Guid membershipId)
         {
             MembershipId = membershipId;
-            _ = LoadMembershipPrices(membershipId);
         }
     }
 
-    private async Task LoadMembershipPrices(Guid id)
+    private async Task LoadMembershipPrices()
     {
 
-       Result<ObservableCollection<MembershipPriceResponse>> result = await _membershipPriceHttpClient.GetAllMembershipsPricesAsync(id);
+       Result<ObservableCollection<MembershipPriceResponse>> result = await _membershipPriceHttpClient.GetAllMembershipsPricesAsync(MembershipId);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
