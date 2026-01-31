@@ -13,6 +13,7 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
     public INavigationService Navigation{ get; set;}
     public ICommand CancelScheduledClassCommand { get; }
     public ICommand LoadScheduledClassCommand { get; }
+    public ICommand ReturnCommand { get; }
 
     private ScheduledClassDetailsResponse _scheduledClass = new();
 
@@ -33,6 +34,8 @@ public class ScheduledClassDetailsViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         CancelScheduledClassCommand = new AsyncRelayCommand(item => CancelScheduledClassAsync(), item => true);
         LoadScheduledClassCommand = new AsyncRelayCommand(item => LoadScheduledClass(), item => true);
+        ReturnCommand = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassViewModel>(ScheduledClass.GymClassId), item => true);
+
         
     }
 

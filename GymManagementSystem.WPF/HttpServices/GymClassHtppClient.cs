@@ -1,5 +1,4 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
-using GymManagementSystem.Core.DTO.GymClass;
+﻿using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.WPF.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;

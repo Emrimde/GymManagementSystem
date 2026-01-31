@@ -122,7 +122,7 @@ using (var scope = app.Services.CreateScope())
     recurringJobs.AddOrUpdate<DeactivateTerminatedClientMembershipsJob>(
         "deactivate-terminated-client-memberships",
         job => job.Run(),
-        Cron.Hourly()
+        Cron.Daily()
     );
 }
 

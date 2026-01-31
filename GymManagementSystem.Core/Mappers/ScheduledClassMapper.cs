@@ -43,7 +43,7 @@ public static class ScheduledClassMapper
             IsCancelled = scheduledClass.IsCancelled,
             MaxPeople = scheduledClass.MaxPeople,
             StartFrom = scheduledClass.StartFrom,
-            StartTo = scheduledClass.StartTo,
+            StartTo = scheduledClass.StartFrom + TimeSpan.FromHours(1),
         };
     }
 }

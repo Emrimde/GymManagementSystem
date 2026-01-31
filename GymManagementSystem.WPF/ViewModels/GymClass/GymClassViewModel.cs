@@ -37,7 +37,7 @@ public class GymClassViewModel : ViewModel
         },
     };
 
-    private bool? _selectedStatusFilter = true;
+    private bool? _selectedStatusFilter;
     public bool? SelectedStatusFilter
     {
         get => _selectedStatusFilter;
@@ -81,7 +81,10 @@ public class GymClassViewModel : ViewModel
                 {
                     MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                Navigation.NavigateTo<GymClassViewModel>();
+                else
+                {
+                    LoadGymClassesCommand.Execute(null);
+                }
             }
         }
     }
@@ -98,7 +101,10 @@ public class GymClassViewModel : ViewModel
                 {
                     MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                Navigation.NavigateTo<GymClassViewModel>();
+                else
+                {
+                    LoadGymClassesCommand.Execute(null);
+                }
             }
         }
     }

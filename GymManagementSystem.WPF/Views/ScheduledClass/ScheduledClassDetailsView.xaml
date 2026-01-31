@@ -1,66 +1,139 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.ScheduledClass.ScheduledClassDetailsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduledClass"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{DynamicResource BackgoundColor}">
+
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ContentControl Grid.Column="0" Content="{Binding SidebarView}"/>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition/>
-                <RowDefinition Height="100"/>
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}">
-            <Run Text="Scheduled class:"/>
-            <Run Text="{Binding ScheduledClass.Date}"/>
-            </TextBlock>
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Duration: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-                        <Run Text="{Binding ScheduledClass.StartFrom}"/>
-                        <Run Text="-"/>
-                        <Run Text="{Binding ScheduledClass.StartTo}"/>
-                    </TextBlock>
-                    
-                    
-                </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Occupied seats: "/>
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}">
-                        <Run Text="{Binding ScheduledClass.AttendeesCount}"  />
-                        <Run Text="/"  />
-                        <Run Text="{Binding ScheduledClass.MaxPeople}"  />
-                    </TextBlock>
-                    
+
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
+
+        <ScrollViewer Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="32">
+
+                <TextBlock FontSize="28"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource PrimaryColor}"
+                           Margin="0,0,0,24">
+                    <Run Text="Scheduled class — "/>
+                    <Run Text="{Binding ScheduledClass.Date}"/>
+                </TextBlock>
+
+                <materialDesign:Card Padding="24"
+                                     UniformCornerRadius="16"
+                                     materialDesign:ElevationAssist.Elevation="Dp4">
+
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="ClockOutline"
+                                                     Foreground="{StaticResource PrimaryColor}"
+                                                     Margin="0,0,12,0"/>
+                            <StackPanel>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="Duration"/>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}">
+                                    <Run Text="{Binding ScheduledClass.StartFrom}"/>
+                                    <Run Text=" – "/>
+                                    <Run Text="{Binding ScheduledClass.StartTo}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="AccountGroupOutline"
+                                                     Foreground="{StaticResource PrimaryColor}"
+                                                     Margin="0,0,12,0"/>
+                            <StackPanel>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="Occupied seats"/>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}">
+                                    <Run Text="{Binding ScheduledClass.AttendeesCount}"/>
+                                    <Run Text=" / "/>
+                                    <Run Text="{Binding ScheduledClass.MaxPeople}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="InformationOutline"
+                                                     Foreground="{StaticResource PrimaryColor}"
+                                                     Margin="0,0,12,0"/>
+                            <StackPanel>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="Status"/>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="{Binding ScheduledClass.IsCancelled}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="Update"
+                                                     Foreground="{StaticResource PrimaryColor}"
+                                                     Margin="0,0,12,0"/>
+                            <StackPanel>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="Updated at"/>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="{Binding ScheduledClass.UpdatedAt}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CalendarPlus"
+                                                     Foreground="{StaticResource PrimaryColor}"
+                                                     Margin="0,0,12,0"/>
+                            <StackPanel>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="Created at"/>
+                                <TextBlock FontSize="15"
+                                           Foreground="{StaticResource PrimaryColor}"
+                                           Text="{Binding ScheduledClass.CreatedAt}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Separator Margin="0,24"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+
+                            <Button Content="Cancel scheduled class"
+                                    Height="40"
+                                    MinWidth="220"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding CancelScheduledClassCommand}" Margin="0,0,10,0"/>
+                            
+                            <Button Content="Return"
+                                    Height="40"
+                                    MinWidth="220"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding ReturnCommand}"/>
+                        </StackPanel>
+
                     </StackPanel>
-                    <StackPanel  Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Status: "/>
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.IsCancelled}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Updated At: "/>
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.UpdatedAt}"/>
-                    </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="Created at: "/>
-                    <TextBlock Foreground="{DynamicResource PrimaryColor}" Text="{Binding ScheduledClass.CreatedAt}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                    <Button Content="Cancel Schedule class" Command="{Binding CancelScheduledClassCommand}"/>
-                </StackPanel>
+                </materialDesign:Card>
+
             </StackPanel>
-        </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

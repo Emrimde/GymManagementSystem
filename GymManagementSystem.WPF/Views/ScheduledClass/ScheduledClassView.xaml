@@ -1,78 +1,90 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.ScheduledClass.ScheduledClassView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ScheduledClass"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{DynamicResource BackgoundColor}">
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
-            <ContentControl Content="{Binding SidebarView}"/>
-        </Border>
-        <Grid Grid.Column="1">
+
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
+
+        <Grid Grid.Column="1" Margin="24">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="0,20,0,0">
+
+            <Grid Grid.Row="0" Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    
-                <TextBlock 
-        Grid.Column="0"
-        Text="Scheduled classes" 
-        FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                    HorizontalAlignment="left"
-        
-        VerticalAlignment="Center"
-                    Width="300" Margin="40,0,0,0"/>
-                    <Button Width="Auto" Height="30" Command="{Binding GenerateScheduledClass}">Generate new </Button>
-                </StackPanel>
+
+                <TextBlock Text="Scheduled classes"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryColor}"
+                           VerticalAlignment="Center"/>
+
+                <Button Grid.Column="1"
+                        Content="Generate new"
+                        Height="40"
+                        Padding="24,0"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding GenerateScheduledClass}"/>
             </Grid>
 
-            <Border Grid.Row="2" Background="#2B2B2B">
-                <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ScheduledClasses}" x:Name="datagrid" CanUserAddRows="False"
-                  AutoGenerateColumns="false">
+            <materialDesign:Card Grid.Row="1"
+                                 Padding="0"
+                                 Background="#2F3038"
+                                 UniformCornerRadius="10">
 
-
+                <DataGrid ItemsSource="{Binding ScheduledClasses}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          Style="{StaticResource MaterialDesignDataGrid}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
-                        <DataGridTextColumn Header="Start from" Binding="{Binding StartFrom}"/>
-                        <DataGridTextColumn Header="End time" Binding="{Binding StartTo}"/>
-                        <DataGridTextColumn Header="Max People" Binding="{Binding MaxPeople}"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding IsActive}"/>
+                        <DataGridTextColumn Header="Name"
+                                            Binding="{Binding Name}"/>
 
-                        <DataGridTemplateColumn Header="Details" Width="150">
+                        <DataGridTextColumn Header="Date"
+                                            Binding="{Binding Date}"/>
+
+                        <DataGridTextColumn Header="Start from"
+                                            Binding="{Binding StartFrom}"/>
+
+                        <DataGridTextColumn Header="End time"
+                                            Binding="{Binding StartTo}"/>
+
+                        <DataGridTextColumn Header="Max people"
+                                            Binding="{Binding MaxPeople}"/>
+
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding IsActive}"/>
+
+                        <DataGridTemplateColumn Header="Details" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Width="40" Height="25" Background="#4CAF50" Foreground="White" FontSize="10"
-                                        Command="{Binding DataContext.OpenScheduledClassDetails, RelativeSource={RelativeSource      AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding Id}">
-                                        <fa:ImageAwesome Icon="InfoCircle" Width="10" Height="25" Foreground="White"/>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            Command="{Binding DataContext.OpenScheduledClassDetails,
+                                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding Id}">
+                                        <materialDesign:PackIcon Kind="InformationOutline"/>
                                     </Button>
                                 </DataTemplate>
-
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
-
                 </DataGrid>
+            </materialDesign:Card>
 
-            </Border>
-        
         </Grid>
     </Grid>
 </UserControl>
