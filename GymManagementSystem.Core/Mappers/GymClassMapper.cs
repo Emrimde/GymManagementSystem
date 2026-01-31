@@ -15,8 +15,8 @@ public static class GymClassMapper
             EndTime = (gymClass.StartHour + TimeSpan.FromMinutes(60)).ToString(@"hh\:mm"),
             MaxPeople = gymClass.MaxPeople,
             Days = gymClass.DaysOfWeek.ToString(),
-            CreatedAt = gymClass.CreatedAt.ToString("dd.MM.yyyy"),
-            UpdatedAt = gymClass.UpdatedAt.ToString("dd.MM.yyyy"),
+            CreatedAt = gymClass.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            UpdatedAt = gymClass.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
             IsActive = gymClass.IsActive,
             CanActivate = !gymClass.IsActive
         };

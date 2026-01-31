@@ -41,6 +41,7 @@ public static class TrainerContractMapper
     }
     public static TrainerContractDetailsResponse ToTrainerContractDetailsResponse(this TrainerContract trainerContract)
     {
+        
         return new TrainerContractDetailsResponse()
         {
             ContractType = "Contract of mandate",
@@ -51,7 +52,8 @@ public static class TrainerContractMapper
             ClubCommissionPercent = trainerContract.ClubCommissionPercent.ToString() + "%",
             Id = trainerContract.Id,
             TrainerType = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer ? "Personal trainer" : "Group instructor",
-            CanShowBooking = trainerContract.TrainerType == TrainerTypeEnum.PersonalTrainer && (trainerContract.Person?.EmploymentTerminations.Any(item => item.EffectiveDate.Date >= DateTime.UtcNow.Date) ?? true),
+            
+            CanShowBooking = (trainerContract.Person!.EmploymentTerminations.Count == 0 || trainerContract.Person.EmploymentTerminations.Any(item => item.EffectiveDate.Date > DateTime.UtcNow.Date)),
             Valid = trainerContract.ValidFrom.ToString("dd.MM.yyyy") + "-" + (trainerContract.ValidTo?.ToString("dd.MM:yyyy") ?? "Permanent"),
             PersonId = trainerContract.PersonId,
             CanTerminate = !(trainerContract.Person?
