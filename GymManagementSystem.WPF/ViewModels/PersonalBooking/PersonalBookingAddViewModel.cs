@@ -89,6 +89,7 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
 
     public ICommand LoadTrainerRatesCommand { get; }
     public ICommand LoadPersonalTrainersCommand { get; }
+    public ICommand CancelCommand { get; }
 
     private ObservableCollection<TrainerRateSelectResponse> _trainerRates = new();
     private DateTime selectedDate;
@@ -105,18 +106,22 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
     public PersonalBookingAddViewModel(INavigationService navigation, SidebarViewModel sidebarView, PersonalBookingHttpClient personalBookingHttpClient, TrainerHttpClient trainerHttpClient)
     {
         Navigation = navigation;
-        PersonalBookingAdd = new PersonalBookingAddRequest();
-        SelectedDate = DateTime.UtcNow;
-        PersonalTrainers = new ObservableCollection<TrainerInfoResponse>();
-        AddPersonalTrainingCommand = new AsyncRelayCommand(item => AddPersonalTrainingAsync(), item => true);
-        LoadTrainerRatesCommand = new AsyncRelayCommand(item => LoadTrainerRatesAsync(), item => true);
-        LoadPersonalTrainersCommand = new AsyncRelayCommand(item => LoadPersonalTrainers(), item => true);
-        AddPersonalTrainingCommand = new AsyncRelayCommand(item => AddPersonalTrainingAsync(), item => SelectedPersonalTrainer != null && SelectedTrainerRate != null && SelectedStartSlot != null);
-        TrainerRates = new ObservableCollection<TrainerRateSelectResponse>();
         SidebarView = sidebarView;
-        TimeSlots = GenerateTimeSlots();
         _personalBookingHttpClient = personalBookingHttpClient;
         _trainerHttpClient = trainerHttpClient;
+
+        PersonalBookingAdd = new PersonalBookingAddRequest(); // OK tylko TU
+        SelectedDate = DateTime.UtcNow;
+        TimeSlots = GenerateTimeSlots();
+
+        LoadTrainerRatesCommand = new AsyncRelayCommand(_ => LoadTrainerRatesAsync(), item=> true);
+        CancelCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+        LoadPersonalTrainersCommand = new AsyncRelayCommand(_ => LoadPersonalTrainers());
+        AddPersonalTrainingCommand = new AsyncRelayCommand(
+            item => AddPersonalTrainingAsync(),
+            item => SelectedPersonalTrainer != null
+              && SelectedTrainerRate != null
+              && SelectedStartSlot != null);
     }
 
     private async Task AddPersonalTrainingAsync()
@@ -176,6 +181,4 @@ public class PersonalBookingAddViewModel : ViewModel, IParameterReceiver
             PersonalBookingAdd.ClientId = clientId;
         }
     }
-
-
 }

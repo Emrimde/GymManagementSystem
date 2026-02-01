@@ -1,4 +1,5 @@
-﻿using GymManagementSystem.Core.Domain.Entities;
+﻿using GymManagementSystem.Core.Domain;
+using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.DTO.TrainerRate;
@@ -8,6 +9,7 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -16,13 +18,15 @@ public class PersonalBookingService : IPersonalBookingService
     private readonly IPersonalBookingRepository _personalBookingRepo;
     private readonly ITrainerRepository _trainerRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IHttpContextAccessor _contextAccessor;
-    public PersonalBookingService(IPersonalBookingRepository personalBookingRepo, ITrainerRepository trainerRepo, ITrainerRateRepository trainerRateRepo, IHttpContextAccessor contextAccessor)
+    public PersonalBookingService(IPersonalBookingRepository personalBookingRepo, ITrainerRepository trainerRepo, ITrainerRateRepository trainerRateRepo, IHttpContextAccessor contextAccessor, IUnitOfWork unitOfWork)
     {
         _personalBookingRepo = personalBookingRepo;
         _trainerRepo = trainerRepo;
         _trainerRateRepo = trainerRateRepo;
         _contextAccessor = contextAccessor;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity)
     {
@@ -31,11 +35,7 @@ public class PersonalBookingService : IPersonalBookingService
         {
             return Result<PersonalBookingInfoResponse>.Failure("Cannot find trainer rate", StatusCodeEnum.NotFound);
         }
-        // to fluent walidacja
-        //if (entity.StartDay == DateTime.MinValue)
-        //{
-        //    return Result<PersonalBookingInfoResponse>.Failure("No date selected", StatusCodeEnum.BadRequest);
-        //}
+
         DateTime localStart = entity.StartDay.Date + entity.StartHour;
 
         DateTime start = DateTime.SpecifyKind(localStart, DateTimeKind.Local)
@@ -54,7 +54,7 @@ public class PersonalBookingService : IPersonalBookingService
         {
             return Result<PersonalBookingInfoResponse>.Failure("Personal trainer not found", StatusCodeEnum.NotFound);
         }
-        if (trainerContract.ValidTo.HasValue )
+        if (trainerContract.ValidTo.HasValue)
         {
             if (trainerContract.ValidTo.Value.Date <= DateTime.UtcNow.Date || entity.StartDay.Date >= trainerContract.ValidTo.Value.Date)
             {
@@ -71,6 +71,7 @@ public class PersonalBookingService : IPersonalBookingService
         personalBooking.Start = start;
         personalBooking.End = end;
         personalBooking.Price = trainerRate.RatePerSessions;
+        personalBooking.TrainerRateId = trainerRate.Id;
 
         if (entity.IsClientReservation)
         {
@@ -87,7 +88,8 @@ public class PersonalBookingService : IPersonalBookingService
             personalBooking.ClientId = entity.ClientId;
         }
 
-        PersonalBooking createdPersonalBooking = await _personalBookingRepo.AddAsync(personalBooking);
+        _personalBookingRepo.AddPersonalBooking(personalBooking);
+        await _unitOfWork.SaveChangesAsync();
         return Result<PersonalBookingInfoResponse>.Success(personalBooking.ToPersonalBookingInfoResponse(), StatusCodeEnum.Ok);
     }
 
@@ -101,6 +103,33 @@ public class PersonalBookingService : IPersonalBookingService
         return Result<bool>.Success(isDeleted, StatusCodeEnum.Ok);
     }
 
+    public async Task<Result<Unit>> DeletePersonalBookingAsync(Guid personalBookingId)
+    {
+        PersonalBooking? personalBooking = await _personalBookingRepo.GetPersonalBookingAsync(personalBookingId);
+        if (personalBooking == null)
+        {
+            return Result<Unit>.Failure("Personal booking not found", StatusCodeEnum.NotFound);
+        }
+        _personalBookingRepo.DeletePersonalBooking(personalBooking);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<PersonalBookingResponse>>> GetAllClientPersonalBookings(Guid clientId)
+    {
+        IEnumerable<PersonalBookingResponse> response = await _personalBookingRepo.GetPersonalBookingsByClientId(clientId).Select(item => new PersonalBookingResponse
+        {
+            PersonalBookingId = item.Id,
+            TrainerFullName = item.TrainerContract != null ? item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName : "",
+            Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
+            StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}",
+            BookingStatus = item.Status.ToString(),
+            Price = item.Price.ToString(),
+        }).ToListAsync();
+
+        return Result<IEnumerable<PersonalBookingResponse>>.Success(response, StatusCodeEnum.Ok);
+    }
+
     public async Task<Result<IEnumerable<PersonalBookingWebResponse>>> GetAllPersonalBookingsByClientIdAsync()
     {
         string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
@@ -109,7 +138,14 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<IEnumerable<PersonalBookingWebResponse>>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
         }
 
-        IEnumerable<PersonalBookingWebResponse> personalBookings = await _personalBookingRepo.GetAllPersonalBookingsByClientIdAsync(clientId);
+        IEnumerable<PersonalBookingWebResponse> personalBookings = await _personalBookingRepo.GetPersonalBookingsByClientId(clientId).Where(item => item.ClientId == clientId)
+            .Select(item => new PersonalBookingWebResponse
+            {
+                TrainerFullName = item.TrainerContract != null ? item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName : "",
+                Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
+                StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}"
+            })
+            .ToListAsync(); ;
 
         return Result<IEnumerable<PersonalBookingWebResponse>>.Success(personalBookings, StatusCodeEnum.Unauthorized);
     }
@@ -122,6 +158,23 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<PersonalBookingInfoResponse>.Failure("Personal booking not found", StatusCodeEnum.NotFound);
         }
         return Result<PersonalBookingInfoResponse>.Success(personal.ToPersonalBookingInfoResponse(), StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<PersonalBookingForEditResponse>> GetPersonalBookingForEditAsync(Guid personalBookingId)
+    {
+        PersonalBookingForEditResponse? personalBooking = await _personalBookingRepo.GetPersonalBookingg(personalBookingId).Select(item => new PersonalBookingForEditResponse()
+        {
+            ClientId = personalBookingId,
+            Start = item.Start,
+            TrainerId = item.TrainerContractId,
+            TrainerRateId = item.TrainerRateId.HasValue ? item.TrainerRateId.Value : Guid.Empty,
+        }).FirstOrDefaultAsync();
+
+        if(personalBooking == null)
+        {
+            return Result<PersonalBookingForEditResponse>.Failure("Personal booking not found", StatusCodeEnum.NotFound);
+        }
+        return Result<PersonalBookingForEditResponse>.Success(personalBooking, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<PersonalBookingInfoResponse>> SetStatusToPaidAsync(Guid id)

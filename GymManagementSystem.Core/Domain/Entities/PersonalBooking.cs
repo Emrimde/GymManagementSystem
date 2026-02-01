@@ -12,6 +12,8 @@ public class PersonalBooking
     public Guid ClientId { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public TrainerRate? TrainerRate { get; set; } 
+    public Guid? TrainerRateId { get; set; }
     public BookingStatus Status { get; set; } = BookingStatus.Booked;
     public decimal Price { get; set; }
     public TrainerContract? TrainerContract { get; set; }

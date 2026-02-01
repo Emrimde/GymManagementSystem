@@ -170,6 +170,12 @@
                     <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingAddViewModel}">
                         <personalbookingview:PersonalBookingAddView />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingViewModel}">
+                        <personalbookingview:PersonalBookingView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingUpdateViewModel}">
+                        <personalbookingview:PersonalUpdateView />
+                    </DataTemplate>
 
     
                    

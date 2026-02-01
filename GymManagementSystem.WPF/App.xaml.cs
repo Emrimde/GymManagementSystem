@@ -82,6 +82,8 @@ public partial class App : Application
         services.AddTransient<StaffUpdateViewModel>();
         services.AddTransient<EmployeeDetailsViewModel>();
         services.AddTransient<PersonalBookingAddViewModel>();
+        services.AddTransient<PersonalBookingUpdateViewModel>();
+        services.AddTransient<PersonalBookingViewModel>();
         services.AddTransient<GymClassUpdateViewModel>();
         services.AddTransient<JwtHandler>();
 

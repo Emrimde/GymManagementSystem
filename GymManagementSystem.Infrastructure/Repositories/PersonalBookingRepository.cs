@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -7,54 +8,46 @@ using Microsoft.EntityFrameworkCore;
 namespace GymManagementSystem.Infrastructure.Repositories;
 public class PersonalBookingRepository : IPersonalBookingRepository
 {
-    private readonly ApplicationDbContext _db;
+    private readonly ApplicationDbContext _dbContext;
     public PersonalBookingRepository(ApplicationDbContext db)
     {
-        _db = db;
+        _dbContext = db;
     }
 
-    public async Task<PersonalBooking> AddAsync(PersonalBooking entity)
+    public void AddPersonalBooking(PersonalBooking entity)
     {
-        _db.PersonalBookings.Add(entity);
-        await _db.SaveChangesAsync();
-        return entity;
+        _dbContext.PersonalBookings.Add(entity);
     }
 
     public async Task<bool> CancelAsync(Guid bookingId, CancellationToken ct)
     {
-        var booking = await _db.PersonalBookings
+        var booking = await _dbContext.PersonalBookings
             .FirstOrDefaultAsync(b => b.Id == bookingId, ct);
 
         if (booking == null)
             return false;
 
         booking.Status = BookingStatus.Cancelled;
-        await _db.SaveChangesAsync(ct);
+        await _dbContext.SaveChangesAsync(ct);
         return true;
     }
 
     public async Task<bool> DeletePersonalBookingAsync(Guid id)
     {
-        PersonalBooking? personal = await _db.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id);
-        _db.PersonalBookings.Remove(personal);
+        PersonalBooking? personal = await _dbContext.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id);
         if (personal == null)
         {
             return false;
         }
-        int deleted = _db.SaveChanges();
+        _dbContext.PersonalBookings.Remove(personal);
+        int deleted = _dbContext.SaveChanges();
         return deleted > 0;
     }
 
-    public async Task<IEnumerable<PersonalBookingWebResponse>> GetAllPersonalBookingsByClientIdAsync(Guid clientId)
+    public IQueryable<PersonalBooking> GetPersonalBookingsByClientId(Guid clientId)
     {
-        return await _db.PersonalBookings.Where(item => item.ClientId == clientId)
-            .Select(item => new PersonalBookingWebResponse
-            {
-                TrainerFullName = item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName,
-                Date = item.Start.ToString("dd:MM:yyyy"),
-                StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}"
-            })
-            .ToListAsync();
+        return _dbContext.PersonalBookings
+            .Where(item => item.ClientId == clientId);
     }
 
     public async Task<IEnumerable<PersonalBooking>> GetForRangeAsync(
@@ -65,12 +58,11 @@ public class PersonalBookingRepository : IPersonalBookingRepository
             from.ToDateTime(TimeOnly.MinValue),
             DateTimeKind.Utc);
 
-        // Koniec zakresu = początek dnia PO 'to' (UTC, exclusive)
         var end = DateTime.SpecifyKind(
             to.AddDays(1).ToDateTime(TimeOnly.MinValue),
             DateTimeKind.Utc);
 
-        return await _db.PersonalBookings
+        return await _dbContext.PersonalBookings
             .AsNoTracking()
             .Include(p => p.Client)
             .Where(item =>
@@ -83,14 +75,22 @@ public class PersonalBookingRepository : IPersonalBookingRepository
 
     public async Task<PersonalBooking?> GetPersonalBookingAsync(Guid id)
     {
-       return await _db.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id); 
+       return await _dbContext.PersonalBookings.FirstOrDefaultAsync(item => item.Id == id); 
+    }
+    public IQueryable<PersonalBooking> GetPersonalBookingg(Guid personalBookingId)
+    {
+        return _dbContext.PersonalBookings.Where(item => item.Id == personalBookingId);
     }
 
     public async Task<PersonalBooking?> UpdatePersonalBooking(PersonalBooking booking)
     {
-        _db.PersonalBookings.Update(booking);
-        await _db.SaveChangesAsync();
+        _dbContext.PersonalBookings.Update(booking);
+        await _dbContext.SaveChangesAsync();
         return booking;
     }
 
+    public void DeletePersonalBooking(PersonalBooking personalBooking)
+    {
+        _dbContext.PersonalBookings.Remove(personalBooking);   
+    }
 }

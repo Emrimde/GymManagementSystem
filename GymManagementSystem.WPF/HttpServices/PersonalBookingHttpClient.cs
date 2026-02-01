@@ -1,7 +1,12 @@
-﻿using GymManagementSystem.Core.DTO.PersonalBooking;
+﻿using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.DTO.ClientMembership;
+using GymManagementSystem.Core.DTO.PersonalBooking;
+using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.WPF.Result;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -34,12 +39,19 @@ public class PersonalBookingHttpClient : BaseHttpClientService
             $"{id}"
         );
     }
+    public Task<Result<PersonalBookingForEditResponse>> GetPersonalBookingForEdit(
+        Guid personalBookingId)
+    {
+        return GetAsync<PersonalBookingForEditResponse>(
+            $"personal-booking-for-edit/{personalBookingId}"
+        );
+    }
 
-    public Task<Result<PersonalBookingResponse>> UpdateAsync(
+    public Task<Result<PersonalBookingInfoResponse>> UpdateAsync(
         Guid id,
         PersonalBookingUpdateRequest request)
     {
-        return PutAsync<PersonalBookingUpdateRequest, PersonalBookingResponse>(
+        return PutAsync<PersonalBookingUpdateRequest, PersonalBookingInfoResponse>(
             $"{id}",
             request
         );
@@ -48,5 +60,17 @@ public class PersonalBookingHttpClient : BaseHttpClientService
     public async Task<Result<PersonalBookingInfoResponse>> SetStatusToPaidAsync(Guid id)
     {
         return await PutAsync<PersonalBookingInfoResponse>($"pay-client/{id}");
+    }
+
+    public Task<Result<ObservableCollection<PersonalBookingResponse>>> GetPersonalBookingsAsync(Guid clientId)
+    {
+        return GetAsync<ObservableCollection<PersonalBookingResponse>>(
+           $"client-personal-bookings/{clientId}"
+       );
+    }
+
+    public Task<Result<Unit>> DeletePersonalBookingAsync(Guid personalBookingId)
+    {
+        return DeleteAsync($"{personalBookingId}");
     }
 }

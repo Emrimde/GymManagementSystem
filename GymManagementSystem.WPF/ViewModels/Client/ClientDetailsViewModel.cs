@@ -30,6 +30,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     public ICommand OpenAllClientClassBookingCommand { get; }
     public ICommand OpenPersonalTrainingAddViewCommand { get; }
     public ICommand LoadClientDetailsCommand { get; }
+    public ICommand OpenPersonalBookingsViewCommand { get; }
     public INavigationService Navigation { get; }
 
     public Guid ClientId { get; set; }
@@ -64,9 +65,11 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         CreateNewTerminationCommand = new RelayCommand(item => OpenCreateNewTermination(), item => true);
         OpenAllClientClassBookingCommand = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(ClientId), item => true);
 
-        OpenPersonalTrainingAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingAddViewModel>(ClientId), item => true);
-        OpenAddClientMembershipViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipAddViewModel>(item!), item => true);
+        OpenPersonalTrainingAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingAddViewModel>(Client.Id), item => true);
+        OpenAddClientMembershipViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipAddViewModel>(), item => true);
+        OpenPersonalBookingsViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingViewModel>(Client.Id), item => true);
         LoadClientDetailsCommand = new AsyncRelayCommand(item => LoadClientAsync(), item => true);
+
     }
 
     private async Task RegisterVisitAsync()
@@ -119,6 +122,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid id)
         {
             ClientId = id;
+            LoadClientDetailsCommand.Execute(null);
         }
     }
 

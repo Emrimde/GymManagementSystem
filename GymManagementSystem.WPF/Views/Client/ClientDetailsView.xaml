@@ -191,6 +191,11 @@
                             Content="All class bookings"
                             Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
                             Command="{Binding OpenAllClientClassBookingCommand}" />
+
+                    <Button Width="240"  Margin="10,0,12,0"
+                            Content="All personal bookings"
+                            Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Command="{Binding OpenPersonalBookingsViewCommand}" />
                 </StackPanel>
 
             </StackPanel>
