@@ -49,14 +49,26 @@ public class TrainerRepository : ITrainerRepository
         }
     }
 
-    public Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end)
+    public Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, Guid? personalBookingId, DateTime start, DateTime end)
     {
-        return _dbContext.PersonalBookings
-            .AnyAsync(item =>
-                item.TrainerContractId == trainerId &&
-                item.Start < end &&
-                item.End > start
-            );
+        if (personalBookingId.HasValue)
+        {
+            return _dbContext.PersonalBookings
+                        .AnyAsync(item => item.Id != personalBookingId &&
+                            item.TrainerContractId == trainerId &&
+                            item.Start < end &&
+                            item.End > start
+                        );
+        }
+        else
+        {
+            return _dbContext.PersonalBookings
+                .AnyAsync(item =>
+                    item.TrainerContractId == trainerId &&
+                    item.Start < end &&
+                    item.End > start
+                );
+        }
     }
     public async Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
@@ -114,8 +126,8 @@ public class TrainerRepository : ITrainerRepository
     {
         return await _dbContext.TrainerContracts.AsNoTracking().Where(item => item.TrainerType == TrainerTypeEnum.GroupInstructor).Select(item => new TrainerContractInfoResponse()
         {
-           Id = item.Id,
-           FullName = item.Person.FirstName + " " + item.Person.LastName
+            Id = item.Id,
+            FullName = item.Person.FirstName + " " + item.Person.LastName
         }).ToListAsync(cancellationToken);
     }
 
@@ -125,8 +137,8 @@ public class TrainerRepository : ITrainerRepository
         {
             FirstName = item.Person.FirstName,
             LastName = item.Person.LastName,
-            FullName = item.Person.FirstName + " " + item.Person.LastName ,
-            Id  = item.Id
+            FullName = item.Person.FirstName + " " + item.Person.LastName,
+            Id = item.Id
         }).ToListAsync();
     }
 
@@ -137,7 +149,7 @@ public class TrainerRepository : ITrainerRepository
 
     public async Task<string?> GetTrainerTimeOffReasonAsync(Guid trainerTimeOffId)
     {
-       return await _dbContext.TrainerTimeOff.Where(item => item.Id == trainerTimeOffId).Select(item => item.Reason).FirstOrDefaultAsync();
+        return await _dbContext.TrainerTimeOff.Where(item => item.Id == trainerTimeOffId).Select(item => item.Reason).FirstOrDefaultAsync();
     }
 
     public async Task<bool> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId)

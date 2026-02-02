@@ -20,9 +20,8 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
     public INavigationService Navigation { get; }
 
     private Guid _personalBookingId;
-    private Guid _clientId;
 
-    // ====== WŁAŚCIWOŚCI STANU (bez DTO) ======
+    private Guid _clientId;
 
     private DateTime _selectedDate;
     public DateTime SelectedDate
@@ -58,8 +57,19 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
     }
 
 
-    public ObservableCollection<TrainerInfoResponse> PersonalTrainers { get; set; } = new();
-    public ObservableCollection<TrainerRateSelectResponse> TrainerRates { get; set; } = new();
+    private ObservableCollection<TrainerInfoResponse> _personalTrainers = new();
+    public ObservableCollection<TrainerInfoResponse> PersonalTrainers
+    {
+        get => _personalTrainers;
+        set { _personalTrainers = value; OnPropertyChanged(); }
+    }
+
+    private ObservableCollection<TrainerRateSelectResponse> _trainerRates = new();
+    public ObservableCollection<TrainerRateSelectResponse> TrainerRates
+    {
+        get => _trainerRates;
+        set { _trainerRates = value; OnPropertyChanged(); }
+    }
     public ObservableCollection<TimeSpan> TimeSlots { get; }
 
 
@@ -93,15 +103,13 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
     {
         var request = new PersonalBookingUpdateRequest
         {
-            PersonalBookingId = _personalBookingId,
             TrainerId = SelectedTrainer!.Id,
             TrainerRateId = SelectedTrainerRate!.TrainerRateId,
-            ClientId = _clientId,
             StartDay = SelectedDate,
             StartHour = SelectedStartSlot!.Value
         };
 
-        Result<PersonalBookingInfoResponse> result =
+        Result<Unit> result =
             await _personalBookingHttpClient.UpdateAsync(_clientId, request);
 
         if (!result.IsSuccess)
@@ -120,12 +128,14 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
         if (SelectedTrainer == null)
             return;
 
-        var result = await _trainerHttpClient
+        Result<ObservableCollection<TrainerRateSelectResponse>> result = await _trainerHttpClient
             .GetTrainerRatesSelectAsync(SelectedTrainer.Id);
 
         if (result.IsSuccess)
             TrainerRates = result.Value!;
     }
+
+
     private async Task LoadAsync()
     {
         if (_personalBookingId == Guid.Empty)
@@ -138,8 +148,9 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
         PersonalBookingForEditResponse booking = bookingResult.Value!;
 
         _clientId = booking.ClientId;
-        SelectedDate = booking.Start.Date;
-        SelectedStartSlot = booking.Start.TimeOfDay;
+        SelectedDate = booking.StartDate;
+
+        SelectedStartSlot = booking.StartDate.TimeOfDay;
 
         Result<ObservableCollection<TrainerInfoResponse>> trainersResult = await _trainerHttpClient.GetPersonalTrainersAsync();
         if (!trainersResult.IsSuccess)
@@ -150,7 +161,6 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
         SelectedTrainer = PersonalTrainers
             .FirstOrDefault(item => item.Id == booking.TrainerId);
 
-        // 3. stawki
         await LoadTrainerRatesAsync();
 
         SelectedTrainerRate = TrainerRates

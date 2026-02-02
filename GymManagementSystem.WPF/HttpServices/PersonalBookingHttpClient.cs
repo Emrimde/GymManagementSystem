@@ -1,12 +1,7 @@
-﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.Core.DTO.ClientMembership;
-using GymManagementSystem.Core.DTO.PersonalBooking;
-using GymManagementSystem.Core.Resulttttt;
+﻿using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.WPF.Result;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Net.Http.Json;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GymManagementSystem.WPF.HttpServices;
 
@@ -47,12 +42,12 @@ public class PersonalBookingHttpClient : BaseHttpClientService
         );
     }
 
-    public Task<Result<PersonalBookingInfoResponse>> UpdateAsync(
+    public  Task<Result<Unit>> UpdateAsync(
         Guid id,
         PersonalBookingUpdateRequest request)
     {
-        return PutAsync<PersonalBookingUpdateRequest, PersonalBookingInfoResponse>(
-            $"{id}",
+        return PutAsync<PersonalBookingUpdateRequest, Unit>(
+            $"update-personal-booking/{id}",
             request
         );
     }

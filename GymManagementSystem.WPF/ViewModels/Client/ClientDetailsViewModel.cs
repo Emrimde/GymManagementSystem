@@ -66,7 +66,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
         OpenAllClientClassBookingCommand = new RelayCommand(item => Navigation.NavigateTo<ClassBookingViewModel>(ClientId), item => true);
 
         OpenPersonalTrainingAddViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingAddViewModel>(Client.Id), item => true);
-        OpenAddClientMembershipViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipAddViewModel>(), item => true);
+        OpenAddClientMembershipViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipAddViewModel>(Client.Id), item => true);
         OpenPersonalBookingsViewCommand = new RelayCommand(item => Navigation.NavigateTo<PersonalBookingViewModel>(Client.Id), item => true);
         LoadClientDetailsCommand = new AsyncRelayCommand(item => LoadClientAsync(), item => true);
 

@@ -10,11 +10,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- SIDEBAR -->
         <ContentControl Grid.Column="0"
                         Content="{Binding SidebarView}"/>
 
-        <!-- MAIN -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -22,7 +20,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- TITLE -->
             <TextBlock Grid.Row="0"
                        Margin="0,24,0,32"
                        HorizontalAlignment="Center"
@@ -31,7 +28,6 @@
                        Foreground="White"
                        Text="Add personal training"/>
 
-            <!-- FORM -->
             <Grid Grid.Row="1"
                   VerticalAlignment="Center"
                   Margin="48,0">
@@ -46,7 +42,6 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- LEFT -->
                         <StackPanel Grid.Column="0">
 
                             <StackPanel Margin="0,0,0,16">
@@ -72,7 +67,6 @@
 
                         </StackPanel>
 
-                        <!-- RIGHT -->
                         <StackPanel Grid.Column="1"
                                     Margin="32,0,0,0">
 
@@ -106,7 +100,6 @@
                 </materialDesign:Card>
             </Grid>
 
-            <!-- ACTIONS -->
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"

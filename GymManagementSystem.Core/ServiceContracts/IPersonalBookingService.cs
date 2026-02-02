@@ -14,5 +14,5 @@ public interface IPersonalBookingService
     Task<Result<PersonalBookingInfoResponse>> GetPersonalBookingAsync(Guid id);
     Task<Result<PersonalBookingForEditResponse>> GetPersonalBookingForEditAsync(Guid personalBookingId);
     Task<Result<PersonalBookingInfoResponse>> SetStatusToPaidAsync(Guid id);
-
+    Task<Result<Unit>> UpdatePersonalBookingAsync(Guid personalBookingId, PersonalBookingUpdateRequest personalBookingUpdateRequest);
 }

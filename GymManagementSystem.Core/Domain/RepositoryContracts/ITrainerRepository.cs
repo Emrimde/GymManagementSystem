@@ -11,7 +11,7 @@ public interface ITrainerRepository
     Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId,Guid? trainerOffId, DateTime start, DateTime end);
     Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff);
     Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken);
-    Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId, DateTime start, DateTime end);
+    Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId,  Guid? personalBookingId, DateTime start, DateTime end);
     TrainerContract CreateTrainerContractAsync(TrainerContract trainerContract);
     Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page = 1, int pageSize = 50 ,string? searchText = null);
     Task<IEnumerable<TrainerContractInfoResponse>> GetAllGroupInstructorsAsync(CancellationToken cancellationToken);

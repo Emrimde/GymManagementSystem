@@ -43,7 +43,7 @@ public class PersonalBookingService : IPersonalBookingService
 
         DateTime end = start.AddMinutes(trainerRate.DurationInMinutes);
 
-        bool isOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(entity.TrainerId, start, end);
+        bool isOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(entity.TrainerId,null, start, end);
         if (isOverlap)
         {
             return Result<PersonalBookingInfoResponse>.Failure("The time range overlaps an existing personal booking", StatusCodeEnum.BadRequest);
@@ -122,7 +122,7 @@ public class PersonalBookingService : IPersonalBookingService
             PersonalBookingId = item.Id,
             TrainerFullName = item.TrainerContract != null ? item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName : "",
             Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
-            StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}",
+            StartEndTime = $"{item.Start.ToLocalTime().ToString("HH:mm")} - {item.End.ToLocalTime().ToString("HH:mm")}",
             BookingStatus = item.Status.ToString(),
             Price = item.Price.ToString(),
         }).ToListAsync();
@@ -164,8 +164,8 @@ public class PersonalBookingService : IPersonalBookingService
     {
         PersonalBookingForEditResponse? personalBooking = await _personalBookingRepo.GetPersonalBookingg(personalBookingId).Select(item => new PersonalBookingForEditResponse()
         {
-            ClientId = personalBookingId,
-            Start = item.Start,
+            ClientId = item.ClientId,
+            StartDate = item.Start.ToLocalTime(),
             TrainerId = item.TrainerContractId,
             TrainerRateId = item.TrainerRateId.HasValue ? item.TrainerRateId.Value : Guid.Empty,
         }).FirstOrDefaultAsync();
@@ -187,5 +187,55 @@ public class PersonalBookingService : IPersonalBookingService
         personal.Status = BookingStatus.PaidByClient;
         PersonalBooking? updatePersonal = await _personalBookingRepo.UpdatePersonalBooking(personal);
         return Result<PersonalBookingInfoResponse>.Success(updatePersonal!.ToPersonalBookingInfoResponse(), StatusCodeEnum.NotFound);
+    }
+
+    public async Task<Result<Unit>> UpdatePersonalBookingAsync(Guid personalBookingId, PersonalBookingUpdateRequest personalBookingUpdateRequest)
+    {
+        PersonalBooking? personalBooking = await _personalBookingRepo.GetPersonalBookingg(personalBookingId).FirstOrDefaultAsync();
+        if(personalBooking == null)
+        {
+            return Result<Unit>.Failure("Personal booking not found", StatusCodeEnum.NotFound);
+        }
+
+        TrainerRateResponse? trainerRate = await _trainerRateRepo.GetTrainerRateByIdAsync(personalBookingUpdateRequest.TrainerRateId);
+        if (trainerRate == null)
+        {
+            return Result<Unit>.Failure("Cannot find trainer rate", StatusCodeEnum.NotFound);
+        }
+
+
+        DateTime start = DateTime.SpecifyKind(personalBookingUpdateRequest.StartDay + personalBookingUpdateRequest.StartHour,DateTimeKind.Local).ToUniversalTime();
+        DateTime end = start.AddMinutes(trainerRate.DurationInMinutes);
+        bool isOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(personalBookingUpdateRequest.TrainerId, personalBookingId, start, end);
+        if (isOverlap)
+        {
+            return Result<Unit>.Failure("The time range overlaps an existing personal booking", StatusCodeEnum.BadRequest);
+        }
+
+        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(personalBookingUpdateRequest.TrainerId, false);
+        if (trainerContract == null)
+        {
+            return Result<Unit>.Failure("Personal trainer not found", StatusCodeEnum.NotFound);
+        }
+        if (trainerContract.ValidTo.HasValue)
+        {
+            if (trainerContract.ValidTo.Value.Date <= DateTime.UtcNow.Date || personalBookingUpdateRequest.StartDay.Date >= trainerContract.ValidTo.Value.Date)
+            {
+                return Result<Unit>.Failure("Trainer contract is not valid, so you can't add personal training for this trainer", StatusCodeEnum.BadRequest);
+            }
+        }
+
+        if (start < DateTime.UtcNow + TimeSpan.FromHours(5))
+        {
+            return Result<Unit>.Failure("Personal training must be registered at least 5 hours before", StatusCodeEnum.BadRequest);
+        }
+
+        personalBooking.Start = start;
+        personalBooking.TrainerContractId = personalBookingUpdateRequest.TrainerId;
+        personalBooking.TrainerRateId = personalBookingUpdateRequest.TrainerRateId;
+        personalBooking.End = end;
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 }
