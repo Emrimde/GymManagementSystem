@@ -32,26 +32,6 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         }
     }
 
-    private async Task LoadTrainerContracts()
-    {
-        Result<ObservableCollection<TrainerContractInfoResponse>> result = await _trainerHttpClient.GetInstructors();
-        if (result.IsSuccess)
-        {
-            foreach (var item in result.Value!)
-            {
-                TrainerContracts.Add(item);
-                
-            }
-            
-        }
-        else
-        {
-            MessageBox.Show($"{result.GetUserMessage()}");
-        }
-    }
-
-
-
     public ObservableCollection<DayItem> DaysOfWeekItems { get; }
 
     public DaysOfWeekFlags SelectedDays =>
@@ -62,7 +42,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; set; }
     public ObservableCollection<TrainerContractInfoResponse> TrainerContracts { get; set; } = new();
 
-    private TrainerContractInfoResponse _selectedTrainerContract;
+    private TrainerContractInfoResponse _selectedTrainerContract = new();
     private readonly TrainerHttpClient _trainerHttpClient;
 
     public TrainerContractInfoResponse SelectedTrainerContract
@@ -80,7 +60,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
 
     public ICommand LoadGymClassForEditCommand { get; }
     public ICommand CancelCommand { get; }
-    public ICommand LoadTrainerContractsCommand { get; }
+    //public ICommand LoadTrainerContractsCommand { get; }
     public ICommand EditGymClassCommand { get; }
     public GymClassUpdateViewModel(GymClassHtppClient gymHttpClient, SidebarViewModel sidebarView, INavigationService navigation, TrainerHttpClient trainerHttpClient)
     {
@@ -180,7 +160,7 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
         Form.Name = dto.Name;
         SelectedTrainerContract = TrainerContracts.Where(item =>  item.Id == dto.TrainerContractId).FirstOrDefault();
 
-        ApplyDaysFromFlags(dto.DaysOfWeek); // ⭐ klucz
+        ApplyDaysFromFlags(dto.DaysOfWeek); 
     }
 
 }

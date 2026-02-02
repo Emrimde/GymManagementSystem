@@ -109,16 +109,12 @@ public class GymClassService : IGymClassService
 
 
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
+        _scheduledClassRepo.DeleteScheduledClassList(scheduledClasses);
 
-        foreach (var item in scheduledClasses)
-        {
-            item.StartFrom = gymClass.StartHour;
-            item.StartTo = gymClass.StartHour + gymClass.Duration;
-            if (!_scheduleGeneratorService.IsDayIncluded(gymClass.DaysOfWeek, item.Date.DayOfWeek))
-            {
-                item.Date = GetNextValidDate(item.Date, gymClass.DaysOfWeek);
-            }
-        }
+        List<ScheduledClass> scheduledClass = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
+
+        _scheduledClassRepo.AddRangeAsync(scheduledClass);
+
 
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);

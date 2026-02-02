@@ -105,12 +105,12 @@ public class PersonalBookingUpdateViewModel : ViewModel, IParameterReceiver
         {
             TrainerId = SelectedTrainer!.Id,
             TrainerRateId = SelectedTrainerRate!.TrainerRateId,
-            StartDay = SelectedDate,
+            StartDay = SelectedDate.Date,
             StartHour = SelectedStartSlot!.Value
         };
 
         Result<Unit> result =
-            await _personalBookingHttpClient.UpdateAsync(_clientId, request);
+            await _personalBookingHttpClient.UpdateAsync(_personalBookingId!, request);
 
         if (!result.IsSuccess)
         {
