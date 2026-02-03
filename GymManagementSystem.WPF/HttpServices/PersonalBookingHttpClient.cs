@@ -21,10 +21,9 @@ public class PersonalBookingHttpClient : BaseHttpClientService
         );
     }
 
-    public Task<Result<Unit>> DeleteAsync(Guid id)
+    public Task<Result<Unit>> DeleteAsync(Guid personalBookingId)
     {
-        // backend używa GET do cancel → mapujemy, ale semantycznie to delete
-        return GetAsync<Unit>($"cancel/{id}");
+        return DeleteAsync($"{personalBookingId}");
     }
 
     public Task<Result<PersonalBookingInfoResponse>> GetPersonalBookingAsync(

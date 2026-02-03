@@ -67,6 +67,20 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<PersonalBookingInfoResponse>.Failure("Personal training must be registered at least 5 hours before", StatusCodeEnum.BadRequest);
         }
 
+        DateTime closeLocal = entity.StartDay.Date.AddHours(22);
+
+        DateTime closeTime = DateTime
+            .SpecifyKind(closeLocal, DateTimeKind.Local)
+            .ToUniversalTime();
+
+        if (end > closeTime)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure(
+                "Personal training ends after gym close",
+                StatusCodeEnum.BadRequest
+            );
+        }
+
         PersonalBooking personalBooking = entity.ToPersonalBooking();
         personalBooking.Start = start;
         personalBooking.End = end;

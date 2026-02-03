@@ -41,9 +41,9 @@ public class GymClassRepository : IGymClassRepository
 
     public async Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassesForSelectAsync()
     {
-       return await _dbContext.GymClasses.Select(item => new GymClassComboBoxResponse() { 
+       return await _dbContext.GymClasses.Where(item => item.IsActive).Select(item => new GymClassComboBoxResponse() { 
             GymClassId = item.Id,
-            Name = item.Name,
+            Name = item.Name
         }).ToListAsync();
     }
 

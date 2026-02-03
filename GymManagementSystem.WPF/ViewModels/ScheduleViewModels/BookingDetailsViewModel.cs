@@ -1,10 +1,9 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.PersonalBooking;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using Syncfusion.UI.Xaml.Scheduler;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.ScheduleViewModels;
@@ -18,9 +17,9 @@ public class BookingDetailsViewModel : ViewModel
     public bool ShouldSetToPaid { get; private set; } = false;
     public bool IsNotPaid { get; private set; } = true;
 
-    public string ClientName { get; set; }
+    public string ClientName { get; set; } = string.Empty;
     public BookingStatus Statuss { get; set; }
-    public string Price { get; set; }
+    public string Price { get; set; } = string.Empty;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
@@ -34,10 +33,9 @@ public class BookingDetailsViewModel : ViewModel
     {
         _bookingHttp = http;
 
-        SaveCommand = new RelayCommand(_ => Save(), _ => true);
-        DeleteCommand = new RelayCommand(_ => Delete(), _ => true);
+        SaveCommand = new RelayCommand(item => Save(), _ => true);
+        DeleteCommand = new RelayCommand(item => Delete(), _ => true);
         SetStatusToPaidCommand = new RelayCommand(_ => SetStatusToPaid(), _ => true);
-       
     }
 
     private async Task _LoadPersonalBooking(Guid bookingId)
@@ -58,9 +56,8 @@ public class BookingDetailsViewModel : ViewModel
         }
     }
 
-    // ---------------------------
-    //   ZAŁADOWANIE Z APPOINTMENT
-    // ---------------------------
+   
+    //   Loading appointment
     public async void LoadFromAppointment(ScheduleAppointment appt)
     {
         BookingId = (Guid)appt.Id;
@@ -69,19 +66,15 @@ public class BookingDetailsViewModel : ViewModel
         Start = appt.StartTime;
         End = appt.EndTime;
 
-        await _LoadPersonalBooking(BookingId); // <-- przeniesione tutaj
+        await _LoadPersonalBooking(BookingId); 
         
         OnPropertyChanged(nameof(ClientName));
         OnPropertyChanged(nameof(Start));
         OnPropertyChanged(nameof(End));
-        OnPropertyChanged(nameof(Statuss));    // <-- konieczne!
+        OnPropertyChanged(nameof(Statuss));    
         OnPropertyChanged(nameof(IsNotPaid));    
         OnPropertyChanged(nameof(Price));    
     }
-
-    // ---------------------------
-    //   AKCJE
-    // ---------------------------
 
     private void Save()
     {
@@ -102,10 +95,6 @@ public class BookingDetailsViewModel : ViewModel
         CloseRequested?.Invoke(true);
 
     }
-
-    // ---------------------------
-    //  DTO DO UPDATE
-    // ---------------------------
 
     public PersonalBookingUpdateRequest BuildDto()
     {

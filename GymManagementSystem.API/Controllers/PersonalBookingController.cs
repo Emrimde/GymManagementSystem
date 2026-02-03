@@ -1,8 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
-using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.DTO.PersonalBooking;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;

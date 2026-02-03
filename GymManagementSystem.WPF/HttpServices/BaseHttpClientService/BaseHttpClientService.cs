@@ -132,7 +132,6 @@ public abstract class BaseHttpClientService
         return Result<T>.Failure(problem);
     }
 
-
     private static JsonSerializerOptions JsonOptions() =>
         new() { PropertyNameCaseInsensitive = true };
 }

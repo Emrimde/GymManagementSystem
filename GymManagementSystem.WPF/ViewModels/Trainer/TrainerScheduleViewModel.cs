@@ -48,7 +48,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     }
 
     
-    //          CORE LOGIC
+    //choice dialog
     private async void OpenEditor(object obj)
     {
         if (obj is not AppointmentEditorOpeningEventArgs e)
@@ -66,8 +66,9 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         // 2. Kliknieto istniejacy event - edytuj
         await HandleEditAction(e);
     }
+
     
-    //            DODAWANIE
+    //Adding
     private async Task HandleAddAction(AppointmentEditorOpeningEventArgs e)
     {
         var choiceDialog = new AddChoiceDialog();
@@ -118,7 +119,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     }
 
    
-    //               EDYCJA
+    //  Edit
     private async Task HandleEditAction(AppointmentEditorOpeningEventArgs e)
     {
         string type = GetTypeFromAppointment(e.Appointment);
@@ -192,11 +193,6 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                     MessageBox.Show($"{result.GetUserMessage()}");
                 }
             }
-            //else
-            //{
-            //    await _bookingHttpClient.UpdateAsync(vm.BookingId, vm.BuildDto());
-            //}
-
             await LoadAppointmentsAsync();
         }
     }
@@ -216,7 +212,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
     }
 
 
-    // ładujemy wszystkie bloki
+    //loading all blocks
     private async Task LoadAppointmentsAsync()
     {
         var schedule = await _trainerHttpClient.GetSchedule(_trainerId);
