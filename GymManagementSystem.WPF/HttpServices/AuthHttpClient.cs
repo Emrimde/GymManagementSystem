@@ -26,4 +26,9 @@ public class AuthHttpClient : BaseHttpClientService
             registerDto
         );
     }
+
+    public async Task<Result<Unit>> ForceChangePasswordAsync(ForceChangePasswordRequest dto)
+    {
+        return await PostAsync<ForceChangePasswordRequest, Unit>($"force-change-password",dto);
+    }
 }

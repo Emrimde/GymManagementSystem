@@ -52,6 +52,9 @@
                     <DataTemplate DataType="{x:Type authvm:RegisterViewModel}">
                         <authview:RegisterView/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type authvm:ChangePasswordViewModel}">
+                        <authview:ChangePasswordView/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type dashboardvm:DashboardViewModel}">
                         <dashboardview:DashboardView/>
                     </DataTemplate>

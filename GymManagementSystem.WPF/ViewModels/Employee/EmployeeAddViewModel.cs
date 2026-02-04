@@ -16,7 +16,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
-
 namespace GymManagementSystem.WPF.ViewModels.Employee;
 public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataErrorInfo
 {
@@ -126,6 +125,7 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                 Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(employeeAddRequest);
                 if (result.IsSuccess)
                 {
+                    MessageBox.Show($"Temporary password for this employee {result.Value!.TemporaryPassword}", "Temporary password", MessageBoxButton.OK, MessageBoxImage.Information);
                     Navigation.NavigateTo<EmployeeDetailsViewModel>(result.Value!.EmployeeId);
                 }
                 else

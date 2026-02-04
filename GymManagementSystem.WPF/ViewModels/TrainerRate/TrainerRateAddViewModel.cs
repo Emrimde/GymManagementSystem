@@ -9,15 +9,8 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.TrainerRate;
 public class TrainerRateAddViewModel : ViewModel, IParameterReceiver
 {
-    private INavigationService _navigation;
     public bool AddExisting { get; set; }
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
-
-    //public ICommand  { get; }
+    public INavigationService Navigation { get; set; }
     public TrainerRateAddRequest TrainerRate { get; set; }
 
     private readonly TrainerHttpClient _trainerHttpClient;
@@ -45,7 +38,6 @@ public class TrainerRateAddViewModel : ViewModel, IParameterReceiver
         {
             Navigation.NavigateTo<TrainerRateViewModel>(TrainerRate.TrainerContractId);
         }
-        // potem np. powrót
     }
 
     public ICommand AddTrainerRateCommand { get; }

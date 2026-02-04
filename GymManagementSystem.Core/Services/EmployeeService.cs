@@ -42,31 +42,37 @@ public class EmployeeService : IEmployeeService
 
         person.IsActive = true;
 
-        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        string? random = new string(
-            Enumerable.Range(0, 3)
-                .Select(_ => chars[Random.Shared.Next(chars.Length)])
-                .ToArray()
-        );
+        string tempPassword = $"{Guid.NewGuid():N}".Substring(0, 12) + "!";
 
         User user = new User
         {
-            UserName = $"{person.FirstName}{person.LastName}{random}"
-                .Replace(" ", "")
-                .ToLower()
+            UserName = person.Email,
+            Email = person.Email,
+            MustChangePassword = true,
+            EmailConfirmed = true
         };
 
-        IdentityResult createResult = await _userManager.CreateAsync(user, "employee");
+        IdentityResult createResult = await _userManager.CreateAsync(user, tempPassword);
         if (!createResult.Succeeded)
         {
             string message = string.Join("\n", createResult.Errors.Select(item => item.Description));
             return Result<EmployeeInfoResponse>.Failure($"{message}", StatusCodeEnum.InternalServerError);
         }
-        await _userManager.AddToRoleAsync(user, "Receptionist");
+        person.IdentityUserId = user.Id;
+
+        if (request.Role == EmployeeRole.Manager)
+        {
+            await _userManager.AddToRoleAsync(user, "Manager");
+        }
+        else if (request.Role == EmployeeRole.Receptionist)
+        {
+            await _userManager.AddToRoleAsync(user, "Receptionist");
+        }
 
         _employeeRepo.CreateEmployee(employee);
         await _unitOfWork.SaveChangesAsync();
         EmployeeInfoResponse response = employee.ToEmployeeInfoResponse();
+        response.TemporaryPassword = tempPassword;
 
         return Result<EmployeeInfoResponse>.Success(response, StatusCodeEnum.Ok);
     }

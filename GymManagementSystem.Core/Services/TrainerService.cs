@@ -33,14 +33,14 @@ public class TrainerService : ITrainerService
         _userManager = userManager;
     }
 
-    public async Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
+    public async Task<Result<TrainerContractCreatedResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
     {
         TrainerContract trainer = request.ToTrainerContract();
         Person? person = await _personRepo.GetPersonByIdAsync(request.PersonId);
 
         if (person == null)
         {
-            return Result<TrainerContractInfoResponse>.Failure("Person not found", StatusCodeEnum.InternalServerError);
+            return Result<TrainerContractCreatedResponse>.Failure("Person not found", StatusCodeEnum.InternalServerError);
         }
 
         trainer.ValidFrom = DateTime.UtcNow;
@@ -48,25 +48,21 @@ public class TrainerService : ITrainerService
         person.IsActive = true;
         var settings = await _generalGymRepo.GetGeneralGymDetailsAsync();
 
-        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        var random = new string(
-            Enumerable.Range(0, 3)
-                .Select(_ => chars[Random.Shared.Next(chars.Length)])
-                .ToArray()
-        );
+        string tempPassword = $"{Guid.NewGuid():N}".Substring(0, 12) + "!";
 
         User user = new User
         {
-            UserName = $"{person.FirstName}{person.LastName}{random}"
-                .Replace(" ", "")
-                .ToLower()
+            UserName = person.Email,
+            MustChangePassword = true,
+            EmailConfirmed = true,
+            Email = person.Email
         };
 
-        var createResult = await _userManager.CreateAsync(user, "trainer");
+        IdentityResult createResult = await _userManager.CreateAsync(user, tempPassword);
         if (!createResult.Succeeded)
         {
             string message = string.Join("\n", createResult.Errors.Select(item => item.Description));
-            return Result<TrainerContractInfoResponse>.Failure($"{message}", StatusCodeEnum.InternalServerError);
+            return Result<TrainerContractCreatedResponse>.Failure(message, StatusCodeEnum.InternalServerError);
         }
 
         person.IdentityUserId = user.Id;
@@ -76,7 +72,7 @@ public class TrainerService : ITrainerService
         TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
         await GeneratedTrainerRates(trainerContract, settings!);
         await _unitOfWork.SaveChangesAsync();
-        return Result<TrainerContractInfoResponse>.Success(new TrainerContractInfoResponse() { Id = trainerContract.Id }, StatusCodeEnum.Ok);
+        return Result<TrainerContractCreatedResponse>.Success(new TrainerContractCreatedResponse() { TrainerContractId = trainerContract.Id, TemporaryPassword = tempPassword }, StatusCodeEnum.Ok);
     }
 
     private async Task GeneratedTrainerRates(TrainerContract trainerContract, GeneralGymDetail generalGymDetail)
@@ -98,7 +94,7 @@ public class TrainerService : ITrainerService
             {
                 TrainerContractId = trainerContract!.Id,
                 DurationInMinutes = 90,
-                RatePerSessions = generalGymDetail.DefaultRate60,
+                RatePerSessions = generalGymDetail.DefaultRate90,
                 ValidFrom = trainerContract.ValidFrom,
                 ValidTo = trainerContract?.ValidTo ?? null,
             };
@@ -106,7 +102,7 @@ public class TrainerService : ITrainerService
             {
                 TrainerContractId = trainerContract!.Id,
                 DurationInMinutes = 120,
-                RatePerSessions = generalGymDetail.DefaultRate60,
+                RatePerSessions = generalGymDetail.DefaultRate120,
                 ValidFrom = trainerContract.ValidFrom,
                 ValidTo = trainerContract?.ValidTo ?? null,
             };

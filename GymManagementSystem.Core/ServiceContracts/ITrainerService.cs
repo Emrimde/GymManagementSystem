@@ -10,7 +10,7 @@ namespace GymManagementSystem.Core.ServiceContracts;
 public interface ITrainerService
 {
     //Task<Result<TrainerInfoResponse>> CreateAsync(TrainerAddRequest entity);
-    Task<Result<TrainerContractInfoResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity);
+    Task<Result<TrainerContractCreatedResponse>> CreateTrainerContractAsync(TrainerContractAddRequest entity);
     Task<Result<TrainerRateInfoResponse>> CreateTrainerRateAsync(TrainerRateAddRequest request);
     Task<Result<Unit>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity);
     Task<Result<Unit>> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId);

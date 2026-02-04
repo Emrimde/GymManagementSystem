@@ -34,31 +34,31 @@ public class AuthService : IAuthService
             return Result<Unit>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
         }
         User? user = await _userManager.FindByIdAsync(userId);
-        if(user == null)
+        if (user == null)
         {
             return Result<Unit>.Failure("User not found", StatusCodeEnum.NotFound);
         }
 
-        if(request.CurrentPassword == request.NewPassword)
+        if (request.CurrentPassword == request.NewPassword)
         {
             return Result<Unit>.Failure("New password is the same as old password", StatusCodeEnum.BadRequest);
         }
 
         IdentityResult identityResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-        if(identityResult != IdentityResult.Success)
+        if (identityResult != IdentityResult.Success)
         {
             return Result<Unit>.Failure("Error during changing password", StatusCodeEnum.InternalServerError);
         }
 
-        return Result<Unit>.Success(new Unit(), StatusCodeEnum.Unauthorized);
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<Unit>> ResetPasswordAsync(ForgotPasswordRequest request)
     {
-        User? user = await _userManager.FindByEmailAsync(request.Email); 
-        if(user == null)
+        User? user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
         {
-           return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
+            return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
         }
         string resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
         string encodedToken = Uri.EscapeDataString(resetPasswordToken);
@@ -90,13 +90,14 @@ public class AuthService : IAuthService
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
 
         var token = await _jwtService.CreateJwtToken(user);
+        token.MustChangePassword = user.MustChangePassword;
 
         return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<bool>> RegisterAsync(RegisterDto request)
     {
-        
+
         if (await _userManager.FindByNameAsync(request.Username) != null)
         {
             return Result<bool>.Failure("Username already in use", StatusCodeEnum.BadRequest);
@@ -157,7 +158,7 @@ public class AuthService : IAuthService
             return Result<Unit>.Failure("Account already activated", StatusCodeEnum.BadRequest);
         }
 
-        IdentityResult result = await _userManager.ResetPasswordAsync(user,request.Token,request.NewPassword);
+        IdentityResult result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
 
         if (!result.Succeeded)
         {
@@ -170,4 +171,44 @@ public class AuthService : IAuthService
 
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<Unit>> ForceChangePasswordAsync(ForceChangePasswordRequest request)
+    {
+        string? userId = _contextAccessor.HttpContext?
+            .User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+        {
+            return Result<Unit>.Failure("Unauthorized", StatusCodeEnum.Unauthorized);
+        }
+
+        User? user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return Result<Unit>.Failure("User not found", StatusCodeEnum.NotFound);
+        }
+
+        if (!user.MustChangePassword)
+        {
+            return Result<Unit>.Failure("Password change not required", StatusCodeEnum.BadRequest);
+        }
+
+        IdentityResult removeResult = await _userManager.RemovePasswordAsync(user);
+        if (!removeResult.Succeeded)
+        {
+            return Result<Unit>.Failure("Error removing password", StatusCodeEnum.InternalServerError);
+        }
+
+        IdentityResult addResult = await _userManager.AddPasswordAsync(user, request.NewPassword);
+        if (!addResult.Succeeded)
+        {
+            return Result<Unit>.Failure("Error setting new password", StatusCodeEnum.InternalServerError);
+        }
+
+        user.MustChangePassword = false;
+        await _userManager.UpdateAsync(user);
+
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
+    }
+
 }

@@ -16,7 +16,7 @@ public class LoginViewModel : ViewModel
     public ICommand OpenRegisterViewCommand { get; }
     public ICommand LoginCommand { get; }
 
-    private string _username;
+    private string _username = string.Empty;
     public string Username
     {
         get { return _username; }
@@ -26,7 +26,7 @@ public class LoginViewModel : ViewModel
         }
     }
 
-    private string _password;
+    private string _password = string.Empty;
     public string Password
     {
         get { return _password; }
@@ -36,29 +36,22 @@ public class LoginViewModel : ViewModel
         }
     }
 
-    private INavigationService _navigation;
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value; OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; set; }
+
     private readonly AuthService _authService;
     private readonly AuthHttpClient _authHttpClient;
-    public LoginViewModel(INavigationService navigationService, AuthHttpClient authHttpClient,AuthService authService)
+    public LoginViewModel(INavigationService navigationService, AuthHttpClient authHttpClient, AuthService authService)
     {
         _authService = authService;
-        _navigation = navigationService;
-        _authHttpClient = authHttpClient;   
-        OpenRegisterViewCommand = new RelayCommand(o => Navigation.NavigateTo<RegisterViewModel>(), o => true);
+        Navigation = navigationService;
+        _authHttpClient = authHttpClient;
+        OpenRegisterViewCommand = new RelayCommand(item => Navigation.NavigateTo<RegisterViewModel>(), item => true);
         LoginCommand = new AsyncRelayCommand(LoginAsync);
     }
 
     private async Task LoginAsync(object arg)
     {
-        SignInDto signInDto = AuthMapper.ToSignInDto(Username,Password);
+        SignInDto signInDto = AuthMapper.ToSignInDto(Username, Password);
         Result<AuthenticationResponse> result = await _authHttpClient.LoginAsync(signInDto);
         if (!result.IsSuccess)
         {
@@ -66,8 +59,15 @@ public class LoginViewModel : ViewModel
         }
         else
         {
-            _authService.SetProperty(result.Value!.Token!); // tutaj
-            _navigation.NavigateTo<DashboardViewModel>();
+            _authService.SetProperty(result.Value!.Token!);
+            if (result.Value!.MustChangePassword)
+            {
+                Navigation.NavigateTo<ChangePasswordViewModel>();
+            }
+            else
+            {
+                Navigation.NavigateTo<DashboardViewModel>();
+            }
         }
     }
 }

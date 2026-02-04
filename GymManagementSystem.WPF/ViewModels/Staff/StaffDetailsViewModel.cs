@@ -99,10 +99,11 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
         MessageBoxResult response = MessageBox.Show("Is trainer signed contract?", "Confirmation", MessageBoxButton.YesNo);
         if (response == MessageBoxResult.Yes)
         {
-            Result<TrainerContractInfoResponse> result = await _trainerHttpClient.PostTrainerContractAsync(request);
+            Result<TrainerContractCreatedResponse> result = await _trainerHttpClient.PostTrainerContractAsync(request);
             if (result.IsSuccess)
             {
-                Navigation.NavigateTo<TrainerContractDetailsViewModel>(result.Value!.Id);
+                MessageBox.Show($"This is temporary password for first time logging. Password: {result.Value!.TemporaryPassword}", "Temporary password", MessageBoxButton.OK, MessageBoxImage.Information);
+                Navigation.NavigateTo<TrainerContractDetailsViewModel>(result.Value!.TrainerContractId);
             }
             else
             {

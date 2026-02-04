@@ -72,10 +72,10 @@ public class TrainerHttpClient : BaseHttpClientService
         return GetAsync<PageResult<TrainerContractResponse>>(query);
     }
 
-    public Task<Result<TrainerContractInfoResponse>> PostTrainerContractAsync(
+    public Task<Result<TrainerContractCreatedResponse>> PostTrainerContractAsync(
         TrainerContractAddRequest request)
     {
-        return PostAsync<TrainerContractAddRequest, TrainerContractInfoResponse>(
+        return PostAsync<TrainerContractAddRequest, TrainerContractCreatedResponse>(
             "trainercontract",
             request
         );

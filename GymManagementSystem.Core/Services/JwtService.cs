@@ -34,6 +34,7 @@ public class JwtService : IJwtService
     ClaimValueTypes.Integer64),
            
 
+
     };
         foreach (var role in roles)
         {
