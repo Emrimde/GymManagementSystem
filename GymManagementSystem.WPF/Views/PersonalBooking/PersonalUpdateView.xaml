@@ -1,115 +1,116 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.PersonalBooking.PersonalUpdateView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.PersonalBooking"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="{StaticResource BackgoundColor}">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Margin="0,24,0,32"
-                   HorizontalAlignment="Center"
-                   FontSize="28"
-                   FontWeight="SemiBold"
-                   Foreground="White"
-                   Text="Edit personal training"/>
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
 
-        <Grid Grid.Row="1"
-              VerticalAlignment="Center"
-              Margin="48,0">
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <materialDesign:Card Padding="32"
-                                 UniformCornerRadius="16"
-                                 materialDesign:ElevationAssist.Elevation="Dp4">
+            <TextBlock Grid.Row="0"
+                       Margin="0,24,0,32"
+                       HorizontalAlignment="Center"
+                       FontSize="28"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource PrimaryColor}"
+                       Text="Edit personal training"/>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1"
+                  VerticalAlignment="Center"
+                  Margin="48,0">
 
-                    <StackPanel Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                        <StackPanel Margin="0,0,0,16">
-                            <TextBlock Text="Date"
-                                       FontSize="22"
-                                       Foreground="White"/>
-                            <DatePicker Height="40"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource PrimaryColor}"
-                                        SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
-                        </StackPanel>
+                <StackPanel Grid.Column="0">
 
-                        <StackPanel>
-                            <TextBlock Text="Start time"
-                                       FontSize="22"
-                                       Foreground="White"/>
-                            <ComboBox Height="40"
-                                      FontSize="16"
-                                      Foreground="{DynamicResource PrimaryColor}"
-                                      ItemsSource="{Binding TimeSlots}"
-                                      SelectedItem="{Binding SelectedStartSlot, Mode=TwoWay}"/>
-                        </StackPanel>
-
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Date"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <DatePicker Height="40"
+                                    FontSize="17"
+                                    Foreground="{DynamicResource PrimaryColor}"
+                                    SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1"
-                                Margin="32,0,0,0">
-
-                        <StackPanel Margin="0,0,0,16">
-                            <TextBlock Text="Personal trainer"
-                                       FontSize="22"
-                                       Foreground="White"/>
-                            <ComboBox Height="40"
-                                      FontSize="16"
-                                      Foreground="{DynamicResource PrimaryColor}"
-                                      ItemsSource="{Binding PersonalTrainers}"
-                                      SelectedItem="{Binding SelectedTrainer, Mode=TwoWay}"
-                                      DisplayMemberPath="FullName"/>
-                        </StackPanel>
-
-                        <StackPanel>
-                            <TextBlock Text="Training duration"
-                                       FontSize="22"
-                                       Foreground="White"/>
-                            <ComboBox Height="40"
-                                      FontSize="16"
-                                      Foreground="{DynamicResource PrimaryColor}"
-                                      ItemsSource="{Binding TrainerRates}"
-                                      SelectedItem="{Binding SelectedTrainerRate, Mode=TwoWay}"
-                                      DisplayMemberPath="DisplayPriceDuration"/>
-                        </StackPanel>
-
+                    <StackPanel>
+                        <TextBlock Text="Start time"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <ComboBox Height="40"
+                                  FontSize="17"
+                                  Foreground="{DynamicResource PrimaryColor}"
+                                  ItemsSource="{Binding TimeSlots}"
+                                  SelectedItem="{Binding SelectedStartSlot, Mode=TwoWay}"/>
                     </StackPanel>
-                </Grid>
 
-            </materialDesign:Card>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Margin="32,0,0,0">
+
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Personal trainer"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <ComboBox Height="40"
+                                  FontSize="17"
+                                  Foreground="{DynamicResource PrimaryColor}"
+                                  ItemsSource="{Binding PersonalTrainers}"
+                                  SelectedItem="{Binding SelectedTrainer, Mode=TwoWay}"
+                                  DisplayMemberPath="FullName"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Training duration"
+                                   FontSize="23"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+                        <ComboBox Height="40"
+                                  FontSize="17"
+                                  Foreground="{DynamicResource PrimaryColor}"
+                                  ItemsSource="{Binding TrainerRates}"
+                                  SelectedItem="{Binding SelectedTrainerRate, Mode=TwoWay}"
+                                  DisplayMemberPath="DisplayPriceDuration"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,32,48,24">
+
+                <Button Content="Update"
+                        Height="40"
+                        MinWidth="160"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Command="{Binding UpdatePersonalTrainingCommand}"/>
+
+                <Button Content="Cancel"
+                        Height="40"
+                        MinWidth="120"
+                        Margin="0,0,12,0"
+                        Command="{Binding CancelCommand}"/>
+
+            </StackPanel>
+
         </Grid>
-
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,32,48,24">
-
-            <Button Content="Update"
-                    Height="40"
-                    MinWidth="160"
-                    Style="{StaticResource MaterialDesignFlatButton}"
-                    Command="{Binding UpdatePersonalTrainingCommand}"/>
-
-            <Button Content="Cancel"
-                    Height="40"
-                    MinWidth="120"
-                    Margin="12,0,0,0"
-                    Command="{Binding CancelCommand}"/>
-
-        </StackPanel>
-
     </Grid>
 </UserControl>

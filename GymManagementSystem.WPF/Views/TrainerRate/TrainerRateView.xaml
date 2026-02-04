@@ -1,96 +1,91 @@
 ﻿<UserControl x:Class="GymManagementSystem.WPF.Views.TrainerRate.TrainerRateView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.TrainerRate"
-             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+             Background="{DynamicResource BackgoundColor}">
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
-            <ContentControl Content="{Binding SidebarView}"/>
-        </Border>
-        <Grid Grid.Column="1">
+
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
+
+        <Grid Grid.Column="1" Margin="24">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="0,20,0,0">
+
+            <Grid Grid.Row="0" Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock 
-Grid.Column="0"
-Text="Trainer Rates" 
-FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-            HorizontalAlignment="left"
+                <TextBlock Text="Trainer Rates"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryColor}"
+                           VerticalAlignment="Center"/>
 
-VerticalAlignment="Center"
-            Width="200" Margin="40,0,0,0"/>
-
-                <Button 
-Grid.Column="1"
-Content="Add Trainer rate"
-Width="150"
-Height="30"
-HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding OpenAddTrainerRateView}"  CommandParameter="{Binding TrainerContractId}"/>
-
-
+                <Button Grid.Column="1"
+                        Content="Add Trainer rate"
+                        Height="40"
+                        Padding="24,0"
+                        Command="{Binding OpenAddTrainerRateView}"
+                        CommandParameter="{Binding TrainerContractId}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
             </Grid>
-            <Border Grid.Row="1" Background="#2B2B2B">
-                <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding TrainerRates}" x:Name="datagrid" CanUserAddRows="False"
-          AutoGenerateColumns="false">
+
+            <materialDesign:Card Grid.Row="1"
+                                 Padding="0"
+                                 Background="#2F3038"
+                                 UniformCornerRadius="10">
+
+                <DataGrid ItemsSource="{Binding TrainerRates}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          Style="{StaticResource MaterialDesignDataGrid}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Duration in Minutes" Binding="{Binding DurationInMinutes}"/>
-                        <DataGridTextColumn Header="Rate per sessions" Binding="{Binding RatePerSessions}"/>
-                        <DataGridTextColumn Header="Valid From" Binding="{Binding ValidFrom}"/>
-                        <DataGridTextColumn Header="Valid To" Binding="{Binding ValidTo}"/>
-                       
+                        <DataGridTextColumn Header="Duration (min)"
+                                            Binding="{Binding DurationInMinutes}"/>
 
-                        <DataGridTemplateColumn Header="Edit/Delete" Width="150">
+                        <DataGridTextColumn Header="Rate per session"
+                                            Binding="{Binding RatePerSessions}"/>
+
+                        <DataGridTextColumn Header="Valid from"
+                                            Binding="{Binding ValidFrom}"/>
+
+                        <DataGridTextColumn Header="Valid to"
+                                            Binding="{Binding ValidTo}"/>
+
+                        <DataGridTemplateColumn Header="Delete" Width="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button  
-                            Width="40" 
-                            Height="25" 
-                            Background="#4CAF50" 
-                            Foreground="White" FontSize="10"
-                           Command="{Binding DataContext.OpenEditClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}"
-                             >
-                                            <fa:ImageAwesome Icon="Edit" Width="10" Height="25" Foreground="White"/>
+                                   
+                                     
+
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.DeleteClientCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon Kind="Delete"/>
                                         </Button>
 
-                                        <Button
-                             Width="40" 
-                            Height="25" FontSize="10"
-                            Background="#F44336" 
-                            Foreground="White"
-                            Command="{Binding DataContext.DeleteClientCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}" >
-                                            <fa:ImageAwesome Icon="Trash" Width="10" Height="25" Foreground="White"/>
-                                        </Button>
-                                    </StackPanel>
+                                    
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                    </DataGrid.Columns>
 
+                    </DataGrid.Columns>
                 </DataGrid>
 
-            </Border>
-
+            </materialDesign:Card>
         </Grid>
     </Grid>
 </UserControl>
