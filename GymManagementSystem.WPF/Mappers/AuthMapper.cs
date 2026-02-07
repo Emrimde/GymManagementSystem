@@ -9,7 +9,7 @@ public static class AuthMapper
     {
         return new SignInDto
         {
-            Username = username,
+            Email = username,
             Password = password
         };
     }

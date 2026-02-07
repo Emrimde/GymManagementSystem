@@ -16,13 +16,13 @@ public class LoginViewModel : ViewModel
     public ICommand OpenRegisterViewCommand { get; }
     public ICommand LoginCommand { get; }
 
-    private string _username = string.Empty;
-    public string Username
+    private string email = string.Empty;
+    public string Email
     {
-        get { return _username; }
+        get { return email; }
         set
         {
-            _username = value; OnPropertyChanged();
+            email = value; OnPropertyChanged();
         }
     }
 
@@ -46,12 +46,12 @@ public class LoginViewModel : ViewModel
         Navigation = navigationService;
         _authHttpClient = authHttpClient;
         OpenRegisterViewCommand = new RelayCommand(item => Navigation.NavigateTo<RegisterViewModel>(), item => true);
-        LoginCommand = new AsyncRelayCommand(LoginAsync);
+        LoginCommand = new AsyncRelayCommand(LoginAsync, item => Email != string.Empty && Password != string.Empty);
     }
 
     private async Task LoginAsync(object arg)
     {
-        SignInDto signInDto = AuthMapper.ToSignInDto(Username, Password);
+        SignInDto signInDto = AuthMapper.ToSignInDto(Email, Password);
         Result<AuthenticationResponse> result = await _authHttpClient.LoginAsync(signInDto);
         if (!result.IsSuccess)
         {

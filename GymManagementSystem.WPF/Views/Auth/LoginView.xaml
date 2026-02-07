@@ -36,7 +36,7 @@
                 <TextBox
                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     materialDesign:HintAssist.Hint="Username"
-                    Text="{Binding Username}"
+                    Text="{Binding Email}"
                     Margin="0,0,0,16"
                     Foreground="{StaticResource PrimaryColor}"
                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"/>

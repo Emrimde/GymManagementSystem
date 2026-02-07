@@ -21,11 +21,10 @@ public class ScheduledClassHttpClient : BaseHttpClientService
 
     public Task<Result<ObservableCollection<ScheduledClassComboBoxResponse>>> GetScheduledClassesComboBox(
         Guid gymClassId,
-        Guid membershipId,
         Guid clientId)
     {
         return GetAsync<ObservableCollection<ScheduledClassComboBoxResponse>>(
-            $"scheduledclasses/{gymClassId}/{membershipId}/{clientId}"
+            $"scheduledclasses/{gymClassId}?clientId={clientId}"
         );
     }
 

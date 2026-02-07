@@ -126,10 +126,10 @@ public class AddClassBookingViewModel : ViewModel, IParameterReceiver
     {
         if (membershipId.HasValue)
         {
-            Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, membershipId.Value, ClientId);
+            Result<ObservableCollection<ScheduledClassComboBoxResponse>> result = await _scheduledClassHttpClient.GetScheduledClassesComboBox(SelectedGymClass.GymClassId, ClientId);
             if (!result.IsSuccess)
             {
-                MessageBox.Show($"{result.GetUserMessage}");
+                MessageBox.Show($"{result.GetUserMessage()}");
             }
             ScheduledClasses = result.Value!;
             SelectedScheduledClass = null;

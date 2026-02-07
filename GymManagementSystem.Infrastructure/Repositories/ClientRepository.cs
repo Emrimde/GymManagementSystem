@@ -182,7 +182,7 @@ public class ClientRepository : IClientRepository
                 MembershipId = item.ClientMemberships
                     .Where(item => item.IsActive)
                     .Select(item => (Guid?)item.MembershipId)
-                    .FirstOrDefault(),
+                    .FirstOrDefault() ?? Guid.Empty,
                 FullName = item.FirstName + " " + item.LastName
             })
             .FirstOrDefaultAsync();

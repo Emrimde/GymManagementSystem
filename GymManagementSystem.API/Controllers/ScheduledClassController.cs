@@ -17,9 +17,9 @@ public class ScheduledClassController : BaseController
     public async Task<ActionResult<IEnumerable<ScheduledClassResponse>>> GetAll([FromRoute] Guid gymClassId)
         => HandleListedResult(await _scheduledClassService.GetAllAsync(gymClassId));
 
-    [HttpGet("scheduledclasses/{gymClassId:guid}/{membershipId:guid}/{clientId:guid}")]
-    public async Task<ActionResult<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId([FromRoute] Guid gymClassId, [FromRoute] Guid membershipId, [FromRoute] Guid clientId)
-        => HandleListedResult(await _scheduledClassService.GetAllScheduledClassesByGymClassId(gymClassId, membershipId, clientId));
+    [HttpGet("scheduledclasses/{gymClassId:guid}")]
+    public async Task<ActionResult<IEnumerable<ScheduledClassComboBoxResponse>>> GetAllScheduledClassesByGymClassId([FromRoute] Guid gymClassId, [FromQuery] Guid? clientId)
+        => HandleListedResult(await _scheduledClassService.GetAllScheduledClassesByGymClassId(gymClassId, clientId));
 
     [HttpDelete("cancel-schedule-class/{scheduleClassId:guid}")]
     public async Task<ActionResult<Unit>> CancelScheduleClass([FromRoute] Guid scheduleClassId)

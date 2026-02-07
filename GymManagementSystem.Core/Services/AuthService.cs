@@ -74,11 +74,9 @@ public class AuthService : IAuthService
 
     public async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request)
     {
-        var user = request.Email != null
-            ? await _userManager.FindByEmailAsync(request.Email)
-            : await _userManager.FindByNameAsync(request.Username!);
+        User? user = await _userManager.FindByEmailAsync(request.Email);
 
-        if (user is null)
+        if (user == null)
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
 
         var passwordOk = await _userManager.CheckPasswordAsync(user, request.Password);

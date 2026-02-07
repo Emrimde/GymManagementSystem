@@ -253,7 +253,6 @@ public class ClientService : IClientService
             response.HasActiveMembership = true;
             response.EndDate = clientMembership.EndDate.HasValue ? clientMembership.EndDate?.ToString("dd.MM.yyyy") : "indefinite time";
             response.StartDate = clientMembership.StartDate.ToString("dd.MM.yyyy");
-            response.IsTerminated = clientMembership.Termination!.IsActive == true && !clientMembership.IsActive ? true : false; 
         }
         return Result<ClientMembershipInformationResponse>.Success(response, StatusCodeEnum.Ok);
     }
