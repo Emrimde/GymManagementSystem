@@ -3,4 +3,6 @@ export interface ClientMembershipResponse {
     startDate?: Date
     endDate?: Date
     Name? : string
+    isTerminated: boolean
+    requestedAt:string
 }

@@ -27,8 +27,6 @@ public class EmployeeService : IEmployeeService
         _unitOfWork = unitOfWork;
     }
 
-
-
     public async Task<Result<EmployeeInfoResponse>> CreateEmployeeAsync(EmployeeAddRequest request)
     {
         Employee employee = request.ToEmployee();

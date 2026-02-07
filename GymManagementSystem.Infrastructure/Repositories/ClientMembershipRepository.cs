@@ -160,6 +160,8 @@ public class ClientMembershipRepository : IClientMembershipRepository
             Name = item.Membership.Name,
             StartDate = item.StartDate.ToString("dd.MM.yyyy"),
             IsActive = item.IsActive,
+            IsTerminated = item.Termination!.IsActive == true,
+            RequestedAt = item.Termination.RequestedAt.ToString("dd.MM.yyyy")
         }).FirstOrDefaultAsync();
     }
 }

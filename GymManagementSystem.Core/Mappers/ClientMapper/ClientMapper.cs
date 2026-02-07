@@ -100,8 +100,4 @@ public static class ClientMapper
             CanTerminate = client.ClientMemberships.Any(item => item.Termination!.IsActive == false && item.IsActive),
         };
     }
-
-            //ClientMembership = client.ClientMemberships
-            //                            .FirstOrDefault(item => item.IsActive)?.ToClientMembershipShortResponse(),
-
 }

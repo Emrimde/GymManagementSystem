@@ -20,9 +20,14 @@
       </div>
     </div>
 
-    <span class="badge bg-success align-self-start px-3 py-2">
+    <span class="badge bg-success align-self-start px-3 py-2 " >
       Active
     </span>
+    @if(clientMembershipResponse()?.isTerminated){
+      <span class="badge bg-warning text-black align-self-start px-3 py-2 my-2">
+      Client terminated membership: {{clientMembershipResponse()?.requestedAt}}
+    </span>
+    }
 
   </div>
 

@@ -39,15 +39,11 @@ public class AuthService : IAuthService
             return Result<Unit>.Failure("User not found", StatusCodeEnum.NotFound);
         }
 
-        if (request.CurrentPassword == request.NewPassword)
-        {
-            return Result<Unit>.Failure("New password is the same as old password", StatusCodeEnum.BadRequest);
-        }
-
         IdentityResult identityResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-        if (identityResult != IdentityResult.Success)
+        if (!identityResult.Succeeded)
         {
-            return Result<Unit>.Failure("Error during changing password", StatusCodeEnum.InternalServerError);
+            string error = identityResult.Errors.FirstOrDefault()?.Description ?? "Password change failed";
+            return Result<Unit>.Failure(error, StatusCodeEnum.BadRequest);
         }
 
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);

@@ -103,7 +103,7 @@
                         </StackPanel>
 
                         <Separator Margin="0,12"/>
-
+                        
                         <Button Content="Terminate"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Visibility="{Binding Employee.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}"

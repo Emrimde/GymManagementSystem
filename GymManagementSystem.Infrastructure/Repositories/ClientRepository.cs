@@ -199,7 +199,7 @@ public class ClientRepository : IClientRepository
           MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType.ToString()).FirstOrDefault() ?? null,
           City = item.City,
           DateOfBirth = item.DateOfBirth,
-          Street = item.StreetAddress
+          Street = item.StreetAddress,
       }).FirstOrDefaultAsync();  
     }
 

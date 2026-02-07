@@ -5,4 +5,6 @@ public class ClientMembershipWebResponse
     public string? EndDate { get; set; }
     public string? Name { get; set; } 
     public bool IsActive { get; set; }
+    public bool IsTerminated { get; set; }
+    public string RequestedAt { get; set; }
 }

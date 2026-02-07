@@ -20,4 +20,3 @@ public class ClientDetailsResponse
     public string? LastVisitDate { get; set; }
 }
 
-    //public ClientMembershipShortResponse? ClientMembership { get; set; }

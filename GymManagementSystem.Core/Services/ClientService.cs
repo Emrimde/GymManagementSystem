@@ -14,6 +14,7 @@ using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace GymManagementSystem.Core.Services;
@@ -252,8 +253,9 @@ public class ClientService : IClientService
             response.HasActiveMembership = true;
             response.EndDate = clientMembership.EndDate.HasValue ? clientMembership.EndDate?.ToString("dd.MM.yyyy") : "indefinite time";
             response.StartDate = clientMembership.StartDate.ToString("dd.MM.yyyy");
+            response.IsTerminated = clientMembership.Termination!.IsActive == true && !clientMembership.IsActive ? true : false; 
         }
-            return Result<ClientMembershipInformationResponse>.Success(response, StatusCodeEnum.Ok);
+        return Result<ClientMembershipInformationResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<ClientEditResponse>> GetByIdForEditAsync(Guid id)
