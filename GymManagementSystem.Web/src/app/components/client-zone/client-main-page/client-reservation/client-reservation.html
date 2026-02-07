@@ -10,21 +10,31 @@
 }
   </div>
   <div class="row g-3 overflow-auto" style="max-height: 420px;">
-@for(personalBooking of scheduledClasses(); track personalBooking.name){
+@for (booking of scheduledClasses(); track booking.id) {
 
   <div class="col-12">
     <div class="card background-light-gray p-3 shadow-sm">
       <h6 class="fw-bold text-white mb-2">
-        Name: {{ personalBooking.name }}
+        Name: {{ booking.name }}
       </h6>
+
       <p class="mb-1 text-white">
-        <strong>Date:</strong> {{ personalBooking.date }}
+        <strong>Date:</strong> {{ booking.date }}
       </p>
-      <p class="mb-0 text-white">
-        <strong>Time:</strong> {{ personalBooking.startFrom }} - {{ personalBooking.startTo }}
+
+      <p class="mb-1 text-white">
+        <strong>Time:</strong>
+        {{ booking.startFrom }} - {{ booking.startTo }}
       </p>
+
+      <button
+        class="btn btn-danger btn-sm mt-2"
+        (click)="cancelBooking(booking.id)">
+        Cancel reservation
+      </button>
     </div>
   </div>
+
 }
 
 

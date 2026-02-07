@@ -14,4 +14,7 @@ export class ClassBookingService {
   createClassBooking(classBookingData: ClassBookingAddRequest) {
     return this.httpClient.post(`${this.base}`, classBookingData);
   }
+  deleteClassBooking(classBookingId: string) {
+    return this.httpClient.delete(`${this.base}/${classBookingId}`);
+  }
 }
