@@ -1,0 +1,23 @@
+<h3>Your group classes</h3>
+
+@if (loading) {
+  <div>Loading…</div>
+}
+
+@if (!loading && gymClasses.length === 0) {
+  <div class="text-muted">
+    No classes assigned
+  </div>
+}
+
+@if (!loading && gymClasses.length > 0) {
+  <div class="list-group">
+    @for (c of gymClasses; track c.id) {
+      <button
+        class="list-group-item list-group-item-action"
+        (click)="openSchedule(c.id)">
+        {{ c.name }}
+      </button>
+    }
+  </div>
+}

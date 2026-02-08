@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
+using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
@@ -14,4 +15,5 @@ public interface IScheduledClassRepository : IRepository<ScheduledClassResponse,
     Task<IEnumerable<ScheduledClass>> GetFutureUnbookedByGymClassId(Guid gymClassId);
     Task<IEnumerable<ScheduledClass>> GetAllScheduledClasses();
     void DeleteScheduledClassList(IEnumerable<ScheduledClass> entity);
+    Task<List<ScheduledClassDto>> GetByGymClassIdAsync(Guid gymClassId);
 }

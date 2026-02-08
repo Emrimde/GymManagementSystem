@@ -3,6 +3,7 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ScheduledClass;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Resulttttt;
+using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -114,5 +115,24 @@ public class ScheduledClassRepository : IScheduledClassRepository
     public Task<ScheduledClass?> UpdateAsync(Guid id, ScheduledClass entity)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<ScheduledClassDto>> GetByGymClassIdAsync(Guid gymClassId)
+    {
+        return await _dbContext.ScheduledClasses
+            .Where(item => item.GymClassId == gymClassId)
+            .OrderBy(item => item.Date)
+            .ThenBy(item => item.StartFrom)
+            .Select(item => new ScheduledClassDto
+            {
+                Id = item.Id,
+                Date = item.Date,
+                StartFrom = item.StartFrom,
+                StartTo = item.StartTo,
+                MaxPeople = item.MaxPeople,
+                IsCancelled = item.IsCancelled,
+                IsActive = item.IsActive
+            })
+            .ToListAsync();
     }
 }

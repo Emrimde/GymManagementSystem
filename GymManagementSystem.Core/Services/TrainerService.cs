@@ -11,7 +11,13 @@ using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.ServiceContracts;
+using GymManagementSystem.Core.WebDTO.GymClass;
+using GymManagementSystem.Core.WebDTO.PersonalBooking;
+using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -20,10 +26,14 @@ public class TrainerService : ITrainerService
     private readonly ITrainerRepository _trainerRepo;
     private readonly IPersonRepository _personRepo;
     private readonly IGeneralGymRepository _generalGymRepo;
+    private readonly IScheduledClassRepository _scheduledClassRepo;
     private readonly ITrainerRateRepository _trainerRateRepo;
+    private readonly IPersonalBookingRepository _personalBookingRepo;
+    private readonly IGymClassRepository _gymClassRepo;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IHttpContextAccessor _httpContext;
     private readonly UserManager<User> _userManager;
-    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork, IPersonRepository personRepo, UserManager<User> userManager)
+    public TrainerService(ITrainerRepository trainerRepo, IGeneralGymRepository generalGymRepo, ITrainerRateRepository trainerRateRepo, IUnitOfWork unitOfWork, IPersonRepository personRepo, UserManager<User> userManager, IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, IHttpContextAccessor httpContext, IPersonalBookingRepository personalBookingRepo)
     {
         _trainerRepo = trainerRepo;
         _generalGymRepo = generalGymRepo;
@@ -31,6 +41,10 @@ public class TrainerService : ITrainerService
         _unitOfWork = unitOfWork;
         _personRepo = personRepo;
         _userManager = userManager;
+        _gymClassRepo = gymClassRepo;
+        _scheduledClassRepo = scheduledClassRepo;
+        _httpContext = httpContext;
+        _personalBookingRepo = personalBookingRepo;
     }
 
     public async Task<Result<TrainerContractCreatedResponse>> CreateTrainerContractAsync(TrainerContractAddRequest request)
@@ -54,6 +68,7 @@ public class TrainerService : ITrainerService
         {
             UserName = person.Email,
             MustChangePassword = true,
+            PersonId = person.Id,
             EmailConfirmed = true,
             Email = person.Email
         };
@@ -136,7 +151,7 @@ public class TrainerService : ITrainerService
         {
             return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
-        
+
 
         TrainerTimeOff addedTrainerAvailability = await _trainerRepo.CreateTrainerTimeOffAsync(entity.ToTrainerTimeOff());
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
@@ -223,11 +238,104 @@ public class TrainerService : ITrainerService
     public async Task<Result<Unit>> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId)
     {
         bool isDeleted = await _trainerRepo.DeleteTrainerTimeOffAsync(trainerTimeOffId);
-        if(isDeleted == false)
+        if (isDeleted == false)
         {
             return Result<Unit>.Failure("Unable to delete. Not found in database", StatusCodeEnum.NotFound);
         }
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
+    }
+
+    public async Task<Result<IEnumerable<GymClassDto>>> GetMyGymClassesAsync()
+    {
+        var personIdClaim = _httpContext.HttpContext?
+            .User
+            .FindFirst("client_id")
+            ?.Value;
+
+        if (string.IsNullOrWhiteSpace(personIdClaim))
+        {
+            return Result<IEnumerable<GymClassDto>>.Failure(
+                "Unauthorized",
+                StatusCodeEnum.Unauthorized
+            );
+        }
+
+        if (!Guid.TryParse(personIdClaim, out var personId))
+        {
+            return Result<IEnumerable<GymClassDto>>.Failure(
+                "Invalid client_id claim",
+                StatusCodeEnum.Unauthorized
+            );
+        }
+
+        var classes = await _gymClassRepo
+            .GetByTrainerPersonIdAsync(personId);
+
+        return Result<IEnumerable<GymClassDto>>
+            .Success(classes, StatusCodeEnum.Ok);
+    }
+
+
+    public async Task<Result<IEnumerable<ScheduledClassDto>>> GetScheduledClassesForGymClassAsync(
+    Guid gymClassId)
+    {
+        var personIdClaim = _httpContext.HttpContext?
+            .User
+            .FindFirst("client_id")
+            ?.Value;
+
+        if (string.IsNullOrWhiteSpace(personIdClaim) ||
+            !Guid.TryParse(personIdClaim, out var personId))
+        {
+            return Result<IEnumerable<ScheduledClassDto>>.Failure(
+                "Unauthorized",
+                StatusCodeEnum.Unauthorized
+            );
+        }
+
+        var owns = await _gymClassRepo
+            .TrainerOwnsClassAsync(gymClassId, personId);
+
+        if (!owns)
+        {
+            return Result<IEnumerable<ScheduledClassDto>>.Failure(
+                "You do not have access to this class",
+                StatusCodeEnum.Unauthorized
+            );
+        }
+
+        var scheduled = await _scheduledClassRepo
+            .GetByGymClassIdAsync(gymClassId);
+
+        return Result<IEnumerable<ScheduledClassDto>>
+            .Success(scheduled, StatusCodeEnum.Ok);
+    }
+
+    public async Task<Result<IEnumerable<PersonalBookingForTrainerResponse>>> GetTrainerPersonalBookingsAsync()
+    {
+        var personIdClaim = _httpContext.HttpContext?
+             .User
+             .FindFirst("person_id")
+             ?.Value;
+
+        if (string.IsNullOrWhiteSpace(personIdClaim) ||
+            !Guid.TryParse(personIdClaim, out var personId))
+        {
+            return Result<IEnumerable<PersonalBookingForTrainerResponse>>.Failure(
+                "Unauthorized",
+                StatusCodeEnum.Unauthorized
+            );
+        }
+
+        IEnumerable<PersonalBookingForTrainerResponse> personalBookings = await _personalBookingRepo.GetPersonalBookings().Where(item => item.TrainerContract.PersonId == personId).Select(item => new PersonalBookingForTrainerResponse()
+        {
+            ClientName = item.Client.FirstName + " " + item.Client.LastName,
+            Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            Duration = item.TrainerRate.DurationInMinutes.ToString() + " minutes",
+            PersonalBookingId = item.Id
+        }).ToListAsync();
+
+        return Result<IEnumerable<PersonalBookingForTrainerResponse>>.Success(personalBookings, StatusCodeEnum.Ok);
     }
 }

@@ -53,7 +53,6 @@ public class PersonalBookingRepository : IPersonalBookingRepository
     public async Task<IEnumerable<PersonalBooking>> GetForRangeAsync(
     Guid trainerId, DateOnly from, DateOnly to, CancellationToken ct)
     {
-        // Początek zakresu (UTC)
         var start = DateTime.SpecifyKind(
             from.ToDateTime(TimeOnly.MinValue),
             DateTimeKind.Utc);
@@ -92,5 +91,10 @@ public class PersonalBookingRepository : IPersonalBookingRepository
     public void DeletePersonalBooking(PersonalBooking personalBooking)
     {
         _dbContext.PersonalBookings.Remove(personalBooking);   
+    }
+
+    public IQueryable<PersonalBooking> GetPersonalBookings()
+    {
+        return _dbContext.PersonalBookings.Where(item => item.Start >= DateTime.UtcNow);
     }
 }

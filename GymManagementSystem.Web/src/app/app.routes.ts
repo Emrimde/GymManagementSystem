@@ -12,6 +12,9 @@ import { AddPersonalBooking } from './components/personal-booking/add-personal-b
 import { AddClassBooking } from './components/ClassBooking/add-class-booking/add-class-booking';
 import { AboutUs } from './components/about-us/about-us';
 import { ActivateAccount } from './components/client-zone/activate-account/activate-account';
+import { TrainerLogin } from './components/Trainer/trainer-login/trainer-login';
+import { TrainerMain } from './components/Trainer/trainer-main/trainer-main';
+import { roleGuardGuard } from './guard/role-guard-guard';
 
 export const routes: Routes = [
 {
@@ -70,6 +73,15 @@ export const routes: Routes = [
 {
     path: 'activate-account', 
     component:ActivateAccount
+},
+{
+  path: 'trainer/login',
+  component: TrainerLogin
+},
+{
+  path: 'trainer',
+  component: TrainerMain,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Trainer', 'GroupInstructor'] }
 }
-
 ];

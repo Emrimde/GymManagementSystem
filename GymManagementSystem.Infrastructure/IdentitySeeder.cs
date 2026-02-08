@@ -9,7 +9,7 @@ public static class IdentitySeeder
         var roleManager = services.GetRequiredService<RoleManager<Role>>();
         var userManager = services.GetRequiredService<UserManager<User>>();
 
-        string[] roles = { "Receptionist", "Trainer", "Manager", "Client", "Owner" };
+        string[] roles = { "Receptionist", "Trainer","GroupInstructor", "Manager", "Client", "Owner" };
 
         foreach (var role in roles)
             if (!await roleManager.RoleExistsAsync(role))

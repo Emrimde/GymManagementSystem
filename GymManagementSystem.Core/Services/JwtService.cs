@@ -46,6 +46,12 @@ public class JwtService : IJwtService
             claims.Add(new Claim("client_id", user.ClientId.ToString()!));
         }
 
+        if ((roles.Contains("Trainer") || roles.Contains("GroupInstructor"))
+            && user.PersonId.HasValue)
+        {
+            claims.Add(new Claim("person_id", user.PersonId.Value.ToString()));
+        }
+
 
         SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

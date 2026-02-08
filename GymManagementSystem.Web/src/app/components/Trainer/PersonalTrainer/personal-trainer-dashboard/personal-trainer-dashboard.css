@@ -1,0 +1,19 @@
+.btn-brand {
+  background-color: #1fa75a;
+  color: #fff;
+  border: none;
+}
+
+.btn-brand:hover {
+  background-color: #168a47;
+}
+
+.text-brand {
+  color: #1fa75a;
+}
+
+.status-confirmed {
+  background: rgba(31,167,90,0.12);
+  color: #1fa75a;
+  border: 1px solid rgba(31,167,90,0.2);
+}

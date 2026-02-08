@@ -20,4 +20,5 @@ public interface ITrainerRepository
     void DeleteTrainer(TrainerContract trainerContract);
     Task<string?> GetTrainerTimeOffReasonAsync(Guid trainerTimeOffId);
     Task<bool> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId);
+
 }

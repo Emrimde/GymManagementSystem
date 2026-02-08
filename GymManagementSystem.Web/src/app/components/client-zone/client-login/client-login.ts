@@ -46,9 +46,9 @@ export class ClientLogin implements OnInit {
   this.authService.signIn(dto).subscribe({
     next: (response: any) => {
       const result: AuthenticationResponse = response;
-      localStorage.setItem('token', result.token);
+      // localStorage.setItem('token', result.token);
+      this.authStateService.setToken(result.token);
       localStorage.setItem('expirationDate', result.expirationDate);
-      this.authStateService.setLoggedIn(true);
       this.router.navigate(['/client-main-page']);
     },
   error: (err : HttpErrorResponse) => {

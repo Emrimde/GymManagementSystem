@@ -4,6 +4,10 @@ using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
+using GymManagementSystem.Core.WebDTO.GymClass;
+using GymManagementSystem.Core.WebDTO.PersonalBooking;
+using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.Core.ServiceContracts;
 
@@ -27,4 +31,7 @@ public interface ITrainerService
     Task<Result<IEnumerable<TrainerRateSelectResponse>>> GetTrainerRatesSelect(Guid id);
     Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken);
     //Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity);
+    Task<Result<IEnumerable<GymClassDto>>> GetMyGymClassesAsync();
+    Task<Result<IEnumerable<ScheduledClassDto>>> GetScheduledClassesForGymClassAsync(Guid gymClassId);
+    Task<Result<IEnumerable<PersonalBookingForTrainerResponse>>> GetTrainerPersonalBookingsAsync();
 }

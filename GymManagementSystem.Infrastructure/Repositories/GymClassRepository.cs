@@ -2,6 +2,7 @@
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.Result;
+using GymManagementSystem.Core.WebDTO.GymClass;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,5 +51,32 @@ public class GymClassRepository : IGymClassRepository
     public Task<GymClass?> UpdateAsync(Guid id, GymClass entity)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<GymClassDto>> GetByTrainerPersonIdAsync(Guid personId)
+    {
+        return await _dbContext.GymClasses
+            .Where(item => item.Trainer != null && item.Trainer.PersonId == personId)
+            .OrderBy(item => item.Name)
+            .Select(item => new GymClassDto
+            {
+                Id = item.Id,
+                Name = item.Name,
+                StartHour = item.StartHour,
+                Duration = item.Duration,
+                DaysOfWeek = item.DaysOfWeek,
+                MaxPeople = item.MaxPeople
+            })
+            .ToListAsync();
+    }
+
+    public async Task<bool> TrainerOwnsClassAsync(Guid gymClassId, Guid personId)
+    {
+        return await _dbContext.GymClasses
+            .AnyAsync(item =>
+                item.Id == gymClassId &&
+                item.Trainer != null &&
+                item.Trainer.PersonId == personId
+            );
     }
 }

@@ -37,24 +37,6 @@ async submit() {
 }
 
 
-
-// changeDate($event: Event) {
-//   const input = $event.target as HTMLInputElement;
-//   const selectedDate = input.value;
-//   this.personalBookingAddRequest.startDate = selectedDate;
-// }
-// changeTime($event: Event) {
-//   const select = $event.target as HTMLSelectElement;
-//   const selectedHour = select.value;
-//   this.personalBookingAddRequest.startHour = selectedHour;
-// }
-
-// changeTrainerRateSelect($event: Event) {
-//   const select = $event.target as HTMLSelectElement;
-//   const selectedTrainerRateId = select.value;
-//   // this.personalBookingAddRequest.trainerRateId = selectedTrainerRateId;
-// }
-
 loadTrainerRates($event: Event) {
     const select = $event.target as HTMLSelectElement;
     const selectedTrainerId = select.value;
