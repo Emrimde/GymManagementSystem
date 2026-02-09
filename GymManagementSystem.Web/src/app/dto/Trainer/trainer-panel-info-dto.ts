@@ -1,4 +1,5 @@
 import { PersonalBookingForTrainerDto } from "../PersonalBooking/personal-booking-for-trainer-dto";
+import { TrainerTimeOffWebResponse } from "../TrainerTImeOff/trainer-time-off-web-response";
 
 export interface TrainerPanelInfoDto {
   monthlyPersonalBookingCount: string;
@@ -7,4 +8,5 @@ export interface TrainerPanelInfoDto {
   email: string;
   location:string;
   personalBookings: PersonalBookingForTrainerDto[];
+  trainerTimeOffs: TrainerTimeOffWebResponse[];
 }

@@ -101,7 +101,7 @@ public class PersonalBookingRepository : IPersonalBookingRepository
             Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
             Duration = item.TrainerRate.DurationInMinutes.ToString() + " minutes",
             PersonalBookingId = item.Id,
-            EndTime = (item.Start.ToLocalTime() + TimeSpan.FromMinutes(item.TrainerRate.DurationInMinutes)).ToString(),
+            EndTime = (item.Start.ToLocalTime() + TimeSpan.FromMinutes(item.TrainerRate.DurationInMinutes)).ToString("HH:mm"),
             Price = item.Price.ToString() + "$"
         }).ToListAsync();
     }

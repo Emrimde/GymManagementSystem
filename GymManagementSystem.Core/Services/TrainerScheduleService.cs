@@ -50,8 +50,13 @@ public class TrainerScheduleService : ITrainerScheduleService
         };
 
         // 1) Pobieramy TimeOff i Booking
-        var trainerTimeOffs =
+        IEnumerable<TrainerTimeOff> trainerTimeOffs =
             await _trainerTimeOffRepo.GetForRangeAsync(trainerId, startDay, endDay, cancellationToken);
+        //trainerTimeOffs = trainerTimeOffs.Select(item =>
+        
+        //    (item.Start = item.Start.ToLocalTime(), item.End = item.End.ToLocalTime())
+            
+        //);
 
         var personalBookings =
             await _personalBookingRepository.GetForRangeAsync(trainerId, startDay, endDay, cancellationToken);
@@ -64,7 +69,6 @@ public class TrainerScheduleService : ITrainerScheduleService
         foreach (var b in personalBookings)
             Console.WriteLine($"{b.Start} - {b.End}");
 
-        // 2) USUWAMY CAŁĄ KONWERSJĘ UTC → LOCAL
 
         // 3) Pobranie godzin otwarcia
         var details = await _gymDetailsRepo.GetGeneralGymDetailsAsync();

@@ -4,6 +4,7 @@ using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.WebDTO.Trainer;
+using GymManagementSystem.Core.WebDTO.TrainerTimeOff;
 
 namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 
@@ -22,4 +23,5 @@ public interface ITrainerRepository
     Task<string?> GetTrainerTimeOffReasonAsync(Guid trainerTimeOffId);
     Task<bool> DeleteTrainerTimeOffAsync(Guid trainerTimeOffId);
     Task<TrainerPanelInfoResponse?> GetTrainerPanelInfoResponse(Guid personId);
+    Task<IEnumerable<TrainerTimeOffWebResponse>> GetTrainerTimeOffsForTrainerPanelAsync(Guid personId);
 }

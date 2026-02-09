@@ -6,6 +6,7 @@ using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.WebDTO.Trainer;
+using GymManagementSystem.Core.WebDTO.TrainerTimeOff;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -182,5 +183,18 @@ DateTime.UtcNow.Year,
             PhoneNumber = item.Person.PhoneNumber,
             TrainerName = item.Person.FirstName + " " + item.Person.LastName,
         }).FirstOrDefaultAsync();
+    }
+
+
+    public async Task<IEnumerable<TrainerTimeOffWebResponse>>  GetTrainerTimeOffsForTrainerPanelAsync(Guid personId)
+    {
+        return await _dbContext.TrainerTimeOff.Where(item => item.Trainer.PersonId == personId).Select(item => new TrainerTimeOffWebResponse()
+        {
+            TimeOffStart = item.Start.ToLocalTime().ToString("HH:mm"),
+            TimeOffEnd = item.End.ToLocalTime().ToString("HH:mm"),
+            TimeOffStartDate = item.Start.ToLocalTime().ToString("dd:MM:yyyy"),
+            TimeOffEndDate = item.End.ToLocalTime().ToString("dd:MM:yyyy"),
+            Reason = item.Reason
+        }).ToListAsync();
     }
 }

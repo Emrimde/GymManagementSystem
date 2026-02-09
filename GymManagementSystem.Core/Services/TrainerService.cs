@@ -15,6 +15,7 @@ using GymManagementSystem.Core.WebDTO.GymClass;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
 using GymManagementSystem.Core.WebDTO.Trainer;
+using GymManagementSystem.Core.WebDTO.TrainerTimeOff;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -332,6 +333,7 @@ public class TrainerService : ITrainerService
         }
 
         IEnumerable<PersonalBookingForTrainerResponse> personalBookings = await _personalBookingRepo.GetPersonalBookingsAsync(personId);
+        IEnumerable<TrainerTimeOffWebResponse> trainerTimeOffs = await _trainerRepo.GetTrainerTimeOffsForTrainerPanelAsync(personId);
 
         TrainerPanelInfoResponse? trainerPanelInfo = await _trainerRepo.GetTrainerPanelInfoResponse(personId);
         if (trainerPanelInfo == null)
@@ -343,6 +345,7 @@ public class TrainerService : ITrainerService
         }
 
         trainerPanelInfo.PersonalBookings = personalBookings;
+        trainerPanelInfo.TrainerTimeOffs = trainerTimeOffs;
 
         return Result<TrainerPanelInfoResponse>.Success(trainerPanelInfo, StatusCodeEnum.Ok);
     }
