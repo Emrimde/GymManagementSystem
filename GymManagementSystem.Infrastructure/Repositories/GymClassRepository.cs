@@ -70,13 +70,5 @@ public class GymClassRepository : IGymClassRepository
             .ToListAsync();
     }
 
-    public async Task<bool> TrainerOwnsClassAsync(Guid gymClassId, Guid personId)
-    {
-        return await _dbContext.GymClasses
-            .AnyAsync(item =>
-                item.Id == gymClassId &&
-                item.Trainer != null &&
-                item.Trainer.PersonId == personId
-            );
-    }
+    
 }

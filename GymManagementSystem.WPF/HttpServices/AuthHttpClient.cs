@@ -31,4 +31,8 @@ public class AuthHttpClient : BaseHttpClientService
     {
         return await PostAsync<ForceChangePasswordRequest, Unit>($"force-change-password",dto);
     }
+    public async Task<Result<Unit>> SetNewPasswordAsync(SetNewPasswordRequest dto)
+    {
+        return await PostAsync<SetNewPasswordRequest, Unit>($"set-new-password",dto);
+    }
 }

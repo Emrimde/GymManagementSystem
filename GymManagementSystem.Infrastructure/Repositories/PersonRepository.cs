@@ -2,8 +2,10 @@
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Person.ReadModel;
 using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.WebDTO.Trainer;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GymManagementSystem.Infrastructure.Repositories;
 public class PersonRepository : IPersonRepository
@@ -99,5 +101,16 @@ public class PersonRepository : IPersonRepository
             ).Include(item => item.TrainerContract).Include(item => item.Employee)
             .ToListAsync();
         return people;
+    }
+
+    public async Task<GroupInstructorPanelResponse?> GetGroupInstructorPanelResponseAsync(Guid personId)
+    {
+       return await _dbContext.People.Where(item => item.Id == personId).Select(item => new GroupInstructorPanelResponse()
+        {
+            TrainerName = $"{item.FirstName} {item.LastName}",
+            PhoneNumber = item.PhoneNumber,
+            Email = item.Email,
+            Location = item.TrainerContract.Person.City,
+        }).FirstOrDefaultAsync();
     }
 }

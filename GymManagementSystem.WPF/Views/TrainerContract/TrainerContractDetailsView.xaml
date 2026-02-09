@@ -143,6 +143,13 @@
                                         Margin="0,0,0,8"
                                         Command="{Binding OpenTrainerRatesCommand}"
                                         CommandParameter="{Binding TrainerContract.Id}"/>
+                                
+                                <Button Content="Set new password"
+                                        Width="180"
+                                        Margin="0,0,0,8"
+                                        Command="{Binding OpenSetNewPasswordViewCommand}"
+                                        
+                                        />
 
                                 <Button Content="Terminate"
                                         Width="180"

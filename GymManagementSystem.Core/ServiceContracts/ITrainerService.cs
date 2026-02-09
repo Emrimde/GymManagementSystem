@@ -33,6 +33,6 @@ public interface ITrainerService
     Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken);
     //Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity);
     Task<Result<IEnumerable<GymClassDto>>> GetMyGymClassesAsync();
-    Task<Result<IEnumerable<ScheduledClassDto>>> GetScheduledClassesForGymClassAsync(Guid gymClassId);
+    Task<Result<GroupInstructorPanelResponse>> GetGroupInstructorPanelAsync();
     Task<Result<TrainerPanelInfoResponse>> GetPersonalTrainerPanelAsync();
 }

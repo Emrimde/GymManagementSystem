@@ -11,5 +11,4 @@ public interface IGymClassRepository : IRepository<GymClassResponse, GymClass>
     Task<GymClass?> GetGymClassWithScheduledClassesAsync(Guid gymClassId);
 
     Task<List<GymClassDto>> GetByTrainerPersonIdAsync(Guid personId);
-    Task<bool> TrainerOwnsClassAsync(Guid gymClassId, Guid personId);
 }

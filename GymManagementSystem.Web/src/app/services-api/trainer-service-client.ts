@@ -7,6 +7,9 @@ import { Injectable } from '@angular/core';
 export class TrainerServiceClient {
   private readonly base = "http://localhost:5105/api/client/trainer"
   constructor(private httpClient: HttpClient) {}
+  getGroupInstructorPanelInfo() {
+    return this.httpClient.get(`${this.base}/get-group-instructor-panel`);
+  }
   getMyGymClasses() {
     return this.httpClient.get(`${this.base}/gym-classes`);
   }

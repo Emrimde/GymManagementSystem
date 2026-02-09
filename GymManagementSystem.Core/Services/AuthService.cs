@@ -2,11 +2,13 @@
 using GymManagementSystem.Core.DTO.Auth;
 using GymManagementSystem.Core.DTO.Email;
 using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.Policies;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
@@ -77,11 +79,23 @@ public class AuthService : IAuthService
         User? user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
+        {
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+        }
+
 
         var passwordOk = await _userManager.CheckPasswordAsync(user, request.Password);
         if (!passwordOk)
+        {
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+        }
+
+        IList<string> roles = await _userManager.GetRolesAsync(user);
+
+        if (!ApplicationAccessPolicy.CanAccess(request.AppType, roles))
+        {
+            return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
+        }
 
         var token = await _jwtService.CreateJwtToken(user);
         token.MustChangePassword = user.MustChangePassword;
@@ -205,4 +219,47 @@ public class AuthService : IAuthService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
+    public async Task<Result<Unit>> SetNewPasswordAsync(SetNewPasswordRequest request)
+    {
+        var user = await _userManager.Users
+       .SingleOrDefaultAsync(item => item.PersonId == request.PersonId);
+
+        if (user == null)
+        {
+            return Result<Unit>.Failure("Employee not found");
+        }
+
+
+        IdentityResult removeResult = await _userManager.RemovePasswordAsync(user);
+        if (!removeResult.Succeeded)
+        {
+            return Result<Unit>.Failure(
+                string.Join(", ", removeResult.Errors.Select(item => item.Description))
+            );
+        }
+
+        IdentityResult addResult = await _userManager.AddPasswordAsync(
+            user,
+            request.NewPassword
+        );
+
+        if (!addResult.Succeeded)
+        {
+            return Result<Unit>.Failure(
+                string.Join(", ", addResult.Errors.Select(item => item.Description))
+            );
+        }
+
+        user.MustChangePassword = false;
+        IdentityResult updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            return Result<Unit>.Failure(
+                string.Join(", ", updateResult.Errors.Select(e => e.Description))
+            );
+        }
+
+        await _userManager.UpdateSecurityStampAsync(user);
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
+    }
 }

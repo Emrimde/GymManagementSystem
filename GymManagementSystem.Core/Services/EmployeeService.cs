@@ -47,7 +47,8 @@ public class EmployeeService : IEmployeeService
             UserName = person.Email,
             Email = person.Email,
             MustChangePassword = true,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            PersonId = person.Id
         };
 
         IdentityResult createResult = await _userManager.CreateAsync(user, tempPassword);

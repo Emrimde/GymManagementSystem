@@ -26,6 +26,7 @@ public class ChangePasswordViewModel : ViewModel
     }
 
     public ICommand ChangePasswordCommand { get; }
+    public ICommand CancelCommand { get; }
 
     private readonly AuthHttpClient _authHttpClient;
     private readonly INavigationService _navigation;
@@ -36,7 +37,7 @@ public class ChangePasswordViewModel : ViewModel
     {
         _authHttpClient = authHttpClient;
         _navigation = navigation;
-
+        CancelCommand = new RelayCommand(item => navigation.NavigateTo<LoginViewModel>(), item => true);
         ChangePasswordCommand = new AsyncRelayCommand(ChangePasswordAsync);
     }
 

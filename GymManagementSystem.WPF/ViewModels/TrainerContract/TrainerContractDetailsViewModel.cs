@@ -13,6 +13,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using GymManagementSystem.WPF.ViewModels.Auth;
 
 namespace GymManagementSystem.WPF.ViewModels.TrainerContract;
 
@@ -37,6 +38,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
 
     public ICommand OpenTrainerScheduleCommand { get; }
     public ICommand OpenTrainerRatesCommand { get; }
+    public ICommand OpenSetNewPasswordViewCommand { get; }
 
     public void ReceiveParameter(object parameter)
     {
@@ -67,6 +69,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         OpenTrainerScheduleCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerScheduleViewModel>(item!), item => true);
         OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item!), item => true);
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTerminationAsync(), item => true);
+        OpenSetNewPasswordViewCommand = new RelayCommand(item => Navigation.NavigateTo<SetNewPasswordViewModel>(TrainerContract.PersonId), item => true);
     }
 
     private async Task GenerateEmploymentTerminationAsync()
@@ -104,7 +107,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
     {
         if (model == null) throw new ArgumentNullException(nameof(model));
 
-        // Dane siłowni z Resources (fallbacky)
         string gymName = Application.Current?.Resources["GymName"] as string ?? "Siłownia XYZ";
         string gymAddress = Application.Current?.Resources["Address"] as string ?? "ul. Przykładowa 1, Miasto";
         string contactNumber = Application.Current?.Resources["ContactNumber"] as string ?? "000-000-000";
@@ -114,7 +116,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         string requestedDateText = model.RequestedDate.ToString("yyyy-MM-dd", pl);
         string effectiveDateText = model.EffectiveDate.ToString("yyyy-MM-dd", pl);
 
-        // Tytuł i teksty zależne od typu umowy (model.ContractType powinien być czytelnym stringiem np. "B2B", "Umowa o pracę", "Zlecenie")
         string contractTitle = $"Wypowiedzenie umowy — {model.ContractType}";
         string terminationClause = model.ContractType?.ToLowerInvariant() switch
         {
@@ -128,7 +129,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
                 "Zasady rozwiązania umowy określone są w treści umowy i niniejszym wypowiedzeniu."
         };
 
-        // Bezpieczna nazwa pliku
         string safeFileName = $"{model.FirstName}_{model.LastName}_Wypowiedzenie_{Guid.NewGuid()}"
             .Replace(" ", "_")
             .Replace(":", "")
@@ -224,7 +224,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
             MessageBox.Show($"Błąd podczas generowania PDF: {ex.Message}");
         }
 
-        // metoda jest async - zakończymy Task
         await Task.CompletedTask;
     }
 }

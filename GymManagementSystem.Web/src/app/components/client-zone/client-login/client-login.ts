@@ -40,7 +40,8 @@ export class ClientLogin implements OnInit {
 
   const dto: SignInDto = {
     email: this.loginForm.value.email,
-    password: this.loginForm.value.password
+    password: this.loginForm.value.password,
+    applicationType: "Web"
   };
 
   this.authService.signIn(dto).subscribe({

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { GymClassDto } from '../../../../dto/GymClass/gym-class-dto';
 import { TrainerServiceClient } from '../../../../services-api/trainer-service-client';
+import { GroupInstructorPanelResponse } from '../../../../dto/Trainer/group-instructor-panel-response';
 
 @Component({
   selector: 'app-group-instructor-dashboard',
@@ -10,23 +11,21 @@ import { TrainerServiceClient } from '../../../../services-api/trainer-service-c
 })
 
 export class GroupInstructorDashboard implements OnInit {
-  gymClasses: GymClassDto[] = [];
-  loading = false;
+
+  panel = signal<GroupInstructorPanelResponse | null>(null);
+  loading = signal<boolean>(true);
 
   constructor(private trainerServiceClient: TrainerServiceClient) {}
 
   ngOnInit(): void {
-    this.loading = true;
-    this.trainerServiceClient.getMyGymClasses().subscribe({
-      next: (data:any) => {
-        this.gymClasses = data;
-        this.loading = false;
+    this.trainerServiceClient.getGroupInstructorPanelInfo().subscribe({
+      next: (data: any) => {
+        this.panel.set(data);
+        this.loading.set(false);
       },
-      error: () => this.loading = false
+      error: () => {
+        this.loading.set(false);
+      }
     });
-  }
-
-  openSchedule(gymClassId: string) {
-   
   }
 }

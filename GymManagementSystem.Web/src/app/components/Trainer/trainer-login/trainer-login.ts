@@ -26,11 +26,19 @@ export class TrainerLogin  {
   ) {}
 
   ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-    });
+  if (
+    this.authStateService.isLoggedIn() &&
+    (this.authStateService.isTrainer() ||
+     this.authStateService.isGroupInstructor())
+  ) {
+    this.router.navigate(['/trainer']);
+    return;
   }
+      this.loginForm = this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required]],
+      });
+}
 
   submit(): void {
     this.backendErrors = [];
@@ -43,6 +51,7 @@ export class TrainerLogin  {
     const dto: SignInDto = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
+      applicationType: "Web"
     };
 
     this.authService.signIn(dto).subscribe({

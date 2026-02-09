@@ -55,7 +55,7 @@ public partial class App : Application
         services.AddTransient<GeneralSettingsViewModel>();
         services.AddTransient<MembershipEditViewModel>();
         services.AddTransient<ClientUpdateViewModel>();
-        services.AddSingleton<LoginViewModel>();
+        services.AddTransient<LoginViewModel>();
         services.AddTransient<VisitViewModel>();
         services.AddTransient<TrainerScheduleViewModel>();
         services.AddTransient<GymClassAddViewModel>();
@@ -86,6 +86,7 @@ public partial class App : Application
         services.AddTransient<PersonalBookingViewModel>();
         services.AddTransient<GymClassUpdateViewModel>();
         services.AddTransient<ChangePasswordViewModel>();
+        services.AddTransient<SetNewPasswordViewModel>();
         services.AddTransient<JwtHandler>();
 
         services.AddSingleton<INavigationService, NavigationService>();

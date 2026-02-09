@@ -55,7 +55,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <!--<ColumnDefinition/--><!-->-->
                     </Grid.ColumnDefinitions>
 
                     <Button
@@ -68,7 +68,7 @@
                         Height="40"
                         Margin="0,0,8,0"/>
 
-                    <Button
+                    <!--<Button
                         Grid.Column="1"
                         Content="REGISTER"
                         Command="{Binding OpenRegisterViewCommand}"
@@ -76,7 +76,7 @@
                         Foreground="{DynamicResource SecondColor}"
                         BorderBrush="{DynamicResource SecondColor}"
                         Height="40"
-                        Margin="8,0,0,0"/>
+                        Margin="8,0,0,0"/>-->
                 </Grid>
 
             </StackPanel>

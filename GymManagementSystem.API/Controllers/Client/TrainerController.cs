@@ -24,9 +24,8 @@ public class TrainerController : BaseController
     public async Task<ActionResult<IEnumerable<GymClassDto>>> GetMyGymClasses() => HandleListedResult(await _trainerService.GetMyGymClassesAsync());
 
 
-    [HttpGet("gym-classes/{gymClassId:guid}/scheduled-classes")]
-    public async Task<ActionResult<IEnumerable<ScheduledClassDto>>> GetScheduledClasses(
-        [FromRoute] Guid gymClassId) => HandleListedResult(await _trainerService.GetScheduledClassesForGymClassAsync(gymClassId));
+    [HttpGet("get-group-instructor-panel")]
+    public async Task<ActionResult<GroupInstructorPanelResponse>> GetGroupInstructorPanel() => HandleResult(await _trainerService.GetGroupInstructorPanelAsync());
 
 
     [HttpGet("get-panel-info")]

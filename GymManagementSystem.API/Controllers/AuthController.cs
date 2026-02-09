@@ -25,7 +25,6 @@ public class AuthController : BaseController
     [HttpPost("force-change-password")]
     public async Task<ActionResult> ForceChangePassword([FromBody] ForceChangePasswordRequest request) => HandleResult(await _authService.ForceChangePasswordAsync(request));
 
-
     [HttpPost("activate-client-account")]
     public async Task<ActionResult> ActivateClientAccount([FromBody] ActivateAccountRequest request) => HandleResult(await _authService.ActivateClientAccountAsync(request));
 
@@ -35,6 +34,11 @@ public class AuthController : BaseController
     [HttpPost("reset-password-confirm")]
     public async Task<ActionResult> ResetPasswordConfirm([FromBody] ConfirmResetPasswordRequest request) => HandleResult(await _authService.ResetPasswordConfirmAsync(request));
 
-    [HttpPost("register")]
-    public async Task<ActionResult> Register([FromBody] RegisterDto request) => HandleResult(await _authService.RegisterAsync(request));
+    //[HttpPost("register")]
+    //public async Task<ActionResult> Register([FromBody] RegisterDto request) => HandleResult(await _authService.RegisterAsync(request));
+
+    [Authorize(Roles = "Manager, Owner")]
+    [HttpPost("set-new-password")]
+    public async Task<ActionResult> SetNewPassword(
+    [FromBody] SetNewPasswordRequest request) => HandleResult(await _authService.SetNewPasswordAsync(request));
 }

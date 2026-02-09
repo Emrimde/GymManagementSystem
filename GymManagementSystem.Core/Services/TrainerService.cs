@@ -82,10 +82,16 @@ public class TrainerService : ITrainerService
         }
 
         person.IdentityUserId = user.Id;
+        if (request.TrainerType == TrainerTypeEnum.PersonalTrainer)
+        {
+            await _userManager.AddToRoleAsync(user, "Trainer");
+        }
+        else
+        {
+            await _userManager.AddToRoleAsync(user, "GroupInstructor");
+        }
 
-        await _userManager.AddToRoleAsync(user, "Trainer");
-
-        TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
+            TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
         await GeneratedTrainerRates(trainerContract, settings!);
         await _unitOfWork.SaveChangesAsync();
         return Result<TrainerContractCreatedResponse>.Success(new TrainerContractCreatedResponse() { TrainerContractId = trainerContract.Id, TemporaryPassword = tempPassword }, StatusCodeEnum.Ok);
@@ -278,39 +284,35 @@ public class TrainerService : ITrainerService
     }
 
 
-    public async Task<Result<IEnumerable<ScheduledClassDto>>> GetScheduledClassesForGymClassAsync(
-    Guid gymClassId)
+    public async Task<Result<GroupInstructorPanelResponse>> GetGroupInstructorPanelAsync()
     {
         var personIdClaim = _httpContext.HttpContext?
             .User
-            .FindFirst("client_id")
+            .FindFirst("person_id")
             ?.Value;
 
         if (string.IsNullOrWhiteSpace(personIdClaim) ||
             !Guid.TryParse(personIdClaim, out var personId))
         {
-            return Result<IEnumerable<ScheduledClassDto>>.Failure(
+            return Result<GroupInstructorPanelResponse>.Failure(
                 "Unauthorized",
                 StatusCodeEnum.Unauthorized
             );
         }
 
-        var owns = await _gymClassRepo
-            .TrainerOwnsClassAsync(gymClassId, personId);
+        IEnumerable<ScheduledClassDto> scheduled = await _scheduledClassRepo
+            .GetInstructorScheduledClasses(personId);
 
-        if (!owns)
+        GroupInstructorPanelResponse? response = await _personRepo.GetGroupInstructorPanelResponseAsync(personId);
+        if(response == null)
         {
-            return Result<IEnumerable<ScheduledClassDto>>.Failure(
-                "You do not have access to this class",
-                StatusCodeEnum.Unauthorized
-            );
+            return Result<GroupInstructorPanelResponse>.Failure("Instructor not found", StatusCodeEnum.NotFound);
         }
 
-        var scheduled = await _scheduledClassRepo
-            .GetByGymClassIdAsync(gymClassId);
+        response.ScheduledClasses = scheduled;
 
-        return Result<IEnumerable<ScheduledClassDto>>
-            .Success(scheduled, StatusCodeEnum.Ok);
+        return Result<GroupInstructorPanelResponse>
+            .Success(response, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<TrainerPanelInfoResponse>> GetPersonalTrainerPanelAsync()
@@ -332,7 +334,7 @@ public class TrainerService : ITrainerService
         IEnumerable<PersonalBookingForTrainerResponse> personalBookings = await _personalBookingRepo.GetPersonalBookingsAsync(personId);
 
         TrainerPanelInfoResponse? trainerPanelInfo = await _trainerRepo.GetTrainerPanelInfoResponse(personId);
-        if(trainerPanelInfo == null)
+        if (trainerPanelInfo == null)
         {
             return Result<TrainerPanelInfoResponse>.Failure(
                 "Trainer not found",

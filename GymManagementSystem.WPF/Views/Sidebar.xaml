@@ -12,7 +12,8 @@
         <Button Command="{Binding OpenMembershipView}" Content="Memberships" Margin="5"/>
         <Button Content="Gym Classes" Command="{Binding OpenGymClassesView}" Margin="5"/>
         <Button Content="Staff" Command="{Binding OpenStaffView}" Margin="5"/>
-        <!--<Button Content="Employment Terminations" Command="{Binding OpenEmploymentTerminationsViewCommand}" Margin="5"/>-->
+        <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5"/>
+    
        
         <Button Content="Settings" Command="{Binding OpenSettingsView}" Margin="5"/>
     </StackPanel>

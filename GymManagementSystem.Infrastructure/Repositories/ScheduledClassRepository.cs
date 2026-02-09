@@ -117,18 +117,18 @@ public class ScheduledClassRepository : IScheduledClassRepository
         throw new NotImplementedException();
     }
 
-    public async Task<List<ScheduledClassDto>> GetByGymClassIdAsync(Guid gymClassId)
+    public async Task<List<ScheduledClassDto>> GetInstructorScheduledClasses(Guid personId)
     {
         return await _dbContext.ScheduledClasses
-            .Where(item => item.GymClassId == gymClassId)
+            .Where(item => item.GymClass.Trainer.Person.Id == personId)
             .OrderBy(item => item.Date)
-            .ThenBy(item => item.StartFrom)
             .Select(item => new ScheduledClassDto
             {
                 Id = item.Id,
-                Date = item.Date,
-                StartFrom = item.StartFrom,
-                StartTo = item.StartTo,
+                Name = item.GymClass.Name,
+                Date = item.Date.ToLocalTime().ToString("dd.MM.yyyy"),
+                StartFrom = item.StartFrom.ToString(@"hh\:mm"),
+                StartTo = (item.StartFrom + TimeSpan.FromHours(1)).ToString(@"hh\:mm"),
                 MaxPeople = item.MaxPeople,
                 IsCancelled = item.IsCancelled,
                 IsActive = item.IsActive

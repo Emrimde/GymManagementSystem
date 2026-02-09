@@ -12,4 +12,5 @@ public interface IAuthService
     Task<Result<bool>> RegisterAsync(RegisterDto request);
     Task<Result<Unit>> ResetPasswordAsync(ForgotPasswordRequest request);
     Task<Result<Unit>> ResetPasswordConfirmAsync(ConfirmResetPasswordRequest request);
+    Task<Result<Unit>> SetNewPasswordAsync(SetNewPasswordRequest request);
 }

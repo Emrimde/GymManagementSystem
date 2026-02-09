@@ -179,6 +179,9 @@
                     <DataTemplate DataType="{x:Type personalbookingvm:PersonalBookingUpdateViewModel}">
                         <personalbookingview:PersonalUpdateView />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type authvm:SetNewPasswordViewModel}">
+                        <authview:SetPasswordView/>
+                    </DataTemplate>
 
     
                    

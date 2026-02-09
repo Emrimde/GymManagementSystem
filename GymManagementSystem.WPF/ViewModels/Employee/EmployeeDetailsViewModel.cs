@@ -5,6 +5,7 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.PdfGenerators;
 using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
+using GymManagementSystem.WPF.ViewModels.Auth;
 using System.Windows;
 using System.Windows.Input;
 
@@ -29,6 +30,7 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
         Navigation = navigation;
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTerminationAsync(), item => true);
         LoadEmployeeCommand = new AsyncRelayCommand(item => LoadEmployeeAsync(), item => true);
+        SetNewPasswordCommand = new RelayCommand(item => Navigation.NavigateTo<SetNewPasswordViewModel>(Employee.PersonId), item => true);
         _employmentTerminationHttpClient = employmentTerminationHttpClient;
         
     }
@@ -68,6 +70,7 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; set; }
     public INavigationService Navigation {  get; set; }
     public ICommand GenerateTerminationCommand { get; }
+    public ICommand SetNewPasswordCommand { get; }
     public ICommand LoadEmployeeCommand { get; }
     private Guid _employeeId;
     public void ReceiveParameter(object parameter)

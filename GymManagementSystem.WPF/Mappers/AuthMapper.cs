@@ -10,7 +10,9 @@ public static class AuthMapper
         return new SignInDto
         {
             Email = username,
-            Password = password
+            Password = password,
+            AppType = "Backoffice"
+
         };
     }
     public static RegisterDto ToRegisterDto(RegisterViewModel viewModel)

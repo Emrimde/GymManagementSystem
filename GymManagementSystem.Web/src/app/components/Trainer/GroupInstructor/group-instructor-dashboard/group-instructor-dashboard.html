@@ -1,23 +1,141 @@
-<h3>Your group classes</h3>
+<div class="container py-4">
+  <div class="row g-4">
 
-@if (loading) {
-  <div>Loading…</div>
-}
+    <!-- PROFILE PANEL -->
+    <aside class="col-12 col-md-4 col-xl-3">
+      <div class="card shadow-sm rounded-3 background-white h-100">
+        <div class="card-body text-center">
 
-@if (!loading && gymClasses.length === 0) {
-  <div class="text-muted">
-    No classes assigned
+          <div class="mb-4">
+            <div
+              class="rounded-circle background-black d-inline-flex align-items-center justify-content-center"
+              style="width:100px;height:100px;">
+              <span class="fs-5 fw-bold text-white-bg">TRAINER</span>
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-1 text-black">
+            {{ panel()?.trainerName }}
+          </h5>
+          <div class="text-green small fw-semibold mb-4">
+            Group Instructor
+          </div>
+
+          <div class="background-light-gray rounded-3 p-3 text-start small">
+            <div class="mb-3">
+              <div class="text-black fw-semibold">Email</div>
+              {{ panel()?.email }}
+            </div>
+
+            <div class="mb-3">
+              <div class="text-black fw-semibold">Phone</div>
+              {{ panel()?.phoneNumber }}
+            </div>
+
+            <div>
+              <div class="text-black fw-semibold">Location</div>
+              {{ panel()?.location }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-12 col-md-8 col-xl-9">
+
+      <!-- HEADER -->
+      <div class="mb-4">
+        <h3 class="mb-1 fw-bold text-black">
+          Your scheduled group classes
+        </h3>
+        <div class="text-light-gray small">
+          All group classes you are currently leading
+        </div>
+      </div>
+
+      <!-- GREEN TABLE CARD -->
+      <div class="card shadow-sm rounded-3 background green">
+        <div class="card-body p-0">
+
+          @if (loading()) {
+            <div class="text-center py-5 text-white-bg">
+              <div class="spinner-border text-white-bg"></div>
+              <div class="mt-2">Loading…</div>
+            </div>
+          }
+
+          @if (!loading() && panel()?.scheduledClasses?.length === 0) {
+            <div class="text-center py-5 text-white-bg fw-semibold">
+              No scheduled classes found
+            </div>
+          }
+
+          @if (!loading() ) {
+            <div class="table-responsive">
+              <table
+                class="table table-borderless align-middle mb-0
+                        text-white-bg">
+
+                <thead>
+                  <tr class="border-bottom border-white bg-transparent">
+                    <th class="fw-semibold">Class</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (c of panel()!.scheduledClasses; track c.id) {
+                    <tr class="border-bottom border-white bg-transparent">
+
+                      <td class="fw-bold">
+                        {{ c.name }}
+                      </td>
+
+                      <td>
+                        <span class="background-green text-white-bg px-2 py-1 rounded-2">
+                          {{ c.date }}
+                        </span>
+                      </td>
+
+                      <td>{{ c.startFrom }}</td>
+                      <td>{{ c.startTo }}</td>
+
+                      <td>
+                        <span class="background-white text-black px-2 py-1 rounded-2 fw-semibold">
+                          {{ c.maxPeople }}
+                        </span>
+                      </td>
+
+                      <td>
+                        @if (c.isActive) {
+                          <span class="badge background-green text-white-bg px-3 py-2">
+                            ACTIVE
+                          </span>
+                        }
+                        @else {
+                          <span class="badge background-light-gray text-black px-3 py-2">
+                            INACTIVE
+                          </span>
+                        }
+                      </td>
+
+                    </tr>
+                  }
+                </tbody>
+
+              </table>
+            </div>
+          }
+
+        </div>
+      </div>
+
+    </main>
   </div>
-}
-
-@if (!loading && gymClasses.length > 0) {
-  <div class="list-group">
-    @for (c of gymClasses; track c.id) {
-      <button
-        class="list-group-item list-group-item-action"
-        (click)="openSchedule(c.id)">
-        {{ c.name }}
-      </button>
-    }
-  </div>
-}
+</div>

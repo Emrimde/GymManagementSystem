@@ -108,6 +108,9 @@
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Visibility="{Binding Employee.CanTerminate, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding GenerateTerminationCommand}"/>
+                        <Button Content="Set new password" Margin="0,10,0,0"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding SetNewPasswordCommand}"/>
 
                     </StackPanel>
                 </materialDesign:Card>
