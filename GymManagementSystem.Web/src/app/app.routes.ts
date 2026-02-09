@@ -17,63 +17,70 @@ import { TrainerMain } from './components/Trainer/trainer-main/trainer-main';
 import { roleGuardGuard } from './guard/role-guard-guard';
 
 export const routes: Routes = [
+
 {
-    path: '',
-    component: MainPage, 
-    
-},
-{
-    path: 'add-class-booking',
-    component: AddClassBooking,
-    canActivate: [authGuardGuard]
-},
-{
-    path: 'about-us',
-    component: AboutUs,
+  path: '',
+  component: MainPage,
 },
 
 {
-    path: 'login-client',
-    component: ClientLogin
-},
-{
-    path: 'register-client',
-    component: ClientRegister
-},
-{
-    path: 'client-main-page',
-    component: ClientMainPage,
-    canActivate: [authGuardGuard]
-},
-{
-    path: 'memberships',
-    component: Membership
-},
-{
-    path: 'forgot-password',
-    component: ForgotPassword
+  path: 'about-us',
+  component: AboutUs,
 },
 
 {
-    path: 'buy-membership/:id',
-    component: BuyMembership,
-    canActivate: [authGuardGuard]
+  path: 'login-client',
+  component: ClientLogin
 },
 {
-    path: 'change-password',
-    component: ChangePassword,
-    canActivate: [authGuardGuard]
-}
-,
-{
-    path: 'add-personal-booking',
-    component: AddPersonalBooking,
-    canActivate: [authGuardGuard]
+  path: 'register-client',
+  component: ClientRegister
 },
 {
-    path: 'activate-account', 
-    component:ActivateAccount
+  path: 'forgot-password',
+  component: ForgotPassword
 },
+{
+  path: 'activate-account',
+  component: ActivateAccount
+},
+
+{
+  path: 'client-main-page',
+  component: ClientMainPage,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Client'] }
+},
+{
+  path: 'add-personal-booking',
+  component: AddPersonalBooking,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Client'] }
+},
+{
+  path: 'add-class-booking',
+  component: AddClassBooking,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Client'] }
+},
+{
+  path: 'buy-membership/:id',
+  component: BuyMembership,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Client'] }
+},
+{
+  path: 'change-password',
+  component: ChangePassword,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Client'] }
+},
+
+{
+  path: 'memberships',
+  component: Membership
+},
+
 {
   path: 'trainer/login',
   component: TrainerLogin
@@ -84,4 +91,5 @@ export const routes: Routes = [
   canActivate: [roleGuardGuard],
   data: { roles: ['Trainer', 'GroupInstructor'] }
 }
+
 ];

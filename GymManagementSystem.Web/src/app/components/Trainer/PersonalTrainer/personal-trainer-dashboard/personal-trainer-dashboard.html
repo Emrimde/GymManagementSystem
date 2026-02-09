@@ -8,27 +8,27 @@
           <div class="mb-3">
             <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center"
                  style="width:96px;height:96px;">
-              <span class="fs-2 text-secondary fw-bold">JK</span>
+              <span class="fs-4 text-secondary fw-bold">User</span>
             </div>
           </div>
 
-          <h5 class="fw-bold mb-0">Jan Kowalski</h5>
+          <h5 class="fw-bold mb-0">{{ panel()?.trainerName }}</h5>
           <div class="text-muted small mb-3">Personal Trainer</div>
 
           <hr>
 
           <div class="text-start small">
             <div class="mb-2">
-              <strong>Email</strong><br />
-              jan.kowalski@example.com
+               <strong>Email</strong><br />
+  {{ panel()?.email }}
             </div>
             <div class="mb-2">
               <strong>Phone</strong><br />
-              +48 600 700 800
+  {{ panel()?.phoneNumber }}
             </div>
             <div>
               <strong>Location</strong><br />
-              Warsaw
+              {{ panel()?.location }}
             </div>
           </div>
 
@@ -36,7 +36,7 @@
 
           <div class="row text-center small">
             <div class="col-12 border-end">
-              <div class="fw-bold text-brand">24</div>
+              <div class="fw-bold text-brand">{{ panel()?.monthlyPersonalBookingCount }}</div>
               <div class="text-muted">Sessions / month</div>
             </div>
   
@@ -69,13 +69,13 @@
             </div>
           }
 
-          @if (!loading() && bookings().length === 0) {
+          @if (!loading() && panel()?.personalBookings?.length === 0) {
             <div class="text-center py-5 text-muted">
               No scheduled personal training sessions
             </div>
           }
 
-          @if (!loading() && bookings().length > 0) {
+          @if (!loading() && panel()?.personalBookings && panel()!.personalBookings.length > 0) {
             <div class="table-responsive">
               <table class="table table-striped align-middle mb-0">
                 <thead class="table-light">
@@ -83,12 +83,12 @@
                     <th>Client</th>
                     <th>Date</th>
                     <th>Duration</th>
-                    <th>Status</th>
-                    <th class="text-end">Action</th>
+                    <th>End Time</th>
+                    <th>Price</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (b of bookings(); track b.personalBookingId) {
+                  @for (b of panel()!.personalBookings; track b.personalBookingId) {
                     <tr>
                       <td class="fw-semibold">
                         {{ b.clientName }}
@@ -100,15 +100,12 @@
                         {{ b.duration }}
                       </td>
                       <td>
-                        <span class="badge status-confirmed">
-                          Confirmed
-                        </span>
+                        {{ b.endTime }}
                       </td>
-                      <td class="text-end">
-                        <button class="btn btn-sm btn-danger">
-                          Cancel
-                        </button>
+                      <td>
+                        {{ b.price }}
                       </td>
+                      
                     </tr>
                   }
                 </tbody>

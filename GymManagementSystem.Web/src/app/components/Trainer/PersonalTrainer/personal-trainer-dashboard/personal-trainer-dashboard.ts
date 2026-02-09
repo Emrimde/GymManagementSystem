@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { TrainerServiceClient } from '../../../../services-api/trainer-service-client';
 import { PersonalBookingForTrainerDto } from '../../../../dto/PersonalBooking/personal-booking-for-trainer-dto';
+import { TrainerPanelInfoDto } from '../../../../dto/Trainer/trainer-panel-info-dto';
 
 @Component({
   selector: 'app-personal-trainer-dashboard',
@@ -10,16 +11,15 @@ import { PersonalBookingForTrainerDto } from '../../../../dto/PersonalBooking/pe
 })
 export class PersonalTrainerDashboard implements OnInit {
 
-  bookings = signal<PersonalBookingForTrainerDto[]>([]);
+  panel = signal<TrainerPanelInfoDto | null>(null);
   loading = signal<boolean>(true);
 
   constructor(private trainerServiceClient: TrainerServiceClient) {}
 
   ngOnInit(): void {
-    this.trainerServiceClient.getMyPersonalBookings().subscribe({
+    this.trainerServiceClient.getTrainerPanelInfo().subscribe({
       next: (data: any) => {
-        this.bookings.set(data);
-        console.log(data);
+        this.panel.set(data);
         this.loading.set(false);
       },
       error: () => {

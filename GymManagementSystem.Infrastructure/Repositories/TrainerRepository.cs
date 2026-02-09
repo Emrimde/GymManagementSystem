@@ -5,6 +5,7 @@ using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Resulttttt;
+using GymManagementSystem.Core.WebDTO.Trainer;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -161,5 +162,25 @@ public class TrainerRepository : ITrainerRepository
         }
         _dbContext.Remove(trainerTimeOff);
         return true;
+    }
+
+    public async Task<TrainerPanelInfoResponse?> GetTrainerPanelInfoResponse(Guid personId)
+    {
+        DateTime start = new DateTime(
+DateTime.UtcNow.Year,
+    DateTime.UtcNow.Month,
+    1,
+    0, 0, 0,
+    DateTimeKind.Utc);
+        DateTime end = start.AddMonths(1);
+
+        return await _dbContext.TrainerContracts.AsNoTracking().Where(item => item.TrainerType == TrainerTypeEnum.PersonalTrainer && item.PersonId == personId).Select(item => new TrainerPanelInfoResponse()
+        {
+            Email = item.Person.Email,
+            Location = item.Person.City,
+            MonthlyPersonalBookingCount = item.PersonalBookings.Count(item => item.Start >= start && item.Start < end),
+            PhoneNumber = item.Person.PhoneNumber,
+            TrainerName = item.Person.FirstName + " " + item.Person.LastName,
+        }).FirstOrDefaultAsync();
     }
 }

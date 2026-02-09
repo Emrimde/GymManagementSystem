@@ -59,7 +59,7 @@ export class TrainerLogin  {
         }
 
         this.authStateService.logout();
-        this.backendErrors = ['Access denied. Trainer account required.'];
+        this.backendErrors = ['Invalid password or email'];
         this.cdr.detectChanges();
       },
       error: (err: HttpErrorResponse) => {

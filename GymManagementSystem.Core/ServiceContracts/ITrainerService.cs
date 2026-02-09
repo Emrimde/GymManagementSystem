@@ -7,6 +7,7 @@ using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.WebDTO.GymClass;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
+using GymManagementSystem.Core.WebDTO.Trainer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.Core.ServiceContracts;
@@ -33,5 +34,5 @@ public interface ITrainerService
     //Task<Result<TrainerInfoResponse>> UpdateAsync(Guid id, TrainerUpdateRequest entity);
     Task<Result<IEnumerable<GymClassDto>>> GetMyGymClassesAsync();
     Task<Result<IEnumerable<ScheduledClassDto>>> GetScheduledClassesForGymClassAsync(Guid gymClassId);
-    Task<Result<IEnumerable<PersonalBookingForTrainerResponse>>> GetTrainerPersonalBookingsAsync();
+    Task<Result<TrainerPanelInfoResponse>> GetPersonalTrainerPanelAsync();
 }

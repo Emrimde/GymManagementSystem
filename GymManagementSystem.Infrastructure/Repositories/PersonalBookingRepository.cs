@@ -93,8 +93,16 @@ public class PersonalBookingRepository : IPersonalBookingRepository
         _dbContext.PersonalBookings.Remove(personalBooking);   
     }
 
-    public IQueryable<PersonalBooking> GetPersonalBookings()
+    public async Task<IEnumerable<PersonalBookingForTrainerResponse>> GetPersonalBookingsAsync(Guid personId)
     {
-        return _dbContext.PersonalBookings.Where(item => item.Start >= DateTime.UtcNow);
+        return await _dbContext.PersonalBookings.Where(item => item.Start >= DateTime.UtcNow && item.TrainerContract.PersonId == personId).Select(item => new PersonalBookingForTrainerResponse()
+        {
+            ClientName = item.Client.FirstName + " " + item.Client.LastName,
+            Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            Duration = item.TrainerRate.DurationInMinutes.ToString() + " minutes",
+            PersonalBookingId = item.Id,
+            EndTime = (item.Start.ToLocalTime() + TimeSpan.FromMinutes(item.TrainerRate.DurationInMinutes)).ToString(),
+            Price = item.Price.ToString() + "$"
+        }).ToListAsync();
     }
 }

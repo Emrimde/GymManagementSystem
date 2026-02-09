@@ -14,5 +14,5 @@ public interface IPersonalBookingRepository
     IQueryable<PersonalBooking> GetPersonalBookingsByClientId(Guid clientId);
     void DeletePersonalBooking(PersonalBooking personalBooking);
     IQueryable<PersonalBooking> GetPersonalBookingg(Guid personalBookingId);
-    IQueryable<PersonalBooking> GetPersonalBookings();
+    Task<IEnumerable<PersonalBookingForTrainerResponse>> GetPersonalBookingsAsync(Guid personId);
 }

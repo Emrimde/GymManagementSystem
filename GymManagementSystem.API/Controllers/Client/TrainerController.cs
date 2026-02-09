@@ -1,14 +1,10 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
-using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.GymClass;
-using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
-using GymManagementSystem.Infrastructure.DatabaseContext;
+using GymManagementSystem.Core.WebDTO.Trainer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace GymManagementSystem.API.Controllers.Client;
 
@@ -33,8 +29,8 @@ public class TrainerController : BaseController
         [FromRoute] Guid gymClassId) => HandleListedResult(await _trainerService.GetScheduledClassesForGymClassAsync(gymClassId));
 
 
-    [HttpGet("get-personal-bookings")]
-    public async Task<ActionResult<IEnumerable<PersonalBookingForTrainerResponse>>> GetPersonalBookings(
-        [FromRoute] Guid gymClassId) => HandleListedResult(await _trainerService.GetTrainerPersonalBookingsAsync());
+    [HttpGet("get-panel-info")]
+    public async Task<ActionResult<IEnumerable<TrainerPanelInfoResponse>>> GetPersonalTrainerPanel(
+        ) => HandleResult(await _trainerService.GetPersonalTrainerPanelAsync());
 
 }

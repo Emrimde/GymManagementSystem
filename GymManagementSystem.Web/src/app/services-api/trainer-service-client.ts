@@ -10,8 +10,8 @@ export class TrainerServiceClient {
   getMyGymClasses() {
     return this.httpClient.get(`${this.base}/gym-classes`);
   }
-  getMyPersonalBookings() {
-    return this.httpClient.get(`${this.base}/get-personal-bookings`);
+  getTrainerPanelInfo() {
+    return this.httpClient.get(`${this.base}/get-panel-info`);
   }
   getTrainerRatesById(id: string) {
     return this.httpClient.get(`${this.base}/trainer-rates-select/${id}`);

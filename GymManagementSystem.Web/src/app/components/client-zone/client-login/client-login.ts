@@ -46,33 +46,27 @@ export class ClientLogin implements OnInit {
   this.authService.signIn(dto).subscribe({
     next: (response: any) => {
       const result: AuthenticationResponse = response;
-      // localStorage.setItem('token', result.token);
+
       this.authStateService.setToken(result.token);
       localStorage.setItem('expirationDate', result.expirationDate);
+
+      if (!this.authStateService.hasRole('Client')) {
+        this.authStateService.logout();
+        this.backendErrors = ['Invalid email or password'];
+        this.cdr.detectChanges();
+        return;
+      }
+
       this.router.navigate(['/client-main-page']);
     },
-  error: (err : HttpErrorResponse) => {
-  const apiError = err.error;
-console.log('STATUS:', err.status);
-console.log('ERROR BODY:', err.error);
-  if (apiError?.errors) {
-    this.backendErrors = Object.values(apiError.errors).flat() as string[];
-    this.cdr.detectChanges(); 
-    return;
-  }
 
-  if (apiError?.detail) {
-    this.backendErrors = [apiError.detail];
-    this.cdr.detectChanges(); 
-    return;
-  }
-
-  this.backendErrors = ['Login failed'];
-  this.cdr.detectChanges(); 
-}
-
+    error: (_err: HttpErrorResponse) => {
+      this.backendErrors = ['Invalid email or password'];
+      this.cdr.detectChanges();
+    }
   });
 }
+
 
 
   }

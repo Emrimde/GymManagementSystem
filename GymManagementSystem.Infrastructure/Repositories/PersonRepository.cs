@@ -82,6 +82,10 @@ public class PersonRepository : IPersonRepository
     {
         return await _dbContext.People.Include(item => item.TrainerContract).Include(item => item.Employee).Include(item => item.EmploymentTerminations).FirstOrDefaultAsync(item => item.Id == personId);
     }
+    public IQueryable<Person> GetPersonById(Guid personId)
+    {
+        return _dbContext.People.Where(item => item.IsActive);
+    }
 
     public async Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync()
     {

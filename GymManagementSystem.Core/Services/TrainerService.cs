@@ -14,6 +14,7 @@ using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.GymClass;
 using GymManagementSystem.Core.WebDTO.PersonalBooking;
 using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
+using GymManagementSystem.Core.WebDTO.Trainer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -312,7 +313,7 @@ public class TrainerService : ITrainerService
             .Success(scheduled, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<PersonalBookingForTrainerResponse>>> GetTrainerPersonalBookingsAsync()
+    public async Task<Result<TrainerPanelInfoResponse>> GetPersonalTrainerPanelAsync()
     {
         var personIdClaim = _httpContext.HttpContext?
              .User
@@ -322,20 +323,25 @@ public class TrainerService : ITrainerService
         if (string.IsNullOrWhiteSpace(personIdClaim) ||
             !Guid.TryParse(personIdClaim, out var personId))
         {
-            return Result<IEnumerable<PersonalBookingForTrainerResponse>>.Failure(
+            return Result<TrainerPanelInfoResponse>.Failure(
                 "Unauthorized",
                 StatusCodeEnum.Unauthorized
             );
         }
 
-        IEnumerable<PersonalBookingForTrainerResponse> personalBookings = await _personalBookingRepo.GetPersonalBookings().Where(item => item.TrainerContract.PersonId == personId).Select(item => new PersonalBookingForTrainerResponse()
-        {
-            ClientName = item.Client.FirstName + " " + item.Client.LastName,
-            Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
-            Duration = item.TrainerRate.DurationInMinutes.ToString() + " minutes",
-            PersonalBookingId = item.Id
-        }).ToListAsync();
+        IEnumerable<PersonalBookingForTrainerResponse> personalBookings = await _personalBookingRepo.GetPersonalBookingsAsync(personId);
 
-        return Result<IEnumerable<PersonalBookingForTrainerResponse>>.Success(personalBookings, StatusCodeEnum.Ok);
+        TrainerPanelInfoResponse? trainerPanelInfo = await _trainerRepo.GetTrainerPanelInfoResponse(personId);
+        if(trainerPanelInfo == null)
+        {
+            return Result<TrainerPanelInfoResponse>.Failure(
+                "Trainer not found",
+                StatusCodeEnum.NotFound
+            );
+        }
+
+        trainerPanelInfo.PersonalBookings = personalBookings;
+
+        return Result<TrainerPanelInfoResponse>.Success(trainerPanelInfo, StatusCodeEnum.Ok);
     }
 }
