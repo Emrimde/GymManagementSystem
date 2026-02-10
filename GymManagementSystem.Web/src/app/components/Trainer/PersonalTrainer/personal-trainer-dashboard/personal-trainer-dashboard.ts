@@ -2,10 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { TrainerServiceClient } from '../../../../services-api/trainer-service-client';
 import { PersonalBookingForTrainerDto } from '../../../../dto/PersonalBooking/personal-booking-for-trainer-dto';
 import { TrainerPanelInfoDto } from '../../../../dto/Trainer/trainer-panel-info-dto';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-personal-trainer-dashboard',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './personal-trainer-dashboard.html',
   styleUrl: './personal-trainer-dashboard.css',
 })

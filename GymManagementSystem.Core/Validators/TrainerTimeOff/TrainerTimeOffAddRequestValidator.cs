@@ -13,9 +13,5 @@ public class TrainerTimeOffAddRequestValidator : AbstractValidator<TrainerTimeOf
         RuleFor(item => item.Start)
             .GreaterThanOrEqualTo(item => DateTime.UtcNow.AddMinutes(-1))
             .WithMessage("You cannot set time off for the past");
-
-        RuleFor(item => item.TrainerId)
-            .NotEmpty()
-            .WithMessage("Trainer identifier is required");
     }
 }

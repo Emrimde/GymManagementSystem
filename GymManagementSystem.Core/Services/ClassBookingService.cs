@@ -41,27 +41,8 @@ public class ClassBookingService : IClassBookingService
             }
 
         }
-        ScheduledClass? scheduledClass = await _scheduledClassRepository.GetByIdAsync(request.ScheduledClassId);
-        if (scheduledClass == null)
-        {
-            return Result<ClassBookingInfoResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound);
-        }
 
-        if (scheduledClass.ClassBookings.Any(item => item.Client!.Id == request.ClientId)) 
-        {
-            return Result<ClassBookingInfoResponse>.Failure("Client booked for this classes", StatusCodeEnum.BadRequest);
-        }
-
-        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(scheduledClass.GymClassId);
-
-
-        int classBookingsCount = scheduledClass.ClassBookings.Count();
-        if (classBookingsCount == gymClass!.MaxPeople)
-        {
-            return Result<ClassBookingInfoResponse>.Failure("Unable to book client because max people reached", StatusCodeEnum.BadRequest);
-        }
         ClassBooking classBooking = request.ToClassBooking();
-
         if (request.IsRequestFromWeb)
         {
             string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
@@ -75,6 +56,28 @@ public class ClassBookingService : IClassBookingService
         {
             classBooking.ClientId = request.ClientId;
         }
+
+
+        ScheduledClass? scheduledClass = await _scheduledClassRepository.GetByIdAsync(request.ScheduledClassId);
+        if (scheduledClass == null)
+        {
+            return Result<ClassBookingInfoResponse>.Failure("Scheduled class not found", StatusCodeEnum.NotFound);
+        }
+
+        if (scheduledClass.ClassBookings.Any(item => item.Client.Id == classBooking.ClientId)) 
+        {
+            return Result<ClassBookingInfoResponse>.Failure("Client booked for this classes", StatusCodeEnum.BadRequest);
+        }
+
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(scheduledClass.GymClassId);
+
+
+        int classBookingsCount = scheduledClass.ClassBookings.Count();
+        if (classBookingsCount == gymClass!.MaxPeople)
+        {
+            return Result<ClassBookingInfoResponse>.Failure("Unable to book client because max people reached", StatusCodeEnum.BadRequest);
+        }
+
 
         _classBookingRepo.CreateAsync(classBooking);
         await _unitOfWork.SaveChangesAsync();

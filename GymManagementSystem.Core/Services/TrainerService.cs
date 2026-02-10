@@ -19,6 +19,7 @@ using GymManagementSystem.Core.WebDTO.TrainerTimeOff;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
@@ -92,7 +93,7 @@ public class TrainerService : ITrainerService
             await _userManager.AddToRoleAsync(user, "GroupInstructor");
         }
 
-            TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
+        TrainerContract trainerContract = _trainerRepo.CreateTrainerContractAsync(trainer);
         await GeneratedTrainerRates(trainerContract, settings!);
         await _unitOfWork.SaveChangesAsync();
         return Result<TrainerContractCreatedResponse>.Success(new TrainerContractCreatedResponse() { TrainerContractId = trainerContract.Id, TemporaryPassword = tempPassword }, StatusCodeEnum.Ok);
@@ -154,16 +155,44 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<Unit>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
-        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null, entity.Start, entity.End);
+        Guid trainerId = entity.TrainerId ?? Guid.Empty;
+        if (entity.TrainerId == null)
+        {
+            string? personIdClaim = _httpContext.HttpContext?.User.FindFirst("person_id")?.Value;
+            if (string.IsNullOrWhiteSpace(personIdClaim) ||
+               !Guid.TryParse(personIdClaim, out var personId))
+            {
+                return Result<Unit>.Failure(
+                    "Unauthorized",
+                    StatusCodeEnum.Unauthorized
+                );
+            }
+            try
+            {
+                trainerId = await _personRepo.GetTrainerIdByPersonIdAsync(personId);
+            }
+            catch (Exception)
+            {
+                return Result<Unit>.Failure(
+                    "Trainer not found for the user",
+                    StatusCodeEnum.NotFound
+                );
+            }
+        }
+
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(trainerId, null, entity.Start, entity.End);
         if (isOverlap)
         {
             return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
+        TrainerTimeOff trainerTimeOff = entity.ToTrainerTimeOff();
+        trainerTimeOff.TrainerId = trainerId;
 
-
-        TrainerTimeOff addedTrainerAvailability = await _trainerRepo.CreateTrainerTimeOffAsync(entity.ToTrainerTimeOff());
+        _trainerRepo.CreateTrainerTimeOffAsync(trainerTimeOff);
+        await _unitOfWork.SaveChangesAsync();   
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
+
 
     public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50)
     {
@@ -305,7 +334,7 @@ public class TrainerService : ITrainerService
             .GetInstructorScheduledClasses(personId);
 
         GroupInstructorPanelResponse? response = await _personRepo.GetGroupInstructorPanelResponseAsync(personId);
-        if(response == null)
+        if (response == null)
         {
             return Result<GroupInstructorPanelResponse>.Failure("Instructor not found", StatusCodeEnum.NotFound);
         }

@@ -113,4 +113,9 @@ public class PersonRepository : IPersonRepository
             Location = item.TrainerContract.Person.City,
         }).FirstOrDefaultAsync();
     }
+
+    public async Task<Guid> GetTrainerIdByPersonIdAsync(Guid personId)
+    {
+        return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item=>  item.TrainerContract.Id).FirstAsync();
+    }
 }

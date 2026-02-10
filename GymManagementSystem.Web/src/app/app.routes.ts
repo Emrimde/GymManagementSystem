@@ -15,6 +15,7 @@ import { ActivateAccount } from './components/client-zone/activate-account/activ
 import { TrainerLogin } from './components/Trainer/trainer-login/trainer-login';
 import { TrainerMain } from './components/Trainer/trainer-main/trainer-main';
 import { roleGuardGuard } from './guard/role-guard-guard';
+import { TrainerTimeOffAdd } from './components/Trainer/PersonalTrainer/trainer-time-off-add/trainer-time-off-add';
 
 export const routes: Routes = [
 
@@ -90,6 +91,12 @@ export const routes: Routes = [
   component: TrainerMain,
   canActivate: [roleGuardGuard],
   data: { roles: ['Trainer', 'GroupInstructor'] }
+},
+{ 
+  path: 'trainer-time-off',
+  component: TrainerTimeOffAdd,
+  canActivate: [roleGuardGuard],
+  data: { roles: ['Trainer'] }
 }
 
 ];

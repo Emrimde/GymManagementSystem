@@ -11,7 +11,7 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface ITrainerRepository
 {
     Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId,Guid? trainerOffId, DateTime start, DateTime end);
-    Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff);
+    void CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff);
     Task<IEnumerable<TrainerTimeOff>> GetTrainerTimeOffs(CancellationToken cancellationToken);
     Task<bool> AnyPersonalBookingOverlapAsync(Guid trainerId,  Guid? personalBookingId, DateTime start, DateTime end);
     TrainerContract CreateTrainerContractAsync(TrainerContract trainerContract);

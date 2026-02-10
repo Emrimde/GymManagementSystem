@@ -21,11 +21,9 @@ public class TrainerRepository : ITrainerRepository
         _dbContext = dbContext;
     }
 
-    public async Task<TrainerTimeOff> CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff)
+    public void CreateTrainerTimeOffAsync(TrainerTimeOff trainerTimeOff)
     {
         _dbContext.TrainerTimeOff.Add(trainerTimeOff);
-        await _dbContext.SaveChangesAsync();
-        return trainerTimeOff;
     }
 
     public Task<bool> AnyTrainerOffOverlapAsync(Guid trainerId, Guid? trainerTimeOffId, DateTime start, DateTime end)

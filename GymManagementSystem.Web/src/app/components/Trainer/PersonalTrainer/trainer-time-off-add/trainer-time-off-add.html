@@ -1,0 +1,108 @@
+<div class="background-white p-4" style="max-width: 500px; margin: 0 auto;">
+  <h3 class="text-black mb-3">Add time off</h3>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="mb-3">
+      <label class="text-black">Start</label>
+      <input
+        type="datetime-local"
+        class="form-control"
+        formControlName="start"
+        step="900"
+      />
+
+      @if (
+        form.get('start')?.touched &&
+        form.get('start')?.errors?.['required']
+      ) {
+        <small class="text-danger">
+          Start date is required
+        </small>
+      }
+
+      @if (
+        form.get('start')?.touched &&
+        form.get('start')?.errors?.['quarterHour']
+      ) {
+        <small class="text-danger">
+          Time must be in 15-minute intervals
+        </small>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="text-black">End</label>
+      <input
+        type="datetime-local"
+        class="form-control"
+        formControlName="end"
+        step="900"
+      />
+
+      @if (
+        form.get('end')?.touched &&
+        form.get('end')?.errors?.['required']
+      ) {
+        <small class="text-danger">
+          End date is required
+        </small>
+      }
+
+      @if (
+        form.get('end')?.touched &&
+        form.get('end')?.errors?.['quarterHour']
+      ) {
+        <small class="text-danger">
+          Time must be in 15-minute intervals
+        </small>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="text-black">Reason (optional)</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        formControlName="reason"
+      ></textarea>
+    </div>
+
+    @if (form.errors?.['endBeforeStart']) {
+      <div class="text-danger mb-3">
+        End must be after start
+      </div>
+    }
+
+    @if (backendErrors.length > 0) {
+      <div class="alert alert-danger mt-3">
+        <ul class="mb-0">
+          @for (err of backendErrors; track err) {
+            <li>{{ err }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="d-grid gap-2">
+      <button
+        type="submit"
+        class="btn button-green fw-bold"
+        [disabled]="isSubmitting || form.invalid"
+      >
+        {{ isSubmitting ? 'Saving...' : 'Save time off' }}
+      </button>
+
+      <button type="button" class="btn button-light-gray" routerLink="/trainer-panel">
+        Back
+      </button>
+    </div>
+
+    @if (success) {
+      <div class="mt-3 text-green">
+        Time off added successfully
+      </div>
+    }
+
+  </form>
+</div>

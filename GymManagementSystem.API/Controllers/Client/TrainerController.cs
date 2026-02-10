@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.TrainerTimeOff;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.GymClass;
 using GymManagementSystem.Core.WebDTO.ScheduledClassDto;
@@ -31,5 +32,9 @@ public class TrainerController : BaseController
     [HttpGet("get-panel-info")]
     public async Task<ActionResult<IEnumerable<TrainerPanelInfoResponse>>> GetPersonalTrainerPanel(
         ) => HandleResult(await _trainerService.GetPersonalTrainerPanelAsync());
+
+    [HttpPost("create-trainer-time-off")]
+    public async Task<ActionResult> GetPersonalTrainerPanel([FromBody] TrainerTimeOffAddRequest request
+        ) => HandleResult(await _trainerService.CreateTrainerTimeOffAsync(request));
 
 }

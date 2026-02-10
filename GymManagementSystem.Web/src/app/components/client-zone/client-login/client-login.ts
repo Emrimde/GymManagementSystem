@@ -63,6 +63,7 @@ export class ClientLogin implements OnInit {
 
     error: (_err: HttpErrorResponse) => {
       this.backendErrors = ['Invalid email or password'];
+      console.log(_err);
       this.cdr.detectChanges();
     }
   });
