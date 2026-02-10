@@ -18,9 +18,6 @@ using GymManagementSystem.Core.WebDTO.Trainer;
 using GymManagementSystem.Core.WebDTO.TrainerTimeOff;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
-using static System.Net.WebRequestMethods;
 
 namespace GymManagementSystem.Core.Services;
 

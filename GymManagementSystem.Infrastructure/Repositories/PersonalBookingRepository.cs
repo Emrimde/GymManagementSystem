@@ -95,7 +95,7 @@ public class PersonalBookingRepository : IPersonalBookingRepository
 
     public async Task<IEnumerable<PersonalBookingForTrainerResponse>> GetPersonalBookingsAsync(Guid personId)
     {
-        return await _dbContext.PersonalBookings.Where(item => item.Start >= DateTime.UtcNow && item.TrainerContract.PersonId == personId).Select(item => new PersonalBookingForTrainerResponse()
+        return await _dbContext.PersonalBookings.AsNoTracking().Where(item => item.Start >= DateTime.UtcNow && item.TrainerContract.PersonId == personId).Select(item => new PersonalBookingForTrainerResponse()
         {
             ClientName = item.Client.FirstName + " " + item.Client.LastName,
             Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),

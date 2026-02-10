@@ -186,12 +186,12 @@ DateTime.UtcNow.Year,
 
     public async Task<IEnumerable<TrainerTimeOffWebResponse>>  GetTrainerTimeOffsForTrainerPanelAsync(Guid personId)
     {
-        return await _dbContext.TrainerTimeOff.Where(item => item.Trainer.PersonId == personId).Select(item => new TrainerTimeOffWebResponse()
+        return await _dbContext.TrainerTimeOff.AsNoTracking().Where(item => item.Trainer.PersonId == personId && item.Start.Date >= DateTime.UtcNow.Date).Select(item => new TrainerTimeOffWebResponse()
         {
             TimeOffStart = item.Start.ToLocalTime().ToString("HH:mm"),
             TimeOffEnd = item.End.ToLocalTime().ToString("HH:mm"),
-            TimeOffStartDate = item.Start.ToLocalTime().ToString("dd:MM:yyyy"),
-            TimeOffEndDate = item.End.ToLocalTime().ToString("dd:MM:yyyy"),
+            TimeOffStartDate = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
+            TimeOffEndDate = item.End.ToLocalTime().ToString("dd.MM.yyyy"),
             Reason = item.Reason
         }).ToListAsync();
     }

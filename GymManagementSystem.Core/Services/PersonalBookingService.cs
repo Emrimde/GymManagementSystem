@@ -157,7 +157,7 @@ public class PersonalBookingService : IPersonalBookingService
             {
                 TrainerFullName = item.TrainerContract != null ? item.TrainerContract.Person.FirstName + " " + item.TrainerContract.Person.LastName : "",
                 Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
-                StartEndTime = $"{item.Start.ToString("HH:mm")} - {item.End.ToString("HH:mm")}"
+                StartEndTime = $"{item.Start.ToLocalTime().ToString("HH:mm")} - {item.End.ToString("HH:mm")}"
             })
             .ToListAsync(); ;
 

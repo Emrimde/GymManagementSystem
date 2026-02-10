@@ -105,7 +105,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task<GroupInstructorPanelResponse?> GetGroupInstructorPanelResponseAsync(Guid personId)
     {
-       return await _dbContext.People.Where(item => item.Id == personId).Select(item => new GroupInstructorPanelResponse()
+       return await _dbContext.People.AsNoTracking().Where(item => item.Id == personId).Select(item => new GroupInstructorPanelResponse()
         {
             TrainerName = $"{item.FirstName} {item.LastName}",
             PhoneNumber = item.PhoneNumber,
