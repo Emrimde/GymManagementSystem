@@ -11,8 +11,6 @@ public static class TrainerTimeOffMapper
             End = request.End,
             Reason = request.Reason,
             Start = request.Start,
-           
-           
         };
     }
     public static TrainerTimeOff ToTrainerTimeOff(this TrainerTimeOffUpdateRequest request)

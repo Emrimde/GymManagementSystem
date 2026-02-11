@@ -32,7 +32,8 @@ public class EmailService : IEmailService
             From = new MailAddress(_configuration["Smtp:From"]!),
             Subject = request.Subject,
             Body = request.Body,
-            IsBodyHtml = true
+            IsBodyHtml = true,
+           
         };
 
         mail.To.Add(request.To);

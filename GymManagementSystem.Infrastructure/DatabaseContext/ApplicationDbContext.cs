@@ -125,10 +125,142 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
             {
                 Id = new Guid("6707ECBD-F2C1-49EE-AE24-8CE497A4F501"),
                 MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
-                ValidFrom = new DateTime(2026, 1, 1,0,0,0,DateTimeKind.Utc),
+                ValidFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 ValidTo = null,
                 Price = 1500m
             }
             );
+
+        builder.Entity<MembershipFeature>().HasData(
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
+        FeatureDescription = "Full access to all training zones"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
+        FeatureDescription = "Group classes included in the membership price"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
+        FeatureDescription = "Full access to all training zones"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
+        FeatureDescription = "Group classes included in the membership price"
+    },
+
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
+        FeatureDescription = "Full access to all training zones"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
+        FeatureDescription = "Group classes included in the membership price"
+    },
+
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
+        FeatureDescription = "Full access to all training zones"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
+        FeatureDescription = "Group classes included in the membership price"
+    }, new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
+        FeatureDescription = "Can book group classes up to 7 days in advance"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
+        FeatureDescription = "Can invite a friend 3 times per month"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("18EC8725-C23B-4EA4-90D4-2952E3B110A0"),
+        FeatureDescription = "Includes 1 free personal training session every 6 months"
+    },
+
+    // Gold Monthly
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
+        FeatureDescription = "Can book group classes up to 14 days in advance"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
+        FeatureDescription = "Can invite a friend 6 times per month"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("BEDD6962-6FA4-435D-8505-B7C6092B9875"),
+        FeatureDescription = "Includes 2 free personal training sessions every 6 months"
+    },
+
+    // Silver Annual
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
+        FeatureDescription = "Can book group classes up to 7 days in advance"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
+        FeatureDescription = "Can invite a friend 3 times per month"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("62DD1607-FD54-4186-B282-8EF9D82CDDCF"),
+        FeatureDescription = "Includes 1 free personal training session every 6 months"
+    },
+
+    // Gold Annual
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
+        FeatureDescription = "Can book group classes up to 14 days in advance"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
+        FeatureDescription = "Can invite a friend 6 times per month"
+    },
+    new MembershipFeature
+    {
+        Id = Guid.NewGuid(),
+        MembershipId = new Guid("DB4A0DC9-6D66-445F-8AE1-E5B941E873CF"),
+        FeatureDescription = "Includes 2 free personal training sessions every 6 months"
+    }
+
+);
+
     }
 }

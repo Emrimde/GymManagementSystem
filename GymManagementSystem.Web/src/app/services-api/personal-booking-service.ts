@@ -16,5 +16,4 @@ export class PersonalBookingService {
   createPersonalBooking(request: PersonalBookingAddRequest) {
     return this.httpClient.post(`${this.base}`, request);
   }
-
 }

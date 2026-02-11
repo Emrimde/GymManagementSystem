@@ -28,6 +28,7 @@ public class AuthController : BaseController
     [HttpPost("activate-client-account")]
     public async Task<ActionResult> ActivateClientAccount([FromBody] ActivateAccountRequest request) => HandleResult(await _authService.ActivateClientAccountAsync(request));
 
+    // reset password for client who forgot their password, so they can reset it using their email
     [HttpPost("reset-password")]
     public async Task<ActionResult> ResetPassword([FromBody] ForgotPasswordRequest request) => HandleResult(await _authService.ResetPasswordAsync(request));
 

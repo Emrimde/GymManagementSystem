@@ -39,6 +39,11 @@
   color: var(--light-gray);
 }
 
+.logo{
+  min-width: 100px;
+  min-height: 60px;
+}
+
 .button-green {
   background-color: var(--green);
   color: var(--white);

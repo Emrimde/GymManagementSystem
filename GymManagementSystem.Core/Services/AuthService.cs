@@ -9,6 +9,7 @@ using GymManagementSystem.Core.WebDTO.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
@@ -19,13 +20,15 @@ public class AuthService : IAuthService
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
 
-    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor, IEmailService emailService)
+    public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IHttpContextAccessor contextAccessor, IEmailService emailService, IConfiguration configuration)
     {
         _userManager = userManager;
         _jwtService = jwtService;
         _contextAccessor = contextAccessor;
         _emailService = emailService;
+        _configuration = configuration;
     }
 
     public async Task<Result<Unit>> ChangePasswordForLoggedInUserAsync(ChangePasswordRequest request)
@@ -61,13 +64,21 @@ public class AuthService : IAuthService
         string resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
         string encodedToken = Uri.EscapeDataString(resetPasswordToken);
         string userId = user.Id.ToString();
+
+        string link =
+            $"{_configuration["App:WebUrl"]}/reset-client-password" +
+            $"?userId={userId}&token={encodedToken}";
+
         EmailRequest emailRequest = new EmailRequest
         {
-            To = request.Email,
-            Body = $"Click the link to reset your password. If it's not you, ignore message <a href='https://yourfrontend.com/reset-password?token={encodedToken}&userId={userId}'>Reset Password</a> <br>" +
-            $"token = CfDJ8CGDZJLEgY9HruVUevfK%2FSeKneozyGZ8i3I7CDzd1UevaWm0u7RMCRLuzjf7VA6%2BjYCyqUl%2Bv%2FvN%2Fg4vnT778CxD2KiBU5J3g1FvZhPdD99zftSzbk10KCN5vBF7ffkidBapk4hcRPPfA6UchdwSai7g7zdB%2FSXfY6Vi%2B7PjpY33%2BK36h%2FDgYOv50C0gcACrKGrowMGBM4WP9fmSNC5J1Se1eHE6FCA6JQowTWGm78BR&userId=fe48d75f-4d8d-4aaa-8d68-b2efb12af6bc"
-            ,
-            Subject = "Password Reset"
+            To = user.Email!,
+            Subject = "Reset your password",
+            Body = $@"
+        <p>Click the link to reset your password. If it's not you, ignore message.</p>
+        <p>
+            <a href='{link}'>Reset Password</a>
+        </p>
+       "
         };
 
         await _emailService.SendLink(emailRequest);

@@ -49,6 +49,12 @@ public class PersonalBookingService : IPersonalBookingService
             return Result<PersonalBookingInfoResponse>.Failure("The time range overlaps an existing personal booking", StatusCodeEnum.BadRequest);
         }
 
+        bool trainerTimeOffOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(entity.TrainerId, null, start, end);
+        if (trainerTimeOffOverlap)
+        {
+            return Result<PersonalBookingInfoResponse>.Failure("At this time is existing trainer time off", StatusCodeEnum.BadRequest);
+        }
+
         TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerId, false);
         if (trainerContract == null)
         {

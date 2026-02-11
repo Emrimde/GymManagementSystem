@@ -16,6 +16,7 @@ import { TrainerLogin } from './components/Trainer/trainer-login/trainer-login';
 import { TrainerMain } from './components/Trainer/trainer-main/trainer-main';
 import { roleGuardGuard } from './guard/role-guard-guard';
 import { TrainerTimeOffAdd } from './components/Trainer/PersonalTrainer/trainer-time-off-add/trainer-time-off-add';
+import { ResetClientPassword } from './components/client-zone/reset-client-password/reset-client-password';
 
 export const routes: Routes = [
 
@@ -45,7 +46,10 @@ export const routes: Routes = [
   path: 'activate-account',
   component: ActivateAccount
 },
-
+{ 
+  path: 'reset-client-password',
+  component: ResetClientPassword,
+},
 {
   path: 'client-main-page',
   component: ClientMainPage,
@@ -76,7 +80,6 @@ export const routes: Routes = [
   canActivate: [roleGuardGuard],
   data: { roles: ['Client'] }
 },
-
 {
   path: 'memberships',
   component: Membership
@@ -97,6 +100,7 @@ export const routes: Routes = [
   component: TrainerTimeOffAdd,
   canActivate: [roleGuardGuard],
   data: { roles: ['Trainer'] }
-}
+},
+
 
 ];

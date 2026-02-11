@@ -152,6 +152,9 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<Unit>> CreateTrainerTimeOffAsync(TrainerTimeOffAddRequest entity)
     {
+        entity.Start = DateTime.SpecifyKind(entity.Start, DateTimeKind.Local).ToUniversalTime();
+        entity.End = DateTime.SpecifyKind(entity.End, DateTimeKind.Local).ToUniversalTime();
+
         Guid trainerId = entity.TrainerId ?? Guid.Empty;
         if (entity.TrainerId == null)
         {
@@ -182,14 +185,20 @@ public class TrainerService : ITrainerService
         {
             return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
+
+        bool isPersonalBookingOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(trainerId, null, entity.Start, entity.End);
+        if (isPersonalBookingOverlap)
+        {
+            return Result<Unit>.Failure("At this time is reservated personal training", StatusCodeEnum.BadRequest);
+        }
+
         TrainerTimeOff trainerTimeOff = entity.ToTrainerTimeOff();
         trainerTimeOff.TrainerId = trainerId;
 
         _trainerRepo.CreateTrainerTimeOffAsync(trainerTimeOff);
-        await _unitOfWork.SaveChangesAsync();   
+        await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
-
 
     public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50)
     {

@@ -257,7 +257,7 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
                 if (item.Type == TrainerScheduleItemType.TimeOff)
                 {
                     appt.AppointmentBackground =
-                        new SolidColorBrush(System.Windows.Media.Color.FromArgb(204, 0, 180, 0)); // zielony 80%
+                        new SolidColorBrush(System.Windows.Media.Color.FromArgb(204, 0, 180, 0)); 
                 }
                 else if (item.Type == TrainerScheduleItemType.Booked)
                 {

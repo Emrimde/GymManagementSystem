@@ -71,8 +71,8 @@ public class AddingDialogWindowViewModel : ViewModel
         return new TrainerTimeOffAddRequest
         {
             TrainerId = _trainerId,
-            Start = start.ToUniversalTime(), // Przelicza np. 15:00 -> 13:00
-            End = end.ToUniversalTime(),
+            Start = start, 
+            End = end,
             Reason = Reason,
         };
     }

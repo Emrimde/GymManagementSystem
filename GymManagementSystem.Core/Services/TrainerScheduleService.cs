@@ -52,14 +52,40 @@ public class TrainerScheduleService : ITrainerScheduleService
         // 1) Pobieramy TimeOff i Booking
         IEnumerable<TrainerTimeOff> trainerTimeOffs =
             await _trainerTimeOffRepo.GetForRangeAsync(trainerId, startDay, endDay, cancellationToken);
-        //trainerTimeOffs = trainerTimeOffs.Select(item =>
-        
-        //    (item.Start = item.Start.ToLocalTime(), item.End = item.End.ToLocalTime())
-            
-        //);
+        trainerTimeOffs = trainerTimeOffs
+      .Select(t =>
+      {
+          // jeśli w repo jest UTC, określ go jako UTC i skonwertuj do lokalnego
+          var start = DateTime.SpecifyKind(t.Start, DateTimeKind.Utc).ToLocalTime();
+          var end = DateTime.SpecifyKind(t.End, DateTimeKind.Utc).ToLocalTime();
+          return new TrainerTimeOff
+          {
+              Id = t.Id,
+              TrainerId = t.TrainerId,
+              Reason = t.Reason,
+              Start = start,
+              End = end,
+          };
+      })
+      .ToList();
 
         var personalBookings =
             await _personalBookingRepository.GetForRangeAsync(trainerId, startDay, endDay, cancellationToken);
+        personalBookings = personalBookings
+    .Select(item =>
+    {
+        var start = DateTime.SpecifyKind(item.Start, DateTimeKind.Utc).ToLocalTime();
+        var end = DateTime.SpecifyKind(item.End, DateTimeKind.Utc).ToLocalTime();
+        return new PersonalBooking
+        {
+            Id = item.Id,
+            TrainerContractId = item.TrainerContractId,
+            Client = item.Client,
+            Start = start,
+            End = end,
+        };
+    })
+    .ToList();
 
         Console.WriteLine("TIME-OFF FROM REPO:");
         foreach (var t in trainerTimeOffs)
