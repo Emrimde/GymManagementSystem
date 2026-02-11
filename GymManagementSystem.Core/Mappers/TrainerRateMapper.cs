@@ -10,9 +10,9 @@ public static class TrainerRateMapper
         {
             DurationInMinutes = trainerRate.DurationInMinutes,
             Id = trainerRate.Id,
-            RatePerSessions = trainerRate.RatePerSessions,
-            ValidFrom = trainerRate.ValidFrom,
-            ValidTo = trainerRate.ValidTo
+            RatePerSessions = trainerRate.RatePerSessions.ToString() + " $",
+            ValidFrom = trainerRate.ValidFrom.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            ValidTo = trainerRate.ValidTo.HasValue ? trainerRate.ValidTo.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm") : null
         };
     }
     public static TrainerRateSelectResponse ToTrainerRateSelectResponse(this TrainerRate trainerRate)

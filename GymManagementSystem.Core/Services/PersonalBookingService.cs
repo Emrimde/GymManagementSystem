@@ -30,7 +30,7 @@ public class PersonalBookingService : IPersonalBookingService
     }
     public async Task<Result<PersonalBookingInfoResponse>> CreatePersonalBookingAsync(PersonalBookingAddRequest entity)
     {
-        TrainerRateResponse? trainerRate = await _trainerRateRepo.GetTrainerRateByIdAsync(entity.TrainerRateId);
+        TrainerRateForPersonalBookingAddResponse? trainerRate = await _trainerRateRepo.GetTrainerRateForPersonalBookingAddResponseAsync(entity.TrainerRateId);
         if (trainerRate == null)
         {
             return Result<PersonalBookingInfoResponse>.Failure("Cannot find trainer rate", StatusCodeEnum.NotFound);
@@ -90,8 +90,8 @@ public class PersonalBookingService : IPersonalBookingService
         PersonalBooking personalBooking = entity.ToPersonalBooking();
         personalBooking.Start = start;
         personalBooking.End = end;
-        personalBooking.Price = trainerRate.RatePerSessions;
-        personalBooking.TrainerRateId = trainerRate.Id;
+        personalBooking.Price =  trainerRate.RatePerSessions;
+        personalBooking.TrainerRateId = trainerRate.TrainerRateId;
 
         if (entity.IsClientReservation)
         {

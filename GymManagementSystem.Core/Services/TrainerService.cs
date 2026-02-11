@@ -231,9 +231,9 @@ public class TrainerService : ITrainerService
         return Result<TrainerContractDetailsResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id)
+    public async Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id, bool? showActive)
     {
-        IEnumerable<TrainerRate> trainerRates = await _trainerRateRepo.GetTrainerRates(id);
+        IEnumerable<TrainerRate> trainerRates = await _trainerRateRepo.GetTrainerRates(id, showActive);
         return Result<IEnumerable<TrainerRateResponse>>.Success(trainerRates.Select(item => item.ToTrainerRateResponse()), StatusCodeEnum.Ok);
     }
 
@@ -245,7 +245,7 @@ public class TrainerService : ITrainerService
 
     public async Task<Result<TrainerRateInfoResponse>> CreateTrainerRateAsync(TrainerRateAddRequest request)
     {
-        IEnumerable<TrainerRate> trainerRates = await _trainerRateRepo.GetTrainerRates(request.TrainerContractId);
+        IEnumerable<TrainerRate> trainerRates = await _trainerRateRepo.GetTrainerRates(request.TrainerContractId, null);
         TrainerRate trainerRate = new TrainerRate();
         foreach (var item in trainerRates)
         {

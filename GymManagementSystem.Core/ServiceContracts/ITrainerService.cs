@@ -24,7 +24,7 @@ public interface ITrainerService
     Task<Result<IEnumerable<TrainerContractInfoResponse>>> GetAllInstructorsAsync(CancellationToken cancellationToken);
     Task<Result<IEnumerable<TrainerInfoResponse>>> GetAllPersonalTrainersAsync();
     Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50);
-    Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id);
+    Task<Result<IEnumerable<TrainerRateResponse>>> GetAllTrainerRatesAsync(Guid id, bool? showActive);
     Task<Result<TrainerTimeOffReasonResponse>> GetTimeOffReasonAsync(Guid trainerTimeOffId);
 
     //Task<Result<TrainerDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);

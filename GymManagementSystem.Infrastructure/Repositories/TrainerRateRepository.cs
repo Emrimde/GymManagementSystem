@@ -17,44 +17,60 @@ public class TrainerRateRepository : ITrainerRateRepository
 
     public async Task AddRangeAsync(IEnumerable<TrainerRate> trainerRates)
     {
-      await _dbContext.TrainerRates.AddRangeAsync(trainerRates);
+        await _dbContext.TrainerRates.AddRangeAsync(trainerRates);
     }
 
     public async Task<TrainerRateInfoResponse> AddTrainerRateAsync(TrainerRate trainerRate)
     {
-       _dbContext.TrainerRates.Add(trainerRate);
+        _dbContext.TrainerRates.Add(trainerRate);
         await _dbContext.SaveChangesAsync();
         return trainerRate.ToTrainerRateInfoResponse();
     }
 
-    // it's for personal booking add action - we want to assign trainer rate price to personal booking price
     public async Task<TrainerRateResponse?> GetTrainerRateByIdAsync(Guid id)
     {
-      return await _dbContext.TrainerRates.Where(item => item.Id == id).Select(item => new TrainerRateResponse()
-      {
-          Id = item.Id,
-          DurationInMinutes = item.DurationInMinutes,
-          RatePerSessions = item.RatePerSessions,
-          ValidFrom = item.ValidFrom,
-          ValidTo = item.ValidTo
-      }).FirstOrDefaultAsync();
+        return await _dbContext.TrainerRates.Where(item => item.Id == id).Select(item => new TrainerRateResponse()
+        {
+            Id = item.Id,
+            DurationInMinutes = item.DurationInMinutes,
+            RatePerSessions = item.RatePerSessions.ToString() + " $",
+            ValidFrom = item.ValidFrom.ToLocalTime().ToString("dd.MM.yyyy HH:mm"),
+            ValidTo = item.ValidTo.HasValue ? item.ValidTo.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm") : null
+        }).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid trainerId)
+    public async Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid trainerId, bool? showActive)
     {
-      return await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).ToListAsync();
+        IQueryable<TrainerRate> query = _dbContext.TrainerRates.OrderByDescending(item => item.ValidFrom);
+        if (showActive.HasValue && showActive.Value == true)
+        {
+            query = query.Where(item => item.ValidTo == null);
+        }
+        return await query.ToListAsync();
+        //return await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).OrderByDescending(item => item.ValidFrom).ToListAsync();
+    }
+
+
+    public async Task<TrainerRateForPersonalBookingAddResponse?> GetTrainerRateForPersonalBookingAddResponseAsync(Guid trainerRateId)
+    {
+        return await _dbContext.TrainerRates.Where(item => item.Id == trainerRateId).Select(item => new TrainerRateForPersonalBookingAddResponse()
+        {
+            TrainerRateId = item.Id,
+            DurationInMinutes = item.DurationInMinutes,
+            RatePerSessions = item.RatePerSessions
+        }).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<TrainerRateSelectResponse>> GetTrainerRatesSelect(Guid trainerId)
     {
-       IEnumerable<TrainerRateSelectResponse> response = await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).Select(item => new TrainerRateSelectResponse()
+        IEnumerable<TrainerRateSelectResponse> response = await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId && item.ValidTo == null).Select(item => new TrainerRateSelectResponse()
         {
-           TrainerRateId = item.Id,
-           DisplayPriceDuration = item.DurationInMinutes.ToString() + "min / " +  item.RatePerSessions.ToString() + "$",
-           DurationInMinutes = item.DurationInMinutes,
-           Price = item.RatePerSessions
+            TrainerRateId = item.Id,
+            DisplayPriceDuration = item.DurationInMinutes.ToString() + "min / " + item.RatePerSessions.ToString() + "$",
+            DurationInMinutes = item.DurationInMinutes,
+            Price = item.RatePerSessions
 
-       }).ToListAsync();
+        }).ToListAsync();
         return response;
     }
 }

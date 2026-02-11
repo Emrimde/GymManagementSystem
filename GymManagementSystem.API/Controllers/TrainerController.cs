@@ -55,9 +55,7 @@ public class TrainerController : BaseController
     public async Task<ActionResult<IEnumerable<TrainerInfoResponse>>> GetAllPersonalTrainers() => HandleListedResult(await _trainerService.GetAllPersonalTrainersAsync());
 
     [HttpGet("trainer-rates/{id:guid}")]
-    public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id));
-
-
+    public async Task<ActionResult<IEnumerable<TrainerRateResponse>>> GetTrainerRates([FromRoute] Guid id, [FromQuery] bool? showActive) => HandleListedResult(await _trainerService.GetAllTrainerRatesAsync(id, showActive));
 
     [HttpPost("trainer-rate")]
     public async Task<ActionResult<TrainerRateInfoResponse>> CreateTrainerRate([FromBody] TrainerRateAddRequest request) => HandleResult(await _trainerService.CreateTrainerRateAsync(request));

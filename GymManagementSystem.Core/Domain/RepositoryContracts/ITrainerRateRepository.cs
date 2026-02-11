@@ -6,8 +6,9 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface ITrainerRateRepository
 {
     Task AddRangeAsync(IEnumerable<TrainerRate> trainerRates);
-    Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid id);
+    Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid id, bool? showActive);
     Task<TrainerRateResponse?> GetTrainerRateByIdAsync(Guid id);
     Task<IEnumerable<TrainerRateSelectResponse>> GetTrainerRatesSelect(Guid id);
     Task<TrainerRateInfoResponse> AddTrainerRateAsync(TrainerRate trainerRate);
+    Task<TrainerRateForPersonalBookingAddResponse?> GetTrainerRateForPersonalBookingAddResponseAsync(Guid trainerRateId);
 }

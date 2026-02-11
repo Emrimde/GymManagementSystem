@@ -93,10 +93,12 @@ public class TrainerHttpClient : BaseHttpClientService
     // RATES
 
     public Task<Result<ObservableCollection<TrainerRateResponse>>> GetTrainerRatesAsync(
-        Guid id)
+        Guid id, bool? showActive)
     {
+        string path = showActive.HasValue ? $"trainer-rates/{id}?showActive={showActive}" : $"trainer-rates/{id}";
+
         return GetAsync<ObservableCollection<TrainerRateResponse>>(
-            $"trainer-rates/{id}"
+            $"{path}"
         );
     }
 
