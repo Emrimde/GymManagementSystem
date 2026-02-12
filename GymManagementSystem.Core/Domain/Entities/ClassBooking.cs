@@ -3,9 +3,9 @@ public class ClassBooking
 {
     public Guid Id { get; set; }
     public Guid ScheduledClassId { get; set; }
-    public ScheduledClass? ScheduledClass { get; set; }
+    public ScheduledClass ScheduledClass { get; set; } = null!;
     public Guid ClientId { get; set; }
-    public Client? Client { get; set; }
+    public Client Client { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CancelledAt { get; set; } 

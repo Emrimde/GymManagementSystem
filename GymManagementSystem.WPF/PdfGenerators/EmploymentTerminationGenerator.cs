@@ -16,40 +16,55 @@ public static class EmploymentTerminationGenerator
 {
     public static void GenerateEmploymentTerminationPdf(this EmploymentTerminationGenerateResponse model)
     {
-        if (model == null) throw new ArgumentNullException(nameof(model));
+        if (model == null)
+            throw new ArgumentNullException(nameof(model));
 
-        // Dane siłowni z Resources (fallbacky)
-        string gymName = Application.Current?.Resources["GymName"] as string ?? "Siłownia XYZ";
-        string gymAddress = Application.Current?.Resources["Address"] as string ?? "ul. Przykładowa 1, Miasto";
+        string gymName = Application.Current?.Resources["GymName"] as string ?? "Gym XYZ";
+        string gymAddress = Application.Current?.Resources["Address"] as string ?? "Sample Street 1, City";
         string contactNumber = Application.Current?.Resources["ContactNumber"] as string ?? "000-000-000";
-        string gymNip = Application.Current?.Resources["GymNip"] as string ?? "000-000-0000";
+        string gymTaxId = Application.Current?.Resources["GymNip"] as string ?? "000-000-0000";
 
-        var pl = CultureInfo.CreateSpecificCulture("pl-PL");
-        string requestedDateText = model.RequestedDate.ToString("yyyy-MM-dd", pl);
-        string effectiveDateText = model.EffectiveDate.ToString("yyyy-MM-dd", pl);
+        string requestedDateText = model.RequestedDate.ToString("yyyy-MM-dd");
+        string effectiveDateText = model.EffectiveDate.ToString("yyyy-MM-dd");
 
-        // Tytuł i teksty zależne od typu umowy (model.ContractType powinien być czytelnym stringiem np. "B2B", "Umowa o pracę", "Zlecenie")
-        string contractTitle = $"Wypowiedzenie umowy — {model.ContractType}";
-        string terminationClause = model.ContractType?.ToLowerInvariant() switch
+        string contractType = model.ContractType?.ToLowerInvariant() ?? "";
+
+        string terminationClause;
+
+        if (contractType.Contains("employment"))
         {
-            var s when s.Contains("umowa o pracę") || s.Contains("umowaoprace") || s.Contains("praca") =>
-                "Zgodnie z obowiązującymi przepisami Kodeksu pracy okres wypowiedzenia ustala się zgodnie z długością zatrudnienia. Strony potwierdzają, że obowiązuje okres wypowiedzenia wskazany w niniejszym dokumencie.",
-            var s when s.Contains("b2b") || s.Contains("b-2-b") =>
-                "Umowa B2B może być rozwiązana przez każdą ze stron z zachowaniem warunków określonych w treści umowy. Strony uzgadniają w niniejszym wypowiedzeniu okres wypowiedzenia określony powyżej.",
-            var s when s.Contains("zlecenie") || s.Contains("zlec") =>
-                "Umowa zlecenie może być rozwiązana przez każdą ze stron na zasadach określonych w umowie. Strony ustalają okres wypowiedzenia podany powyżej.",
-            _ =>
-                "Zasady rozwiązania umowy określone są w treści umowy i niniejszym wypowiedzeniu."
-        };
+            terminationClause =
+                "The termination period is determined according to applicable labor law and the length of employment.";
+        }
+        else if (contractType.Contains("b2b"))
+        {
+            terminationClause =
+                "The B2B agreement may be terminated by either party according to the terms specified in the contract.";
+        }
+        else if (contractType.Contains("commission"))
+        {
+            terminationClause =
+                "The commission agreement may be terminated by either party according to the contract terms.";
+        }
+        else
+        {
+            terminationClause =
+                "The termination conditions are defined in the agreement between the parties.";
+        }
 
-        // Bezpieczna nazwa pliku
-        string safeFileName = $"{model.FirstName}_{model.LastName}_Wypowiedzenie_{Guid.NewGuid()}"
+        string safeFileName = $"{model.FirstName}_{model.LastName}_Termination_{Guid.NewGuid()}"
             .Replace(" ", "_")
             .Replace(":", "")
             .Replace("/", "_");
 
-        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string filePath = Path.Combine(desktop, $"{safeFileName}.pdf");
+        string downloadsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Downloads");
+
+        if (!Directory.Exists(downloadsPath))
+            Directory.CreateDirectory(downloadsPath);
+
+        string filePath = Path.Combine(downloadsPath, $"{safeFileName}.pdf");
 
         var document = Document.Create(container =>
         {
@@ -58,55 +73,53 @@ public static class EmploymentTerminationGenerator
                 page.Size(PageSizes.A4);
                 page.Margin(40);
                 page.DefaultTextStyle(x => x.FontSize(11));
+
                 page.Header()
                     .AlignCenter()
-                    .Text(contractTitle)
+                    .Text($"Contract Termination — {model.ContractType ?? "N/A"}")
                     .FontSize(16)
                     .Bold();
 
                 page.Content().Column(column =>
                 {
-                    column.Item().Text($"Wypowiedzenie wygenerowano: {requestedDateText}.");
-                    column.Item().PaddingTop(8).Text("Strony:");
-                    column.Item().Text($"a) Klub: {gymName}, {gymAddress}, NIP: {gymNip}, tel: {contactNumber}");
-                    column.Item().Text($"b) Osoba: {model.FirstName} {model.LastName} (typ umowy: {model.ContractType ?? "—"})");
+                    column.Item().Text($"Generated on: {requestedDateText}");
+                    column.Item().PaddingTop(8).Text("Parties:");
+                    column.Item().Text($"a) Gym: {gymName}, {gymAddress}, Tax ID: {gymTaxId}, Phone: {contactNumber}");
+                    column.Item().Text($"b) Person: {model.FirstName} {model.LastName}");
+
                     if (!string.IsNullOrWhiteSpace(model.EmploymentType))
-                        column.Item().Text($"   Forma zatrudnienia: {model.EmploymentType}");
+                        column.Item().Text($"   Employment type: {model.EmploymentType}");
 
-                    column.Item().PaddingTop(10).Text("§1 Przedmiot wypowiedzenia:");
-                    column.Item().Text("Niniejszy dokument stanowi wypowiedzenie umowy zawartej między stronami w zakresie określonym w umowie.");
+                    column.Item().PaddingTop(10).Text("1. Subject of Termination:");
+                    column.Item().Text("This document constitutes formal termination of the agreement between the parties.");
 
-                    column.Item().PaddingTop(10).Text("§2 Okres wypowiedzenia:");
-                    column.Item().Text($"Wypowiedzenie zostało zgłoszone dnia: {requestedDateText}. Niniejsze wypowiedzenie staje się skuteczne z dniem: {effectiveDateText}.");
+                    column.Item().PaddingTop(10).Text("2. Notice Period:");
+                    column.Item().Text($"The termination was submitted on {requestedDateText} and becomes effective on {effectiveDateText}.");
                     column.Item().Text(terminationClause);
 
-                    column.Item().PaddingTop(10).Text("§3 Skutki wypowiedzenia:");
-                    column.Item().Text("1. Po upływie okresu wypowiedzenia osoba przestaje wykonywać obowiązki wynikające z umowy oraz traci prawa wynikające z aktywnych uprawnień pracowniczych / kontraktowych.");
-                    column.Item().Text("2. Klub może rozliczyć należności wynikające z dotychczasowej współpracy zgodnie z umową.");
-
-                    column.Item().PaddingTop(10).Text("§4 Postanowienia końcowe:");
-                    column.Item().Text("1. Wszelkie zmiany niniejszego wypowiedzenia wymagają formy pisemnej.");
-                    column.Item().Text("2. W sprawach nieuregulowanych zastosowanie mają odpowiednie przepisy prawa polskiego.");
+                    column.Item().PaddingTop(10).Text("3. Legal Effects:");
+                    column.Item().Text("After the notice period, the person ceases to perform contractual duties and loses related rights.");
+                    column.Item().Text("The Gym may settle any outstanding obligations in accordance with the agreement.");
 
                     column.Item().PaddingTop(24).Row(row =>
                     {
-                        row.RelativeItem().Text($"Data wypowiedzenia: {requestedDateText}");
-                        row.RelativeItem().Text($"Data skuteczności: {effectiveDateText}");
+                        row.RelativeItem().Text($"Notice Date: {requestedDateText}");
+                        row.RelativeItem().Text($"Effective Date: {effectiveDateText}");
                     });
 
                     column.Item().PaddingTop(30).Row(row =>
                     {
                         row.ConstantItem(250).Column(left =>
                         {
-                            left.Item().Text("Podpis przedstawiciela Klubu:");
+                            left.Item().Text("Gym Representative Signature:");
                             left.Item().PaddingTop(40).Text("_________________________");
                         });
 
                         row.ConstantItem(250).Column(right =>
                         {
-                            right.Item().Text(model.ContractType != null && model.ContractType.ToLowerInvariant().Contains("b2b")
-                                ? "Podpis Wykonawcy (firma):"
-                                : "Podpis Pracownika / Zleceniobiorcy:");
+                            right.Item().Text(contractType.Contains("b2b")
+                                ? "Contractor Signature:"
+                                : "Employee Signature:");
                             right.Item().PaddingTop(40).Text("_________________________");
                         });
                     });
@@ -135,14 +148,16 @@ public static class EmploymentTerminationGenerator
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Błąd podczas generowania PDF: {ex.Message}");
+            MessageBox.Show($"Error while generating PDF: {ex.Message}");
         }
     }
 
-    public static void GenerateTrainerContractPdf(this TrainerContractAddRequest request,GeneralGymResponse gym, PersonDetailsResponse person)
-    {
-        var culture = CultureInfo.InvariantCulture;
 
+    public static void GenerateTrainerContractPdf(
+      this TrainerContractAddRequest request,
+      GeneralGymResponse gym,
+      PersonDetailsResponse person)
+    {
         string contractTitle = "Contract of Mandate (Trainer Agreement)";
 
         string trainerRole = request.TrainerType switch
@@ -153,9 +168,8 @@ public static class EmploymentTerminationGenerator
         };
 
         string commissionText = request.TrainerType == TrainerTypeEnum.PersonalTrainer
-    ? $"{request.ClubCommissionPercent:0.##}% club commission from each client payment."
-    : "";
-
+            ? $"{request.ClubCommissionPercent:0.##}% club commission from each client payment."
+            : string.Empty;
 
         string mainClause =
             "The subject of this agreement is the provision of training services " +
@@ -169,22 +183,28 @@ public static class EmploymentTerminationGenerator
                 $"Payments are made within 14 days based on settlement documents.",
 
             TrainerTypeEnum.GroupInstructor =>
-                "The remuneration is determined in accordance with the currently applicable price list/rates specified in the appendix/settlement system of the Club.”",
+                "The remuneration is determined in accordance with the currently applicable rates defined by the Club.",
 
             _ => string.Empty
         };
 
-
         string terminationClause =
             "Either party may terminate this agreement with a 14-day notice period.";
 
-        // SAFE FILE NAME
         string safeFileName =
             $"{person.FirstName}_{person.LastName}_TrainerContract_{Guid.NewGuid()}"
-                .Replace(" ", "_");
+                .Replace(" ", "_")
+                .Replace(":", "")
+                .Replace("/", "_");
 
-        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string filePath = Path.Combine(desktop, $"{safeFileName}.pdf");
+        string downloadsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Downloads");
+
+        if (!Directory.Exists(downloadsPath))
+            Directory.CreateDirectory(downloadsPath);
+
+        string filePath = Path.Combine(downloadsPath, $"{safeFileName}.pdf");
 
         var document = Document.Create(container =>
         {
@@ -227,7 +247,9 @@ public static class EmploymentTerminationGenerator
 
                     column.Item().PaddingTop(10).Text("§3 Remuneration");
                     column.Item().Text(paymentClause);
-                    column.Item().Text(commissionText);
+
+                    if (!string.IsNullOrWhiteSpace(commissionText))
+                        column.Item().Text(commissionText);
 
                     column.Item().PaddingTop(10).Text("§4 Termination");
                     column.Item().Text(terminationClause);
@@ -264,5 +286,6 @@ public static class EmploymentTerminationGenerator
             UseShellExecute = true
         });
     }
+
 
 }

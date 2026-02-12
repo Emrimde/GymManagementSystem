@@ -50,11 +50,6 @@ public class EmploymentTerminationService : IEmploymentTerminationService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Created);
     }
 
-    public async Task<Result<EmploymentTerminationGenerateResponse>> GetEmployeeEmploymentTerminationsAsync(Guid personId)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Result<EmploymentTerminationGenerateResponse>> GetEmploymentTerminationDetailsAsync(Guid personId)
     {
         Person? person = await _personRepo.GetPersonByIdAsync(personId);

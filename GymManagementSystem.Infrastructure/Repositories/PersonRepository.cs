@@ -110,13 +110,13 @@ public class PersonRepository : IPersonRepository
             TrainerName = $"{item.FirstName} {item.LastName}",
             PhoneNumber = item.PhoneNumber,
             Email = item.Email,
-            Location = item.TrainerContract.Person.City,
+            Location = item.City,
         }).FirstOrDefaultAsync();
     }
 
-    public async Task<Guid> GetTrainerIdByPersonIdAsync(Guid personId)
+    public async Task<Guid?> GetTrainerIdByPersonIdAsync(Guid personId)
     {
-        return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item => item.TrainerContract.Id).FirstAsync();
+        return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item => item.TrainerContract!.Id).FirstOrDefaultAsync();
     }
 
     public async Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber)

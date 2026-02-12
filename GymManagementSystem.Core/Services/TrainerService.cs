@@ -155,7 +155,7 @@ public class TrainerService : ITrainerService
         entity.Start = DateTime.SpecifyKind(entity.Start, DateTimeKind.Local).ToUniversalTime();
         entity.End = DateTime.SpecifyKind(entity.End, DateTimeKind.Local).ToUniversalTime();
 
-        Guid trainerId = entity.TrainerId ?? Guid.Empty;
+        Guid? trainerId = entity.TrainerId ?? Guid.Empty;
         if (entity.TrainerId == null)
         {
             string? personIdClaim = _httpContext.HttpContext?.User.FindFirst("person_id")?.Value;
@@ -167,33 +167,28 @@ public class TrainerService : ITrainerService
                     StatusCodeEnum.Unauthorized
                 );
             }
-            try
-            {
-                trainerId = await _personRepo.GetTrainerIdByPersonIdAsync(personId);
-            }
-            catch (Exception)
-            {
-                return Result<Unit>.Failure(
-                    "Trainer not found for the user",
-                    StatusCodeEnum.NotFound
-                );
-            }
+            
+            trainerId = await _personRepo.GetTrainerIdByPersonIdAsync(personId);
+        }
+        if(trainerId == null)
+        {
+            return Result<Unit>.Failure("Trainer not found for this person", StatusCodeEnum.NotFound);
         }
 
-        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(trainerId, null, entity.Start, entity.End);
+        bool isOverlap = await _trainerRepo.AnyTrainerOffOverlapAsync(trainerId.Value, null, entity.Start, entity.End);
         if (isOverlap)
         {
             return Result<Unit>.Failure("The time range overlaps an existing time off", StatusCodeEnum.BadRequest);
         }
 
-        bool isPersonalBookingOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(trainerId, null, entity.Start, entity.End);
+        bool isPersonalBookingOverlap = await _trainerRepo.AnyPersonalBookingOverlapAsync(trainerId.Value, null, entity.Start, entity.End);
         if (isPersonalBookingOverlap)
         {
             return Result<Unit>.Failure("At this time is reservated personal training", StatusCodeEnum.BadRequest);
         }
 
         TrainerTimeOff trainerTimeOff = entity.ToTrainerTimeOff();
-        trainerTimeOff.TrainerId = trainerId;
+        trainerTimeOff.TrainerId = trainerId.Value;
 
         _trainerRepo.CreateTrainerTimeOffAsync(trainerTimeOff);
         await _unitOfWork.SaveChangesAsync();

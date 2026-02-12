@@ -6,7 +6,7 @@ public class Contract
 {
     public Guid Id { get; set; }
     public Guid ClientMembershipId { get; set; }
-    public ClientMembership? ClientMembership { get; set; }
+    public ClientMembership ClientMembership { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public DateTime? IsSigned { get; set; }
     public ContractStatus ContractStatus { get; set; }

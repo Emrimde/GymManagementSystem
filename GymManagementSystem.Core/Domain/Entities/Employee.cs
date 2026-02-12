@@ -12,6 +12,6 @@ public class Employee
     public EmployeeRole Role { get; set; }
     public EmploymentType EmploymentType { get; set; }
     public ContractTypeEnum ContractTypeEnum { get; set; }
-    public Person? Person { get; set; }
+    public Person Person { get; set; } = null!;
     public bool IsActive { get; set; } = true;
 }

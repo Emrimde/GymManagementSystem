@@ -105,7 +105,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
     private async Task AddClientMembershipAsync()
     {
         Result<ClientMembershipContractPreviewResponse> contractDetails = await _httpClient.GetContractPreviewDetailsAsync(_clientMembershipAddRequest.ClientId, _clientMembershipAddRequest.MembershipId);
-        await GenerateClientMembershipContractPdf(contractDetails.Value!);
+        GenerateClientMembershipContractPdf(contractDetails.Value!);
         MessageBoxResult messageBoxResult = MessageBox.Show("Is client signed a contract?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (messageBoxResult == MessageBoxResult.Yes)
         {
@@ -120,7 +120,7 @@ public class ClientMembershipAddViewModel : ViewModel, IParameterReceiver
 
     }
 
-    public async Task GenerateClientMembershipContractPdf(
+    public void GenerateClientMembershipContractPdf(
         ClientMembershipContractPreviewResponse contract)
     {
         if (contract == null)

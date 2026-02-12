@@ -26,7 +26,6 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
 
     public INavigationService Navigation { get; set; }
 
-
     private TrainerContractDetailsResponse _trainer = new();
 
     public ICommand GenerateTerminationCommand { get; }
@@ -35,22 +34,23 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         get { return _trainer; }
         set { _trainer = value; OnPropertyChanged(); }
     }
-
+    private Guid _trainerId;
     public ICommand OpenTrainerScheduleCommand { get; }
     public ICommand OpenTrainerRatesCommand { get; }
     public ICommand OpenSetNewPasswordViewCommand { get; }
+    public ICommand LoadTrainerCommand { get; }
 
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid id)
         {
-            _ = LoadTrainer(id);
+            _trainerId = id;
         }
     }
 
-    private async Task LoadTrainer(Guid id)
+    private async Task LoadTrainer()
     {
-        Result<TrainerContractDetailsResponse> result = await _trainerHttpClient.GetTrainerContractAsync(id, true);
+        Result<TrainerContractDetailsResponse> result = await _trainerHttpClient.GetTrainerContractAsync(_trainerId, true);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.GetUserMessage()}");
@@ -70,6 +70,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
         OpenTrainerRatesCommand = new RelayCommand(item => Navigation.NavigateTo<TrainerRateViewModel>(item!), item => true);
         GenerateTerminationCommand = new AsyncRelayCommand(item => GenerateEmploymentTerminationAsync(), item => true);
         OpenSetNewPasswordViewCommand = new RelayCommand(item => Navigation.NavigateTo<SetNewPasswordViewModel>(TrainerContract.PersonId), item => true);
+        LoadTrainerCommand = new AsyncRelayCommand(item => LoadTrainer(), item => true);
     }
 
     private async Task GenerateEmploymentTerminationAsync()

@@ -181,7 +181,7 @@ public partial class App : Application
 
         _serviceProvider = services.BuildServiceProvider();
     }
-    protected async override void OnStartup(StartupEventArgs e)
+    protected override void OnStartup(StartupEventArgs e)
     {
         GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
         //Result<GeneralGymResponse> gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();

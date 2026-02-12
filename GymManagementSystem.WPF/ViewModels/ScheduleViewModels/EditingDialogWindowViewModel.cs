@@ -44,7 +44,7 @@ public class EditingDialogWindowViewModel : ViewModel
         _trainerId = trainerId;
         _trainerHttpClient = trainerHttpClient;
         SaveCommand = new RelayCommand(item => Save(), item => true);
-        DeleteCommand = new AsyncRelayCommand(item => DeleteAsync(), item => true);
+        DeleteCommand = new RelayCommand(item => Delete(), item => true);
         CancelCommand = new RelayCommand(item => Cancel(), item => true);
         LoadReasonCommand = new AsyncRelayCommand(item => LoadReasonDataAsync(), item => true);
         TimeSlots = GenerateTimeSlots();
@@ -104,7 +104,7 @@ public class EditingDialogWindowViewModel : ViewModel
         CloseRequested?.Invoke(true);
     }
 
-    private async Task DeleteAsync()
+    private void Delete()
     {
         ShouldDelete = true;
         CloseRequested?.Invoke(true);

@@ -12,7 +12,7 @@ public interface IPersonRepository
     void UpdatePerson(Person person);
     Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync();
     Task<GroupInstructorPanelResponse?> GetGroupInstructorPanelResponseAsync(Guid personId);
-    Task<Guid> GetTrainerIdByPersonIdAsync(Guid personId);
+    Task<Guid?> GetTrainerIdByPersonIdAsync(Guid personId);
     Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber);
     Task<bool> ExistsByPhoneAsync(string phoneNumber, Guid? personId);
 }

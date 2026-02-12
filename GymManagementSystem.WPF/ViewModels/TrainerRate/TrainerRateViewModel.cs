@@ -10,13 +10,9 @@ namespace GymManagementSystem.WPF.ViewModels.TrainerRate;
 
 public class TrainerRateViewModel : ViewModel, IParameterReceiver
 {
-    private INavigationService _navigation;
     public Guid TrainerContractId { get; set; }
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+ 
+    public INavigationService Navigation { get; set; }
 
     public ObservableCollection<StatusFilter> StatusFilters { get; } = new()
 {

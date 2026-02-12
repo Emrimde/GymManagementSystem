@@ -120,7 +120,7 @@ public class ScheduledClassRepository : IScheduledClassRepository
     public async Task<List<ScheduledClassDto>> GetInstructorScheduledClasses(Guid personId)
     {
         return await _dbContext.ScheduledClasses
-            .Where(item => item.GymClass.Trainer.Person.Id == personId)
+            .Where(item => item.GymClass.Trainer != null && item.GymClass.Trainer.Person.Id == personId)
             .OrderBy(item => item.Date)
             .Select(item => new ScheduledClassDto
             {
