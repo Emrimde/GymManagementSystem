@@ -102,7 +102,13 @@ public class StaffDetailsViewModel : ViewModel, IParameterReceiver
             Result<TrainerContractCreatedResponse> result = await _trainerHttpClient.PostTrainerContractAsync(request);
             if (result.IsSuccess)
             {
-                MessageBox.Show($"This is temporary password for first time logging. Password: {result.Value!.TemporaryPassword}", "Temporary password", MessageBoxButton.OK, MessageBoxImage.Information);
+                Clipboard.SetText(result.Value!.TemporaryPassword);
+
+                MessageBox.Show(
+                    "Temporary password has been copied to clipboard.",
+                    $"Temporary password - {result.Value!.TemporaryPassword}",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
                 Navigation.NavigateTo<TrainerContractDetailsViewModel>(result.Value!.TrainerContractId);
             }
             else

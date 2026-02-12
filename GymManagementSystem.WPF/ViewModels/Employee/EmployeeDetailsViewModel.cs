@@ -56,10 +56,9 @@ public class EmployeeDetailsViewModel : ViewModel, IParameterReceiver
                 {
                     MessageBox.Show($"{additionResult.GetUserMessage()}");
                 }
+
+                LoadEmployeeCommand.Execute(null);
             }
-
-            Navigation.NavigateTo<EmployeeDetailsViewModel>(Employee.Id);
-
         }
         else
         {

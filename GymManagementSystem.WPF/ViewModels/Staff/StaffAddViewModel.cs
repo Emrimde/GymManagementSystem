@@ -38,7 +38,7 @@ public class StaffAddViewModel : ViewModel
         Result<Unit> result = await _staffHttpClient.PostPersonToStaffAsync(request);
         if (!result.IsSuccess)
         {
-            MessageBox.Show(result.GetUserMessage());
+            MessageBox.Show(result.GetUserMessage(),"Error", MessageBoxButton.OK,MessageBoxImage.Error);
             return;
         }
         Navigation.NavigateTo<StaffViewModel>();

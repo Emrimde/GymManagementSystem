@@ -125,7 +125,13 @@ public class EmployeeAddViewModel : ViewModel, IParameterReceiver, INotifyDataEr
                 Result<EmployeeInfoResponse> result = await _employeeHttpClient.PostEmployeeAsync(employeeAddRequest);
                 if (result.IsSuccess)
                 {
-                    MessageBox.Show($"Temporary password for this employee {result.Value!.TemporaryPassword}", "Temporary password", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Clipboard.SetText(result.Value!.TemporaryPassword);
+
+                    MessageBox.Show(
+                        "Temporary password has been copied to clipboard.",
+                        $"Temporary password - {result.Value!.TemporaryPassword}",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                     Navigation.NavigateTo<EmployeeDetailsViewModel>(result.Value!.EmployeeId);
                 }
                 else
