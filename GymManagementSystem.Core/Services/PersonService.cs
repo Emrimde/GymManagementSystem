@@ -24,6 +24,13 @@ public class PersonService : IPersonService
     {
         Person personAdd = request.ToPerson();
         _personRepo.AddPersonToStaff(personAdd);
+        bool exists = await _personRepo.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
+
+        if (exists)
+        {
+            return Result<Unit>.Failure("Person with the same email or phone number already exists!", StatusCodeEnum.Conflict);
+        }
+
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }

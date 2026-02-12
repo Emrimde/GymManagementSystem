@@ -72,7 +72,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
                     errors.Add("Street is required.");
                 else if (Street.Length > 60)
                     errors.Add("Street cannot exceed 60 characters.");
-                else if (!Regex.IsMatch(FirstName, @".*[A-Z].*"))
+                else if (!Regex.IsMatch(Street, @".*[A-Z].*"))
                     errors.Add("First name must contain at least one uppercase letter.");
                 break;
 
@@ -81,7 +81,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
                     errors.Add("City is required.");
                 else if (City.Length > 50)
                     errors.Add("City cannot exceed 50 characters.");
-                else if (!Regex.IsMatch(FirstName, @".*[A-Z].*"))
+                else if (!Regex.IsMatch(City, @".*[A-Z].*"))
                     errors.Add("First name must contain at least one uppercase letter.");
                 break;
         }

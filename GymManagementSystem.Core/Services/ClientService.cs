@@ -27,9 +27,10 @@ public class ClientService : IClientService
     private readonly IHttpContextAccessor _http;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IClientMembershipRepository _clientMembershipRepository;
+    private readonly IPersonRepository _personRepo;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository,IConfiguration configuration, IEmailService emailService)
+    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository,IConfiguration configuration, IEmailService emailService, IPersonRepository personRepo)
     {
         _repository = repository;
         _visitRepo = visitRepository;
@@ -39,6 +40,7 @@ public class ClientService : IClientService
         _clientMembershipRepository = clientMembershipRepository;
         _configuration = configuration;
         _emailService = emailService;
+        _personRepo = personRepo;
     }
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query)
@@ -78,14 +80,16 @@ public class ClientService : IClientService
             age--;
         }
 
-        IEnumerable<ClientContactResponse> clientContactResponse = await _repository.GetClientContactsAsync();
-
-        HashSet<string> hashSet = clientContactResponse.Select(item => (item.Email + "#" + item.PhoneNumber)).ToHashSet();
-        
-        if(hashSet.Contains(client.Email + "#" + client.PhoneNumber))
+        bool exists = await _repository.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
+        if (exists)
         {
-            return Result<ClientInfoResponse>.Failure("Client existing in database",StatusCodeEnum.BadRequest);
-        }  
+            Result<ClientInfoResponse>.Failure("Client with the same email or phone number already exists", StatusCodeEnum.BadRequest);
+        }
+        bool existsInEmployee = await _personRepo.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
+        if (existsInEmployee)
+        {
+            Result<ClientInfoResponse>.Failure("Person with the same email or phone number already exists in employees", StatusCodeEnum.BadRequest);
+        }
 
 
         client.HasParentalConsent = age < 18 ? true : null;

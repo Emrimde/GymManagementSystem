@@ -118,4 +118,9 @@ public class PersonRepository : IPersonRepository
     {
         return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item=>  item.TrainerContract.Id).FirstAsync();
     }
+
+    public async Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber)
+    {
+        return await _dbContext.People.AnyAsync(item => item.Email == email || item.PhoneNumber == phoneNumber);
+    }
 }

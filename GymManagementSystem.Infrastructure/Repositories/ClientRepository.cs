@@ -66,15 +66,6 @@ public class ClientRepository : IClientRepository
         };
     }
 
-    public async Task<IEnumerable<ClientContactResponse>> GetClientContactsAsync()
-    {
-        return await _dbContext.Clients.AsNoTracking().Select(item => new ClientContactResponse()
-        {
-            Email = item.Email,
-            PhoneNumber = item.PhoneNumber
-        }).ToListAsync();
-    } 
-
     public async Task<Client?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Clients
@@ -82,7 +73,6 @@ public class ClientRepository : IClientRepository
         .ThenInclude(item => item.Membership)
     .FirstOrDefaultAsync(item => item.Id == id);
     }
-
 
     public async Task<ClientDetailsResponse?> GetClientDetailsAsync(Guid clientId)
     {
@@ -123,7 +113,6 @@ public class ClientRepository : IClientRepository
             })
             .FirstOrDefaultAsync();
     }
-
 
     public async Task<Client?> UpdateAsync(Guid id, Client entity)
     {
@@ -213,6 +202,8 @@ public class ClientRepository : IClientRepository
         client.DateOfBirth = updated.DateOfBirth;
         client.PhoneNumber = updated.PhoneNumber;
     }
-
-   
+    public async Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber)
+    {
+        return await _dbContext.Clients.AnyAsync(item => item.Email == email || item.PhoneNumber == phoneNumber);
+    }
 }

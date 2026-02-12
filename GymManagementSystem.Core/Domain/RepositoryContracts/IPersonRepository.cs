@@ -13,4 +13,5 @@ public interface IPersonRepository
     Task<IEnumerable<Person>> GetAllActivePeopleWithTerminationAsync();
     Task<GroupInstructorPanelResponse?> GetGroupInstructorPanelResponseAsync(Guid personId);
     Task<Guid> GetTrainerIdByPersonIdAsync(Guid personId);
+    Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber);
 }
