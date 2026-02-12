@@ -10,5 +10,6 @@ public interface IMembershipRepository : IRepository<MembershipResponse, Members
 {
     public Task<IEnumerable<MembershipResponse>> GetAllMemberships();
     Task<IEnumerable<MembershipWebDetailsResponse>> GetAllMembershipsWithFeaturesAsync();
+    Task<int> GetFreeFriendArrivalsPerMonthAsync(Guid membershipId);
     Task<MembershipInfoResponse?> GetMembershipNameAsync(Guid membershipId);
 }

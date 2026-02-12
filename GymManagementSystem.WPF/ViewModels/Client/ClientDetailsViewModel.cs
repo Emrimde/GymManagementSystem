@@ -1,13 +1,14 @@
 ﻿using GymManagementSystem.Core.DTO.Client;
-using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.Core;
 using GymManagementSystem.WPF.HttpServices;
+using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.ViewModels.ClassBooking;
 using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using GymManagementSystem.WPF.ViewModels.PersonalBooking;
 using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Visit;
+using GymManagementSystem.WPF.Views.Visit.CustomDialogs;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,7 +19,7 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
     Client.IsActive
         ? $"{Client.ClientMembershipName}"
         : "No membership";
-    
+
     private readonly VisitHttpClient _visitHttpClient;
 
     public ICommand CreateNewTerminationCommand { get; }
@@ -88,8 +89,27 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
             }
 
         }
-        Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId);
-        if(result.IsSuccess)
+        MessageBoxResult mbResult = MessageBox.Show("Do client wants bring friend for free?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        string? GuestName = null;
+        if (mbResult == MessageBoxResult.Yes)
+        {
+            var dialog = new FreeFriendArrivalDialog();
+            dialog.Owner = Application.Current.MainWindow;
+
+            if (dialog.ShowDialog() == true)
+            {
+                GuestName = dialog.InputText;
+            }
+
+        }
+        else
+        {
+            return;
+        }
+
+            Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId, GuestName);
+        if (result.IsSuccess)
         {
             await LoadClientAsync();
         }

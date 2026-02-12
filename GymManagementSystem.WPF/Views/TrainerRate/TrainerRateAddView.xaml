@@ -73,7 +73,7 @@
                         HorizontalAlignment="Right"
                         Margin="0,32,48,24">
 
-                <Button Content="Add client"
+                <Button Content="Add trainer rate"
                         Height="40"
                         MinWidth="160"
                         Style="{StaticResource MaterialDesignFlatButton}"

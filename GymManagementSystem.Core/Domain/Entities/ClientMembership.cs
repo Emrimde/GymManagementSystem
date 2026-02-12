@@ -8,7 +8,7 @@ public class ClientMembership
     public Guid ClientId { get; set; }
     public Client? Client { get; set; }
     public Guid MembershipId { get; set; }
-    public Membership? Membership { get; set; }
+    public Membership Membership { get; set; } = null!;
     public DateTime StartDate { get; set; } = DateTime.UtcNow;
     public DateTime? EndDate { get; set; }
     public bool IsActive { get; set; } = true;

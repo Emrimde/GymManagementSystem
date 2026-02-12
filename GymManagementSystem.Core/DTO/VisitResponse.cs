@@ -6,4 +6,5 @@ public class VisitResponse
     public Guid Id { get; set; }
     public VisitSourceEnum VisitSource { get; set; }
     public string VisitDate { get; set; } = default!;
+    public string GuestName { get; set; } = default!;
 }

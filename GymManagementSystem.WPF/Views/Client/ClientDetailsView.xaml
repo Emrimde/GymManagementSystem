@@ -125,6 +125,16 @@
                                 <TextBlock Text="{Binding Client.Valid}"/>
                             </StackPanel>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Style="{StaticResource VerticalItem}"
+                                    Visibility="{Binding Client.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <materialDesign:PackIcon Kind="GuitarPick"
+                                                     Style="{StaticResource HorizontalItem}" Foreground="{StaticResource PrimaryColor}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="Free friend count per month used"/>
+                                <TextBlock Text="{Binding Client.FreeFriendVisits}"/>
+                            </StackPanel>
+                        </StackPanel>
 
                         <Separator Margin="0,12"/>
 

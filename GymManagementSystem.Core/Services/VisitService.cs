@@ -15,12 +15,14 @@ public class VisitService : IVisitService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IClientRepository _clientRepo;
     private readonly IClientMembershipRepository _clientMembershipRepo;
-    public VisitService(IVisitRepository visitRepository, IUnitOfWork unitOfWork, IClientRepository clientRepo, IClientMembershipRepository clientMembershipRepo)
+    private readonly IMembershipRepository _membershipRepository;
+    public VisitService(IVisitRepository visitRepository, IUnitOfWork unitOfWork, IClientRepository clientRepo, IClientMembershipRepository clientMembershipRepo, IMembershipRepository membershipRepo)
     {
         _visitRepository = visitRepository;
         _unitOfWork = unitOfWork;
         _clientRepo = clientRepo;
         _clientMembershipRepo = clientMembershipRepo;
+        _membershipRepository = membershipRepo;
     }
 
     public async Task<Result<IEnumerable<VisitResponse>>> GetAllClientVisitsAsync(Guid clientId)
@@ -29,7 +31,7 @@ public class VisitService : IVisitService
         return Result<IEnumerable<VisitResponse>>.Success(visits, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<Unit>> RegisterVisitAsync(Guid clientId)
+    public async Task<Result<Unit>> RegisterVisitAsync(Guid clientId, string? guestName)
     {
         Client? client = await _clientRepo.GetByIdAsync(clientId);
         if (client == null)
@@ -40,17 +42,27 @@ public class VisitService : IVisitService
         Visit visit = new Visit
         {
             ClientId = clientId,
-            VisitDate = DateTime.UtcNow
+            VisitDate = DateTime.UtcNow,
+            IsWithGuest = false
         };
 
         ClientMembership? clientMembership = await _clientMembershipRepo.GetActiveClientMembershipByClientId(clientId);
-
+        
         if (clientMembership == null)
         {
             visit.VisitSource = VisitSourceEnum.FromSingleVisit;
         }
         else
         {
+            int freeFriendVisits = await _membershipRepository.GetFreeFriendArrivalsPerMonthAsync(clientMembership.MembershipId);
+            int actualFriendVisitThisMonth = await _visitRepository.GetFriendVisitsCountForClientInMonthAsync(clientId);
+            if(freeFriendVisits <= actualFriendVisitThisMonth)
+            {
+                return Result<Unit>.Failure("No more free friend visits available for this month", StatusCodeEnum.BadRequest);
+            }
+
+            visit.IsWithGuest = !string.IsNullOrEmpty(guestName);
+            visit.GuestName = guestName;
             visit.ClientMembershipId = clientMembership.Id;
             visit.VisitSource = VisitSourceEnum.FromMembership;
         }

@@ -18,5 +18,6 @@ public class ClientDetailsResponse
     public bool CanTerminate { get; set; }
     public int TotalVisits { get; set; }
     public string? LastVisitDate { get; set; }
+    public string? FreeFriendVisits { get; set; }
 }
 

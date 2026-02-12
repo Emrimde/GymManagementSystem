@@ -15,7 +15,6 @@ public class Client
     public User? User { get; set; }
     public bool IsActive { get; set; } = false;
     public bool? HasParentalConsent { get; set; }
-    //public ICollection<Termination> Terminations { get; set; } = new List<Termination>();
     public ICollection<Visit> Visits { get; set; } = new List<Visit>();
     public ICollection<ClientMembership> ClientMemberships { get; set; } = new List<ClientMembership>();
     public ICollection<ClassBooking> ClassBookings { get; set; } = new List<ClassBooking>();

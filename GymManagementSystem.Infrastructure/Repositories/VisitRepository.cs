@@ -28,6 +28,7 @@ public class VisitRepository : IVisitRepository
                 Id = item.Id,
                 VisitSource = item.VisitSource,
                 VisitDate = item.VisitDate.ToLocalTime().ToString("dd:MM:yyyy - HH:mm"),
+                GuestName = item.GuestName ?? string.Empty
             })
             .ToListAsync();
     }
@@ -79,5 +80,17 @@ public class VisitRepository : IVisitRepository
     public void DeleteVisit(Visit visit)
     {
         _dbContext.Visits.Remove(visit);
+    }
+
+    public async Task<int> GetFriendVisitsCountForClientInMonthAsync(Guid clientId)
+    {
+        DateTime now = DateTime.UtcNow;
+        DateTime startOfMonth = new DateTime(now.Year, now.Month, 1);
+        startOfMonth = DateTime.SpecifyKind(startOfMonth, DateTimeKind.Utc);
+        DateTime endOfMonth = startOfMonth.AddMonths(1);
+        return await _dbContext.Visits.CountAsync(item => item.ClientId == clientId
+            && item.IsWithGuest == true
+            && item.VisitDate >= startOfMonth
+            && item.VisitDate < endOfMonth);
     }
 }

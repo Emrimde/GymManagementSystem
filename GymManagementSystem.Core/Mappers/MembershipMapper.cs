@@ -16,7 +16,6 @@ public static class MembershipMapper
             Price = membership.MembershipPrices?.Where(item => item.ValidTo == null).Select(item => item.Price.ToString("0.0",CultureInfo.InvariantCulture)).FirstOrDefault() ?? "0.0" ,
             ClassBookingDaysInAdvanceCount = membership.ClassBookingDaysInAdvanceCount,
             FreeFriendEntryCountPerMonth = membership.FreeFriendEntryCountPerMonth,
-            FreePersonalTrainingSessions = membership.FreePersonalTrainingSessions
         };
     }
     public static Membership ToMembership(this MembershipAddRequest membership)
@@ -32,7 +31,6 @@ public static class MembershipMapper
     {
         membership.Name = membershipUpdateRequest.Name;
         membership.FreeFriendEntryCountPerMonth = membershipUpdateRequest.FreeFriendEntryCountPerMonth;
-        membership.FreePersonalTrainingSessions = membershipUpdateRequest.FreePersonalTrainingSessions;
         membership.ClassBookingDaysInAdvanceCount = membershipUpdateRequest.ClassBookingDaysInAdvanceCount;
     }
 }

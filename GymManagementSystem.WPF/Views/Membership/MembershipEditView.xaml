@@ -90,20 +90,7 @@
                                                        RelativeSource={RelativeSource Self}}"/>
                         </StackPanel>
 
-                        <StackPanel>
-                            <TextBlock Text="Free personal training sessions"
-                                       FontSize="23"
-                                       Foreground="{StaticResource PrimaryColor}"/>
-                            <TextBox Height="40"
-                                     FontSize="17"
-                                     Foreground="{StaticResource PrimaryColor}"
-                                     Text="{Binding FreePersonalTrainingSessions,
-                                                    UpdateSourceTrigger=PropertyChanged,
-                                                    ValidatesOnNotifyDataErrors=True}"
-                                     ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                                                       RelativeSource={RelativeSource Self}}"/>
-                        </StackPanel>
-
+                    
                     </StackPanel>
                 </Grid>
             </materialDesign:Card>

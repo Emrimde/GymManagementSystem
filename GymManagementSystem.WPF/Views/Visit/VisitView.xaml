@@ -62,6 +62,8 @@
 
                         <DataGridTextColumn Header="Visit source"
                                             Binding="{Binding VisitSource}"/>
+                        <DataGridTextColumn Header="Guest name"
+                                            Binding="{Binding GuestName}"/>
 
                         <DataGridTemplateColumn Header="Delete" Width="80">
                             <DataGridTemplateColumn.CellTemplate>

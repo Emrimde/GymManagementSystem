@@ -14,4 +14,5 @@ public interface IVisitRepository
     Task<IEnumerable<PointResponse>> GetAllVisitsOverTime(DateTime startTime, DateTime endTime);
     Task<Visit?> GetVisitById(Guid visitId);
     void DeleteVisit(Visit visit);
+    Task<int> GetFriendVisitsCountForClientInMonthAsync(Guid clientId);
 }

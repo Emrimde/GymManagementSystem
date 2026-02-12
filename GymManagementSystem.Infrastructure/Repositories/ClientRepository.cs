@@ -76,6 +76,12 @@ public class ClientRepository : IClientRepository
 
     public async Task<ClientDetailsResponse?> GetClientDetailsAsync(Guid clientId)
     {
+
+        DateTime now = DateTime.UtcNow;
+        DateTime startOfMonth = new DateTime(now.Year, now.Month, 1);
+        startOfMonth = DateTime.SpecifyKind(startOfMonth, DateTimeKind.Utc);
+        DateTime endOfMonth = startOfMonth.AddMonths(1);
+        
         return await _dbContext.Clients
             .Where(item => item.Id == clientId)
             .Select(item => new ClientDetailsResponse
@@ -109,7 +115,27 @@ public class ClientRepository : IClientRepository
                     .FirstOrDefault(),
 
                 Valid = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.StartDate.ToString("dd.MM.yyyy") + " - " + (item.EndDate.HasValue ? item.EndDate.Value.ToString("dd.MM.yyyy") : "Indefinite"))
-               .FirstOrDefault()
+               .FirstOrDefault(),
+                FreeFriendVisits =
+    (
+        item.ClientMemberships
+            .Where(item => item.IsActive)
+            .Select(item => item.Membership.FreeFriendEntryCountPerMonth)
+            .FirstOrDefault()
+    ) == 0
+    ? ""
+    :
+    item.Visits.Count(item =>
+        item.IsWithGuest &&
+        item.VisitDate >= startOfMonth &&
+        item.VisitDate < endOfMonth
+    ).ToString()
+    + "/"
+    +
+    item.ClientMemberships
+        .Where(item => item.IsActive)
+        .Select(item => item.Membership!.FreeFriendEntryCountPerMonth)
+        .FirstOrDefault()
             })
             .FirstOrDefaultAsync();
     }

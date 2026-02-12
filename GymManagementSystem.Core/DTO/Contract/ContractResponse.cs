@@ -9,6 +9,5 @@ public class ContractResponse
     public ClientMembershipResponse? ClientMembership { get; set; }
     public string? FirstName { get; set; } = default!;
     public string? LastName { get; set; } = default!;
-    public string CreatedAt { get; set; } = default!;
     public ContractStatus ContractStatus { get; set; }
 }

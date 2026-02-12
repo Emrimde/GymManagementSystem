@@ -41,12 +41,12 @@ public class MembershipRepository : IMembershipRepository
 
     public async Task<Membership?> GetByIdAsync(Guid id)
     {
-       return await _dbContext.Memberships.Include(item => item.MembershipPrices).FirstOrDefaultAsync(item => item.Id == id);
+        return await _dbContext.Memberships.Include(item => item.MembershipPrices).FirstOrDefaultAsync(item => item.Id == id);
     }
 
     public async Task<MembershipInfoResponse?> GetMembershipNameAsync(Guid membershipId)
     {
-       return await _dbContext.Memberships.Where(item => item.Id == membershipId).Select(item => new MembershipInfoResponse()
+        return await _dbContext.Memberships.Where(item => item.Id == membershipId).Select(item => new MembershipInfoResponse()
         {
             MembershipId = membershipId,
             MembershipName = item.Name,
@@ -55,7 +55,7 @@ public class MembershipRepository : IMembershipRepository
 
     public async Task<Membership?> UpdateAsync(Guid id, Membership entity)
     {
-        Membership? membership =  await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id);
+        Membership? membership = await _dbContext.Memberships.FirstOrDefaultAsync(item => item.Id == id);
 
         if (membership == null)
         {
@@ -65,5 +65,10 @@ public class MembershipRepository : IMembershipRepository
         membership.Name = entity.Name;
         await _dbContext.SaveChangesAsync();
         return membership;
+    }
+
+    public async Task<int> GetFreeFriendArrivalsPerMonthAsync(Guid membershipId)
+    {
+        return await _dbContext.Memberships.Where(item => item.Id == membershipId).Select(item => item.FreeFriendEntryCountPerMonth).FirstOrDefaultAsync();
     }
 }

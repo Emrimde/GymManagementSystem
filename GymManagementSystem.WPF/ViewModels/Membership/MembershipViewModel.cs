@@ -13,9 +13,6 @@ public class MembershipViewModel : ViewModel
     public SidebarViewModel SidebarView { get; }
     private INavigationService _navigation;
     public ICommand OpenMembershipDetailsCommand { get; set; }
-    public ICommand OpenAddMembershipView { get; }
-    
-    public ICommand OpenFeatureView { get; }
     public ICommand OpenEditMembershipCommand { get; }
     private readonly MembershipHttpClient _membershipHttpClient;
     public INavigationService Navigation
@@ -27,7 +24,7 @@ public class MembershipViewModel : ViewModel
         }
     }
 
-    private ObservableCollection<MembershipResponse> _memberships;
+    private ObservableCollection<MembershipResponse> _memberships = new();
 
     public ObservableCollection<MembershipResponse> Memberships
     {

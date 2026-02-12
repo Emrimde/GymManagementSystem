@@ -64,7 +64,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 MembershipType = MembershipTypeEnum.Monthly,
                 ClassBookingDaysInAdvanceCount = 7,
                 FreeFriendEntryCountPerMonth = 3,
-                FreePersonalTrainingSessions = 1
             },
             new Membership
             {
@@ -73,7 +72,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 MembershipType = MembershipTypeEnum.Monthly,
                 ClassBookingDaysInAdvanceCount = 14,
                 FreeFriendEntryCountPerMonth = 6,
-                FreePersonalTrainingSessions = 2
 
             },
               new Membership
@@ -83,7 +81,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                   MembershipType = MembershipTypeEnum.Annual,
                   ClassBookingDaysInAdvanceCount = 7,
                   FreeFriendEntryCountPerMonth = 3,
-                  FreePersonalTrainingSessions = 1
               },
             new Membership
             {
@@ -92,7 +89,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
                 MembershipType = MembershipTypeEnum.Annual,
                 ClassBookingDaysInAdvanceCount = 14,
                 FreeFriendEntryCountPerMonth = 6,
-                FreePersonalTrainingSessions = 2
             }
         );
 

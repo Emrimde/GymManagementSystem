@@ -12,11 +12,13 @@ public class VisitHttpClient : BaseHttpClientService
     {
     }
 
-    public Task<Result<Unit>> RegisterVisitAsync(Guid clientId)
+    public Task<Result<Unit>> RegisterVisitAsync(Guid clientId, string? GuestName)
     {
+        string url = GuestName != null ? $"register-visit/{clientId}?guestName={GuestName}"
+            : $"register-visit/{clientId}";
+
         return PostAsync<object?, Unit>(
-            $"register-visit/{clientId}",
-            null
+            $"{url}", null
         );
     }
 

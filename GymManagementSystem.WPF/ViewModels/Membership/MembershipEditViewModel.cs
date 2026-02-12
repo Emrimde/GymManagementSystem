@@ -55,19 +55,6 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
         }
     }
 
-    private int _freePersonalTrainingSessions;
-    public int FreePersonalTrainingSessions
-    {
-        get => _freePersonalTrainingSessions;
-        set
-        {
-            if (_freePersonalTrainingSessions == value) return;
-            _freePersonalTrainingSessions = value;
-            OnPropertyChanged();
-            ValidateProperty(nameof(FreePersonalTrainingSessions));
-        }
-    }
-
     private void ValidateProperty(string propertyName)
     {
         _errors.Remove(propertyName);
@@ -94,10 +81,6 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
                     errors.Add("Value cannot be negative.");
                 break;
 
-            case nameof(FreePersonalTrainingSessions):
-                if (FreePersonalTrainingSessions < 0)
-                    errors.Add("Value cannot be negative.");
-                break;
         }
 
         if (errors.Any())
@@ -120,7 +103,7 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
         CancelCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipViewModel>(), item => true);
         LoadMembershipCommand = new AsyncRelayCommand(item => LoadMembershipForEditByIdAsync(), item => true);
         _httpClient = httpClient;
-        UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => Name.Length < 50 &&  Name != string.Empty && Name.Length > 10 && ClassBookingDaysInAdvanceCount > 0 && FreeFriendEntryCountPerMonth > 0 && FreePersonalTrainingSessions > 0);
+        UpdateMembershipCommand = new AsyncRelayCommand(UpdateMembershipAsync, item => Name.Length < 50 &&  Name != string.Empty && Name.Length > 10 && ClassBookingDaysInAdvanceCount > 0 && FreeFriendEntryCountPerMonth > 0);
     }
 
     private async Task LoadMembershipForEditByIdAsync()
@@ -129,7 +112,6 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
         Name = result.Value!.Name;
         ClassBookingDaysInAdvanceCount = result.Value!.ClassBookingDaysInAdvanceCount;
         FreeFriendEntryCountPerMonth = result.Value!.FreeFriendEntryCountPerMonth;
-        FreePersonalTrainingSessions = result.Value!.FreePersonalTrainingSessions;
     }
 
     private async Task UpdateMembershipAsync(object arg)
@@ -139,7 +121,6 @@ public class MembershipEditViewModel : ViewModel, IParameterReceiver, INotifyDat
             Name = Name,
             ClassBookingDaysInAdvanceCount = ClassBookingDaysInAdvanceCount,
             FreeFriendEntryCountPerMonth = FreeFriendEntryCountPerMonth,
-            FreePersonalTrainingSessions = FreePersonalTrainingSessions
         };
 
         Result<Unit> result = await _httpClient.PutMembershipAsync(request, MembershipId);

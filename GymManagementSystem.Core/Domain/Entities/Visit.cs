@@ -10,4 +10,6 @@ public class Visit
     public Guid? ClientMembershipId { get; set; }
     public VisitSourceEnum VisitSource { get; set; } 
     public DateTime VisitDate { get; set; }
+    public bool IsWithGuest { get; set; }
+    public string? GuestName { get; set; }
 }

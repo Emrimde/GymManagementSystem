@@ -14,8 +14,8 @@ public class VisitController : BaseController
     }
 
     [HttpPost("register-visit/{clientId:guid}")]
-    public async Task<ActionResult> RegisterVisit([FromRoute] Guid clientId)
-        => HandleResult(await _visitService.RegisterVisitAsync(clientId));
+    public async Task<ActionResult> RegisterVisit([FromRoute] Guid clientId, [FromQuery] string? guestName)
+        => HandleResult(await _visitService.RegisterVisitAsync(clientId, guestName));
 
     [HttpGet("{clientId:guid}")]
     public async Task<ActionResult<IEnumerable<VisitResponse>>> GetAllClientVisits([FromRoute] Guid clientId)
