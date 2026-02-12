@@ -35,29 +35,42 @@ public class ClientEditFormModel : ObservableObject , INotifyDataErrorInfo
             case nameof(LastName):
                 if (string.IsNullOrWhiteSpace(LastName))
                     errors.Add("Last name is required.");
-                if (LastName.Length > 50)
+                else if (LastName.Length > 50)
                     errors.Add("Last name cannot exceed 50 characters.");
+                else if (Regex.IsMatch(LastName, @"\d"))
+                    errors.Add("Last name cannot contain numbers.");
+                else if (!Regex.IsMatch(LastName, @".*[A-Z].*"))
+                    errors.Add("Last name must contain at least one uppercase letter.");
                 break;
 
             case nameof(PhoneNumber):
                 if (string.IsNullOrWhiteSpace(PhoneNumber))
                     errors.Add("Phone number is required.");
-                if (!Regex.IsMatch(PhoneNumber, @"^\+?[1-9]\d{1,14}$"))
-                    errors.Add("A valid phone number is required.");
+                else if (!Regex.IsMatch(PhoneNumber, @"^\d{9,}$"))
+                    errors.Add("Phone number must contain at least 9 digits and digits only.");
                 break;
 
             case nameof(Street):
                 if (string.IsNullOrWhiteSpace(Street))
                     errors.Add("Street is required.");
+                else if (Street.Length > 60)
+                    errors.Add("Street cannot exceed 60 characters.");
+                else if (!Regex.IsMatch(Street, @".*[A-Z].*"))
+                    errors.Add("Street must contain at least one uppercase letter.");
                 break;
 
             case nameof(City):
                 if (string.IsNullOrWhiteSpace(City))
-                    errors.Add( "City is required.");
+                    errors.Add("City is required.");
+                else if (City.Length > 50)
+                    errors.Add("City cannot exceed 50 characters.");
+                else if (!Regex.IsMatch(City, @".*[A-Z].*"))
+                    errors.Add("City must contain at least one uppercase letter.");
                 break;
         }
 
-        if(errors.Any())
+
+        if (errors.Any())
         {
             _errors.Add(propertyName, errors);
         }

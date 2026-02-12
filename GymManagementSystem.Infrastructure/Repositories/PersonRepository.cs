@@ -105,7 +105,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task<GroupInstructorPanelResponse?> GetGroupInstructorPanelResponseAsync(Guid personId)
     {
-       return await _dbContext.People.AsNoTracking().Where(item => item.Id == personId).Select(item => new GroupInstructorPanelResponse()
+        return await _dbContext.People.AsNoTracking().Where(item => item.Id == personId).Select(item => new GroupInstructorPanelResponse()
         {
             TrainerName = $"{item.FirstName} {item.LastName}",
             PhoneNumber = item.PhoneNumber,
@@ -116,11 +116,22 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Guid> GetTrainerIdByPersonIdAsync(Guid personId)
     {
-        return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item=>  item.TrainerContract.Id).FirstAsync();
+        return await _dbContext.People.Where(item => item.Id == personId && item.TrainerContract != null).Select(item => item.TrainerContract.Id).FirstAsync();
     }
 
     public async Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber)
     {
         return await _dbContext.People.AnyAsync(item => item.Email == email || item.PhoneNumber == phoneNumber);
+    }
+    public async Task<bool> ExistsByPhoneAsync(string phoneNumber, Guid? personId)
+    {
+        if (personId == null)
+        {
+            return await _dbContext.People.AnyAsync(item => item.PhoneNumber == phoneNumber);
+        }
+        else
+        {
+            return await _dbContext.People.AnyAsync(item => item.Id != personId && item.PhoneNumber == phoneNumber);
+        }
     }
 }

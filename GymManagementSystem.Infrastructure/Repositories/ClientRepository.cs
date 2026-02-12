@@ -23,7 +23,7 @@ public class ClientRepository : IClientRepository
         _dbContext.Clients.Add(entity);
     }
 
-    public async Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1,string? searchText = null)
+    public async Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1, string? searchText = null)
     {
         IQueryable<Client> query = _dbContext.Clients;
 
@@ -45,16 +45,16 @@ public class ClientRepository : IClientRepository
         {
             query = query.Where(item => item.IsActive == isActive);
         }
-    
+
         int totalCount = await query.CountAsync();
         int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        List<ClientResponse> list  = await query.OrderBy(item => item.FirstName)
+        List<ClientResponse> list = await query.OrderBy(item => item.FirstName)
                                                     .Skip((page - 1) * pageSize)
                                                         .Take(pageSize)
                                                             .Select(item => item.ToClientResponse())
                                                                 .ToListAsync();
-        
-    
+
+
 
         return new PageResult<ClientResponse>()
         {
@@ -179,17 +179,17 @@ public class ClientRepository : IClientRepository
 
     public async Task<ClientDetailsWebResponse?> GetClientProfileInfoAsync(Guid clientId)
     {
-      return await _dbContext.Clients.Where(item => item.Id == clientId).Select(item => new ClientDetailsWebResponse()
-      {
-          Email = item.Email,
-          FirstName = item.FirstName,
-          PhoneNumber = item.PhoneNumber,
-          LastName = item.LastName,
-          MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType.ToString()).FirstOrDefault() ?? null,
-          City = item.City,
-          DateOfBirth = item.DateOfBirth,
-          Street = item.StreetAddress,
-      }).FirstOrDefaultAsync();  
+        return await _dbContext.Clients.Where(item => item.Id == clientId).Select(item => new ClientDetailsWebResponse()
+        {
+            Email = item.Email,
+            FirstName = item.FirstName,
+            PhoneNumber = item.PhoneNumber,
+            LastName = item.LastName,
+            MembershipName = item.ClientMemberships.Where(item => item.IsActive).Select(item => item.Membership.Name + " " + item.Membership.MembershipType.ToString()).FirstOrDefault() ?? null,
+            City = item.City,
+            DateOfBirth = item.DateOfBirth,
+            Street = item.StreetAddress,
+        }).FirstOrDefaultAsync();
     }
 
     public async Task UpdateClientAsync(Client updated)
@@ -205,5 +205,16 @@ public class ClientRepository : IClientRepository
     public async Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber)
     {
         return await _dbContext.Clients.AnyAsync(item => item.Email == email || item.PhoneNumber == phoneNumber);
+    }
+    public async Task<bool> ExistsByPhoneAsync(string phoneNumber, Guid? clientId)
+    {
+        if (clientId == null)
+        {
+            return await _dbContext.Clients.AnyAsync(item => item.PhoneNumber == phoneNumber);
+        }
+        else
+        {
+            return await _dbContext.Clients.AnyAsync(item => item.Id != clientId && item.PhoneNumber == phoneNumber);
+        }
     }
 }

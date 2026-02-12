@@ -130,6 +130,10 @@ public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
                     errors.Add("First name is required.");
                 else if (FirstName.Length > 50)
                     errors.Add("First name cannot exceed 50 characters.");
+                else if (Regex.IsMatch(FirstName, @"\d"))
+                    errors.Add("First name cannot contain numbers.");
+                else if (!Regex.IsMatch(FirstName, @".*[A-Z].*"))
+                    errors.Add("First name must contain at least one uppercase letter.");
                 break;
 
             case nameof(LastName):
@@ -137,6 +141,10 @@ public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
                     errors.Add("Last name is required.");
                 else if (LastName.Length > 50)
                     errors.Add("Last name cannot exceed 50 characters.");
+                else if (Regex.IsMatch(LastName, @"\d"))
+                    errors.Add("Last name cannot contain numbers.");
+                else if (!Regex.IsMatch(LastName, @".*[A-Z].*"))
+                    errors.Add("Last name must contain at least one uppercase letter.");
                 break;
 
             case nameof(Email):
@@ -151,8 +159,8 @@ public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
             case nameof(PhoneNumber):
                 if (string.IsNullOrWhiteSpace(PhoneNumber))
                     errors.Add("Phone number is required.");
-                else if (!Regex.IsMatch(PhoneNumber, @"^\+?[1-9]\d{1,14}$"))
-                    errors.Add("A valid phone number is required.");
+                else if (!Regex.IsMatch(PhoneNumber, @"^\d{9,}$"))
+                    errors.Add("Phone number must contain at least 9 digits and digits only.");
                 break;
 
             case nameof(DateOfBirth):
@@ -165,6 +173,8 @@ public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
                     errors.Add("Street is required.");
                 else if (Street.Length > 60)
                     errors.Add("Street cannot exceed 60 characters.");
+                else if (!Regex.IsMatch(Street, @".*[A-Z].*"))
+                    errors.Add("Street must contain at least one uppercase letter.");
                 break;
 
             case nameof(City):
@@ -172,8 +182,11 @@ public class ClientAddFormModel : ObservableObject, INotifyDataErrorInfo
                     errors.Add("City is required.");
                 else if (City.Length > 50)
                     errors.Add("City cannot exceed 50 characters.");
+                else if (!Regex.IsMatch(City, @".*[A-Z].*"))
+                    errors.Add("City must contain at least one uppercase letter.");
                 break;
         }
+
 
         if (errors.Any())
             _errors[propertyName] = errors;

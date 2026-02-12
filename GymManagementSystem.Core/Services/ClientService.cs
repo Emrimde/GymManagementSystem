@@ -30,7 +30,7 @@ public class ClientService : IClientService
     private readonly IPersonRepository _personRepo;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
-    public ClientService(IClientRepository repository,IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository,IConfiguration configuration, IEmailService emailService, IPersonRepository personRepo)
+    public ClientService(IClientRepository repository, IVisitRepository visitRepository, UserManager<User> userManager, IHttpContextAccessor http, IUnitOfWork unitOfWork, IClientMembershipRepository clientMembershipRepository, IConfiguration configuration, IEmailService emailService, IPersonRepository personRepo)
     {
         _repository = repository;
         _visitRepo = visitRepository;
@@ -45,7 +45,7 @@ public class ClientService : IClientService
 
     public async Task<PageResult<ClientResponse>> GetAllAsync(GetClientQueryDto query)
     {
-        PageResult<ClientResponse> clients = await _repository.GetAllAsync(isActive:query.IsActive, searchText:query.SearchText, page: query.Page);
+        PageResult<ClientResponse> clients = await _repository.GetAllAsync(isActive: query.IsActive, searchText: query.SearchText, page: query.Page);
         return clients;
     }
 
@@ -56,9 +56,23 @@ public class ClientService : IClientService
             return Result<ClientInfoResponse>.Failure("Invalid ID", StatusCodeEnum.BadRequest);
         }
         Client? clientt = await _repository.GetByIdAsync(id);
-        if(clientt == null)
+        if (clientt == null)
         {
             return Result<ClientInfoResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
+        }
+
+        bool exist = await _repository.ExistsByPhoneAsync(request.PhoneNumber, id);
+
+        if (exist)
+        {
+            return Result<ClientInfoResponse>.Failure("Client with the same phone number already exists", StatusCodeEnum.BadRequest);
+        }
+
+        bool personExist = await _personRepo.ExistsByPhoneAsync(request.PhoneNumber, null);
+
+        if (personExist)
+        {
+            return Result<ClientInfoResponse>.Failure("Person from staff with the same phone number already exists", StatusCodeEnum.BadRequest);
         }
 
         clientt.ModifyClient(request);
@@ -179,7 +193,7 @@ public class ClientService : IClientService
     public async Task<Result<ClientInfoResponse>> GetClientFullNameByIdAsync(Guid id)
     {
         ClientInfoResponse? dto = await _repository.GetClientFullNameByIdAsync(id);
-        if(dto == null)
+        if (dto == null)
         {
             return Result<ClientInfoResponse>.Failure("Error during getting client data", StatusCodeEnum.NotFound);
         }
@@ -195,7 +209,7 @@ public class ClientService : IClientService
         }
 
         ClientDetailsWebResponse? dto = await _repository.GetClientProfileInfoAsync(clientId);
-        if(dto == null)
+        if (dto == null)
         {
             return Result<ClientDetailsWebResponse>.Failure("Error during loading client", StatusCodeEnum.BadRequest);
         }
@@ -205,14 +219,14 @@ public class ClientService : IClientService
     public async Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest entity)
     {
         Client client = entity.ToClient();
-         _repository.CreateAsync(client);
+        _repository.CreateAsync(client);
         User user = new User()
         {
             UserName = client.FirstName + client.LastName,
             ClientId = client.Id,
             Email = client.Email,
         };
-        var createResult = await _userManager.CreateAsync(user,entity.Password);
+        var createResult = await _userManager.CreateAsync(user, entity.Password);
         if (!createResult.Succeeded)
         {
             return Result<Unit>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
@@ -246,7 +260,7 @@ public class ClientService : IClientService
         {
             return Result<ClientMembershipInformationResponse>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
         }
-        ClientMembership? clientMembership =  await _clientMembershipRepository.GetActiveClientMembershipByClientId(clientId);
+        ClientMembership? clientMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(clientId);
         ClientMembershipInformationResponse response = new ClientMembershipInformationResponse();
         if (clientMembership == null)
         {
@@ -263,16 +277,16 @@ public class ClientService : IClientService
 
     public async Task<Result<ClientEditResponse>> GetByIdForEditAsync(Guid id)
     {
-       Client? client = await _repository.GetByIdAsync(id);
-       if (client == null)
-       {
+        Client? client = await _repository.GetByIdAsync(id);
+        if (client == null)
+        {
             return Result<ClientEditResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
-       }
+        }
 
         ClientEditResponse clientEditResponse = new ClientEditResponse()
         {
             City = client.City,
-            Email = client.Email,   
+            Email = client.Email,
             LastName = client.LastName,
             PhoneNumber = client.PhoneNumber,
             Street = client.StreetAddress

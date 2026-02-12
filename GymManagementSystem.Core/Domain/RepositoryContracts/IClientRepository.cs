@@ -15,4 +15,5 @@ public interface IClientRepository : IRepository<ClientResponse,Client>
     Task<PageResult<ClientResponse>> GetAllAsync(bool? isActive, int pageSize = 50, int page = 1, string? searchText = null);
     Task<ClientDetailsResponse?> GetClientDetailsAsync(Guid clientId);
     Task<bool> ExistsByEmailOrPhoneAsync(string email, string phoneNumber);
+    Task<bool> ExistsByPhoneAsync(string phoneNumber,Guid? clientId);
 }
