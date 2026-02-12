@@ -20,4 +20,8 @@ public class VisitController : BaseController
     [HttpGet("{clientId:guid}")]
     public async Task<ActionResult<IEnumerable<VisitResponse>>> GetAllClientVisits([FromRoute] Guid clientId)
         => HandleListedResult(await _visitService.GetAllClientVisitsAsync(clientId));
+
+    [HttpDelete("{visitId:guid}")]
+    public async Task<ActionResult> DeleteVisit([FromRoute] Guid visitId)
+        => HandleResult(await _visitService.DeleteVisitAsync(visitId));
 }

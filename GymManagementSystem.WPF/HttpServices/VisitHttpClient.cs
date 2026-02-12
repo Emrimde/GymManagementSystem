@@ -27,4 +27,11 @@ public class VisitHttpClient : BaseHttpClientService
             $"{clientId}"
         );
     }
+    public Task<Result<Unit>> DeleteVisitAsync(
+        Guid visitId)
+    {
+        return DeleteAsync(
+            $"{visitId}"
+        );
+    }
 }

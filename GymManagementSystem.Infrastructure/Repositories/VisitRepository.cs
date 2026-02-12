@@ -25,8 +25,9 @@ public class VisitRepository : IVisitRepository
             .OrderByDescending(item => item.VisitDate).Take(25)
             .Select(item => new VisitResponse
             {
+                Id = item.Id,
                 VisitSource = item.VisitSource,
-                VisitDate = item.VisitDate.ToString("dd:MM:yyyy - HH:mm"),
+                VisitDate = item.VisitDate.ToLocalTime().ToString("dd:MM:yyyy - HH:mm"),
             })
             .ToListAsync();
     }
@@ -71,5 +72,12 @@ public class VisitRepository : IVisitRepository
         return await query.CountAsync();
     }
 
-
+    public async Task<Visit?> GetVisitById(Guid visitId)
+    {
+       return await _dbContext.Visits.Where(item => item.Id == visitId).FirstOrDefaultAsync();
+    }
+    public void DeleteVisit(Visit visit)
+    {
+        _dbContext.Visits.Remove(visit);
+    }
 }

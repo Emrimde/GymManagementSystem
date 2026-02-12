@@ -18,12 +18,14 @@ public class VisitViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; }
     private INavigationService _navigation;
     public ICommand ReturnCommand { get; set; }
+    public ICommand DeleteVisitCommand { get; set; }
+    public ICommand LoadVisitViewDataCommand { get; set; }
     private ClientInfoResponse _clientName;
 
     public ClientInfoResponse ClientName
     {
         get { return _clientName; }
-        set { _clientName = value; OnPropertyChanged();}
+        set { _clientName = value; OnPropertyChanged(); }
     }
 
     public Guid ClientId { get; set; }
@@ -43,15 +45,43 @@ public class VisitViewModel : ViewModel, IParameterReceiver
     }
 
 
-    public VisitViewModel(VisitHttpClient visitHttpClient, INavigationService navigation,SidebarViewModel sidebarViewModel, ClientHttpClient clientHttpClient)
+    public VisitViewModel(VisitHttpClient visitHttpClient, INavigationService navigation, SidebarViewModel sidebarViewModel, ClientHttpClient clientHttpClient)
     {
         _visitHttpClient = visitHttpClient;
         Navigation = navigation;
         SidebarView = sidebarViewModel;
         _clientHttpClient = clientHttpClient;
         ReturnCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
+        DeleteVisitCommand = new AsyncRelayCommand(item => DeleteVisitAsync(item!), item => true);
+        LoadVisitViewDataCommand = new AsyncRelayCommand(item => LoadVisitViewDataAsync(), item => true);
+    }
 
+    private async Task LoadVisitViewDataAsync()
+    {
+        await LoadVisits(ClientId);
+        await LoadClientNameAsync(ClientId);
+    }
 
+    private async Task DeleteVisitAsync(object parameter)
+    {
+        if (parameter is Guid visitId)
+        {
+            MessageBoxResult mbResult = MessageBox.Show("Are you sure to delete visit?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (mbResult == MessageBoxResult.Yes)
+            {
+
+                Result<Unit> result = await _visitHttpClient.DeleteVisitAsync(visitId);
+                if (!result.IsSuccess)
+                {
+                    MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    LoadVisitViewDataCommand.Execute(null);
+                }
+            }
+            MessageBox.Show("Visit deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
     private async Task LoadClientNameAsync(Guid clientId)
@@ -59,7 +89,7 @@ public class VisitViewModel : ViewModel, IParameterReceiver
         Result<ClientInfoResponse> result = await _clientHttpClient.GetClientNameById(clientId);
         if (!result.IsSuccess)
         {
-            MessageBox.Show($"{result.GetUserMessage()}","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"{result.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         ClientName = result.Value!;
@@ -70,21 +100,19 @@ public class VisitViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid clientId)
         {
             ClientId = clientId;
-            _ = LoadVisits(clientId);
-            _ = LoadClientNameAsync(clientId);
         }
     }
 
     private async Task LoadVisits(Guid clientId)
     {
         Result<ObservableCollection<VisitResponse>> result = await _visitHttpClient.GetAllClientVisitsAsync(clientId);
-        if(result.IsSuccess)
+        if (result.IsSuccess)
         {
             Visits = result.Value!;
         }
         else
         {
-           MessageBox.Show($"Error loading visits: {result.GetUserMessage()}");
+            MessageBox.Show($"Error loading visits: {result.GetUserMessage()}");
         }
     }
 }

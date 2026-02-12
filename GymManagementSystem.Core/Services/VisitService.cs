@@ -60,4 +60,17 @@ public class VisitService : IVisitService
 
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<Unit>> DeleteVisitAsync(Guid visitId)
+    {
+        Visit? visit = await _visitRepository.GetVisitById(visitId);
+        if (visit == null)
+        {
+            return Result<Unit>.Failure("Visit not found", StatusCodeEnum.NotFound);
+        }
+
+        _visitRepository.DeleteVisit(visit);
+        await _unitOfWork.SaveChangesAsync();
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
+    }
 }
