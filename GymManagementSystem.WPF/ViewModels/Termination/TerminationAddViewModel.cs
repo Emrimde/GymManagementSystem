@@ -12,14 +12,9 @@ namespace GymManagementSystem.WPF.ViewModels.Termination;
 public class TerminationAddViewModel : ViewModel, IParameterReceiver
 {
 	private readonly TerminationHttpClient _httpClient;
-	private INavigationService _navigation;
-	public Guid ClientId { get; set; }
+    public INavigationService Navigation { get; set; }
+    public Guid ClientId { get; set; }
 	public SidebarViewModel SidebarView { get; }
-	public INavigationService Navigation
-	{
-		get { return  _navigation; }
-		set { _navigation = value; OnPropertyChanged(); }
-	}
 	public ICommand CreateTerminationCommand { get; }
 
     public TerminationAddViewModel(SidebarViewModel sidebarView, INavigationService navigation, TerminationHttpClient httpClient)
@@ -48,7 +43,7 @@ public class TerminationAddViewModel : ViewModel, IParameterReceiver
 
     }
 
-    private TerminationAddRequest _terminationAddRequest;
+    private TerminationAddRequest _terminationAddRequest = new();
     public TerminationAddRequest TerminationAddRequest
     {
 		get { return _terminationAddRequest; }

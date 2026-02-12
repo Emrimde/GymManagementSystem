@@ -18,13 +18,6 @@ public class BaseController: ControllerBase
             Problem(detail: result.ErrorMessage, statusCode: (int)result.StatusCode) : Ok(result.Value);
     }
 
-    protected ActionResult HandleResult
-       (ResultNoContent result)
-    {
-        return result.StatusCode == StatusCodeEnum.NoContent ? NoContent() : 
-            Problem(detail: result.ErrorMessage, statusCode: (int)result.StatusCode);
-    }
-
     protected ActionResult HandleListedResult<T>
     (Result<IEnumerable<T>> result)
     {

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Staff"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
@@ -11,49 +12,124 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ContentControl Grid.Column="0" Content="{Binding SidebarView}"/>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition/>
-                <RowDefinition Height="100"/>
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}">
-            <Run Text="{Binding Person.FirstName}"/>
-            <Run Text="{Binding Person.LastName}"/>
-            <Run Text=": details"/>
-            </TextBlock>
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Phone number: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20">
-                    <Run Text="{Binding Person.PhoneNumber}"/>
 
-                    </TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Email: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Person.Email}" Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Visibility="{Binding Person.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="Role: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Text="{Binding Person.Role}"/>
+        <ContentControl Grid.Column="0"
+                        Content="{Binding SidebarView}"/>
 
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Address: "  Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Person.Address}" Foreground="{DynamicResource PrimaryColor}" FontSize="20"/>
-                </StackPanel>
-                <TextBlock Text="Actions:" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryColor}" FontSize="20" Margin="0,30,0,10" />
-                <StackPanel Orientation="Vertical" >
-                    <Button Content="Add personal trainer role" Command="{Binding AddPersonalTrainerRoleCommand}" />
-                    <Button Content="Add group instructor role" Command="{Binding AddGroupTrainerRoleCommand}" />
-                    <Button Content="Add employee role" Command="{Binding OpenEmployeeViewCommand}" />
-                </StackPanel>
+        <ScrollViewer Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="32">
+
+                <TextBlock FontSize="28"
+                           FontWeight="Bold"
+                           Margin="0,0,0,24"
+                           Foreground="{DynamicResource PrimaryColor}">
+                    <Run Text="{Binding Person.FirstName}"/>
+                    <Run Text=" "/>
+                    <Run Text="{Binding Person.LastName}"/>
+                    <Run Text=" – Details"/>
+                </TextBlock>
+
+                <materialDesign:Card Padding="24"
+                                     UniformCornerRadius="16"
+                                     materialDesign:ElevationAssist.Elevation="Dp4">
+
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="Phone"
+                                                     Width="24"
+                                                     Height="24"
+                                                     Margin="0,0,16,0"
+                                                     Foreground="{DynamicResource PrimaryColor}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold"
+                                           Text="Phone number"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                                <TextBlock Text="{Binding Person.PhoneNumber}"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="Email"
+                                                     Width="24"
+                                                     Height="24"
+                                                     Margin="0,0,16,0"
+                                                     Foreground="{DynamicResource PrimaryColor}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold"
+                                           Text="Email"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                                <TextBlock Text="{Binding Person.Email}"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,16"
+                                    Visibility="{Binding Person.IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <materialDesign:PackIcon Kind="AccountTie"
+                                                     Width="24"
+                                                     Height="24"
+                                                     Margin="0,0,16,0"
+                                                     Foreground="{DynamicResource PrimaryColor}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold"
+                                           Text="Role"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                                <TextBlock Text="{Binding Person.Role}"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                            <materialDesign:PackIcon Kind="MapMarker"
+                                                     Width="24"
+                                                     Height="24"
+                                                     Margin="0,0,16,0"
+                                                     Foreground="{DynamicResource PrimaryColor}"/>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold"
+                                           Text="Address"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                                <TextBlock Text="{Binding Person.Address}"
+                                           Foreground="{DynamicResource PrimaryColor}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Separator Margin="0,12"/>
+
+                        <TextBlock Text="Actions"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Margin="0,16,0,16"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+
+                        <Button Content="Add personal trainer role"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,0,12"
+                                Command="{Binding AddPersonalTrainerRoleCommand}"/>
+
+                        <Button Content="Add group instructor role"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,0,12"
+                                Command="{Binding AddGroupTrainerRoleCommand}"/>
+
+                        <Button Content="Add employee role"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding OpenEmployeeViewCommand}"/>
+
+                    </StackPanel>
+
+                </materialDesign:Card>
+
             </StackPanel>
-        </Grid>
+
+        </ScrollViewer>
     </Grid>
 </UserControl>

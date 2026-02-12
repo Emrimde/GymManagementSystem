@@ -20,7 +20,7 @@ class NavigationService : ObservableObject, INavigationService
         _viewModelFactory = viewModelFactory;
     }
 
-    public void NavigateTo<TViewModel>(object parameter = null) where TViewModel : ViewModel
+    public void NavigateTo<TViewModel>(object parameter = null!) where TViewModel : ViewModel
     {
         ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
         if (parameter is not null && viewModel is IParameterReceiver receiver)

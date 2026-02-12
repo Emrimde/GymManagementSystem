@@ -9,18 +9,10 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.ClientMembership;
 public class ClientMembershipDetailsViewModel : ViewModel, IParameterReceiver
 {
-   
-
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public INavigationService Navigation { get; set; }
 
     private readonly ClientMembershipHttpClient _clientMembershipHttpClient;
-    private ClientMembershipDetailsResponse _clientMembership;
+    private ClientMembershipDetailsResponse _clientMembership = new();
 
     public ClientMembershipDetailsResponse ClientMembership
     {
@@ -39,24 +31,27 @@ public class ClientMembershipDetailsViewModel : ViewModel, IParameterReceiver
         _clientMembershipHttpClient = clientMembershipHttpClient;
         ClientMembership = new ClientMembershipDetailsResponse();
         SidebarView = sidebarView;
-        OpenClientMembershipsHistoryCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(item), item => true);
+        OpenClientMembershipsHistoryCommand = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipViewModel>(item!), item => true);
+        LoadClientMembershipCommand = new AsyncRelayCommand(item => LoadClientMembershipAsync(), item => true);
        
     }
+
+    private Guid _id;
 
     public void ReceiveParameter(object parameter)
     {
         if (parameter is Guid id)
         {
-            
-            _ = LoadClientMembership(id);
+            _id = id;
         }
     }
 
     public ICommand OpenClientMembershipsHistoryCommand { get; }
+    public ICommand LoadClientMembershipCommand { get; }
 
-    private async Task LoadClientMembership(Guid id)
+    private async Task LoadClientMembershipAsync()
     {
-        Result<ClientMembershipDetailsResponse> result = await _clientMembershipHttpClient.GetClientMembershipDetailsAsync(id);
+        Result<ClientMembershipDetailsResponse> result = await _clientMembershipHttpClient.GetClientMembershipDetailsAsync(_id);
         if (!result.IsSuccess)
         {
             MessageBox.Show($"{result.GetUserMessage()}");

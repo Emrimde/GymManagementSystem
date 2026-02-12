@@ -16,9 +16,6 @@ public class EmploymentContractPdfDto
     public string PhoneNumber { get; set; } = default!;
     public string Address { get; set; } = default!;
 
-
-
-
     // Contract
     public ContractTypeEnum ContractType { get; set; }
     public string ValidFrom { get; set; } = string.Empty;
@@ -27,7 +24,5 @@ public class EmploymentContractPdfDto
     public string Salary { get; set; } = string.Empty;
     public EmploymentType EmploymentType { get; set; }
     public EmployeeRole Role { get; set; }
-
-
 }
 

@@ -4,7 +4,6 @@ using GymManagementSystem.WPF.HttpServices;
 using GymManagementSystem.WPF.Mappers;
 using GymManagementSystem.WPF.Result;
 using GymManagementSystem.WPF.ServiceContracts;
-using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
 
@@ -24,7 +23,7 @@ public class RegisterViewModel : ViewModel
         }
     }
 
-    private string _email;
+    private string _email = string.Empty;
 
     public  string Email
     {
@@ -32,7 +31,7 @@ public class RegisterViewModel : ViewModel
         set { _email = value;  OnPropertyChanged(); }
     }
 
-    private string _password;
+    private string _password = string.Empty;
 
     public string Password
         {
@@ -40,14 +39,14 @@ public class RegisterViewModel : ViewModel
         set { _password = value; OnPropertyChanged(); }
     }
 
-    private string _confirmPassword;
+    private string _confirmPassword = string.Empty;
     public string ConfirmPassword
     {
         get { return _confirmPassword; }
         set { _confirmPassword = value; OnPropertyChanged(); }
     }
 
-    private string _username;
+    private string _username = string.Empty;
     public string Username
     {
         get { return _username; }

@@ -3,52 +3,92 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.Employee"
              xmlns:conv="clr-namespace:GymManagementSystem.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
+
+        <Border Grid.Column="0"
+                Background="#2F3038">
             <ContentControl Content="{Binding SidebarView}"/>
         </Border>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
-            </Grid.RowDefinitions>
-            <TextBlock Margin="0,20,0,0" HorizontalAlignment="Center" FontSize="30" Foreground="{StaticResource SecondColor}" Text="Add new employee" />
-            <Grid Grid.Row="1" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-              
-                <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Monthly Salary (Brutto)" Foreground="White"/>
-                        <TextBox Text="{Binding MonthlySalaryBrutto,UpdateSourceTrigger=PropertyChanged,
-                ValidatesOnNotifyDataErrors=True}" ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                          RelativeSource={RelativeSource Self}}" VerticalContentAlignment="Center" FontSize="20" Margin="10,0,0,0"  Width="150"/>
+
+        <ScrollViewer Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="32">
+                <TextBlock Text="Add new employee"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="0,0,0,24"
+                           Foreground="{DynamicResource PrimaryColor}"/>
+
+                <materialDesign:Card Padding="32"
+                                     UniformCornerRadius="16"
+                                     materialDesign:ElevationAssist.Elevation="Dp4">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Monthly Salary (Gross)"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+
+                        <TextBox Text="{Binding MonthlySalaryBrutto,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                ValidatesOnNotifyDataErrors=True}"
+                                 ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                                           RelativeSource={RelativeSource Self}}"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Margin="0,0,0,24"/>
+
+                        <TextBlock Text="Employee Role"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+
+                        <ComboBox ItemsSource="{Binding EmployeeRoles}"
+                                  SelectedItem="{Binding SelectedEmployeeRole}"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Margin="0,0,0,24"/>
+
+                        <TextBlock Text="Employment Type"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"
+                                   Foreground="{DynamicResource PrimaryColor}"/>
+
+                        <ComboBox ItemsSource="{Binding EmploymentTypes}"
+                                  SelectedItem="{Binding SelectedEmploymentType}"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Margin="0,0,0,32"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+
+                            <Button Content="Cancel"
+                                    Margin="0,0,16,0"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding ReturnToStaffViewCommand}"/>
+
+                            <Button Content="Add employee"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Command="{Binding AddEmployeeCommand}"/>
+
+                        </StackPanel>
+
                     </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Employee role" Foreground="White"/>
-                        <ComboBox ItemsSource="{Binding EmployeeRoles}" SelectedItem="{Binding SelectedEmployeeRole }" />
-                       
-                    </StackPanel>
-                    <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock FontSize="25" Text="Employment Type" Foreground="White"/>
-                        <ComboBox ItemsSource="{Binding EmploymentTypes}" SelectedItem="{Binding SelectedEmploymentType }" />
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-            <StackPanel Grid.Row="2" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Add employee" Command="{Binding AddEmployeeCommand }"/>
-                <Button Content="Cancel" Command="{Binding ReturnToStaffViewCommand }"/>
+
+                </materialDesign:Card>
+
             </StackPanel>
-        </Grid>
+
+        </ScrollViewer>
     </Grid>
 </UserControl>

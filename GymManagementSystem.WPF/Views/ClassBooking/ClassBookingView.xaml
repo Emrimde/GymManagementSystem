@@ -3,82 +3,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:GymManagementSystem.WPF.Views.ClassBooking"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgoundColor}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SidebarColumn" Width="200"/>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="#2B2B2B">
+
+        <Border Grid.Column="0"
+                Background="#2F3038">
             <ContentControl Content="{Binding SidebarView}"/>
         </Border>
+
         <Grid Grid.Column="1">
+
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
 
-                <TextBlock 
-    Grid.Column="0"
-    
-    FontSize="30" FontWeight="Bold" Foreground="#EEEEEE" 
-                HorizontalAlignment="Center"
-    
-    VerticalAlignment="Center"
-                Width="auto" Margin="40,0,0,0">
-                    
-                    <Run Text="{Binding Client.FullName}"/>
-                    <Run Text=" - Class bookings"/>
-                </TextBlock>
-            </Grid>
-            <Border Grid.Row="1" Background="#2B2B2B">
-                <DataGrid Style="{DynamicResource DataGridStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" ItemsSource="{Binding ClassBookings}" x:Name="datagrid" CanUserAddRows="False"
-              AutoGenerateColumns="false">
+            <TextBlock Grid.Row="0"
+                       Margin="32,24,32,16"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryColor}">
+                <Run Text="{Binding Client.FullName}"/>
+                <Run Text=" – Class bookings"/>
+            </TextBlock>
 
+            <materialDesign:Card Grid.Row="1"
+                                 Margin="32,0,32,16"
+                                 Padding="0"
+                                 UniformCornerRadius="16"
+                                 materialDesign:ElevationAssist.Elevation="Dp4">
 
+                <DataGrid ItemsSource="{Binding ClassBookings}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          Style="{StaticResource MaterialDesignDataGrid}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
-                        <DataGridTextColumn Header="Start from" Binding="{Binding StartFrom}"/>
-                        <DataGridTextColumn Header="Start to" Binding="{Binding StartTo}"/>
-                        <DataGridTextColumn Header="Created at" Binding="{Binding CreatedAt}"/>
-                        
-                        <DataGridTemplateColumn Header="Delete booking" Width="150">
+
+                        <DataGridTextColumn Header="Name"
+                                            Binding="{Binding Name}"/>
+
+                        <DataGridTextColumn Header="Date"
+                                            Binding="{Binding Date}"/>
+
+                        <DataGridTextColumn Header="Start from"
+                                            Binding="{Binding StartFrom}"/>
+
+                        <DataGridTextColumn Header="Start to"
+                                            Binding="{Binding StartTo}"/>
+
+                        <DataGridTextColumn Header="Created at"
+                                            Binding="{Binding CreatedAt}"/>
+
+                        <DataGridTemplateColumn Header="Delete"
+                                                Width="90">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Width="36"
+                                            Height="36"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Command="{Binding DataContext.DeleteClassBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding Id}">
 
-
-                                        <Button
-                                 Width="40" 
-                                Height="25" FontSize="10"
-                                Background="#F44336" 
-                                Foreground="White"
-                                Command="{Binding DataContext.DeleteClassBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                CommandParameter="{Binding Id}" >
-
-                                        </Button>
-                                    </StackPanel>
+                                        <materialDesign:PackIcon Kind="Delete"
+                                                                 Width="20"
+                                                                 Height="20"
+                                                                 Foreground="#F44336"/>
+                                    </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
 
                 </DataGrid>
 
-            </Border>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Return" Width="100" Margin="10,0" Command="{Binding PreviousPageCommand}"/>
+            </materialDesign:Card>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="32,0,32,24">
+
+                <Button Content="Return"
+                        Width="120"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding PreviousPageCommand}"/>
+
             </StackPanel>
+
         </Grid>
     </Grid>
 </UserControl>

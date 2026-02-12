@@ -45,7 +45,7 @@ public class ClientMembershipViewModel : ViewModel, IParameterReceiver
         ClientMemberships = new ObservableCollection<ClientMembershipResponse>();
         Client = new ClientInfoResponse();
         _clientHttpClient = clientHttpClient;
-        OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item), item => true);
+        OpenClientMembershipDetails = new RelayCommand(item => Navigation.NavigateTo<ClientMembershipDetailsViewModel>(item!), item => true);
         ReturnToClientDetailsViewCommand = new RelayCommand(item => Navigation.NavigateTo<ClientDetailsViewModel>(ClientId), item => true);
         LoadClientMembershipsDataCommand = new AsyncRelayCommand(item => LoadClientMembershipsDataAsync(), item => true);
     }

@@ -9,7 +9,7 @@ public class Result<T>
     public bool IsSuccess { get; set; }
     public T? Value { get; set; }
     public string? ErrorMessage { get; set; }
-    public StatusCodeEnum? StatusCode { get; set; }
+    public StatusCodeEnum StatusCode { get; set; }
     public static Result<T> Success(T value, StatusCodeEnum statusCode)
     {
         return new Result<T> { IsSuccess = true, Value = value, StatusCode = statusCode };

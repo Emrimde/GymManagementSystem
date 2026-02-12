@@ -42,16 +42,17 @@ public class GymClassUpdateViewModel : ViewModel, IParameterReceiver
     public SidebarViewModel SidebarView { get; set; }
     public ObservableCollection<TrainerContractInfoResponse> TrainerContracts { get; set; } = new();
 
-    private TrainerContractInfoResponse _selectedTrainerContract = new();
+    private TrainerContractInfoResponse? _selectedTrainerContract = new();
     private readonly TrainerHttpClient _trainerHttpClient;
 
-    public TrainerContractInfoResponse SelectedTrainerContract
+    public TrainerContractInfoResponse? SelectedTrainerContract
     {
         get { return _selectedTrainerContract; }
         set
         {
             _selectedTrainerContract = value;
-            Form.TrainerContractId = value.Id;
+            if(value != null)
+                Form.TrainerContractId = value.Id;
             OnPropertyChanged();
         }
     }

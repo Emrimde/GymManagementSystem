@@ -19,25 +19,19 @@ public class GeneralSettingsViewModel : ViewModel
 {
 
     private readonly GeneralGymDetailsHttpClient _httpClient;
-    private GeneralGymUpdateRequest _generalSettingsUpdateRequest;
-    public SidebarViewModel SidebarView { get; }
-    private INavigationService _navigation;
-
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
-
-    public ICommand SaveGeneralSettingsCommand { get; }
-    public ICommand PickLogoCommand { get; }
-    public ImageSource? LogoPreview { get; set; }
-
+    private GeneralGymUpdateRequest _generalSettingsUpdateRequest = new();
     public GeneralGymUpdateRequest GeneralGymDetailsUpdateRequest
     {
         get { return _generalSettingsUpdateRequest; }
         set { _generalSettingsUpdateRequest = value; OnPropertyChanged(); }
     }
+    public SidebarViewModel SidebarView { get; }
+    public INavigationService Navigation { get; set; }
+
+    public ICommand SaveGeneralSettingsCommand { get; }
+    public ICommand PickLogoCommand { get; }
+    public ImageSource? LogoPreview { get; set; }
+
 
     public GeneralSettingsViewModel(SidebarViewModel sidebarVm,GeneralGymDetailsHttpClient httpClient, INavigationService navigationService)
     {
@@ -82,7 +76,7 @@ public class GeneralSettingsViewModel : ViewModel
             Application.Current.Resources["GymName"] = result.Value!.GymName;
             Application.Current.Resources["Address"] = result.Value!.Address;
             Application.Current.Resources["ContactNumber"] = result.Value!.ContactNumber;
-            Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.PrimaryColor)!; // czy to poprawne?
+            Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.PrimaryColor)!; 
             Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.SecondColor)!;
             Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.BackgroundColor)!; ;
             Navigation.NavigateTo<DashboardViewModel>();

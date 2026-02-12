@@ -20,7 +20,7 @@ public class GymClassEditFormModel : ObservableObject, INotifyDataErrorInfo
         return Enumerable.Empty<string>();
     }
 
-    private string _name;
+    private string _name = string.Empty;
 
     public string Name
     {

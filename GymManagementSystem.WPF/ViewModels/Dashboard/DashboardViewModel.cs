@@ -13,14 +13,14 @@ using System.Windows.Input;
 namespace GymManagementSystem.WPF.ViewModels.Dashboard;
 public class DashboardViewModel : ViewModel
 {
-    private PlotModel _visitsModel;
+    private PlotModel _visitsModel = new();
 
     public PlotModel VisitsModel
     {
         get { return _visitsModel; }
         set { _visitsModel = value; OnPropertyChanged(); }
     }
-    private PlotModel clientMemberships;
+    private PlotModel clientMemberships = new();
 
     public PlotModel ClientMemberships
     {
@@ -30,14 +30,14 @@ public class DashboardViewModel : ViewModel
 
     private readonly DashboardHttpClient _dashboardHttpClient;
 
-    private DashboardKpiResponse _dashboardKpi;
+    private DashboardKpiResponse _dashboardKpi = new();
 
     public DashboardKpiResponse DashboardKPI
     {
         get { return _dashboardKpi; }
         set { _dashboardKpi = value; OnPropertyChanged(); }
     }
-    private DashboardPlotsDataResponse _points;
+    private DashboardPlotsDataResponse _points = new();
 
     public DashboardPlotsDataResponse Points
     {

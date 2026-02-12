@@ -103,7 +103,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
       
 
 
-    private string _firstName;
+    private string _firstName = string.Empty;
     public string FirstName
     {
         get { return _firstName; }
@@ -115,7 +115,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _lastName;
+    private string _lastName = string.Empty;
     public string LastName
     {
         get { return _lastName; }
@@ -127,7 +127,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _email;
+    private string _email = string.Empty;
     public string Email
     {
         get { return _email; }
@@ -139,7 +139,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _phoneNumber;
+    private string _phoneNumber = string.Empty;
     public string PhoneNumber
     {
         get { return _phoneNumber; }
@@ -151,7 +151,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _street;
+    private string _street = string.Empty;
     public string Street
     {
         get { return _street; }
@@ -163,7 +163,7 @@ public class PersonAddForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _city;
+    private string _city = string.Empty;
     public string City
     {
         get { return _city; }

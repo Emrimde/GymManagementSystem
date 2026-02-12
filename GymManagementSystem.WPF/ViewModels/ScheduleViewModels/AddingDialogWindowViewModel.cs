@@ -63,17 +63,22 @@ public class AddingDialogWindowViewModel : ViewModel
         CloseRequested?.Invoke(true);
     }
 
-    public TrainerTimeOffAddRequest BuildDto()
+    public TrainerTimeOffAddRequest? BuildDto()
     {
-        var start = SelectedDate.Value.Date + TimeSpan.Parse(SelectedStartSlot);
-        var end = SelectedDate.Value.Date + TimeSpan.Parse(SelectedEndSlot);
+        var start = SelectedDate?.Date + TimeSpan.Parse(SelectedStartSlot);
+        var end = SelectedDate?.Date + TimeSpan.Parse(SelectedEndSlot);
 
-        return new TrainerTimeOffAddRequest
+        if (start.HasValue && end.HasValue)
         {
-            TrainerId = _trainerId,
-            Start = start, 
-            End = end,
-            Reason = Reason,
-        };
+
+            return new TrainerTimeOffAddRequest
+            {
+                TrainerId = _trainerId,
+                Start = start.Value,
+                End = end.Value,
+                Reason = Reason,
+            };
+        }
+        return null;
     }
 }

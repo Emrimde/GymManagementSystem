@@ -46,7 +46,7 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
         _trainerHttpClient = trainerHttpClient;
         TrainerRates = new ObservableCollection<TrainerRateResponse>();
         SidebarView = sidebarView;
-        OpenAddTrainerRateView = new RelayCommand(item => Navigation.NavigateTo<TrainerRateAddViewModel>(item), item => true);
+        OpenAddTrainerRateView = new RelayCommand(item => Navigation.NavigateTo<TrainerRateAddViewModel>(item!), item => true);
         LoadTrainerRatesCommand = new AsyncRelayCommand(item => LoadTrainerRatesAsync(), item => true);
 
     }
@@ -56,7 +56,6 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
         if (parameter is Guid id)
         {
             TrainerContractId = id;
-            _ = LoadTrainerRatesAsync();
         }
     }
 
@@ -68,7 +67,7 @@ public class TrainerRateViewModel : ViewModel, IParameterReceiver
 
         if (!result.IsSuccess) return;
 
-        var items = result.Value;
+        var items = result.Value!;
 
         foreach (var item in items)
             TrainerRates.Add(item);

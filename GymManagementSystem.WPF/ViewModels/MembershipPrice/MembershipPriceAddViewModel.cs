@@ -42,7 +42,7 @@ public class MembershipPriceAddViewModel : ViewModel, IParameterReceiver
 
 
     }
-    private MembershipInfoResponse _membership;
+    private MembershipInfoResponse _membership = new();
 
     public MembershipInfoResponse Membership
     {

@@ -15,7 +15,7 @@ public static class ClassBookingMapper
             StartFrom = classBooking.StartFrom.ToString(@"hh\:mm"),
             StartTo = (classBooking.StartFrom + TimeSpan.FromMinutes(60)).ToString(@"hh\:mm"),
             Date = classBooking.Date.ToString("dd.MM.yyyy"),
-            CreatedAt = classBooking.CreatedAt.ToString("dd.MM.yyyy"),
+            CreatedAt = classBooking.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy"),
         };
     }
 

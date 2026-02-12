@@ -71,7 +71,7 @@ public class PersonEditForm : ObservableObject, INotifyDataErrorInfo
       !string.IsNullOrWhiteSpace(City);
 
 
-    private string _lastName;
+    private string _lastName = string.Empty;
     public string LastName
     {
         get { return _lastName; }
@@ -83,7 +83,7 @@ public class PersonEditForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _phoneNumber;
+    private string _phoneNumber = string.Empty;
     public string PhoneNumber
     {
         get { return _phoneNumber; }
@@ -95,7 +95,7 @@ public class PersonEditForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _street;
+    private string _street = string.Empty;
     public string Street
     {
         get { return _street; }
@@ -107,7 +107,7 @@ public class PersonEditForm : ObservableObject, INotifyDataErrorInfo
         }
     }
 
-    private string _city;
+    private string _city = string.Empty;
     public string City
     {
         get { return _city; }

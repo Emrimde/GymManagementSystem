@@ -41,13 +41,12 @@ public class TrainerRateRepository : ITrainerRateRepository
 
     public async Task<IEnumerable<TrainerRate>> GetTrainerRates(Guid trainerId, bool? showActive)
     {
-        IQueryable<TrainerRate> query = _dbContext.TrainerRates.OrderByDescending(item => item.ValidFrom);
+        IQueryable<TrainerRate> query = _dbContext.TrainerRates.OrderByDescending(item => item.ValidFrom).Where(item => item.TrainerContractId == trainerId);
         if (showActive.HasValue && showActive.Value == true)
         {
             query = query.Where(item => item.ValidTo == null);
         }
         return await query.ToListAsync();
-        //return await _dbContext.TrainerRates.Where(item => item.TrainerContractId == trainerId).OrderByDescending(item => item.ValidFrom).ToListAsync();
     }
 
 

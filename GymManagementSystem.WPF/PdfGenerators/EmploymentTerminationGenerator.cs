@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
+using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.DTO.EmploymentTermination;
 using GymManagementSystem.Core.DTO.GeneralGymDetail;
 using GymManagementSystem.Core.DTO.Person;
@@ -287,5 +288,7 @@ public static class EmploymentTerminationGenerator
         });
     }
 
+
+    
 
 }

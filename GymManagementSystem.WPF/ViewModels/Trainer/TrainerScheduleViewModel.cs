@@ -107,7 +107,12 @@ public class TrainerScheduleViewModel : ViewModel, IParameterReceiver
         AddingDialogWindow dialog = new AddingDialogWindow { DataContext = vm };
         if (dialog.ShowDialog() == true)
         {
-            TrainerTimeOffAddRequest dto = vm.BuildDto();
+            TrainerTimeOffAddRequest? dto = vm.BuildDto();
+            if(dto == null)
+            {
+                MessageBox.Show("Invalid input. Please check your data and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Result<Unit> result = await _trainerHttpClient.PostTrainerTimeOff(dto);
             if (!result.IsSuccess)
             {

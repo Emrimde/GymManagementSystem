@@ -11,18 +11,11 @@ namespace GymManagementSystem.WPF.ViewModels.Membership;
 public class MembershipViewModel : ViewModel
 {
     public SidebarViewModel SidebarView { get; }
-    private INavigationService _navigation;
+   
     public ICommand OpenMembershipDetailsCommand { get; set; }
     public ICommand OpenEditMembershipCommand { get; }
     private readonly MembershipHttpClient _membershipHttpClient;
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set
-        {
-            _navigation = value; OnPropertyChanged();
-        }
-    }
+    public INavigationService Navigation { get; set; }
 
     private ObservableCollection<MembershipResponse> _memberships = new();
 
@@ -42,13 +35,13 @@ public class MembershipViewModel : ViewModel
 
     public MembershipViewModel(INavigationService navigationService, SidebarViewModel sidebarView, MembershipHttpClient membershipHttpClient)
     {
-        _navigation = navigationService;
+        Navigation = navigationService;
         SidebarView = sidebarView;
         _membershipHttpClient = membershipHttpClient;
         Memberships = new ObservableCollection<MembershipResponse>();
-        OpenMembershipDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(item), item => true);
+        OpenMembershipDetailsCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipDetailsViewModel>(item!), item => true);
         _ = LoadMembershipsAsync();
-        OpenEditMembershipCommand = new RelayCommand(item => _navigation.NavigateTo<MembershipEditViewModel>(item), item => true);
+        OpenEditMembershipCommand = new RelayCommand(item => Navigation.NavigateTo<MembershipEditViewModel>(item!), item => true);
     }
 
     private async Task LoadMembershipsAsync()

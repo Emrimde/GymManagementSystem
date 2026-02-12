@@ -10,17 +10,16 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Visit;
-
 public class VisitViewModel : ViewModel, IParameterReceiver
 {
     private readonly VisitHttpClient _visitHttpClient;
     private readonly ClientHttpClient _clientHttpClient;
     public SidebarViewModel SidebarView { get; }
-    private INavigationService _navigation;
+
     public ICommand ReturnCommand { get; set; }
     public ICommand DeleteVisitCommand { get; set; }
     public ICommand LoadVisitViewDataCommand { get; set; }
-    private ClientInfoResponse _clientName;
+    private ClientInfoResponse _clientName = new();
 
     public ClientInfoResponse ClientName
     {
@@ -30,13 +29,9 @@ public class VisitViewModel : ViewModel, IParameterReceiver
 
     public Guid ClientId { get; set; }
 
-    public INavigationService Navigation
-    {
-        get { return _navigation; }
-        set { _navigation = value; OnPropertyChanged(); }
-    }
+    public INavigationService Navigation { get; set; }
 
-    private ObservableCollection<VisitResponse> _visits;
+    private ObservableCollection<VisitResponse> _visits = new();
 
     public ObservableCollection<VisitResponse> Visits
     {
