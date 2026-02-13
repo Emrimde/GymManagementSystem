@@ -14,7 +14,9 @@ public static class ApplicationAccessPolicy
             {
                 "Manager",
                 "Receptionist",
-                "Owner"
+                "Owner",
+                "Trainer",
+                "GroupInstructor"
             }
         };
 

@@ -108,7 +108,7 @@ public class AuthService : IAuthService
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
         }
 
-        var token = await _jwtService.CreateJwtToken(user);
+        AuthenticationResponse token = await _jwtService.CreateJwtToken(user);
         token.MustChangePassword = user.MustChangePassword;
 
         return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -72,31 +73,31 @@ builder.Services.AddIdentity<User, Role>(options =>
                 .AddDefaultTokenProviders();
 
 
-var jwtKey = builder.Configuration["Jwt:Key"];
 
-if (string.IsNullOrWhiteSpace(jwtKey))
-    throw new InvalidOperationException("JWT Key is not configured.");
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey)
-            ),
+})
+       .AddJwtBearer(options => {
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuer = true,
+               ValidateAudience = true,
+               ValidateLifetime = true,
+               ValidateIssuerSigningKey = true,
 
-            RoleClaimType = ClaimTypes.Role
-        };
-    });
+               ValidIssuer = builder.Configuration["Jwt:Issuer"],
+               ValidAudience = builder.Configuration["Jwt:Audience"],
+               IssuerSigningKey = new SymmetricSecurityKey(
+                   Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+               RoleClaimType = ClaimTypes.Role
+           };
+       });
 
 
 builder.Services.AddAuthorization();

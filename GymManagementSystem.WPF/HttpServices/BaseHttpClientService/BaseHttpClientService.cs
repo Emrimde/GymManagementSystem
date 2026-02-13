@@ -116,7 +116,6 @@ public abstract class BaseHttpClientService
             return Result<T>.Failure(pd);
         }
 
-        // jeśli body puste dla innych błędów -> generuj prosty ProblemDetails
         if (string.IsNullOrWhiteSpace(body))
         {
             return Result<T>.Failure(new ProblemDetails
