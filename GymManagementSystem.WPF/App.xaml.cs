@@ -97,7 +97,7 @@ public partial class App : Application
         {
             options.BaseAddress = new Uri("http://localhost:5105/api/auth/");
             options.DefaultRequestHeaders.Add("Accept", "application/json");
-        }).AddHttpMessageHandler<JwtHandler>();
+        });
 
         services.AddHttpClient<GymClassHtppClient>(options =>
         {

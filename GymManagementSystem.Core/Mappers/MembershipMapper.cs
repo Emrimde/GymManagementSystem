@@ -18,14 +18,6 @@ public static class MembershipMapper
             FreeFriendEntryCountPerMonth = membership.FreeFriendEntryCountPerMonth,
         };
     }
-    public static Membership ToMembership(this MembershipAddRequest membership)
-    {
-        return new Membership()
-        {
-            Name = membership.Name,
-            MembershipType = membership.MembershipType,
-        };
-    }
 
     public static void ModifyMembership(this Membership membership, MembershipUpdateRequest membershipUpdateRequest)
     {

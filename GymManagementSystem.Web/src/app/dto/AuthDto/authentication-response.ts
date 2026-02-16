@@ -1,4 +1,5 @@
 export interface AuthenticationResponse {
-    token: string
-    expirationDate:string
+    token: string,
+    refreshToken: string
+    expirationTime:string
 }

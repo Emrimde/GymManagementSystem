@@ -19,7 +19,7 @@ public class JwtHandler : DelegatingHandler
 
 
     protected override async Task<HttpResponseMessage> SendAsync(
-          HttpRequestMessage request, CancellationToken ct)
+    HttpRequestMessage request, CancellationToken ct)
     {
         if (!string.IsNullOrEmpty(_auth.JwtToken))
         {
@@ -29,16 +29,30 @@ public class JwtHandler : DelegatingHandler
 
         var response = await base.SendAsync(request, ct);
 
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        if (response.StatusCode == HttpStatusCode.Unauthorized &&
+            !request.RequestUri!.AbsolutePath.Contains("refresh"))
         {
-            _auth.ClearJwt();
+            var refreshSuccess = await _auth.RefreshAsync();
 
-            Application.Current.Dispatcher.Invoke(() =>
+            if (!refreshSuccess)
             {
-                _navigation.NavigateTo<LoginViewModel>();
-            });
+                _auth.ClearJwt();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _navigation.NavigateTo<LoginViewModel>();
+                });
+
+                return response;
+            }
+
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", _auth.JwtToken);
+
+            return await base.SendAsync(request, ct);
         }
 
         return response;
     }
+
 }

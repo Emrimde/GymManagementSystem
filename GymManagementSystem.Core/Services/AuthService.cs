@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.InteropServices.Marshalling;
 using System.Security.Claims;
 
 namespace GymManagementSystem.Core.Services;
@@ -110,6 +112,9 @@ public class AuthService : IAuthService
 
         AuthenticationResponse token = await _jwtService.CreateJwtToken(user);
         token.MustChangePassword = user.MustChangePassword;
+        user.RefreshToken = token.RefreshToken;
+        user.RefreshTokenExpirationDateTime = token.RefreshTokenExpirationDateTime;
+        await _userManager.UpdateAsync(user);
 
         return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);
     }
@@ -273,4 +278,38 @@ public class AuthService : IAuthService
         await _userManager.UpdateSecurityStampAsync(user);
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
+
+    public async Task<Result<AuthenticationResponse>> RefreshTokenAsync(
+    RefreshTokenRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.RefreshToken))
+        {
+            return Result<AuthenticationResponse>
+                .Failure("Invalid refresh token", StatusCodeEnum.Unauthorized);
+        }
+
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(u =>
+                u.RefreshToken == request.RefreshToken);
+
+        if (user == null ||
+            user.RefreshTokenExpirationDateTime == null ||
+            user.RefreshTokenExpirationDateTime <= DateTime.UtcNow)
+        {
+            return Result<AuthenticationResponse>
+                .Failure("Invalid refresh token", StatusCodeEnum.Unauthorized);
+        }
+
+        AuthenticationResponse newTokens = await _jwtService.CreateJwtToken(user);
+
+        user.RefreshToken = newTokens.RefreshToken;
+        user.RefreshTokenExpirationDateTime =
+            newTokens.RefreshTokenExpirationDateTime;
+
+        await _userManager.UpdateAsync(user);
+
+        return Result<AuthenticationResponse>
+            .Success(newTokens, StatusCodeEnum.Ok);
+    }
+
 }

@@ -10,6 +10,14 @@ public class AuthHttpClient : BaseHttpClientService
         : base(httpClient)
     {
     }
+    public async Task<Result<AuthenticationResponse>> RefreshAsync(
+    RefreshTokenRequest request)
+    {
+        return await PostAsync<RefreshTokenRequest, AuthenticationResponse>(
+            "refresh",
+            request
+        );
+    }
 
     public async Task<Result<AuthenticationResponse>> LoginAsync(SignInDto signInDto)
     {

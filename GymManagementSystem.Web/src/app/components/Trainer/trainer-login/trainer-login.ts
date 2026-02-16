@@ -56,8 +56,8 @@ export class TrainerLogin  {
 
     this.authService.signIn(dto).subscribe({
       next: (response: any) => {
-        this.authStateService.setToken(response.token);
-        localStorage.setItem('expirationDate', response.expirationDate);
+        this.authStateService.setToken(response.token, response.refreshToken);
+        localStorage.setItem('expirationDate', response.expirationTime);
 
         if (
           this.authStateService.isTrainer() ||

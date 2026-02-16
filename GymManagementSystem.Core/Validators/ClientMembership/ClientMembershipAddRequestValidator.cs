@@ -6,8 +6,6 @@ public class ClientMembershipAddRequestValidator : AbstractValidator<ClientMembe
 {
     public ClientMembershipAddRequestValidator()
     {
-        RuleFor(item => item.ClientId)
-            .NotEmpty().WithMessage("ClientId is required.");
         RuleFor(item => item.MembershipId)
             .NotEmpty().WithMessage("MembershipId is required.");
     }

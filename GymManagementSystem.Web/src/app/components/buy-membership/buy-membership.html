@@ -1,92 +1,211 @@
 <div class="container my-5">
-
   <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
 
       <div class="card shadow-sm background-black p-4">
 
         <h3 class="text-center text-green mb-4">
-         Zakup karnetu
+          Buy membership
         </h3>
-        @if(clientMembershipForm){
+
+        @if (clientMembershipForm) {
 
           <form [formGroup]="clientMembershipForm" (ngSubmit)="submit()">
+
+   
+<div class="mb-4 p-4 rounded bg-dark-gray text-white">
+
+  <h5 class="text-green mb-4">Membership summary</h5>
+
+  <div class="row mb-2">
+    <div class="col-5 text-white">Name</div>
+    <div class="col-7 fw-semibold">
+      {{ clientMembershipForm.get('firstName')?.value }}
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-5 text-white">Last name</div>
+    <div class="col-7 fw-semibold">
+      {{ clientMembershipForm.get('lastName')?.value }}
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-5 text-white">Email</div>
+    <div class="col-7">
+      {{ clientMembershipForm.get('email')?.value }}
+    </div>
+  </div>
+
+  <hr class="text-white-bg my-3">
+
+  <div class="row">
+    <div class="col-5 text-white">Membership type</div>
+    <div class="col-7 fw-bold text-green">
+      {{ clientMembershipForm.get('membershipName')?.value }}
+    </div>
+  </div>
+
+</div>
+
+
+            <h5 class="text-green mb-3">Contact information</h5>
+
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Imię</label>
-                <input formControlName="firstName" type="text" class="form-control" readonly />
+                <label class="form-label text-white-bg">Phone</label>
+                <input type="tel"
+                       formControlName="phoneNumber"
+                       class="form-control"
+                       [class.is-invalid]="clientMembershipForm.get('phoneNumber')?.touched 
+                                           && clientMembershipForm.get('phoneNumber')?.invalid"/>
+
+                @if (clientMembershipForm.get('phoneNumber')?.touched 
+                      && clientMembershipForm.get('phoneNumber')?.hasError('required')) {
+                  <div class="text-danger small">
+                    Phone is required
+                  </div>
+                }
+
+                @if (backendFieldErrors['phoneNumber']) {
+                  <div class="text-danger small">
+                    @for (err of backendFieldErrors['phoneNumber']; track err) {
+                      <div>{{ err }}</div>
+                    }
+                  </div>
+                }
               </div>
 
               <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Nazwisko</label>
-                <input formControlName="lastName" type="text" class="form-control" readonly />
+                <label class="form-label text-white-bg">Date of birth</label>
+                <input type="date"
+                       formControlName="dateOfBirth"
+                       class="form-control"
+                       [class.is-invalid]="clientMembershipForm.get('dateOfBirth')?.touched 
+                                           && clientMembershipForm.get('dateOfBirth')?.invalid"/>
+
+                @if (clientMembershipForm.get('dateOfBirth')?.touched 
+                      && clientMembershipForm.get('dateOfBirth')?.hasError('required')) {
+                  <div class="text-danger small">
+                    Date of birth is required
+                  </div>
+                }
+
+                @if (backendFieldErrors['dateOfBirth']) {
+                  <div class="text-danger small">
+                    @for (err of backendFieldErrors['dateOfBirth']; track err) {
+                      <div>{{ err }}</div>
+                    }
+                  </div>
+                }
               </div>
             </div>
-  
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Email</label>
-                <input formControlName="email" type="email" class="form-control" readonly />
-              </div>
-  
-              <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Telefon</label>
-                <input type="tel" formControlName="phoneNumber" class="form-control" />
-              </div>
-            </div>
-  
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Data urodzenia</label>
-                <input type="date" formControlName="dateOfBirth" class="form-control" />
-              </div>
-  
-              <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Wybrany karnet</label>
-                <input type="text" formControlName="membershipName" class="form-control" readonly />
-               
-              </div>
-            </div>
-  
+
             <hr class="text-white-bg my-4">
-  
-            <h5 class="text-green mb-3">Adres zamieszkania</h5>
-  
+
+            <h5 class="text-green mb-3">Address</h5>
+
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Miasto</label>
-                <input type="text" formControlName="city" class="form-control" />
+                <label class="form-label text-white-bg">City</label>
+                <input type="text"
+                       formControlName="city"
+                       class="form-control"
+                       [class.is-invalid]="clientMembershipForm.get('city')?.touched 
+                                           && clientMembershipForm.get('city')?.invalid"/>
+
+                @if (clientMembershipForm.get('city')?.touched 
+                      && clientMembershipForm.get('city')?.hasError('required')) {
+                  <div class="text-danger small">
+                    City is required
+                  </div>
+                }
+
+                @if (backendFieldErrors['city']) {
+                  <div class="text-danger small">
+                    @for (err of backendFieldErrors['city']; track err) {
+                      <div>{{ err }}</div>
+                    }
+                  </div>
+                }
               </div>
-  
+
               <div class="col-md-6 mb-3">
-                <label class="form-label text-white-bg">Ulica</label>
-                <input type="text" formControlName="street" class="form-control" />
+                <label class="form-label text-white-bg">Street</label>
+                <input type="text"
+                       formControlName="street"
+                       class="form-control"
+                       [class.is-invalid]="clientMembershipForm.get('street')?.touched 
+                                           && clientMembershipForm.get('street')?.invalid"/>
+
+                @if (clientMembershipForm.get('street')?.touched 
+                      && clientMembershipForm.get('street')?.hasError('required')) {
+                  <div class="text-danger small">
+                    Street is required
+                  </div>
+                }
+
+                @if (backendFieldErrors['street']) {
+                  <div class="text-danger small">
+                    @for (err of backendFieldErrors['street']; track err) {
+                      <div>{{ err }}</div>
+                    }
+                  </div>
+                }
               </div>
             </div>
-  
+
             <div class="form-check mt-3 mb-4">
-              <input class="form-check-input" type="checkbox" id="accept" />
-              <label class="form-check-label text-white-bg" for="accept">
-                Akceptuję regulamin i warunki umowy
+              <input type="checkbox"
+                     class="form-check-input"
+                     formControlName="acceptTerms"/>
+
+              <label class="form-check-label text-white-bg">
+                I accept the terms and conditions
               </label>
+
+              @if (clientMembershipForm.get('acceptTerms')?.touched 
+                    && clientMembershipForm.get('acceptTerms')?.invalid) {
+                <div class="text-danger small">
+                  You must accept the terms
+                </div>
+              }
             </div>
-  
+
             <div class="d-grid gap-2">
-              <button type="submit" class="btn button-green fw-bold">
-                Kup karnet
+              <button type="submit"
+                      class="btn button-green fw-bold"
+                      [disabled]="isSubmitting">
+                @if (isSubmitting) { Processing... } @else { Buy membership }
               </button>
-  
-              <button type="button" class="btn button-light-gray">
-                Wróć
+
+              <button type="button"
+                      class="btn button-light-gray">
+                Back
               </button>
             </div>
-  
+
+            @if (successMessage) {
+              <div class="alert alert-success mt-3">
+                {{ successMessage }}
+              </div>
+            }
+
+            @if (backendErrors.length > 0) {
+              <div class="alert alert-danger mt-3">
+                <ul class="mb-0">
+                  @for (err of backendErrors; track err) {
+                    <li>{{ err }}</li>
+                  }
+                </ul>
+              </div>
+            }
+
           </form>
         }
 
       </div>
-
     </div>
   </div>
-
 </div>

@@ -48,8 +48,8 @@ export class ClientLogin implements OnInit {
     next: (response: any) => {
       const result: AuthenticationResponse = response;
 
-      this.authStateService.setToken(result.token);
-      localStorage.setItem('expirationDate', result.expirationDate);
+      this.authStateService.setToken(result.token, result.refreshToken);
+      localStorage.setItem('expirationDate', result.expirationTime);
 
       if (!this.authStateService.hasRole('Client')) {
         this.authStateService.logout();

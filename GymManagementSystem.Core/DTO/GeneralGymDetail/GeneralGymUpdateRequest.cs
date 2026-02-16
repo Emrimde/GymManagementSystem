@@ -6,12 +6,9 @@ public class GeneralGymUpdateRequest
     public string GymName { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string ContactNumber { get; set; } = string.Empty;
-    public string PrimaryColor { get; set; } = string.Empty;
-    public string BackgroundColor { get; set; } = string.Empty;
-    public string SecondColor { get; set; } = string.Empty;
+    public string AboutUs { get; set; } = string.Empty;
+    public string LogoUrl { get; set; } = string.Empty;
     public decimal DefaultRate60 { get; set; }
     public decimal DefaultRate90 { get; set; }
     public decimal DefaultRate120 { get; set; }
-    public string AboutUs { get; set; } = string.Empty;
-    public string LogoUrl { get; set; } = string.Empty;
 }

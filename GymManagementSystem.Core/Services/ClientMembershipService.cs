@@ -62,7 +62,7 @@ public class ClientMembershipService : IClientMembershipService
             return Result<ClientMembershipInfoResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
         }
 
-        ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(entity.ClientId);
+        ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(client.Id);
 
         if (activeMembership != null)
         {

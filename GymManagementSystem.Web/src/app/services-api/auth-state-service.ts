@@ -38,8 +38,9 @@ logout(): void {
     this.loadFromToken(token);
   }
 
-  setToken(token: string) {
+  setToken(token: string, refreshToken: string) {
     localStorage.setItem('token', token);
+    localStorage.setItem('refreshToken', refreshToken);
     this.isLoggedIn.set(true);
     this.loadFromToken(token);
   }

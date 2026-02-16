@@ -8,6 +8,7 @@ using GymManagementSystem.WPF.ViewModels.ClientMembership;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GymManagementSystem.WPF.ViewModels.Staff.Models;
+using System.Windows;
 
 namespace GymManagementSystem.WPF.ViewModels.Client;
 
@@ -137,6 +138,11 @@ public class ClientViewModel : ViewModel
     private async Task GetAllClientsAsync()
     {
         Result<PageResult<ClientResponse>> pageResult = await _clientHttpClient.GetAllClientsAsync(null, SelectedPage, null);
+        if (!pageResult.IsSuccess)
+        {
+            MessageBox.Show($"{pageResult.GetUserMessage()}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            return;
+        }
         Clients = new ObservableCollection<ClientResponse>(pageResult.Value!.Items);
         TotalPages = pageResult.Value!.TotalPages;
     }

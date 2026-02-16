@@ -20,6 +20,9 @@ public class ClientController : BaseController
     public async Task<ActionResult<ClientDetailsWebResponse>> GetClientWebProfileInfo()
        => HandleResult(await _clientService.GetClientProfileInfoAsync());
 
+    [HttpPost("create-account")]
+    public async Task<ActionResult<Unit>> CreateAccount([FromBody] ClientWebAddRequest entity)
+        => HandleResult(await _clientService.CreateAccountAsync(entity));
 
     [Authorize(Roles = "Client")]
     [HttpGet("get-client-context")]

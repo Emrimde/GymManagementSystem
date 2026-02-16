@@ -38,8 +38,12 @@ public class AuthController : BaseController
     //[HttpPost("register")]
     //public async Task<ActionResult> Register([FromBody] RegisterDto request) => HandleResult(await _authService.RegisterAsync(request));
 
-    [Authorize(Roles = "Manager, Owner")]
     [HttpPost("set-new-password")]
     public async Task<ActionResult> SetNewPassword(
     [FromBody] SetNewPasswordRequest request) => HandleResult(await _authService.SetNewPasswordAsync(request));
+
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult> RefreshToken(
+    [FromBody] RefreshTokenRequest request) => HandleResult(await _authService.RefreshTokenAsync(request));
 }

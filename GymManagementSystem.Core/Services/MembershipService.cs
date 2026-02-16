@@ -20,15 +20,6 @@ public class MembershipService : IMembershipService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<MembershipResponse>> CreateAsync(MembershipAddRequest entity)
-    {
-        Membership membership = entity.ToMembership();
-
-        _repository.CreateAsync(membership);
-        await _unitOfWork.SaveChangesAsync();
-        return Result<MembershipResponse>.Success(membership.ToMembershipResponse());
-    }
-
     public async Task<Result<IEnumerable<MembershipResponse>>> GetAllAsync()
     {
         IEnumerable<MembershipResponse> memberships = await _repository.GetAllMemberships();

@@ -9,6 +9,7 @@ public interface IAuthService
     Task<Result<Unit>> ChangePasswordForLoggedInUserAsync(ChangePasswordRequest request);
     Task<Result<Unit>> ForceChangePasswordAsync(ForceChangePasswordRequest request);
     Task<Result<AuthenticationResponse>> LoginAsync(SignInDto request);
+    Task<Result<AuthenticationResponse>> RefreshTokenAsync(RefreshTokenRequest request);
     Task<Result<bool>> RegisterAsync(RegisterDto request);
     Task<Result<Unit>> ResetPasswordAsync(ForgotPasswordRequest request);
     Task<Result<Unit>> ResetPasswordConfirmAsync(ConfirmResetPasswordRequest request);

@@ -6,6 +6,7 @@ import { ChangePasswordRequest } from '../dto/AuthDto/change-password-request';
 import { ResetPasswordRequest } from '../dto/AuthDto/reset-password-request';
 import { ConfirmResetPasswordRequest } from '../dto/AuthDto/confirm-reset-password-request';
 import { ActivateAccountRequest } from '../dto/AuthDto/activate-account-request';
+import { map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,20 @@ import { ActivateAccountRequest } from '../dto/AuthDto/activate-account-request'
 export class AuthService {
   constructor(private httpClient:HttpClient){}
   private readonly base = "http://localhost:5105/api/Auth"
+
+ refreshToken() {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  return this.httpClient
+    .post<any>(`${this.base}/refresh`, { refreshToken })
+    .pipe(
+      tap(res => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('refreshToken', res.refreshToken);
+      }),
+      map(res => res.token)
+    );
+}
   
   resetPasswordAsync(resetPasswordRequest: ResetPasswordRequest) {
     return this.httpClient.post(`${this.base}/reset-password`, resetPasswordRequest);
@@ -32,4 +47,5 @@ export class AuthService {
   confirmResetPassword(confirmResetPasswordRequest: ConfirmResetPasswordRequest) {
     return this.httpClient.post(`${this.base}/reset-password-confirm`, confirmResetPasswordRequest)
   }
+  
 }

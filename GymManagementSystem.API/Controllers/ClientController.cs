@@ -1,10 +1,9 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.Client;
 using GymManagementSystem.Core.DTO.Client.QueryDto;
-using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.ServiceContracts;
-using GymManagementSystem.Core.WebDTO.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -17,6 +16,7 @@ public class ClientController : BaseController
         _clientService = clientService;
     }
 
+    [Authorize(Roles = "Owner,Manager,Receptionist")]
     [HttpGet]
     public async Task<ActionResult<PageResult<ClientResponse>>> GetAll([FromQuery] GetClientQueryDto query)
         => HandlePageResult(await _clientService.GetAllAsync(query));
@@ -36,10 +36,6 @@ public class ClientController : BaseController
     [HttpPost]
     public async Task<ActionResult<ClientInfoResponse>> Create([FromBody] ClientAddRequest entity)
         => HandleResult(await _clientService.CreateAsync(entity));
-
-    [HttpPost("create-account")]
-    public async Task<ActionResult<Unit>> CreateAccount([FromBody] ClientWebAddRequest entity)
-        => HandleResult(await _clientService.CreateAccountAsync(entity));
 
     [HttpPost("validate")]
     public ActionResult<ClientInfoResponse> ValidateClientAge([FromBody] ClientAgeValidationRequest entity)

@@ -49,9 +49,6 @@ public static class GeneralGymDetailMapper
             generalGymDetail.GymName = generalUpdateRequest.GymName;
             generalGymDetail.Address = generalUpdateRequest.Address;
             generalGymDetail.ContactNumber = generalUpdateRequest.ContactNumber;
-            generalGymDetail.BackgroundColor = generalUpdateRequest.BackgroundColor;
-            generalGymDetail.PrimaryColor = generalUpdateRequest.PrimaryColor;
-            generalGymDetail.SecondColor = generalUpdateRequest.SecondColor;
             generalGymDetail.DefaultRate60 = generalUpdateRequest.DefaultRate60;
             generalGymDetail.DefaultRate120 = generalUpdateRequest.DefaultRate120;
             generalGymDetail.DefaultRate90 = generalUpdateRequest.DefaultRate90;

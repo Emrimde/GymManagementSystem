@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -66,6 +67,16 @@ public class JwtService : IJwtService
         {
             Token = token,
             ExpirationTime = expirationDate,
+            RefreshToken = GenerateRefreshToken(),
+            RefreshTokenExpirationDateTime = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:Expiration_Minutes"]))
         };
+    }
+
+    private string GenerateRefreshToken()
+    {
+        Byte[] bytes = new byte[64];
+        var randomNumberGenerator = RandomNumberGenerator.Create();
+        randomNumberGenerator.GetBytes(bytes);
+        return Convert.ToBase64String(bytes);
     }
 }

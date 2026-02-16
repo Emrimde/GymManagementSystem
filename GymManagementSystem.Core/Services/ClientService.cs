@@ -97,12 +97,12 @@ public class ClientService : IClientService
         bool exists = await _repository.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
         if (exists)
         {
-            Result<ClientInfoResponse>.Failure("Client with the same email or phone number already exists", StatusCodeEnum.BadRequest);
+           return Result<ClientInfoResponse>.Failure("Client with the same email or phone number already exists", StatusCodeEnum.BadRequest);
         }
         bool existsInEmployee = await _personRepo.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
         if (existsInEmployee)
         {
-            Result<ClientInfoResponse>.Failure("Person with the same email or phone number already exists in employees", StatusCodeEnum.BadRequest);
+            return Result<ClientInfoResponse>.Failure("Person with the same email or phone number already exists in employees", StatusCodeEnum.BadRequest);
         }
 
 
@@ -216,23 +216,37 @@ public class ClientService : IClientService
         return Result<ClientDetailsWebResponse>.Success(dto, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest entity)
+    public async Task<Result<Unit>> CreateAccountAsync(ClientWebAddRequest request)
     {
-        Client client = entity.ToClient();
+        Client client = request.ToClient();
+
+        bool exists = await _repository.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
+        if (exists)
+        {
+            return Result<Unit>.Failure("Invalid email or phone number", StatusCodeEnum.BadRequest);
+        }
+        bool existsInEmployee = await _personRepo.ExistsByEmailOrPhoneAsync(request.Email, request.PhoneNumber);
+        if (existsInEmployee)
+        {
+           return Result<Unit>.Failure("Invalid email or phone number", StatusCodeEnum.BadRequest);
+        }
+
         _repository.CreateAsync(client);
         User user = new User()
         {
-            UserName = client.FirstName + client.LastName,
+            UserName = client.Email,
             ClientId = client.Id,
             Email = client.Email,
         };
-        var createResult = await _userManager.CreateAsync(user, entity.Password);
+
+
+        var createResult = await _userManager.CreateAsync(user, request.Password);
         if (!createResult.Succeeded)
         {
             return Result<Unit>.Failure($"{createResult.Errors}", StatusCodeEnum.InternalServerError);
         }
 
-        await _userManager.AddToRoleAsync(user, "Member");
+        await _userManager.AddToRoleAsync(user, "Client");
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.Ok);
     }
@@ -245,9 +259,20 @@ public class ClientService : IClientService
             return Result<Unit>.Failure("Error, token not found", StatusCodeEnum.Unauthorized);
         }
 
+        bool exists = await _repository.ExistsByPhoneAsync(updateRequest.PhoneNumber,clientId);
+        if (exists)
+        {
+            return Result<Unit>.Failure("Client with the same email or phone number already exists", StatusCodeEnum.BadRequest);
+        }
+        bool existsInEmployee = await _personRepo.ExistsByPhoneAsync(updateRequest.PhoneNumber,null);
+        if (existsInEmployee)
+        {
+            return Result<Unit>.Failure("Client with the same email or phone number already exists", StatusCodeEnum.BadRequest);
+        }
+
         Client client = updateRequest.ToClient();
         client.Id = clientId;
-        client.DateOfBirth = DateTime.SpecifyKind(updateRequest.DateOfBirth, DateTimeKind.Utc);
+        client.DateOfBirth = DateTime.SpecifyKind(updateRequest.DateOfBirth, DateTimeKind.Local).ToUniversalTime();
         await _repository.UpdateClientAsync(client);
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);

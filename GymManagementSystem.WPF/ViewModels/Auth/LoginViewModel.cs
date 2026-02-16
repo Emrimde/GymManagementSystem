@@ -59,7 +59,7 @@ public class LoginViewModel : ViewModel
         }
         else
         {
-            _authService.SetProperty(result.Value!.Token!);
+            _authService.SetTokens(result.Value!.Token!, result.Value.RefreshToken!);
             if (result.Value!.MustChangePassword)
             {
                 Navigation.NavigateTo<ChangePasswordViewModel>();

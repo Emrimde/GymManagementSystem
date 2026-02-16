@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
+using GymManagementSystem.Core.DTO.ClientMembership;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.ClientMembership;
 using Microsoft.AspNetCore.Authorization;
@@ -23,4 +24,9 @@ public class ClientMembershipController : BaseController
     [Authorize(Roles = "Client")]
     [HttpGet("get-client-membership-preview/{membershipId:guid}")]
     public async Task<ActionResult<ClientMembershipWebPreviewResponse?>> GetClientMembershipWebPreview([FromRoute] Guid membershipId) => HandleResult(await _clientMembershipService.GetClientMembershipPreviewAsync(membershipId));
+
+    [Authorize(Roles = "Client")]
+    [HttpPost]
+    public async Task<ActionResult<ClientMembershipInfoResponse>> Create([FromBody] ClientMembershipAddRequest entity)
+       => HandleResult(await _clientMembershipService.CreateAsync(entity));
 }

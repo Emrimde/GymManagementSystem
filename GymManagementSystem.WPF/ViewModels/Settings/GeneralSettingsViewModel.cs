@@ -76,9 +76,6 @@ public class GeneralSettingsViewModel : ViewModel
             Application.Current.Resources["GymName"] = result.Value!.GymName;
             Application.Current.Resources["Address"] = result.Value!.Address;
             Application.Current.Resources["ContactNumber"] = result.Value!.ContactNumber;
-            Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.PrimaryColor)!; 
-            Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.SecondColor)!;
-            Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(result.Value!.BackgroundColor)!; ;
             Navigation.NavigateTo<DashboardViewModel>();
         }
         else
