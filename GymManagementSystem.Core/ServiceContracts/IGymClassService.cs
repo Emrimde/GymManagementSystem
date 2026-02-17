@@ -10,7 +10,6 @@ public interface IGymClassService
 
     //Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId);
     Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(bool? isActive);
-    Task<Result<GymClassDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync();
     Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId);
     Task<Result<Unit>> RestoreGymClassAsync(Guid gymClassId);

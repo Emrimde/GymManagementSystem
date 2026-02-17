@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GymManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260212133956_VisitUpdate")]
-    partial class VisitUpdate
+    [Migration("20260217122204_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -369,9 +369,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.Property<int>("FreeFriendEntryCountPerMonth")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FreePersonalTrainingSessions")
-                        .HasColumnType("integer");
-
                     b.Property<int>("MembershipType")
                         .HasColumnType("integer");
 
@@ -389,7 +386,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                             Id = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"),
                             ClassBookingDaysInAdvanceCount = 7,
                             FreeFriendEntryCountPerMonth = 3,
-                            FreePersonalTrainingSessions = 1,
                             MembershipType = 0,
                             Name = "Silver Membership"
                         },
@@ -398,7 +394,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                             Id = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"),
                             ClassBookingDaysInAdvanceCount = 14,
                             FreeFriendEntryCountPerMonth = 6,
-                            FreePersonalTrainingSessions = 2,
                             MembershipType = 0,
                             Name = "Gold Membership"
                         },
@@ -407,7 +402,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                             Id = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"),
                             ClassBookingDaysInAdvanceCount = 7,
                             FreeFriendEntryCountPerMonth = 3,
-                            FreePersonalTrainingSessions = 1,
                             MembershipType = 1,
                             Name = "Silver Membership"
                         },
@@ -416,7 +410,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                             Id = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"),
                             ClassBookingDaysInAdvanceCount = 14,
                             FreeFriendEntryCountPerMonth = 6,
-                            FreePersonalTrainingSessions = 2,
                             MembershipType = 1,
                             Name = "Gold Membership"
                         });
@@ -444,121 +437,121 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4b45ff6e-62a2-435c-b857-a9608c99760d"),
+                            Id = new Guid("60a461c5-9e41-455a-88ce-9be332fe728b"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("57516763-6340-4930-ab64-d5410c51f11f"),
+                            Id = new Guid("e348709f-6320-4ce8-8896-abdd3db44eb8"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("9a00a14e-4528-46f0-bef6-fa7e78f49c04"),
+                            Id = new Guid("3adac94a-c9fc-4719-bdf2-62f0def9832d"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("a0d431cc-dd31-4ab9-9a41-bdf3666747bd"),
+                            Id = new Guid("bf4d2ec0-79ff-4a99-8c0e-79142127939c"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("6d72f6e0-1e11-4678-bcc2-d5ac76876c5e"),
+                            Id = new Guid("914fddc6-5c44-480e-865d-3867a3625b0a"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("3c524385-9b3a-4932-8fe4-67d5b512fdd8"),
+                            Id = new Guid("261da2df-c98a-4601-a77d-c138bfbee4ef"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("cfce94cd-b60a-441e-995d-5c394ae6dba7"),
+                            Id = new Guid("b8430732-b142-4b9e-ba2d-e1d43dae3d2b"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("bc5809f7-7af0-480b-89e2-d3d00602712a"),
+                            Id = new Guid("aa62970d-5680-4b68-b080-ba6fb9b6e490"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("3ce82aef-9e9c-4b01-bdc7-cf2820039dcd"),
+                            Id = new Guid("f3a64b11-9d38-481e-8a27-db44d6e2b838"),
                             FeatureDescription = "Can book group classes up to 7 days in advance",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("9d90b359-bf7b-4d87-b997-e3b5acc50d7d"),
+                            Id = new Guid("24c0e11f-eb14-4cfe-8a04-e5fc820cec7f"),
                             FeatureDescription = "Can invite a friend 3 times per month",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("1b1b7a54-38c5-4ca6-8b1b-25d37885f98a"),
+                            Id = new Guid("1d8c39a8-5c84-4dd6-b77e-bcf868edf37b"),
                             FeatureDescription = "Includes 1 free personal training session every 6 months",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("474738f8-7409-4e82-9dc0-7c5006fa5826"),
+                            Id = new Guid("fa2eb55f-49f3-477b-8780-2477c3aa1cbd"),
                             FeatureDescription = "Can book group classes up to 14 days in advance",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("2b9a788c-c753-45cc-ac92-5d172138d50d"),
+                            Id = new Guid("da7dcb8e-a70d-4cc9-95ed-93de1f2ed738"),
                             FeatureDescription = "Can invite a friend 6 times per month",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("09ec454e-0bdd-49da-987b-9626dda236f5"),
+                            Id = new Guid("0bcd9987-1e4e-4799-b457-d7ee7f5de8c2"),
                             FeatureDescription = "Includes 2 free personal training sessions every 6 months",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("41310350-09f0-4bb3-b94e-f432195f566c"),
+                            Id = new Guid("2dbed205-aa2a-4f75-ab29-89bd719810bf"),
                             FeatureDescription = "Can book group classes up to 7 days in advance",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("9129ede4-5969-4e03-86ce-6f3dd1e7ea30"),
+                            Id = new Guid("33b4aa95-8727-4fc0-a684-dbc14a69343f"),
                             FeatureDescription = "Can invite a friend 3 times per month",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("f371af89-9e6d-4e28-ab11-0f64ab0d83d9"),
+                            Id = new Guid("7b764669-6bf2-4b06-ba06-30414b26337a"),
                             FeatureDescription = "Includes 1 free personal training session every 6 months",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("4d1d4d9e-003c-4689-8457-a4ec7fea77fb"),
+                            Id = new Guid("aaff3893-d991-4fa9-9841-db0935dbe1f5"),
                             FeatureDescription = "Can book group classes up to 14 days in advance",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("79bc0812-122f-46b9-b08b-432badb1f5a7"),
+                            Id = new Guid("f24c8b45-f772-4c05-94bb-5ca84b2aec13"),
                             FeatureDescription = "Can invite a friend 6 times per month",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("15a3df05-8281-40da-874e-b178e76757ec"),
+                            Id = new Guid("0e65d144-a039-4d75-8fcf-c015ac3e0354"),
                             FeatureDescription = "Includes 2 free personal training sessions every 6 months",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         });
@@ -997,6 +990,12 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RefreshTokenExpirationDateTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");

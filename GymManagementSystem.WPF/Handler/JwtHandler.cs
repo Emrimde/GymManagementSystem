@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.WPF.ServiceContracts;
 using GymManagementSystem.WPF.Services;
 using GymManagementSystem.WPF.ViewModels.Auth;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,23 +9,25 @@ using System.Windows;
 
 public class JwtHandler : DelegatingHandler
 {
-    private readonly AuthService _auth;
+    private readonly IServiceProvider _provider;
     private readonly INavigationService _navigation;
 
-    public JwtHandler(AuthService auth, INavigationService navigation)
+    public JwtHandler(IServiceProvider provider,
+                      INavigationService navigation)
     {
-        _auth = auth;
+        _provider = provider;
         _navigation = navigation;
     }
 
-
     protected override async Task<HttpResponseMessage> SendAsync(
-    HttpRequestMessage request, CancellationToken ct)
+        HttpRequestMessage request, CancellationToken ct)
     {
-        if (!string.IsNullOrEmpty(_auth.JwtToken))
+        var auth = _provider.GetRequiredService<AuthService>();
+
+        if (!string.IsNullOrEmpty(auth.JwtToken))
         {
             request.Headers.Authorization =
-                new AuthenticationHeaderValue("Bearer", _auth.JwtToken);
+                new AuthenticationHeaderValue("Bearer", auth.JwtToken);
         }
 
         var response = await base.SendAsync(request, ct);
@@ -32,11 +35,11 @@ public class JwtHandler : DelegatingHandler
         if (response.StatusCode == HttpStatusCode.Unauthorized &&
             !request.RequestUri!.AbsolutePath.Contains("refresh"))
         {
-            var refreshSuccess = await _auth.RefreshAsync();
+            var refreshSuccess = await auth.RefreshAsync();
 
             if (!refreshSuccess)
             {
-                _auth.ClearJwt();
+                auth.ClearJwt();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -47,12 +50,11 @@ public class JwtHandler : DelegatingHandler
             }
 
             request.Headers.Authorization =
-                new AuthenticationHeaderValue("Bearer", _auth.JwtToken);
+                new AuthenticationHeaderValue("Bearer", auth.JwtToken);
 
             return await base.SendAsync(request, ct);
         }
 
         return response;
     }
-
 }

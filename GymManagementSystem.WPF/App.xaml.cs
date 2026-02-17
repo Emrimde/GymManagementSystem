@@ -97,25 +97,25 @@ public partial class App : Application
         {
             options.BaseAddress = new Uri("http://localhost:5105/api/auth/");
             options.DefaultRequestHeaders.Add("Accept", "application/json");
-        });
+        }).AddHttpMessageHandler<JwtHandler>();
 
         services.AddHttpClient<GymClassHtppClient>(options =>
         {
             options.BaseAddress = new Uri("http://localhost:5105/api/gymClass/");
             options.DefaultRequestHeaders.Add("Accept", "application/json");
-        }).AddHttpMessageHandler<JwtHandler>(); ;
+        }).AddHttpMessageHandler<JwtHandler>(); 
 
         services.AddHttpClient<GeneralGymDetailsHttpClient>(options =>
         {
             options.BaseAddress = new Uri("http://localhost:5105/api/generalGymDetail/");
             options.DefaultRequestHeaders.Add("Accept", "application/json");
-        }).AddHttpMessageHandler<JwtHandler>(); ;
+        }).AddHttpMessageHandler<JwtHandler>(); 
 
         services.AddHttpClient<MembershipHttpClient>(options =>
         {
             options.BaseAddress = new Uri("http://localhost:5105/api/membership/");
             options.DefaultRequestHeaders.Add("Accept", "application/json");
-        }).AddHttpMessageHandler<JwtHandler>(); ;
+        }).AddHttpMessageHandler<JwtHandler>(); 
 
         services.AddHttpClient<ClientHttpClient>(options =>
         {
@@ -183,14 +183,7 @@ public partial class App : Application
     }
     protected override void OnStartup(StartupEventArgs e)
     {
-        GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
-        //Result<GeneralGymResponse> gymDetails = await gymDetailsHttpClient.GetGeneralGymSettingsAsync();
-        //Application.Current.Resources["GymName"] = gymDetails.Value!.GymName;
-        //Application.Current.Resources["Address"] = gymDetails.Value!.Address;
-        //Application.Current.Resources["ContactNumber"] = gymDetails.Value!.ContactNumber;
-        //Application.Current.Resources["PrimaryColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.PrimaryColor)!;
-        //Application.Current.Resources["SecondColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.SecondColor)!;
-        //Application.Current.Resources["BackgoundColor"] = (SolidColorBrush)(new BrushConverter()).ConvertFromString(gymDetails.Value!.BackgroundColor)!;
+        //GeneralGymDetailsHttpClient gymDetailsHttpClient = _serviceProvider.GetRequiredService<GeneralGymDetailsHttpClient>();
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
         base.OnStartup(e);

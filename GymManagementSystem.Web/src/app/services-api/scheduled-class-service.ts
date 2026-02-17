@@ -10,5 +10,4 @@ export class ScheduledClassService {
   getScheduledClasses(gymClassId : string){
     return this.httpClient.get(`${this.base}/scheduledclasses/${gymClassId}`);
   }
-   
 }

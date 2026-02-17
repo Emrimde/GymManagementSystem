@@ -1,10 +1,12 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.ServiceContracts;
 using GymManagementSystem.Core.WebDTO.GeneralGymDetail;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers.Public;
 
+[AllowAnonymous]
 [Route("api/public/general-gym-detail")]
 public class GeneralGymDetailController : BaseController
 {

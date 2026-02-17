@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.API.Controllers.Base;
 using GymManagementSystem.Core.DTO.EmploymentTermination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.API.Controllers;
@@ -11,12 +12,15 @@ public class EmploymentTerminationController : BaseController
         _employmentTerminationService = employmentTerminationService;
     }
 
+    [Authorize(Roles = "Owner,Manager")]
     [HttpGet("{personId:guid}")]
     public async Task<ActionResult<EmploymentTerminationGenerateResponse>> GetEmploymentTerminationDetails([FromRoute] Guid personId) => HandleResult(await _employmentTerminationService.GetEmploymentTerminationDetailsAsync(personId));
 
+    [Authorize(Roles = "Owner,Manager")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmploymentTerminationResponse>>> GetEmploymentTerminations() => HandleResult(await _employmentTerminationService.GetEmploymentTerminationsAsync());
 
+    [Authorize(Roles = "Owner,Manager")]
     [HttpPost]
     public async Task<ActionResult> CreateEmploymentTerminationAsync([FromBody] EmploymentTerminationAddRequest request) => HandleResult(await _employmentTerminationService.CreateEmploymentTerminationAsync(request));
 }

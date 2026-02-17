@@ -45,7 +45,6 @@
                            FontWeight="Bold"
                            Margin="0,0,0,24">
                     <Run Text="{Binding TrainerContract.FirstName}"/>
-                    <Run Text=" "/>
                     <Run Text="{Binding TrainerContract.LastName}"/>
                     <Run Text=" — details"/>
                 </TextBlock>

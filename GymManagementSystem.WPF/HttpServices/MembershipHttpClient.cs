@@ -40,8 +40,6 @@ public class MembershipHttpClient : BaseHttpClientService
         );
     }
 
-    // FEATURES
-
     public Task<Result<MembershipFeatureForEditResponse>> GetMembershipFeatureForEdit(
         Guid membershipFeatureId)
     {

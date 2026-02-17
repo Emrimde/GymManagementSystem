@@ -434,121 +434,121 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3907917d-d40d-4d44-9b7e-831d98f94fbd"),
+                            Id = new Guid("60a461c5-9e41-455a-88ce-9be332fe728b"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("39724848-5fff-4e09-a4ca-844d010b759d"),
+                            Id = new Guid("e348709f-6320-4ce8-8896-abdd3db44eb8"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("a9df85df-f059-494d-87f0-23ef1d521ce7"),
+                            Id = new Guid("3adac94a-c9fc-4719-bdf2-62f0def9832d"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("b7ba2807-b959-4fc4-bb8b-38ecdb5e8651"),
+                            Id = new Guid("bf4d2ec0-79ff-4a99-8c0e-79142127939c"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("b9149bd4-98a7-4570-91ff-6083a24d35e0"),
+                            Id = new Guid("914fddc6-5c44-480e-865d-3867a3625b0a"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("a04619ed-3859-49e2-9189-d8e9d2161f0b"),
+                            Id = new Guid("261da2df-c98a-4601-a77d-c138bfbee4ef"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("edfcde44-e65f-48cd-a02b-e7541d50f130"),
+                            Id = new Guid("b8430732-b142-4b9e-ba2d-e1d43dae3d2b"),
                             FeatureDescription = "Full access to all training zones",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("3917131c-ff21-4efc-a125-46c6516b735a"),
+                            Id = new Guid("aa62970d-5680-4b68-b080-ba6fb9b6e490"),
                             FeatureDescription = "Group classes included in the membership price",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("e68bc8ab-c766-47a1-beea-5811f0ff784f"),
+                            Id = new Guid("f3a64b11-9d38-481e-8a27-db44d6e2b838"),
                             FeatureDescription = "Can book group classes up to 7 days in advance",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("6848849c-24cb-44b1-936b-33e6dfa479c9"),
+                            Id = new Guid("24c0e11f-eb14-4cfe-8a04-e5fc820cec7f"),
                             FeatureDescription = "Can invite a friend 3 times per month",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("01db6faa-b9b0-4f70-b6cb-789eb1f9b070"),
+                            Id = new Guid("1d8c39a8-5c84-4dd6-b77e-bcf868edf37b"),
                             FeatureDescription = "Includes 1 free personal training session every 6 months",
                             MembershipId = new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0")
                         },
                         new
                         {
-                            Id = new Guid("6f23eba6-9be2-4a04-bc22-9059205f79cd"),
+                            Id = new Guid("fa2eb55f-49f3-477b-8780-2477c3aa1cbd"),
                             FeatureDescription = "Can book group classes up to 14 days in advance",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("0f8e1e69-d742-4412-9435-297480e86d48"),
+                            Id = new Guid("da7dcb8e-a70d-4cc9-95ed-93de1f2ed738"),
                             FeatureDescription = "Can invite a friend 6 times per month",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("2439adac-be86-4ea6-a3fb-7baefad214ce"),
+                            Id = new Guid("0bcd9987-1e4e-4799-b457-d7ee7f5de8c2"),
                             FeatureDescription = "Includes 2 free personal training sessions every 6 months",
                             MembershipId = new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875")
                         },
                         new
                         {
-                            Id = new Guid("5566dd97-5087-4347-9590-69432a19b4b4"),
+                            Id = new Guid("2dbed205-aa2a-4f75-ab29-89bd719810bf"),
                             FeatureDescription = "Can book group classes up to 7 days in advance",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("5da2d35a-4278-416d-8f77-6388e26cf165"),
+                            Id = new Guid("33b4aa95-8727-4fc0-a684-dbc14a69343f"),
                             FeatureDescription = "Can invite a friend 3 times per month",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("29ddaff6-8103-4f35-a667-7827368eabb4"),
+                            Id = new Guid("7b764669-6bf2-4b06-ba06-30414b26337a"),
                             FeatureDescription = "Includes 1 free personal training session every 6 months",
                             MembershipId = new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf")
                         },
                         new
                         {
-                            Id = new Guid("c74953dd-62db-48fd-a63a-c085df1e7132"),
+                            Id = new Guid("aaff3893-d991-4fa9-9841-db0935dbe1f5"),
                             FeatureDescription = "Can book group classes up to 14 days in advance",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("3ff1f0f0-e768-4d8a-9f23-9ba7b9fbbf8f"),
+                            Id = new Guid("f24c8b45-f772-4c05-94bb-5ca84b2aec13"),
                             FeatureDescription = "Can invite a friend 6 times per month",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         },
                         new
                         {
-                            Id = new Guid("074753c5-4986-4f84-b97d-1f9293d24967"),
+                            Id = new Guid("0e65d144-a039-4d75-8fcf-c015ac3e0354"),
                             FeatureDescription = "Includes 2 free personal training sessions every 6 months",
                             MembershipId = new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf")
                         });

@@ -82,7 +82,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     ClassBookingDaysInAdvanceCount = table.Column<int>(type: "integer", nullable: false),
                     FreeFriendEntryCountPerMonth = table.Column<int>(type: "integer", nullable: false),
-                    FreePersonalTrainingSessions = table.Column<int>(type: "integer", nullable: false),
                     MembershipType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -151,6 +150,10 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ClientId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PersonId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
+                    RefreshTokenExpirationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    MustChangePassword = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -184,7 +187,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
                     ClientId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClientMembershipId = table.Column<Guid>(type: "uuid", nullable: true),
                     VisitSource = table.Column<int>(type: "integer", nullable: false),
-                    VisitDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    VisitDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsWithGuest = table.Column<bool>(type: "boolean", nullable: false),
+                    GuestName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -499,41 +504,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PersonalBookings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TrainerContractId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    TrainerProfileId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalBookings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PersonalBookings_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalBookings_TrainerContracts_TrainerContractId",
-                        column: x => x.TrainerContractId,
-                        principalTable: "TrainerContracts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalBookings_TrainerProfiles_TrainerProfileId",
-                        column: x => x.TrainerProfileId,
-                        principalTable: "TrainerProfiles",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TrainerRates",
                 columns: table => new
                 {
@@ -603,6 +573,47 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PersonalBookings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TrainerContractId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    End = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TrainerRateId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    TrainerProfileId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalBookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PersonalBookings_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonalBookings_TrainerContracts_TrainerContractId",
+                        column: x => x.TrainerContractId,
+                        principalTable: "TrainerContracts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonalBookings_TrainerProfiles_TrainerProfileId",
+                        column: x => x.TrainerProfileId,
+                        principalTable: "TrainerProfiles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PersonalBookings_TrainerRates_TrainerRateId",
+                        column: x => x.TrainerRateId,
+                        principalTable: "TrainerRates",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClassBookings",
                 columns: table => new
                 {
@@ -638,13 +649,40 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Memberships",
-                columns: new[] { "Id", "ClassBookingDaysInAdvanceCount", "FreeFriendEntryCountPerMonth", "FreePersonalTrainingSessions", "MembershipType", "Name" },
+                columns: new[] { "Id", "ClassBookingDaysInAdvanceCount", "FreeFriendEntryCountPerMonth", "MembershipType", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"), 7, 3, 1, 0, "Silver Membership" },
-                    { new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"), 7, 3, 1, 1, "Silver Membership" },
-                    { new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"), 14, 6, 2, 0, "Gold Membership" },
-                    { new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"), 14, 6, 2, 1, "Gold Membership" }
+                    { new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0"), 7, 3, 0, "Silver Membership" },
+                    { new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf"), 7, 3, 1, "Silver Membership" },
+                    { new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875"), 14, 6, 0, "Gold Membership" },
+                    { new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf"), 14, 6, 1, "Gold Membership" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MembershipFeatures",
+                columns: new[] { "Id", "FeatureDescription", "MembershipId" },
+                values: new object[,]
+                {
+                    { new Guid("0bcd9987-1e4e-4799-b457-d7ee7f5de8c2"), "Includes 2 free personal training sessions every 6 months", new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875") },
+                    { new Guid("0e65d144-a039-4d75-8fcf-c015ac3e0354"), "Includes 2 free personal training sessions every 6 months", new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf") },
+                    { new Guid("1d8c39a8-5c84-4dd6-b77e-bcf868edf37b"), "Includes 1 free personal training session every 6 months", new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0") },
+                    { new Guid("24c0e11f-eb14-4cfe-8a04-e5fc820cec7f"), "Can invite a friend 3 times per month", new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0") },
+                    { new Guid("261da2df-c98a-4601-a77d-c138bfbee4ef"), "Group classes included in the membership price", new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf") },
+                    { new Guid("2dbed205-aa2a-4f75-ab29-89bd719810bf"), "Can book group classes up to 7 days in advance", new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf") },
+                    { new Guid("33b4aa95-8727-4fc0-a684-dbc14a69343f"), "Can invite a friend 3 times per month", new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf") },
+                    { new Guid("3adac94a-c9fc-4719-bdf2-62f0def9832d"), "Full access to all training zones", new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875") },
+                    { new Guid("60a461c5-9e41-455a-88ce-9be332fe728b"), "Full access to all training zones", new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0") },
+                    { new Guid("7b764669-6bf2-4b06-ba06-30414b26337a"), "Includes 1 free personal training session every 6 months", new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf") },
+                    { new Guid("914fddc6-5c44-480e-865d-3867a3625b0a"), "Full access to all training zones", new Guid("62dd1607-fd54-4186-b282-8ef9d82cddcf") },
+                    { new Guid("aa62970d-5680-4b68-b080-ba6fb9b6e490"), "Group classes included in the membership price", new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf") },
+                    { new Guid("aaff3893-d991-4fa9-9841-db0935dbe1f5"), "Can book group classes up to 14 days in advance", new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf") },
+                    { new Guid("b8430732-b142-4b9e-ba2d-e1d43dae3d2b"), "Full access to all training zones", new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf") },
+                    { new Guid("bf4d2ec0-79ff-4a99-8c0e-79142127939c"), "Group classes included in the membership price", new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875") },
+                    { new Guid("da7dcb8e-a70d-4cc9-95ed-93de1f2ed738"), "Can invite a friend 6 times per month", new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875") },
+                    { new Guid("e348709f-6320-4ce8-8896-abdd3db44eb8"), "Group classes included in the membership price", new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0") },
+                    { new Guid("f24c8b45-f772-4c05-94bb-5ca84b2aec13"), "Can invite a friend 6 times per month", new Guid("db4a0dc9-6d66-445f-8ae1-e5b941e873cf") },
+                    { new Guid("f3a64b11-9d38-481e-8a27-db44d6e2b838"), "Can book group classes up to 7 days in advance", new Guid("18ec8725-c23b-4ea4-90d4-2952e3b110a0") },
+                    { new Guid("fa2eb55f-49f3-477b-8780-2477c3aa1cbd"), "Can book group classes up to 14 days in advance", new Guid("bedd6962-6fa4-435d-8505-b7c6092b9875") }
                 });
 
             migrationBuilder.InsertData(
@@ -769,6 +807,11 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 column: "TrainerProfileId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PersonalBookings_TrainerRateId",
+                table: "PersonalBookings",
+                column: "TrainerRateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScheduledClasses_GymClassId",
                 table: "ScheduledClasses",
                 column: "GymClassId");
@@ -852,9 +895,6 @@ namespace GymManagementSystem.Infrastructure.Migrations
                 name: "Terminations");
 
             migrationBuilder.DropTable(
-                name: "TrainerRates");
-
-            migrationBuilder.DropTable(
                 name: "TrainerTimeOff");
 
             migrationBuilder.DropTable(
@@ -868,6 +908,9 @@ namespace GymManagementSystem.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScheduledClasses");
+
+            migrationBuilder.DropTable(
+                name: "TrainerRates");
 
             migrationBuilder.DropTable(
                 name: "ClientMemberships");

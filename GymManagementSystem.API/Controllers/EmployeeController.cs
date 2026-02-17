@@ -4,7 +4,6 @@ using GymManagementSystem.Core.DTO.Employee;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GymManagementSystem.API.Controllers;
 
@@ -16,16 +15,15 @@ public class EmployeeController : BaseController
         _employeeService = employeeService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<EmployeeResponse>>> GetAllEmployees([FromQuery] string? searchText = null) => HandleListedResult(await _employeeService.GetAllEmployeesAsync(searchText));
-
+    [Authorize(Roles = "Owner,Manager")]
     [HttpGet("{employeeId:guid}")]
     public async Task<ActionResult<EmployeeDetailsResponse>> GetEmployeeById([FromRoute] Guid employeeId) => HandleResult(await _employeeService.GetEmployeeByIdAsync(employeeId));
 
-    [HttpPost]
     [Authorize(Roles = "Manager,Owner")]
+    [HttpPost]
     public async Task<ActionResult<EmployeeInfoResponse>> CreateEmployee([FromBody] EmployeeAddRequest request) => HandleResult(await _employeeService.CreateEmployeeAsync(request));
-    
+
+    [Authorize(Roles = "Owner,Manager")]
     [HttpPost("get-employee-contract")]
     public async Task<ActionResult<EmploymentContractPdfDto>> BuildEmployeeContract([FromBody] EmployeeContractRequest request) => HandleResult( await _employeeService.BuildEmployeeContractAsync(request));
     

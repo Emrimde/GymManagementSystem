@@ -10,6 +10,7 @@ using GymManagementSystem.WPF.ViewModels.Termination;
 using GymManagementSystem.WPF.ViewModels.Visit;
 using GymManagementSystem.WPF.Views.Visit.CustomDialogs;
 using System.Windows;
+using System.Windows.Automation.Provider;
 using System.Windows.Input;
 
 namespace GymManagementSystem.WPF.ViewModels.Client;
@@ -81,14 +82,20 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 MessageBox.Show("Visit registered for single entry.");
-
-            }
-            else
-            {
+                Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId, null);
+                if (result.IsSuccess)
+                {
+                    await LoadClientAsync();
+                }
+                else
+                {
+                    MessageBox.Show($"Error registering visit: {result.GetUserMessage()}");
+                }
                 return;
             }
 
         }
+
         MessageBoxResult mbResult = MessageBox.Show("Do client wants bring friend for free?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
         string? GuestName = null;
@@ -101,23 +108,23 @@ public class ClientDetailsViewModel : ViewModel, IParameterReceiver
             {
                 GuestName = dialog.InputText;
             }
-
-        }
-        else
-        {
-            return;
-        }
-
             Result<Unit> result = await _visitHttpClient.RegisterVisitAsync(ClientId, GuestName);
-        if (result.IsSuccess)
-        {
-            await LoadClientAsync();
+            if (result.IsSuccess)
+            {
+                await LoadClientAsync();
+            }
+            else
+            {
+                MessageBox.Show($"Error registering visit: {result.GetUserMessage()}");
+            }
+            return;
+
         }
-        else
-        {
-            MessageBox.Show($"Error registering visit: {result.GetUserMessage()}");
-        }
+      
     }
+
+       
+    
 
     private async Task LoadClientAsync()
     {

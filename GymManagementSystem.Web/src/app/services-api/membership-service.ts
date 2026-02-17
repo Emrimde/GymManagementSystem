@@ -11,8 +11,8 @@ export class MembershipService {
     return this.httpClient.get(`${this.base}/get-all-memberships`)
   }
 
-  getMembershipNameById(membershipId : string){
-    return this.httpClient.get(`${this.base}/${membershipId}`)
-  }
+  // getMembershipNameById(membershipId : string){
+  //   return this.httpClient.get(`${this.base}/${membershipId}`)
+  // }
   constructor(private httpClient:HttpClient){}
 }

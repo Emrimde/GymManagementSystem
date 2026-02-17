@@ -195,13 +195,6 @@ public class TrainerService : ITrainerService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.Ok);
     }
 
-    public async Task<PageResult<TrainerContractResponse>> GetAllTrainerContractsAsync(int page, string? searchText = null, int pageSize = 50)
-    {
-        PageResult<TrainerContractResponse> trainerContracts = await _trainerRepo.GetAllTrainerContractsAsync(page, pageSize, searchText);
-
-        return trainerContracts;
-    }
-
     public async Task<Result<IEnumerable<TrainerTimeOffInfoResponse>>> GetTrainerTimeOffs(CancellationToken cancellationToken)
     {
         IEnumerable<Domain.Entities.TrainerTimeOff> timeOffs = await _trainerRepo.GetTrainerTimeOffs(cancellationToken);

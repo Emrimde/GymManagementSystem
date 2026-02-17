@@ -1,7 +1,6 @@
 <div class="container py-4">
   <div class="row g-4">
 
-    <!-- PROFILE PANEL -->
     <aside class="col-12 col-md-4 col-xl-3">
       <div class="card shadow-sm rounded-3 background-white h-100">
         <div class="card-body text-center">
@@ -15,26 +14,26 @@
           </div>
 
           <h5 class="fw-bold mb-1 text-black">
-            {{ panel()?.trainerName }}
+            <span class="text-black">{{ panel()?.trainerName }}</span>
           </h5>
           <div class="text-green small fw-semibold mb-4">
             Group Instructor
           </div>
 
-          <div class="background-light-gray rounded-3 p-3 text-start small">
+          <div class="background-green rounded-3 p-3 text-start  small">
             <div class="mb-3">
-              <div class="text-black fw-semibold">Email</div>
-              {{ panel()?.email }}
+              <div class="text-white fw-semibold">Email</div>
+              <span class="text-white">{{ panel()?.email }}</span> 
             </div>
 
             <div class="mb-3">
-              <div class="text-black fw-semibold">Phone</div>
-              {{ panel()?.phoneNumber }}
+              <div class="text-white fw-semibold">Phone</div>
+              <span class="text-white">{{ panel()?.phoneNumber }}</span> 
             </div>
 
             <div>
-              <div class="text-black fw-semibold">Location</div>
-              {{ panel()?.location }}
+              <div class="text-white fw-semibold">Location</div>
+              <span class="text-white">{{ panel()?.location }}</span> 
             </div>
           </div>
 
@@ -42,10 +41,8 @@
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="col-12 col-md-8 col-xl-9">
 
-      <!-- HEADER -->
       <div class="mb-4">
         <h3 class="mb-1 fw-bold text-black">
           Your scheduled group classes
@@ -55,7 +52,6 @@
         </div>
       </div>
 
-      <!-- GREEN TABLE CARD -->
       <div class="card shadow-sm rounded-3 background green">
         <div class="card-body p-0">
 

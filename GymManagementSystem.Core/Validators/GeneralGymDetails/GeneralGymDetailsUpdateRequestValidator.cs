@@ -6,9 +6,6 @@ public class GeneralGymDetailsUpdateRequestValidator : AbstractValidator<General
 {
     public GeneralGymDetailsUpdateRequestValidator()
     {
-        RuleFor(item => item.Id)
-            .NotEmpty()
-            .WithMessage("Id is required.");
 
         RuleFor(item => item.GymName)
             .NotEmpty()

@@ -115,9 +115,4 @@ public class ClassBookingService : IClassBookingService
         }
         return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
     }
-
-    public Task<Result<ClassBookingDetailsResponse>> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
 }

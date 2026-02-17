@@ -11,7 +11,6 @@ public class ClientHttpClient : BaseHttpClientService
     {
     }
 
-    // POST validate
     public Task<Result<ClientAgeValidationResponse>> ValidateClientAgeAsync(
         ClientAgeValidationRequest request)
     {
@@ -19,13 +18,11 @@ public class ClientHttpClient : BaseHttpClientService
             "validate", request);
     }
 
-    // GET name by id
     public Task<Result<ClientInfoResponse>> GetClientNameById(Guid clientId)
     {
         return GetAsync<ClientInfoResponse>($"name/{clientId}");
     }
 
-    // GET paged list
     public Task<Result<PageResult<ClientResponse>>> GetAllClientsAsync(
      string? searchText, int page, bool? selectedIsActive)
     {
@@ -43,16 +40,14 @@ public class ClientHttpClient : BaseHttpClientService
         return GetAsync<PageResult<ClientResponse>>($"?{string.Join("&", query)}");
     }
 
-    // POST client
     public Task<Result<ClientInfoResponse>> PostClientAsync(ClientAddRequest request)
     {
         request.DateOfBirth =
-            DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
+            DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Local).ToUniversalTime();
 
         return PostAsync<ClientAddRequest, ClientInfoResponse>("", request);
     }
 
-    // PUT client
     public Task<Result<ClientInfoResponse>> PutClientAsync(
         ClientUpdateRequest request, Guid id)
     {
@@ -60,25 +55,13 @@ public class ClientHttpClient : BaseHttpClientService
             $"{id}", request);
     }
 
-    // GET by id
     public Task<Result<ClientDetailsResponse>> GetClientById(Guid id)
     {
         return GetAsync<ClientDetailsResponse>($"{id}");
     }
 
-    // GET for edit
     public Task<Result<ClientEditResponse>> GetClientForEditByClientIdAsync(Guid id)
     {
         return GetAsync<ClientEditResponse>($"get-for-edit/{id}");
-    }
-
-    // GET lookup
-    public Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClients(
-        string query, Guid? scheduledClassId)
-    {
-        string url =
-            $"lookup?query={Uri.EscapeDataString(query)}&scheduledClassId={scheduledClassId}";
-
-        return GetAsync<IEnumerable<ClientInfoResponse>>(url);
     }
 }

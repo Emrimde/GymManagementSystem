@@ -87,11 +87,6 @@ public class GymClassService : IGymClassService
         return Result<IEnumerable<GymClassResponse>>.Success(response, StatusCodeEnum.Ok);
     }
 
-    public Task<Result<GymClassDetailsResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync()
     {
         IEnumerable<GymClassComboBoxResponse> dto = await _gymClassRepo.GetGymClassesForSelectAsync();

@@ -3,9 +3,7 @@ using GymManagementSystem.Core.DTO.Trainer;
 using GymManagementSystem.Core.DTO.TrainerContract;
 using GymManagementSystem.Core.DTO.TrainerRate;
 using GymManagementSystem.Core.DTO.TrainerTimeOff;
-using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.WPF.Result;
-using System;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 
@@ -17,8 +15,6 @@ public class TrainerHttpClient : BaseHttpClientService
         : base(httpClient)
     {
     }
-
-    // TIME OFF
 
     public Task<Result<Unit>> PostTrainerTimeOff(
         TrainerTimeOffAddRequest request)
@@ -48,8 +44,6 @@ public class TrainerHttpClient : BaseHttpClientService
         return DeleteAsync($"trainer-time-off-delete/{trainerTimeOffId}");
     }
 
-    // SCHEDULE
-
     public Task<Result<TrainerScheduleResponse>> GetSchedule(
         Guid trainerId,
         int days = 30)
@@ -57,19 +51,6 @@ public class TrainerHttpClient : BaseHttpClientService
         return GetAsync<TrainerScheduleResponse>(
             $"schedule/{trainerId}?days={days}"
         );
-    }
-
-    // CONTRACTS
-
-    public Task<Result<PageResult<TrainerContractResponse>>> GetTrainerContracts(
-        string? searchText,
-        int page = 1)
-    {
-        string query = string.IsNullOrWhiteSpace(searchText)
-            ? $"trainercontracts?page={page}"
-            : $"trainercontracts?searchText={Uri.EscapeDataString(searchText)}&page={page}";
-
-        return GetAsync<PageResult<TrainerContractResponse>>(query);
     }
 
     public Task<Result<TrainerContractCreatedResponse>> PostTrainerContractAsync(
@@ -89,8 +70,6 @@ public class TrainerHttpClient : BaseHttpClientService
             $"trainercontract/{trainerContractId}?includeDetails={includeDetails}"
         );
     }
-
-    // RATES
 
     public Task<Result<ObservableCollection<TrainerRateResponse>>> GetTrainerRatesAsync(
         Guid id, bool? showActive)
@@ -120,8 +99,6 @@ public class TrainerHttpClient : BaseHttpClientService
             request
         );
     }
-
-    // TRAINERS
 
     public Task<Result<ObservableCollection<TrainerInfoResponse>>> GetPersonalTrainersAsync()
     {

@@ -23,30 +23,6 @@ public class EmployeeRepository : IEmployeeRepository
         _dbContext.Remove(employee);
     }
 
-    public async Task<IEnumerable<Employee>> GetAllEmployeesAsync(string? searchText = null)
-    {
-        IQueryable<Employee> query = _dbContext.Employees.AsNoTracking();
-
-
-        if (searchText != null)
-        {
-            string searchLower = searchText.ToLower();
-            string[] terms = searchLower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (string term in terms)
-            {
-                query = query.Where(item =>
-                    item.Person!.FirstName.ToLower().Contains(term) ||
-                    item.Person.LastName.ToLower().Contains(term) ||
-                    item.Person.Email.ToLower().Contains(term) ||
-                    item.Person.PhoneNumber.ToLower().Contains(term));
-            }
-        }
-
-
-
-        return await query.Include(item => item.Person).ToListAsync();
-    }
-
     public async Task<Employee?> GetEmployeeByIdAsync(Guid employeeId)
     {
        return await _dbContext.Employees.Include(item => item.Person).ThenInclude(item => item!.EmploymentTerminations).FirstOrDefaultAsync(item => item.Id == employeeId);    

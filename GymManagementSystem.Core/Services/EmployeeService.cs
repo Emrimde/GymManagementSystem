@@ -76,12 +76,6 @@ public class EmployeeService : IEmployeeService
         return Result<EmployeeInfoResponse>.Success(response, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<EmployeeResponse>>> GetAllEmployeesAsync(string? searchText = null)
-    {
-        IEnumerable<Employee> employees = await _employeeRepo.GetAllEmployeesAsync(searchText);
-        return Result<IEnumerable<EmployeeResponse>>.Success(employees.Select(item => item.ToEmployeeResponse()), StatusCodeEnum.Ok);
-    }
-
     public async Task<Result<EmployeeDetailsResponse>> GetEmployeeByIdAsync(Guid employeeId)
     {
         Employee? employee = await _employeeRepo.GetEmployeeByIdAsync(employeeId);

@@ -104,7 +104,7 @@
                             <TextBlock Text="Trainer"
                                        FontSize="23"
                                        Foreground="{StaticResource PrimaryColor}"/>
-                            <ComboBox Height="40"
+                            <ComboBox Height="60" Foreground="{StaticResource PrimaryColor}"
                                       HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding TrainerContracts}"
                                       DisplayMemberPath="FullName"

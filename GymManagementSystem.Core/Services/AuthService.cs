@@ -119,37 +119,6 @@ public class AuthService : IAuthService
         return Result<AuthenticationResponse>.Success(token, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<bool>> RegisterAsync(RegisterDto request)
-    {
-
-        if (await _userManager.FindByNameAsync(request.Username) != null)
-        {
-            return Result<bool>.Failure("Username already in use", StatusCodeEnum.BadRequest);
-        }
-
-        if (await _userManager.FindByEmailAsync(request.Email) != null)
-        {
-            return Result<bool>.Failure("Email already in use", StatusCodeEnum.BadRequest);
-        }
-
-        User user = new User
-        {
-            UserName = request.Username,
-            Email = request.Email,
-        };
-
-        IdentityResult result = await _userManager.CreateAsync(user, request.Password);
-
-        await _userManager.AddToRoleAsync(user, "");
-
-        if (!result.Succeeded)
-        {
-            return Result<bool>.Failure(string.Join(", ", result.Errors.Select(item => item.Description)), StatusCodeEnum.Unauthorized);
-        }
-
-        return Result<bool>.Success(true, StatusCodeEnum.Ok);
-    }
-
     public async Task<Result<Unit>> ResetPasswordConfirmAsync(ConfirmResetPasswordRequest request)
     {
         var token = Uri.UnescapeDataString(request.Token);
@@ -198,8 +167,7 @@ public class AuthService : IAuthService
 
     public async Task<Result<Unit>> ForceChangePasswordAsync(ForceChangePasswordRequest request)
     {
-        string? userId = _contextAccessor.HttpContext?
-            .User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string? userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (userId == null)
         {

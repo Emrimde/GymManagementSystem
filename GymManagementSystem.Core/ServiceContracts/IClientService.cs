@@ -4,7 +4,6 @@ using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
 using GymManagementSystem.Core.WebDTO;
 using GymManagementSystem.Core.WebDTO.Client;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementSystem.Core.ServiceContracts;
 
@@ -16,7 +15,6 @@ public interface IClientService
     Task<Result<ClientDetailsResponse>> GetByIdAsync(Guid id);
     Task<Result<ClientDetailsWebResponse>> GetClientProfileInfoAsync();
     Task<Result<ClientInfoResponse>> GetClientFullNameByIdAsync(Guid id);
-    Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null);
     Task<Result<ClientInfoResponse>> UpdateAsync(Guid id, ClientUpdateRequest entity);
     Result<ClientAgeValidationResponse> ValidateClientAgeAsync(ClientAgeValidationRequest entity);
     Task<Result<Unit>> UpdateWebClientInfoAsync(ClientWebUpdateRequest updateRequest);

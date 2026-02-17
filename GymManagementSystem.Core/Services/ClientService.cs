@@ -172,12 +172,6 @@ public class ClientService : IClientService
         return Result<ClientDetailsResponse>.Success(client, StatusCodeEnum.Ok);
     }
 
-    public async Task<Result<IEnumerable<ClientInfoResponse>>> LookUpClientsAsync(string query, Guid? scheduledClassId = null)
-    {
-        IEnumerable<Client> searchedClients = await _repository.LookUpClientsAsync(query, scheduledClassId);
-        return Result<IEnumerable<ClientInfoResponse>>.Success(searchedClients.Select(item => item.ToClientInfoResponse()));
-    }
-
     public Result<ClientAgeValidationResponse> ValidateClientAgeAsync(ClientAgeValidationRequest entity)
     {
         DateTime today = DateTime.UtcNow;
