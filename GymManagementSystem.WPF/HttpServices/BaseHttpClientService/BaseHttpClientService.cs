@@ -22,14 +22,12 @@ public abstract class BaseHttpClientService
         _httpClient = httpClient;
     }
 
-    // GET
     protected async Task<Result<TResponse>> GetAsync<TResponse>(string url)
     {
         var response = await _httpClient.GetAsync(url);
         return await HandleResponse<TResponse>(response);
     }
 
-    // POST
     protected async Task<Result<TResponse>> PostAsync<TRequest, TResponse>(
         string url, TRequest request)
     {
@@ -37,7 +35,6 @@ public abstract class BaseHttpClientService
         return await HandleResponse<TResponse>(response);
     }
 
-    // PUT
     protected async Task<Result<TResponse>> PutAsync<TRequest, TResponse>(
         string url, TRequest request)
     {
@@ -58,7 +55,6 @@ public abstract class BaseHttpClientService
         return await HandleResponse<TResponse>(response);
     }
 
-    // CORE
     private async Task<Result<T>> HandleResponse<T>(HttpResponseMessage response)
     {
         if (response.StatusCode == HttpStatusCode.NoContent)
@@ -79,26 +75,22 @@ public abstract class BaseHttpClientService
                 return Result<T>.ValidationFailure(validation);
         }
 
-        // --- specjalne: uwierzytelnianie / autoryzacja ---
         if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
         {
-            // pusty body -> utwórz prosty ProblemDetails
             if (string.IsNullOrWhiteSpace(body))
             {
                 return Result<T>.Failure(new ProblemDetails
                 {
                     Status = (int)response.StatusCode,
-                    Title = response.StatusCode == HttpStatusCode.Forbidden ? "Brak uprawnień" : "Nieautoryzowany"
+                    Title = response.StatusCode == HttpStatusCode.Forbidden ? "Not accessed" : "Unauthorized"
                 });
             }
 
-            // jeśli body jest, spróbuj zdeserializować i ewentualnie wyciągnąć requiredRole
             var pd = JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
                      ?? new ProblemDetails { Status = (int)response.StatusCode };
 
-            pd.Title ??= response.StatusCode == HttpStatusCode.Forbidden ? "Brak uprawnień" : "Nieautoryzowany";
+            pd.Title ??= response.StatusCode == HttpStatusCode.Forbidden ? "Not accessed" : "Unauthorized";
 
-            // parse "RequiredRole:Owner,Manager" w Detail albo Extensions["requiredRole"]
             if (!string.IsNullOrWhiteSpace(pd.Detail) && pd.Detail.Contains("RequiredRole:", StringComparison.OrdinalIgnoreCase))
             {
                 try
@@ -110,7 +102,7 @@ public abstract class BaseHttpClientService
                                     .Select(r => r.Trim()).ToArray();
                     if (roles.Any()) pd.Extensions["requiredRole"] = roles;
                 }
-                catch { /* toleruj błędy parsowania */ }
+                catch {  }
             }
 
             return Result<T>.Failure(pd);

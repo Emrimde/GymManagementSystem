@@ -20,9 +20,9 @@
                     FontWeight="Bold"
                     Foreground="{DynamicResource PrimaryColor}"
                     HorizontalAlignment="Center">
-                    <Run Text="Welcome in "/>
+                    <Run Text="Welcome in"/>
                     <Run Text="{DynamicResource GymName}" Foreground="{DynamicResource SecondColor}"/>
-                    <Run Text=" System"/>
+                    <Run Text="System"/>
                 </TextBlock>
 
                 <TextBlock

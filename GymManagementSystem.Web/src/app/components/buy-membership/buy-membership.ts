@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from "@angular/forms";
 import { ClientDetails } from '../../dto/Client/client-details';
 import { ClientService } from '../../services-api/client-service';
@@ -30,7 +30,8 @@ export class BuyMembership implements OnInit {
     private clientService: ClientService,
     private clientMembershipService: ClientMembershipService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +101,7 @@ export class BuyMembership implements OnInit {
           next: () => {
             this.successMessage = 'Membership purchased successfully.';
             this.isSubmitting = false;
+            this.router.navigate(['/client-main-page']);
             this.cdr.detectChanges();
           },
           error: (err: any) => {

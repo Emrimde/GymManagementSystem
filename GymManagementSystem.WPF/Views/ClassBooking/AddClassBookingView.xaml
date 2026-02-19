@@ -47,6 +47,7 @@
 
                         <ComboBox ItemsSource="{Binding GymClasses}"
                                   DisplayMemberPath="Name"
+                                  Foreground="{StaticResource PrimaryColor}"
                                   SelectedItem="{Binding SelectedGymClass}"
                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                   Margin="0,0,0,24"/>
@@ -60,6 +61,7 @@
                         <ComboBox ItemsSource="{Binding ScheduledClasses}"
                                   DisplayMemberPath="ScheduledClassDetails"
                                   SelectedItem="{Binding SelectedScheduledClass}"
+                                  Foreground="{StaticResource PrimaryColor}"
                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                   Margin="0,0,0,32"
                                   Visibility="{Binding IsScheduledClassComboBoxVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>

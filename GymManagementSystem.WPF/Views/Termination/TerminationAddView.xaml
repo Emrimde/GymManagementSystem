@@ -22,7 +22,7 @@
             <StackPanel Grid.Row="1" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Reason" HorizontalAlignment="Center" FontSize="30" Foreground="{DynamicResource PrimaryColor}"/>
-                    <TextBox  Height="120" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="20,0,0,0" Width="600" Text="{Binding TerminationAddRequest.Reason}" HorizontalAlignment="Center" FontSize="30" />
+                    <TextBox Foreground="{StaticResource PrimaryColor}"  Height="120" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="20,0,0,0" Width="600" Text="{Binding TerminationAddRequest.Reason}" HorizontalAlignment="Center" FontSize="30" />
                 </StackPanel>
             </StackPanel>
             <Button Grid.Row="2" Width="100" Height="50" Content="Create" Command="{Binding CreateTerminationCommand}" />

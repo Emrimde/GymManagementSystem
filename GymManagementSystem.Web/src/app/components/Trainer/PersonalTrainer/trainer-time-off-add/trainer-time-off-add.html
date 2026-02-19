@@ -1,76 +1,65 @@
-<div class="background-white p-4" style="max-width: 500px; margin: 0 auto;">
-  <h3 class="text-black mb-3">Add time off</h3>
+<div class="background-white p-4" style="max-width: 420px; margin: 0 auto;">
+  <h3 class="text-black mb-4">Add time off</h3>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
 
     <div class="mb-3">
-      <label class="text-black">Start</label>
-      <input
-        type="datetime-local"
-        class="form-control"
-        formControlName="start"
-        step="900"
-      />
+      <label class="text-black">Reason</label>
+      <input class="form-control" formControlName="reason" />
 
-      @if (
-        form.get('start')?.touched &&
-        form.get('start')?.errors?.['required']
-      ) {
+      @if (form.get('reason')?.touched && form.get('reason')?.hasError('required')) {
         <small class="text-danger">
-          Start date is required
-        </small>
-      }
-
-      @if (
-        form.get('start')?.touched &&
-        form.get('start')?.errors?.['quarterHour']
-      ) {
-        <small class="text-danger">
-          Time must be in 15-minute intervals
+          Reason is required
         </small>
       }
     </div>
 
     <div class="mb-3">
-      <label class="text-black">End</label>
-      <input
-        type="datetime-local"
-        class="form-control"
-        formControlName="end"
-        step="900"
-      />
+      <label class="text-black">Date</label>
+      <input type="date" class="form-control" formControlName="date" />
 
-      @if (
-        form.get('end')?.touched &&
-        form.get('end')?.errors?.['required']
-      ) {
+      @if (form.get('date')?.touched && form.get('date')?.hasError('required')) {
         <small class="text-danger">
-          End date is required
-        </small>
-      }
-
-      @if (
-        form.get('end')?.touched &&
-        form.get('end')?.errors?.['quarterHour']
-      ) {
-        <small class="text-danger">
-          Time must be in 15-minute intervals
+          Date is required
         </small>
       }
     </div>
 
     <div class="mb-3">
-      <label class="text-black">Reason (optional)</label>
-      <textarea
-        class="form-control"
-        rows="3"
-        formControlName="reason"
-      ></textarea>
+      <label class="text-black">Start time</label>
+      <select class="form-select" formControlName="startTime">
+        <option value="">Select time</option>
+        @for (slot of timeSlots; track slot) {
+          <option value="{{slot}}">{{slot}}</option>
+        }
+      </select>
+
+      @if (form.get('startTime')?.touched && form.get('startTime')?.hasError('required')) {
+        <small class="text-danger">
+          Start time is required
+        </small>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="text-black">End time</label>
+      <select class="form-select" formControlName="endTime">
+        <option value="">Select time</option>
+        @for (slot of timeSlots; track slot) {
+          <option value="{{slot}}">{{slot}}</option>
+        }
+      </select>
+
+      @if (form.get('endTime')?.touched && form.get('endTime')?.hasError('required')) {
+        <small class="text-danger">
+          End time is required
+        </small>
+      }
     </div>
 
     @if (form.errors?.['endBeforeStart']) {
       <div class="text-danger mb-3">
-        End must be after start
+        End must be after start time
       </div>
     }
 
@@ -88,12 +77,11 @@
       <button
         type="submit"
         class="btn button-green fw-bold"
-        [disabled]="isSubmitting || form.invalid"
-      >
-        {{ isSubmitting ? 'Saving...' : 'Save time off' }}
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Saving...' : 'Save' }}
       </button>
 
-      <button type="button" class="btn button-light-gray" routerLink="/trainer-panel">
+      <button type="button" class="btn button-light-gray" routerLink="/trainer">
         Back
       </button>
     </div>

@@ -11,30 +11,68 @@
 
         <div class="mb-3">
           <label class="form-label text-white-bg">Gym class</label>
-          <select formControlName="gymClassId" (change)="gymClassChange($event)"
-                  class="form-select background-white">
+
+          <select
+            formControlName="gymClassId"
+            (change)="gymClassChange($event)"
+            class="form-select background-white">
+
             <option value="">Select class</option>
-            @for(gymClass of gymClasses(); track gymClass.name){
+
+            @for (gymClass of gymClasses(); track gymClass.gymClassId) {
               <option value="{{ gymClass.gymClassId }}">
                 {{ gymClass.name }}
               </option>
             }
+
           </select>
+
+          @if (gymClassForm.get('gymClassId')?.touched) {
+            @if (gymClassForm.get('gymClassId')?.hasError('required')) {
+              <div class="text-danger small">
+                Gym class is required
+              </div>
+            }
+          }
         </div>
 
         <div class="mb-4">
           <label class="form-label text-white-bg">Select date</label>
-          <select formControlName="scheduledClassId"
-                  class="form-select background-white">
-            @for(scheduledClass of scheduledClasses(); track scheduledClass.scheduledClassDetails){
+
+          <select
+            formControlName="scheduledClassId"
+            class="form-select background-white">
+
+            <option value="">Select date</option>
+
+            @for (scheduledClass of scheduledClasses(); track scheduledClass.scheduledClassId) {
               <option value="{{ scheduledClass.scheduledClassId }}">
                 {{ scheduledClass.scheduledClassDetails }}
               </option>
             }
+
           </select>
+
+          @if (gymClassForm.get('scheduledClassId')?.touched) {
+            @if (gymClassForm.get('scheduledClassId')?.hasError('required')) {
+              <div class="text-danger small">
+                Scheduled class is required
+              </div>
+            }
+          }
         </div>
 
-        <button class="btn button-green w-100 fw-bold">
+        @if (backendErrors.length > 0) {
+          <div class="alert alert-danger mt-3">
+            <ul class="mb-0">
+              @for (err of backendErrors; track err) {
+                <li>{{ err }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <button type="submit" class="btn button-green w-100 fw-bold">
           Book class
         </button>
 

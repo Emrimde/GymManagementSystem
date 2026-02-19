@@ -62,6 +62,14 @@ public class ClientMembershipService : IClientMembershipService
             return Result<ClientMembershipInfoResponse>.Failure("Client not found", StatusCodeEnum.NotFound);
         }
 
+        DateTime minimalYear = DateTime.UtcNow.AddYears(-13);
+        if (client.DateOfBirth >= minimalYear)
+        {
+            return Result<ClientMembershipInfoResponse>.Failure(
+                "You must be at least 13 years old to purchase a membership.",
+                StatusCodeEnum.BadRequest);
+        }
+
         ClientMembership? activeMembership = await _clientMembershipRepository.GetActiveClientMembershipByClientId(client.Id);
 
         if (activeMembership != null)
@@ -74,6 +82,7 @@ public class ClientMembershipService : IClientMembershipService
         {
             return Result<ClientMembershipInfoResponse>.Failure("Membership not found",StatusCodeEnum.NotFound);
         }
+
 
 
         if (membership.MembershipType == MembershipTypeEnum.Annual)

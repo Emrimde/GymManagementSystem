@@ -19,6 +19,7 @@ export class ActivateAccount implements OnInit {
 
   private userId!: string;
   private token!: string;
+  isActivated = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,8 +62,10 @@ export class ActivateAccount implements OnInit {
 
     this.authService.activateAccount(dto).subscribe({
       next: () => {
-        this.router.navigate(['/client-main-page']);
-      },
+  this.isSubmitting = false;
+  this.isActivated = true;
+  this.activateAccountForm.disable();
+},
       error: (err: HttpErrorResponse) => {
         const apiError = err.error;
 

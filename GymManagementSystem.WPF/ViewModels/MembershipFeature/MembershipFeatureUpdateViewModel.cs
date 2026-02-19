@@ -13,7 +13,7 @@ namespace GymManagementSystem.WPF.ViewModels.MembershipFeature;
 public class MembershipFeatureUpdateViewModel : ViewModel, IParameterReceiver, INotifyDataErrorInfo
 {
     private Guid _membershipFeatureId;
-    private readonly SidebarViewModel SidebarView;
+    public SidebarViewModel SidebarView { get; }
     private readonly MembershipHttpClient _membershipHttpClient;
     private readonly INavigationService _navigation;
     public ICommand UpdateMembershipFeatureCommand { get; }

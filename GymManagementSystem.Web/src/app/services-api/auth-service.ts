@@ -7,13 +7,14 @@ import { ResetPasswordRequest } from '../dto/AuthDto/reset-password-request';
 import { ConfirmResetPasswordRequest } from '../dto/AuthDto/confirm-reset-password-request';
 import { ActivateAccountRequest } from '../dto/AuthDto/activate-account-request';
 import { map, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   constructor(private httpClient:HttpClient){}
-  private readonly base = "http://localhost:5105/api/Auth"
+  private readonly base = `${environment.apiUrl}/Auth`
 
  refreshToken() {
   const refreshToken = localStorage.getItem('refreshToken');

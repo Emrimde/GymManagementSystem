@@ -9,43 +9,108 @@
 
       <form [formGroup]="personalBookingForm" (ngSubmit)="submit()">
 
+        <!-- Date -->
         <div class="mb-3">
           <label class="form-label text-white-bg">Date</label>
-          <input formControlName="startDate" type="date" class="form-control background-white"  >
+          <input
+            type="date"
+            formControlName="startDate"
+            class="form-control background-white" />
+
+          @if (personalBookingForm.get('startDate')?.touched) {
+            @if (personalBookingForm.get('startDate')?.hasError('required')) {
+              <div class="text-danger small">
+                Date is required
+              </div>
+            }
+          }
         </div>
 
+        <!-- Start hour -->
         <div class="mb-3">
           <label class="form-label text-white-bg">Start time</label>
-          <select formControlName="startHour" class="form-select background-white">
-            <option>Select time</option >
-            @for(hour of timeSlots; track hour) 
-            {
+
+          <select formControlName="startHour"
+                  class="form-select background-white">
+            <option value="">Select time</option>
+            @for(hour of timeSlots; track hour) {
               <option value="{{hour}}">{{hour}}</option>
             }
           </select>
+
+          @if (personalBookingForm.get('startHour')?.touched) {
+            @if (personalBookingForm.get('startHour')?.hasError('required')) {
+              <div class="text-danger small">
+                Start time is required
+              </div>
+            }
+          }
         </div>
 
+        <!-- Trainer -->
         <div class="mb-3">
           <label class="form-label text-white-bg">Personal trainer</label>
-          <select formControlName="trainerId" class="form-select background-white" (change)="loadTrainerRates($event)">
-            @for(trainer of trainerInfoResponse(); track trainer.id) 
-            {
-              <option value="{{trainer.id}}">{{trainer.fullName}}</option>
+
+          <select
+            formControlName="trainerId"
+            class="form-select background-white"
+            (change)="loadTrainerRates($event)">
+
+            <option value="">Select trainer</option>
+
+            @for(trainer of trainerInfoResponse(); track trainer.id) {
+              <option value="{{trainer.id}}">
+                {{trainer.fullName}}
+              </option>
             }
           </select>
+
+          @if (personalBookingForm.get('trainerId')?.touched) {
+            @if (personalBookingForm.get('trainerId')?.hasError('required')) {
+              <div class="text-danger small">
+                Trainer is required
+              </div>
+            }
+          }
         </div>
 
+        <!-- Duration -->
         <div class="mb-4">
           <label class="form-label text-white-bg">Training duration</label>
-          <select formControlName="trainerRateId" class="form-select background-white">
-            @for(trainerRate of trainerRateSelect(); track trainerRate.trainerRateId) 
-            {
-              <option value="{{trainerRate.trainerRateId}}">{{trainerRate.displayPriceDuration}}</option>
+
+          <select
+            formControlName="trainerRateId"
+            class="form-select background-white">
+
+            <option value="">Select duration</option>
+
+            @for(trainerRate of trainerRateSelect(); track trainerRate.trainerRateId) {
+              <option value="{{trainerRate.trainerRateId}}">
+                {{trainerRate.displayPriceDuration}}
+              </option>
             }
           </select>
+
+          @if (personalBookingForm.get('trainerRateId')?.touched) {
+            @if (personalBookingForm.get('trainerRateId')?.hasError('required')) {
+              <div class="text-danger small">
+                Training duration is required
+              </div>
+            }
+          }
         </div>
 
-        <button class="btn button-green w-100 fw-bold">
+        @if (backendErrors.length > 0) {
+          <div class="alert alert-danger mt-3">
+            <ul class="mb-0">
+              @for (err of backendErrors; track err) {
+                <li>{{ err }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <button type="submit" class="btn button-green w-100 fw-bold">
           Save
         </button>
 

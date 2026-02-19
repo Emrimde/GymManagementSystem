@@ -91,8 +91,7 @@ public class TrainerContractDetailsViewModel : ViewModel, IParameterReceiver
                 }
             }
 
-            Navigation.NavigateTo<TrainerContractDetailsViewModel>(TrainerContract.Id);
-
+            LoadTrainerCommand.Execute(null);
         }
         else
         {

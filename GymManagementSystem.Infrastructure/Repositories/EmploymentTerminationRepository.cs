@@ -1,7 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.EmploymentTermination;
-using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,5 +35,4 @@ public class EmploymentTerminationRepository : IEmploymentTerminationRepository
     {
         return await _dbContext.EmploymentTerminations.Where(item => item.PersonId == personId && item.IsActive).FirstOrDefaultAsync();
     }
-
 }

@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrainerService {
-  private readonly base = "http://localhost:5105/api/Trainer"
+  private readonly base = `${environment.apiUrl}/Trainer`
   constructor(private httpClient: HttpClient) {}
   getAllPersonalTrainers() {
     return this.httpClient.get(`${this.base}/personal-trainers`);

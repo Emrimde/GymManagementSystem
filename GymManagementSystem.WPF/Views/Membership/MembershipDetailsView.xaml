@@ -82,16 +82,6 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
-                            <materialDesign:PackIcon Kind="Dumbbell" Foreground="{StaticResource PrimaryColor}"
-                                                     Style="{StaticResource HorizontalItem}"/>
-                            <StackPanel>
-                                <TextBlock FontWeight="SemiBold"
-                                           Text="Free personal trainings / 6 months"/>
-                                <TextBlock Text="{Binding Membership.FreePersonalTrainingSessions}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" Style="{StaticResource VerticalItem}">
                             <materialDesign:PackIcon Kind="CardAccountDetails"
                                                      Style="{StaticResource HorizontalItem}" Foreground="{StaticResource PrimaryColor}"/>
                             <StackPanel>

@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PersonalBookingAddRequest } from '../dto/PersonalBooking/personal-booking-add-request';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonalBookingService {
   constructor(private httpClient: HttpClient) {}
-  private readonly base = "http://localhost:5105/api/PersonalBooking"
+  private readonly base = `${environment.apiUrl}/PersonalBooking`
   
   getPersonalBookingsForClient() {
     return this.httpClient.get(`${this.base}`);

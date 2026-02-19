@@ -86,6 +86,10 @@ public class GeneralSettingsViewModel : ViewModel
     private async Task LoadGeneralSettings()
     {
         Result<GeneralGymResponse> response = await _httpClient.GetGeneralGymSettingsAsync();
+        if (!response.IsSuccess) {
+            MessageBox.Show($"{response.GetUserMessage()}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
         GeneralGymUpdateRequest generalGymUpdate = response.Value!.ToGeneralGymUpdateRequest();
         GeneralGymDetailsUpdateRequest = generalGymUpdate;
     }

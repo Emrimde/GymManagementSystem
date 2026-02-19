@@ -1,18 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MembershipService {
-  private readonly base = "http://localhost:5105/api/membership"
+  private readonly base = `${environment.apiUrl}/membership`
 
   getAllMembershipsWithFeatures() {
     return this.httpClient.get(`${this.base}/get-all-memberships`)
   }
 
-  // getMembershipNameById(membershipId : string){
-  //   return this.httpClient.get(`${this.base}/${membershipId}`)
-  // }
   constructor(private httpClient:HttpClient){}
 }

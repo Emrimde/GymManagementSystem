@@ -7,8 +7,6 @@ public class ClassBookingAddRequestValidator : AbstractValidator<ClassBookingAdd
 {
     public ClassBookingAddRequestValidator()
     {
-        RuleFor(item => item.ClientId)
-            .NotEmpty().WithMessage("Client id is required.");
         RuleFor(item => item.ScheduledClassId)
             .NotEmpty().WithMessage("Scheduled class id is required.");
     }

@@ -144,7 +144,7 @@ public class PersonalBookingService : IPersonalBookingService
             Date = item.Start.ToLocalTime().ToString("dd.MM.yyyy"),
             StartEndTime = $"{item.Start.ToLocalTime().ToString("HH:mm")} - {item.End.ToLocalTime().ToString("HH:mm")}",
             BookingStatus = item.Status.ToString(),
-            Price = item.Price.ToString(),
+            Price = item.TrainerRate.RatePerSessions.ToString()
         }).ToListAsync();
 
         return Result<IEnumerable<PersonalBookingResponse>>.Success(response, StatusCodeEnum.Ok);

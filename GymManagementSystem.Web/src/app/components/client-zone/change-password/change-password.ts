@@ -69,5 +69,4 @@ async submit() {
     const confirmPassword = group.get('confirmPassword')?.value;
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
   }
-
 }

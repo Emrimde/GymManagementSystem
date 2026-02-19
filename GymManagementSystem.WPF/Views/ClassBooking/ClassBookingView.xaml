@@ -63,21 +63,15 @@
                         <DataGridTextColumn Header="Created at"
                                             Binding="{Binding CreatedAt}"/>
 
-                        <DataGridTemplateColumn Header="Delete"
-                                                Width="90">
+                        <DataGridTemplateColumn Header="Delete" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Width="36"
-                                            Height="36"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Command="{Binding DataContext.DeleteClassBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding Id}">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding DataContext.DeleteClassBookingCommand,
+                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                    CommandParameter="{Binding Id}">
 
-                                        <materialDesign:PackIcon Kind="Delete"
-                                                                 Width="20"
-                                                                 Height="20"
-                                                                 Foreground="#F44336"/>
+                                        <materialDesign:PackIcon Kind="Delete"/>
                                     </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

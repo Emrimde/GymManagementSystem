@@ -3,18 +3,22 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { TrainerServiceClient } from '../../../../services-api/trainer-service-client';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-trainer-time-off-add',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,RouterLink],
   templateUrl: './trainer-time-off-add.html',
   styleUrl: './trainer-time-off-add.css',
 })
 export class TrainerTimeOffAdd implements OnInit {
+
   form!: FormGroup;
-  isSubmitting = false;
-  success = false;
   backendErrors: string[] = [];
+  success = false;
+  isSubmitting = false;
+
+  timeSlots: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -23,95 +27,106 @@ export class TrainerTimeOffAdd implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.generateTimeSlots();
     this.form = this.buildForm();
   }
 
   buildForm(): FormGroup {
     return this.fb.group(
       {
-        start: ['', [Validators.required, this.quarterHourValidator]],
-        end: ['', [Validators.required, this.quarterHourValidator]],
-        reason: ['']
+        reason: [''],
+        date: ['', Validators.required],
+        startTime: ['', Validators.required],
+        endTime: ['', Validators.required]
       },
       { validators: [this.endAfterStartValidator] }
     );
   }
 
-  submit(): void {
-    this.backendErrors = [];
-    this.success = false;
+  generateTimeSlots(): void {
+    const start = 7 * 60;
+    const end = 22 * 60;
+    const step = 15;
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
+    for (let m = start; m <= end; m += step) {
+      const h = Math.floor(m / 60);
+      const min = m % 60;
+
+      const hh = h.toString().padStart(2, '0');
+      const mm = min.toString().padStart(2, '0');
+
+      this.timeSlots.push(`${hh}:${mm}`);
     }
-
-    this.isSubmitting = true;
-
-    const start = new Date(this.form.value.start);
-    const end = new Date(this.form.value.end);
-
-    const dto = {
-      start: start.toISOString(),
-      end: end.toISOString(),
-      reason: this.form.value.reason
-    };
-
-    this.trainerService.createTrainerTimeOff(dto).subscribe({
-      next: () => {
-        this.success = true;
-        this.form.reset();
-        this.isSubmitting = false;
-        this.cdr.detectChanges();
-      },
-      error: (err: HttpErrorResponse) => {
-        const apiError = err.error;
-
-        // ValidationProblemDetails style: { errors: { field1: [...], field2: [...] } }
-        if (apiError?.errors) {
-          try {
-            this.backendErrors = Object.values(apiError.errors).flat() as string[];
-          } catch {
-            this.backendErrors = ['Validation error'];
-          }
-          this.isSubmitting = false;
-          this.cdr.detectChanges();
-          return;
-        }
-
-        // RFC-like detail field
-        if (apiError?.detail) {
-          this.backendErrors = [apiError.detail];
-          this.isSubmitting = false;
-          this.cdr.detectChanges();
-          return;
-        }
-
-        // fallback to message or status text
-        if (apiError?.message) {
-          this.backendErrors = [apiError.message];
-          this.isSubmitting = false;
-          this.cdr.detectChanges();
-          return;
-        }
-
-        this.backendErrors = ['Unknown error'];
-        this.isSubmitting = false;
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  quarterHourValidator(control: any) {
-    if (!control?.value) return null;
-    const date = new Date(control.value);
-    return date.getMinutes() % 15 === 0 ? null : { quarterHour: true };
   }
 
   endAfterStartValidator(group: FormGroup): ValidationErrors | null {
-    const start = group.get('start')?.value;
-    const end = group.get('end')?.value;
-    if (!start || !end) return null;
-    return new Date(end) > new Date(start) ? null : { endBeforeStart: true };
+    const date = group.get('date')?.value;
+    const start = group.get('startTime')?.value;
+    const end = group.get('endTime')?.value;
+
+    if (!date || !start || !end) return null;
+
+    const startDate = new Date(`${date}T${start}`);
+    const endDate = new Date(`${date}T${end}`);
+
+    return endDate > startDate ? null : { endBeforeStart: true };
   }
+
+  submit(): void {
+  this.backendErrors = [];
+  this.success = false;
+
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
+  }
+
+  this.isSubmitting = true;
+
+  const { date, startTime, endTime, reason } = this.form.value;
+
+  const dto = {
+    start: `${date}T${startTime}`,
+    end: `${date}T${endTime}`,
+    reason: reason
+  };
+
+  this.trainerService.createTrainerTimeOff(dto).subscribe({
+    next: () => {
+      this.success = true;
+      this.form.reset();
+      this.isSubmitting = false;
+      this.cdr.detectChanges();
+    },
+    error: (err: HttpErrorResponse) => {
+      const apiError = err.error;
+
+      if (apiError?.errors) {
+        this.backendErrors = Object.values(apiError.errors).flat() as string[];
+        this.isSubmitting = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      if (apiError?.detail) {
+        this.backendErrors = [apiError.detail];
+        this.isSubmitting = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      if (apiError?.message) {
+        this.backendErrors = [apiError.message];
+        this.isSubmitting = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      this.backendErrors = ['Unknown error'];
+      this.isSubmitting = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
 }

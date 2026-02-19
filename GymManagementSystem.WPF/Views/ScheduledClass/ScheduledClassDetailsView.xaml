@@ -70,19 +70,19 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <!--<StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                             <materialDesign:PackIcon Kind="InformationOutline"
                                                      Foreground="{StaticResource PrimaryColor}"
                                                      Margin="0,0,12,0"/>
-                            <StackPanel>
+                            --><!--<StackPanel>
                                 <TextBlock FontSize="15"
                                            Foreground="{StaticResource PrimaryColor}"
                                            Text="Status"/>
                                 <TextBlock FontSize="15"
                                            Foreground="{StaticResource PrimaryColor}"
                                            Text="{Binding ScheduledClass.IsCancelled}"/>
-                            </StackPanel>
-                        </StackPanel>
+                            </StackPanel>--><!--
+                        </StackPanel>-->
 
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                             <materialDesign:PackIcon Kind="Update"

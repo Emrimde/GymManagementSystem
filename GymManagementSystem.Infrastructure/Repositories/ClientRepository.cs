@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.Client;
+using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers.ClientMapper;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.Resulttttt;
@@ -104,7 +105,7 @@ public class ClientRepository : IClientRepository
                 CanTerminate = item.ClientMemberships
                     .Any(item =>
                         item.IsActive &&
-                        item.Termination == null
+                        item.Termination == null && item.Membership.MembershipType == MembershipTypeEnum.Monthly
                     ),
 
                 TotalVisits = item.Visits.Count,

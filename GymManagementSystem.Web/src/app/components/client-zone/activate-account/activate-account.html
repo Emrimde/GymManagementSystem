@@ -1,81 +1,100 @@
-<form [formGroup]="activateAccountForm" (ngSubmit)="submit()">
+<div class="min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-  <div class="mb-3">
-    <label class="form-label text-white">
-      New password
-    </label>
-    <input
-      type="password"
-      class="form-control form-control-lg"
-      formControlName="newPassword"
-    />
+        <div class="background-black p-4 rounded shadow-sm">
+          <h3 class="text-white text-center mb-3">Activate account</h3>
 
-    @if (
-      activateAccountForm.get('newPassword')?.touched &&
-      activateAccountForm.get('newPassword')?.hasError('required')
-    ) {
-      <div class="text-danger small mt-1">
-        Password is required.
-      </div>
-    }
+          @if (!isActivated) {
+          <form [formGroup]="activateAccountForm" (ngSubmit)="submit()">
 
-    @if (
-      activateAccountForm.get('newPassword')?.touched &&
-      activateAccountForm.get('newPassword')?.hasError('minlength')
-    ) {
-      <div class="text-danger small mt-1">
-        Password must be at least 6 characters.
-      </div>
-    }
-  </div>
+            <div class="mb-3">
+              <label class="form-label text-white-bg">New password</label>
+              <input
+                type="password"
+                formControlName="newPassword"
+                class="form-control"
+                autocomplete="new-password"
+              />
 
-  <div class="mb-4">
-    <label class="form-label text-white">
-      Confirm password
-    </label>
-    <input
-      type="password"
-      class="form-control form-control-lg"
-      formControlName="confirmPassword"
-    />
+              @if (activateAccountForm.get('newPassword')?.touched) {
+                @if (activateAccountForm.get('newPassword')?.hasError('required')) {
+                  <div class="text-danger small">
+                    Password is required
+                  </div>
+                }
+                @else if (activateAccountForm.get('newPassword')?.hasError('minlength')) {
+                  <div class="text-danger small">
+                    Minimum 6 characters required
+                  </div>
+                }
+              }
+            </div>
 
-    @if (
-      activateAccountForm.get('confirmPassword')?.touched &&
-      activateAccountForm.get('confirmPassword')?.hasError('required')
-    ) {
-      <div class="text-danger small mt-1">
-        Confirm password is required.
-      </div>
-    }
+            <div class="mb-3">
+              <label class="form-label text-white-bg">Confirm password</label>
+              <input
+                type="password"
+                formControlName="confirmPassword"
+                class="form-control"
+                autocomplete="new-password"
+              />
 
-    @if (
-      activateAccountForm.hasError('passwordsNotMatch') &&
-      activateAccountForm.get('confirmPassword')?.touched
-    ) {
-      <div class="text-danger small mt-1">
-        Passwords do not match.
-      </div>
-    }
-  </div>
+              @if (activateAccountForm.get('confirmPassword')?.touched) {
+                @if (activateAccountForm.get('confirmPassword')?.hasError('required')) {
+                  <div class="text-danger small">
+                    Confirm password is required
+                  </div>
+                }
+              }
 
-  @if (backendErrors.length > 0) {
-    <div class="alert alert-danger mt-3">
-      <ul class="mb-0">
-        @for (err of backendErrors; track err) {
-          <li>{{ err }}</li>
+              @if (
+                activateAccountForm.hasError('passwordsNotMatch') &&
+                activateAccountForm.get('confirmPassword')?.touched
+              ) {
+                <div class="text-danger small">
+                  Passwords do not match
+                </div>
+              }
+            </div>
+
+            <button
+              type="submit"
+              class="button-green w-100 mb-3"
+              [disabled]="isSubmitting || activateAccountForm.invalid"
+            >
+              Activate account
+            </button>
+
+          </form>
         }
-      </ul>
-    </div>
-  }
-
-  <div class="d-grid mt-3">
-    <button
-      type="submit"
-      class="button-green btn-lg fw-semibold"
-      [disabled]="isSubmitting || activateAccountForm.invalid"
-    >
-      Activate account
-    </button>
+          @if (isActivated) {
+  <div class="alert alert-success mt-2">
+    Your account has been successfully activated. You can now sign in.
   </div>
+}
 
-</form>
+          @if (backendErrors.length > 0) {
+            <div class="alert alert-danger mt-3">
+              <ul class="mb-0">
+                @for (err of backendErrors; track err) {
+                  <li>{{ err }}</li>
+                }
+              </ul>
+            </div>
+          }
+
+          <div class="text-center mt-3">
+            <a routerLink="/login"
+               class="text-light-gray small hover-green text-decoration-none">
+              Back to <span class="text-green">Sign in</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

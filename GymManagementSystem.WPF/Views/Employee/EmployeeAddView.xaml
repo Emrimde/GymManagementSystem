@@ -47,12 +47,14 @@
                                  ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                                            RelativeSource={RelativeSource Self}}"
                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                 Margin="0,0,0,24"/>
+                                 Margin="0,0,0,24"
+                                 Foreground="{StaticResource PrimaryColor}"
+                                 />
 
                         <TextBlock Text="Employee Role"
                                    FontWeight="SemiBold"
                                    Margin="0,0,0,8"
-                                   Foreground="{DynamicResource PrimaryColor}"/>
+                                   Foreground="{StaticResource PrimaryColor}"/>
 
                         <ComboBox ItemsSource="{Binding EmployeeRoles}"
                                   SelectedItem="{Binding SelectedEmployeeRole}"
@@ -67,6 +69,7 @@
                         <ComboBox ItemsSource="{Binding EmploymentTypes}"
                                   SelectedItem="{Binding SelectedEmploymentType}"
                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Foreground="{StaticResource PrimaryColor}"
                                   Margin="0,0,0,32"/>
 
                         <StackPanel Orientation="Horizontal"
