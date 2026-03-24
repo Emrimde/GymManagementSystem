@@ -1,5 +1,6 @@
 ﻿using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
+using GymManagementSystem.Core.DTO.ClassBooking;
 using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
 using GymManagementSystem.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -33,17 +34,18 @@ public class ClassBookingRepository : IClassBookingRepository
         return affected > 0;
     }
 
-    public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)
+    public async Task<IEnumerable<ClassBookingResponse>> GetAllClassBookingsByClientId(Guid clientId)
     {
-        return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow && item.IsActive).Select(item => new ClassBookingReadModel()
+        return await _dbContext.ClassBookings.Where(item => item.ClientId == clientId && item.ScheduledClass.Date >= DateTime.UtcNow && item.IsActive).Select(item => new ClassBookingResponse
         {
             Id = item.Id,
-            CreatedAt = item.CreatedAt,
-            Date = item.ScheduledClass!.Date,
-            StartFrom = item.ScheduledClass.StartFrom,
-            StartTo = item.ScheduledClass.StartTo,
             Name = item.ScheduledClass!.GymClass!.Name,
-        }).ToListAsync();
+            StartFrom = item.ScheduledClass.StartFrom.ToString(@"hh\:mm"),
+            StartTo = (item.ScheduledClass.StartFrom + TimeSpan.FromMinutes(60)).ToString(@"hh\:mm"),
+            Date = item.ScheduledClass.Date.ToString("dd.MM.yyyy"),
+            CreatedAt = item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy"),
+        })
+        .ToListAsync();
     }
 
     public async Task<ClassBooking?> GetByIdAsync(Guid id)

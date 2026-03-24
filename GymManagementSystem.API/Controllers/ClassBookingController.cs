@@ -17,11 +17,11 @@ public class ClassBookingController : BaseController
 
     [Authorize(Roles = "Receptionist,Manager,Owner")]
     [HttpGet("getAll/{clientId:guid}")]
-    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAllByClientId([FromRoute] Guid clientId) => HandleListedResult(await _classBookingService.GetAllByClientIdAsync(clientId));
+    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAllByClientId([FromRoute] Guid clientId) => HandleListedResult(await _classBookingService.GetAllClassBookingsByClientIdAsync(clientId));
 
     [Authorize(Roles = "Client")]
     [HttpGet("getAll")]
-    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAllClientReservatedClasses() => HandleListedResult(await _classBookingService.GetAllByClientIdAsync(null));
+    public async Task<ActionResult<IEnumerable<ClassBookingResponse>>> GetAllClientReservatedClasses() => HandleListedResult(await _classBookingService.GetAllClassBookingsByClientIdAsync(null));
 
     [Authorize(Roles = "Receptionist,Manager,Owner,Client")]
     [HttpPost]

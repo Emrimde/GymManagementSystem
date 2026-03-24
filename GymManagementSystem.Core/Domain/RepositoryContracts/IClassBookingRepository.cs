@@ -8,6 +8,6 @@ public interface IClassBookingRepository : IRepository<ClassBookingResponse, Cla
 {
     Task<int> CountClassBookingsByScheduledClassId(Guid scheduleClassId);
     Task<bool> DeleteClassBookingAsync(Guid classBookingId);
-    Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId);
+    Task<IEnumerable<ClassBookingResponse>> GetAllClassBookingsByClientId(Guid clientId);
     void DeleteClassBookingList(IEnumerable<ClassBooking> entity);
 }

@@ -2,13 +2,11 @@
 using GymManagementSystem.Core.Domain.Entities;
 using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.ClassBooking;
-using GymManagementSystem.Core.DTO.ClassBooking.ReadModel;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 using Microsoft.AspNetCore.Http;
-using System.Runtime.CompilerServices;
 
 namespace GymManagementSystem.Core.Services;
 
@@ -95,9 +93,9 @@ public class ClassBookingService : IClassBookingService
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 
-    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllByClientIdAsync(Guid? clientId)
+    public async Task<Result<IEnumerable<ClassBookingResponse>>> GetAllClassBookingsByClientIdAsync(Guid? clientId)
     {
-        IEnumerable<ClassBookingReadModel> classBookings = new List<ClassBookingReadModel> { };
+        IEnumerable<ClassBookingResponse> classBookings = new List<ClassBookingResponse> { };
         if (clientId == null)
         {
             string? claim = _contextAccessor.HttpContext?.User.FindFirst("client_id")?.Value;
@@ -112,6 +110,6 @@ public class ClassBookingService : IClassBookingService
         {
             classBookings = await _classBookingRepo.GetAllClassBookingsByClientId(clientId.Value);
         }
-        return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings.Select(item => item.ToClassBookingResponse()));
+        return Result<IEnumerable<ClassBookingResponse>>.Success(classBookings, StatusCodeEnum.Ok);
     }
 }
