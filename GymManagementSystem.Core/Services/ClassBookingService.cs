@@ -86,12 +86,11 @@ public class ClassBookingService : IClassBookingService
 
     public async Task<Result<Unit>> DeleteClassBookingAsync(Guid classBookingId)
     {
-        bool exists = _classBookingRepo.DeleteClassBookingAsync(classBookingId);
+        bool exists = await _classBookingRepo.DeleteClassBookingAsync(classBookingId);
         if (!exists)
         {
             return Result<Unit>.Failure("Not Found", StatusCodeEnum.NotFound);
         }
-        await _unitOfWork.SaveChangesAsync();
 
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }

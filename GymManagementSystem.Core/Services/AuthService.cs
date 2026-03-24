@@ -96,8 +96,8 @@ public class AuthService : IAuthService
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);
         }
 
+        bool passwordOk = await _userManager.CheckPasswordAsync(user, request.Password);
 
-        var passwordOk = await _userManager.CheckPasswordAsync(user, request.Password);
         if (!passwordOk)
         {
             return Result<AuthenticationResponse>.Failure("Invalid username or password", StatusCodeEnum.Unauthorized);

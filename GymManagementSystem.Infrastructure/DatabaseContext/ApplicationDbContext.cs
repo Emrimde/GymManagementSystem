@@ -25,7 +25,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<TrainerTimeOff> TrainerTimeOff { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Person> People { get; set; }
-    public DbSet<TrainerProfile> TrainerProfiles { get; set; }
     public DbSet<TrainerRate> TrainerRates { get; set; }
     public DbSet<TrainerContract> TrainerContracts { get; set; }
     public DbSet<EmploymentTermination> EmploymentTerminations { get; set; }

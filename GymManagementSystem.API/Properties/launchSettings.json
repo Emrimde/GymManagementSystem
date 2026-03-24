@@ -4,17 +4,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION_STRING": "Server=localhost;Database=GymManagementSystemDb;Username =postgres;Password=admin;Port=5432;",
-        "DB_NAME": "GymManagementSystemDb",
-        "DB_HOST": "localhost",
-        "DB_PORT": "5432",
-        "DB_USERNAME": "postgres",
-        "DB_PASSWORD": "admin"
-
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5105"
+      "applicationUrl": "http://localhost:5105/"
     },
     "https": {
       "commandName": "Project",

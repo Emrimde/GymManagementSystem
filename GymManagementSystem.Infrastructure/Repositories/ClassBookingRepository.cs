@@ -27,16 +27,10 @@ public class ClassBookingRepository : IClassBookingRepository
         _dbContext.ClassBookings.RemoveRange(entity);
     }
 
-    public bool DeleteClassBookingAsync(Guid classBookingId)
+    public async Task<bool> DeleteClassBookingAsync(Guid classBookingId)
     {
-        ClassBooking? classBooking = _dbContext.ClassBookings.Find(classBookingId);
-        if(classBooking == null)
-        {
-            return false;
-        }
-        _dbContext.ClassBookings.Remove(classBooking);
-
-        return true;
+        int affected = await _dbContext.ClassBookings.Where(item => item.Id == classBookingId).ExecuteDeleteAsync();
+        return affected > 0;
     }
 
     public async Task<IEnumerable<ClassBookingReadModel>> GetAllClassBookingsByClientId(Guid clientId)
