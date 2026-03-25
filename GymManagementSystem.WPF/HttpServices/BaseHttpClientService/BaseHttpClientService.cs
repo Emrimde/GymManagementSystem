@@ -116,7 +116,7 @@ public abstract class BaseHttpClientService
                 Title = response.ReasonPhrase ?? "HTTP error"
             });
         }
-
+        
         var problem = JsonSerializer.Deserialize<ProblemDetails>(body, JsonOptions())
                       ?? new ProblemDetails { Status = (int)response.StatusCode, Title = "HTTP error" };
 

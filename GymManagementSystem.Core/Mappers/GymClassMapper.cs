@@ -30,24 +30,23 @@ public static class GymClassMapper
             Name = gymClass.Name,
         };
     }
-    public static GymClass ToGymClass(this GymClassAddRequest gymClass)
+    public static GymClass ToGymClass(this GymClassAddRequest request)
     {
-        return new GymClass()
-        {
-            Name = gymClass.Name,
+        return new GymClass(
+            request.Name,
+            request.TrainerContractId,
+            request.DaysOfWeek,
+            request.StartHour,
+            request.MaxPeople
+        );
+    }
 
-            DaysOfWeek = gymClass.DaysOfWeek,
-            StartHour = gymClass.StartHour,
-            TrainerContractId = gymClass.TrainerContractId,
-            MaxPeople = gymClass.MaxPeople,
-        };
-    }
-    public static void ModfiyGymClass(this GymClass gymClass, GymClassUpdateRequest gymClassUpdate)
-    {
-        gymClass.Name = gymClassUpdate.Name;
-        gymClass.DaysOfWeek = gymClassUpdate.DaysOfWeek;
-        gymClass.StartHour = gymClassUpdate.StartHour;
-        gymClass.TrainerContractId = gymClassUpdate.TrainerId;
-        gymClass.MaxPeople = gymClassUpdate.MaxPeople;
-    }
+    //public static void ModfiyGymClass(this GymClass gymClass, GymClassUpdateRequest gymClassUpdate)
+    //{
+    //    gymClass.Name = gymClassUpdate.Name;
+    //    gymClass.DaysOfWeek = gymClassUpdate.DaysOfWeek;
+    //    gymClass.StartHour = gymClassUpdate.StartHour;
+    //    gymClass.TrainerContractId = gymClassUpdate.TrainerId;
+    //    gymClass.MaxPeople = gymClassUpdate.MaxPeople;
+    //}
 }

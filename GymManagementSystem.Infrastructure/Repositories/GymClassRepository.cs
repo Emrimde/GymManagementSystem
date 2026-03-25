@@ -70,5 +70,14 @@ public class GymClassRepository : IGymClassRepository
             .ToListAsync();
     }
 
-    
+    public async Task<bool> ExistsOverlapAsync(GymClass gymClass)
+    {
+        TimeSpan duration = TimeSpan.FromMinutes(60);
+
+        return await _dbContext.GymClasses
+            .AnyAsync(item =>
+                (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 &&
+                item.StartHour < gymClass.StartHour + duration &&
+                (item.StartHour + duration) > gymClass.StartHour);
+    }
 }

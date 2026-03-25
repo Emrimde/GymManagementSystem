@@ -28,36 +28,40 @@ public class GymClassService : IGymClassService
         _classBookingRepository = classBookingRepository;
     }
 
-    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity)
+    public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest request)
     {
-        TrainerContract? trainerContract = await _trainerRepo.GetTrainerContractAsync(entity.TrainerContractId,false);
+        TrainerContract? trainer = await _trainerRepo.GetTrainerContractAsync(request.TrainerContractId, false);
 
-        if(trainerContract == null)
+        if (trainer == null)
         {
             return Result<GymClassInfoResponse>.Failure("Cannot check whether trainer is group instructor", StatusCodeEnum.InternalServerError);
         }
 
-        if(trainerContract.TrainerType != TrainerTypeEnum.GroupInstructor)
+        if (trainer.TrainerType != TrainerTypeEnum.GroupInstructor)
         {
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved because trainer isn't group instructor", StatusCodeEnum.BadRequest);
         }
 
-        GymClass gymClass = entity.ToGymClass();
-        gymClass.Duration = new TimeSpan(0, 59, 59);
-        TimeSpan endTime = gymClass.StartHour + gymClass.Duration;
+        GymClass gymClass = request.ToGymClass();
 
-        IEnumerable<GymClass> gymClasses = await _gymClassRepo.GetAllAsync(true);
+        bool overlaps = await _gymClassRepo.ExistsOverlapAsync(gymClass);
 
-        if(gymClasses.Any(item => (item.DaysOfWeek & gymClass.DaysOfWeek) != 0 && endTime > item.StartHour && gymClass.StartHour < item.StartHour + item.Duration))
+        if (overlaps)
         {
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-        _gymClassRepo.CreateAsync(gymClass);
-       List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
-       _scheduledClassRepo.AddRangeAsync(scheduledClasses);
-       await _unitOfWork.SaveChangesAsync();
-       return Result<GymClassInfoResponse>.Success(gymClass.ToGymInfoResponse(), StatusCodeEnum.Ok);
+         _gymClassRepo.CreateAsync(gymClass);
+
+        List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
+
+         _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<GymClassInfoResponse>.Success(
+            gymClass.ToGymInfoResponse(),
+            StatusCodeEnum.Ok);
     }
 
     public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)
@@ -100,7 +104,7 @@ public class GymClassService : IGymClassService
         {
             return Result<Unit>.Failure("Gym class not found",StatusCodeEnum.NotFound);
         }
-        gymClass.ModfiyGymClass(entity);
+        //gymClass.ModfiyGymClass(entity);
 
 
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
@@ -113,18 +117,6 @@ public class GymClassService : IGymClassService
 
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
-    }
-
-    private DateTime GetNextValidDate(DateTime date, DaysOfWeekFlags daysOfWeek)
-    {
-        for (int i = 0; i < 7; i++)
-        {
-            DateTime candidate = date.AddDays(i);
-            if (_scheduleGeneratorService.IsDayIncluded(daysOfWeek, candidate.DayOfWeek))
-                return candidate.Date;
-        }
-
-        throw new InvalidOperationException("No valid day in DaysOfWeekFlags");
     }
 
     public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
@@ -149,11 +141,13 @@ public class GymClassService : IGymClassService
     public async Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId)
     {
         GymClass? gymClass = await _gymClassRepo.GetGymClassWithScheduledClassesAsync(gymClassId);
+
         if(gymClass == null)
         {
             return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
-        gymClass.IsActive = false;
+
+        
         _scheduledClassRepo.DeleteScheduledClassList(gymClass.ScheduledClasses);
         
         foreach(ScheduledClass scheduledClass in gymClass.ScheduledClasses)
@@ -181,7 +175,7 @@ public class GymClassService : IGymClassService
             return Result<Unit>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-        gymClass.IsActive = true;
+        //gymClass.IsActive = true;
         await _unitOfWork.SaveChangesAsync();
 
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);

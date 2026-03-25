@@ -17,6 +17,7 @@ public class ClassBookingRepository : IClassBookingRepository
     {
         _dbContext.Add(entity);
     }
+
     public void DeleteClassBookingList(IEnumerable<ClassBooking> entity)
     {
         _dbContext.ClassBookings.RemoveRange(entity);
