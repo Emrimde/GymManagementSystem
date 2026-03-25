@@ -13,11 +13,6 @@ public class ClassBookingRepository : IClassBookingRepository
         _dbContext = dbContext;
     }
 
-    public async Task<int> CountClassBookingsByScheduledClassId(Guid scheduleClassId)
-    {
-        return await _dbContext.ClassBookings.CountAsync(item => item.ScheduledClassId == scheduleClassId);
-    }
-
     public void CreateAsync(ClassBooking entity)
     {
         _dbContext.Add(entity);
