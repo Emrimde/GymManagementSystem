@@ -64,11 +64,7 @@ A full-featured gym management system designed to streamline staff operations an
 GymManagementSystemDb
 ```
 
-* Restore backup from:
-
-```bash
-BackupDb/backupdb
-```
+* Restore file "backup" from main folder:
 
 * Update connection string in `appsettings.json`:
 
