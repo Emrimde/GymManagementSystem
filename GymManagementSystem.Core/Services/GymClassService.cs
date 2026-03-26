@@ -104,7 +104,8 @@ public class GymClassService : IGymClassService
         {
             return Result<Unit>.Failure("Gym class not found",StatusCodeEnum.NotFound);
         }
-        //gymClass.ModfiyGymClass(entity);
+
+        gymClass.Update(entity.Name, entity.DaysOfWeek, entity.StartHour, entity.TrainerId, entity.MaxPeople);
 
 
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
@@ -155,6 +156,8 @@ public class GymClassService : IGymClassService
             _classBookingRepository.DeleteClassBookingList(scheduledClass.ClassBookings);
         }
 
+        gymClass.Deactivate();
+
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
@@ -175,7 +178,7 @@ public class GymClassService : IGymClassService
             return Result<Unit>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-        //gymClass.IsActive = true;
+        gymClass.Activate();
         await _unitOfWork.SaveChangesAsync();
 
         return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);

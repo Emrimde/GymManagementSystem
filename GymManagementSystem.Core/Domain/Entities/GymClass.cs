@@ -22,7 +22,7 @@ public class GymClass
     public TimeSpan Duration => DurationConst;
     public TimeSpan EndHour => StartHour + DurationConst;
 
-    private GymClass() { } 
+    private GymClass() { }
 
     public GymClass(string name, Guid trainerContractId, DaysOfWeekFlags daysOfWeek, TimeSpan startHour, int maxPeople)
     {
@@ -33,10 +33,37 @@ public class GymClass
         MaxPeople = maxPeople;
     }
 
-    public bool Overlaps(GymClass other)
+    public void Update(string name, DaysOfWeekFlags daysOfWeek, TimeSpan startHour, Guid trainerId, int maxPeople)
     {
-        return (DaysOfWeek & other.DaysOfWeek) != 0 &&
-               EndHour > other.StartHour &&
-               StartHour < other.EndHour;
+        if (maxPeople <= 0)
+        {
+            throw new Exception("Invalid max people");
+        }
+
+        Name = name;
+        DaysOfWeek = daysOfWeek;
+        StartHour = startHour;
+        TrainerContractId = trainerId;
+        MaxPeople = maxPeople;
+        UpdatedAt = DateTime.UtcNow;
     }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+            return;
+
+        IsActive = false;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Activate()
+    {
+        if (IsActive)
+            return;
+
+        IsActive = true;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
 }
