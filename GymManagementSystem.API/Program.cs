@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using GymManagementSystem.API.Jobs;
+using GymManagementSystem.API.Middlewares;
 using GymManagementSystem.Core;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Infrastructure;
@@ -136,7 +137,7 @@ using (var scope = app.Services.CreateScope())
 {
     await IdentitySeeder.SeedAsync(scope.ServiceProvider);
 }
-
+app.UseMiddleware<DomainExceptionMiddleware>(); 
 app.UseHangfireDashboard();
 app.UseRouting();
 app.UseStaticFiles();

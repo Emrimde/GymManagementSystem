@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.Core.Enum;
+using GymManagementSystem.Core.Exceptions;
 
 namespace GymManagementSystem.Core.Domain.Entities;
 
@@ -26,6 +27,11 @@ public class GymClass
 
     public GymClass(string name, Guid trainerContractId, DaysOfWeekFlags daysOfWeek, TimeSpan startHour, int maxPeople)
     {
+        if(maxPeople <= 0)
+        {
+            throw new DomainException("Invalid max people");
+        }
+
         Name = name;
         TrainerContractId = trainerContractId;
         DaysOfWeek = daysOfWeek;
@@ -37,7 +43,7 @@ public class GymClass
     {
         if (maxPeople <= 0)
         {
-            throw new Exception("Invalid max people");
+            throw new DomainException("Invalid max people");
         }
 
         Name = name;
@@ -51,7 +57,9 @@ public class GymClass
     public void Deactivate()
     {
         if (!IsActive)
+        {
             return;
+        }
 
         IsActive = false;
         UpdatedAt = DateTime.UtcNow;
@@ -60,7 +68,9 @@ public class GymClass
     public void Activate()
     {
         if (IsActive)
+        {
             return;
+        }
 
         IsActive = true;
         UpdatedAt = DateTime.UtcNow;
