@@ -33,17 +33,7 @@ public class ScheduledClassViewModel : ViewModel, IParameterReceiver
         SidebarView = sidebarView;
         Navigation = navigation;
         OpenScheduledClassDetails = new RelayCommand(item => Navigation.NavigateTo<ScheduledClassDetailsViewModel>(item!), item => true);
-        GenerateScheduledClass = new AsyncRelayCommand(item => GenerateScheduledClassAsync(), item => true);
         LoadScheduleClassesCommand = new AsyncRelayCommand(item => LoadScheduledClasses(_gymClassId), item => true);
-    }
-
-    private async Task GenerateScheduledClassAsync()
-    {
-        Result<Unit> result = await _gymClassHttpCLient.GenerateNewScheduledClasses(_gymClassId);
-        if (result.IsSuccess)
-        {
-            Navigation.NavigateTo<ScheduledClassViewModel>(_gymClassId);
-        }
     }
 
     private async Task LoadScheduledClasses(Guid gymClassId)

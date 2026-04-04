@@ -30,13 +30,6 @@
                            FontWeight="Bold"
                            Foreground="{StaticResource PrimaryColor}"
                            VerticalAlignment="Center"/>
-
-                <!--<Button Grid.Column="1"
-                        Content="Generate new"
-                        Height="40"
-                        Padding="24,0"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Command="{Binding GenerateScheduledClass}"/>-->
             </Grid>
 
             <materialDesign:Card Grid.Row="1"

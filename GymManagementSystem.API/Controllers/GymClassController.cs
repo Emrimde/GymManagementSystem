@@ -34,11 +34,6 @@ public class GymClassController : BaseController
         => HandleResult(await _gymClassService.CreateAsync(entity));
 
     [Authorize(Roles = "Owner,Manager")]
-    [HttpPost("{gymCLassId:guid}")]
-    public async Task<ActionResult<Unit>> GenerateScheduledClasses([FromRoute] Guid gymClassId)
-        => HandleResult(await _gymClassService.GenerateNewScheduledClassesAsync(gymClassId));
-
-    [Authorize(Roles = "Owner,Manager")]
     [HttpPut]
     public async Task<ActionResult<Unit>> Update(GymClassUpdateRequest gymClassUpdateRequest)
         => HandleResult(await _gymClassService.UpdateAsync(gymClassUpdateRequest));

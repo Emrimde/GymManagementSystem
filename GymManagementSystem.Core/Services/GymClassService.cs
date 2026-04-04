@@ -37,7 +37,7 @@ public class GymClassService : IGymClassService
             return Result<GymClassInfoResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
         }
 
-        if(!trainer.IsGroupInstructor())
+        if (!trainer.IsGroupInstructor())
         {
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved because trainer isn't group instructor", StatusCodeEnum.BadRequest);
         }
@@ -51,37 +51,17 @@ public class GymClassService : IGymClassService
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-         _gymClassRepo.Create(gymClass);
+        _gymClassRepo.Create(gymClass);
 
         List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
 
-         _scheduledClassRepo.AddRange(scheduledClasses);
+        _scheduledClassRepo.AddRange(scheduledClasses);
 
         await _unitOfWork.SaveChangesAsync();
 
         return Result<GymClassInfoResponse>.Success(
             gymClass.ToGymInfoResponse(),
             StatusCodeEnum.Ok);
-    }
-
-    public async Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId)
-    {
-        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
-
-        if (gymClass == null)
-        {
-            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
-        }
-        IEnumerable<ScheduledClass> presentScheduleClass = await _scheduledClassRepo.GetAllScheduledClassesByGymClassId(gymClassId, null, false);
-
-        HashSet<DateTime> occupiedDates = presentScheduleClass.Select(item => item.Date).ToHashSet();
-
-        List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass, 14);
-        List<ScheduledClass> newScheduledClasses = scheduledClasses.Where(item => !occupiedDates.Contains(item.Date)).ToList();
-
-        _scheduledClassRepo.AddRange(newScheduledClasses);
-        await _unitOfWork.SaveChangesAsync();
-        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
 
     public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(bool? isActive)
@@ -103,7 +83,7 @@ public class GymClassService : IGymClassService
 
         if (gymClass == null)
         {
-            return Result<Unit>.Failure("Gym class not found",StatusCodeEnum.NotFound);
+            return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
 
         gymClass.Update(entity.Name, entity.DaysOfWeek, entity.StartHour, entity.TrainerId, entity.MaxPeople);
@@ -123,7 +103,7 @@ public class GymClassService : IGymClassService
     public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
     {
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
-        if (gymClass == null) 
+        if (gymClass == null)
         {
             return Result<GymClassForEditResponse>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
@@ -143,15 +123,15 @@ public class GymClassService : IGymClassService
     {
         GymClass? gymClass = await _gymClassRepo.GetGymClassWithScheduledClassesAsync(gymClassId);
 
-        if(gymClass == null)
+        if (gymClass == null)
         {
             return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
 
-        
+
         _scheduledClassRepo.DeleteScheduledClassList(gymClass.ScheduledClasses);
-        
-        foreach(ScheduledClass scheduledClass in gymClass.ScheduledClasses)
+
+        foreach (ScheduledClass scheduledClass in gymClass.ScheduledClasses)
         {
             _classBookingRepository.DeleteClassBookingList(scheduledClass.ClassBookings);
         }
@@ -165,7 +145,7 @@ public class GymClassService : IGymClassService
     public async Task<Result<Unit>> RestoreGymClassAsync(Guid gymClassId)
     {
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
-        if(gymClass == null || gymClass.IsActive == true)
+        if (gymClass == null || gymClass.IsActive == true)
         {
             return Result<Unit>.Failure("Gym class not found or already active", StatusCodeEnum.BadRequest);
         }

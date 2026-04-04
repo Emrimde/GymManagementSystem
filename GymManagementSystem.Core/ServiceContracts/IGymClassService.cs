@@ -6,7 +6,6 @@ public interface IGymClassService
 {
     Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest entity);
     Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId);
-    Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId);
 
     //Task<Result<Unit>> GenerateNewScheduledClassesAsync(Guid gymClassId);
     Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(bool? isActive);
