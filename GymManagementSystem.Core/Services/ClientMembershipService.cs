@@ -95,7 +95,7 @@ public class ClientMembershipService : IClientMembershipService
             clientMembership.EndDate = null;
         }
 
-        _clientMembershipRepository.CreateAsync(clientMembership);
+        _clientMembershipRepository.Create(clientMembership);
         client.IsActive = true;
         Contract contract = new Contract()
         {
@@ -104,7 +104,7 @@ public class ClientMembershipService : IClientMembershipService
             ContractStatus = ContractStatus.Draft,
             IsActive = true
         };
-        _contractRepo.CreateAsync(contract);
+        _contractRepo.Create(contract);
         await _unitOfWork.SaveChangesAsync();
         return Result<ClientMembershipInfoResponse>.Success(clientMembership.ToClientMembershipInfoResponse(contract.Id));
     }

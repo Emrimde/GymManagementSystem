@@ -44,7 +44,7 @@ public class TerminationService : ITerminationService
         nextMonth = DateTime.SpecifyKind(nextMonth, DateTimeKind.Utc);
         activeMembership.EndDate = nextMonth.AddDays(-1);
         Termination termination = entity.ToTermination(activeMembership.Id);
-        _terminationRepo.CreateAsync(termination);
+        _terminationRepo.Create(termination);
         await _unitOfWork.SaveChangesAsync();
         return Result<TerminationResponse>.Success(termination.ToTerminationResponse(), StatusCodeEnum.Ok);
     }

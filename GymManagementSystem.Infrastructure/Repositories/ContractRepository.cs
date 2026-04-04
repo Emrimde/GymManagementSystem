@@ -12,7 +12,7 @@ public class ContractRepository : IContractRepository
     {
         _dbContext = dbContext;
     }
-    public void CreateAsync(Contract entity)
+    public void Create(Contract entity)
     {
         _dbContext.Contracts.Add(entity);
     }

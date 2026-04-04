@@ -34,10 +34,10 @@ public class GymClassService : IGymClassService
 
         if (trainer == null)
         {
-            return Result<GymClassInfoResponse>.Failure("Cannot check whether trainer is group instructor", StatusCodeEnum.InternalServerError);
+            return Result<GymClassInfoResponse>.Failure("Trainer not found", StatusCodeEnum.NotFound);
         }
 
-        if (trainer.TrainerType != TrainerTypeEnum.GroupInstructor)
+        if(!trainer.IsGroupInstructor())
         {
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved because trainer isn't group instructor", StatusCodeEnum.BadRequest);
         }
@@ -51,11 +51,11 @@ public class GymClassService : IGymClassService
             return Result<GymClassInfoResponse>.Failure("The gym class cannot be saved they are overlapping with other gym classes", StatusCodeEnum.BadRequest);
         }
 
-         _gymClassRepo.CreateAsync(gymClass);
+         _gymClassRepo.Create(gymClass);
 
         List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
 
-         _scheduledClassRepo.AddRangeAsync(scheduledClasses);
+         _scheduledClassRepo.AddRange(scheduledClasses);
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -79,7 +79,7 @@ public class GymClassService : IGymClassService
         List<ScheduledClass> scheduledClasses = _scheduleGeneratorService.GenerateScheduledClasses(gymClass, 14);
         List<ScheduledClass> newScheduledClasses = scheduledClasses.Where(item => !occupiedDates.Contains(item.Date)).ToList();
 
-        _scheduledClassRepo.AddRangeAsync(newScheduledClasses);
+        _scheduledClassRepo.AddRange(newScheduledClasses);
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
     }
@@ -100,6 +100,7 @@ public class GymClassService : IGymClassService
     public async Task<Result<Unit>> UpdateAsync(GymClassUpdateRequest entity)
     {
         GymClass? gymClass = await _gymClassRepo.GetByIdAsync(entity.GymClassId);
+
         if (gymClass == null)
         {
             return Result<Unit>.Failure("Gym class not found",StatusCodeEnum.NotFound);
@@ -107,13 +108,12 @@ public class GymClassService : IGymClassService
 
         gymClass.Update(entity.Name, entity.DaysOfWeek, entity.StartHour, entity.TrainerId, entity.MaxPeople);
 
-
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
         _scheduledClassRepo.DeleteScheduledClassList(scheduledClasses);
 
         List<ScheduledClass> scheduledClass = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
 
-        _scheduledClassRepo.AddRangeAsync(scheduledClass);
+        _scheduledClassRepo.AddRange(scheduledClass);
 
 
         await _unitOfWork.SaveChangesAsync();

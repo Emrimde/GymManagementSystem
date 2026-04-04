@@ -107,7 +107,7 @@ public class ClientService : IClientService
 
 
         client.HasParentalConsent = age < 18 ? true : null;
-        _repository.CreateAsync(client);
+        _repository.Create(client);
         await _unitOfWork.SaveChangesAsync();
         User user = new User()
         {
@@ -225,7 +225,7 @@ public class ClientService : IClientService
            return Result<Unit>.Failure("Invalid email or phone number", StatusCodeEnum.BadRequest);
         }
 
-        _repository.CreateAsync(client);
+        _repository.Create(client);
         User user = new User()
         {
             UserName = client.Email,

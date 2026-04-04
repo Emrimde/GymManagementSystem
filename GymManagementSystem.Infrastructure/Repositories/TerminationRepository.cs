@@ -20,7 +20,7 @@ public class TerminationRepository : IRepository<TerminationResponse,Termination
         _dbContext = dbContext;
     }
 
-    public void CreateAsync(Termination entity)
+    public void Create(Termination entity)
     {
        _dbContext.Terminations.Add(entity);
     }

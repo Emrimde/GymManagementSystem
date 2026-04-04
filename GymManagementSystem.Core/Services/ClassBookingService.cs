@@ -77,7 +77,7 @@ public class ClassBookingService : IClassBookingService
         }
 
 
-        _classBookingRepo.CreateAsync(classBooking);
+        _classBookingRepo.Create(classBooking);
         await _unitOfWork.SaveChangesAsync();
         return Result<ClassBookingInfoResponse>.Success(classBooking.ToClassBookingInfo());
     }

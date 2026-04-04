@@ -15,7 +15,7 @@ public class GymClassRepository : IGymClassRepository
     {
         _dbContext = dbContext;
     }
-    public void CreateAsync(GymClass entity)
+    public void Create(GymClass entity)
     {
         _dbContext.GymClasses.Add(entity);
     }

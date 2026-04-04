@@ -16,7 +16,7 @@ public class MembershipRepository : IMembershipRepository
     {
         _dbContext = dbContext;
     }
-    public void CreateAsync(Membership entity)
+    public void Create(Membership entity)
     {
         _dbContext.Memberships.Add(entity);
     }

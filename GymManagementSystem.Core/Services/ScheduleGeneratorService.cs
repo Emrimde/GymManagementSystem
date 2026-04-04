@@ -61,7 +61,7 @@ public class ScheduleGeneratorService : IScheduleGeneratorService
 
         if (allToGenerate.Any())
         {
-            _scheduledClassRepo.AddRangeAsync(allToGenerate);
+            _scheduledClassRepo.AddRange(allToGenerate);
             await _unitOfWork.SaveChangesAsync();
         }
     }

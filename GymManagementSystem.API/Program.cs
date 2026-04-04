@@ -1,6 +1,5 @@
 using FluentValidation.AspNetCore;
 using GymManagementSystem.API.Jobs;
-using GymManagementSystem.API.Middlewares;
 using GymManagementSystem.Core;
 using GymManagementSystem.Core.Domain.Identity;
 using GymManagementSystem.Infrastructure;

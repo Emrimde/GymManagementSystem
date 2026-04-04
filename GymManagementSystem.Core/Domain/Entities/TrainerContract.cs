@@ -16,4 +16,9 @@ public class TrainerContract
     public ICollection<TrainerRate> Rates { get; set; } = new List<TrainerRate>();
     public ICollection<PersonalBooking> PersonalBookings { get; set; } = new List<PersonalBooking>();
     public ICollection<GymClass> GymClasses { get; set; } = new List<GymClass>();
+
+    public bool IsGroupInstructor()
+    {
+       return TrainerType == TrainerTypeEnum.GroupInstructor;
+    }
 }

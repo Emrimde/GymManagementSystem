@@ -19,7 +19,7 @@ public class ClientRepository : IClientRepository
         _dbContext = dbContext;
     }
 
-    public void CreateAsync(Client entity)
+    public void Create(Client entity)
     {
         _dbContext.Clients.Add(entity);
     }

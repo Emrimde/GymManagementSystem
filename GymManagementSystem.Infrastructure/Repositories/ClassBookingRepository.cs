@@ -13,7 +13,7 @@ public class ClassBookingRepository : IClassBookingRepository
         _dbContext = dbContext;
     }
 
-    public void CreateAsync(ClassBooking entity)
+    public void Create(ClassBooking entity)
     {
         _dbContext.Add(entity);
     }

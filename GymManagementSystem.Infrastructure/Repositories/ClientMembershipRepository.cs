@@ -20,7 +20,7 @@ public class ClientMembershipRepository : IClientMembershipRepository
         _dbContext = dbContext;
     }
 
-    public void CreateAsync(ClientMembership entity)
+    public void Create(ClientMembership entity)
     {
         _dbContext.ClientMemberships.Add(entity);
     }

@@ -16,12 +16,12 @@ public class ScheduledClassRepository : IScheduledClassRepository
         _dbContext = dbContext;
     }
 
-    public void AddRangeAsync(IEnumerable<ScheduledClass> entities)
+    public void AddRange(IEnumerable<ScheduledClass> entities)
     {
         _dbContext.ScheduledClasses.AddRangeAsync(entities);
     }
 
-    public void CreateAsync(ScheduledClass entity)
+    public void Create(ScheduledClass entity)
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,7 @@
 
 public interface IRepository<Response,Entity>
 {
-    void CreateAsync(Entity entity);
+    void Create(Entity entity);
     Task<Entity?> GetByIdAsync(Guid id);
     Task<Entity?> UpdateAsync(Guid id, Entity entity);
 }
