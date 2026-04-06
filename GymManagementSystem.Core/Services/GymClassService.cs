@@ -5,6 +5,7 @@ using GymManagementSystem.Core.Domain.RepositoryContracts;
 using GymManagementSystem.Core.DTO.GymClass;
 using GymManagementSystem.Core.Enum;
 using GymManagementSystem.Core.Mappers;
+using GymManagementSystem.Core.QueryContracts;
 using GymManagementSystem.Core.Result;
 using GymManagementSystem.Core.ServiceContracts;
 
@@ -12,13 +13,15 @@ namespace GymManagementSystem.Core.Services;
 
 public class GymClassService : IGymClassService
 {
+
     private readonly IGymClassRepository _gymClassRepo;
+    private readonly IGymClassQueryService _gymClassQueryService;
     private readonly IScheduledClassRepository _scheduledClassRepo;
     private readonly ITrainerRepository _trainerRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IScheduleGeneratorService _scheduleGeneratorService;
     private readonly IClassBookingRepository _classBookingRepository;
-    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo, IUnitOfWork unitOfWork, IScheduleGeneratorService scheduleGeneratorService, IClassBookingRepository classBookingRepository)
+    public GymClassService(IGymClassRepository gymClassRepo, IScheduledClassRepository scheduledClassRepo, ITrainerRepository trainerRepo, IUnitOfWork unitOfWork, IScheduleGeneratorService scheduleGeneratorService, IClassBookingRepository classBookingRepository, IGymClassQueryService gymClassQueryService)
     {
         _gymClassRepo = gymClassRepo;
         _scheduledClassRepo = scheduledClassRepo;
@@ -26,6 +29,7 @@ public class GymClassService : IGymClassService
         _unitOfWork = unitOfWork;
         _scheduleGeneratorService = scheduleGeneratorService;
         _classBookingRepository = classBookingRepository;
+        _gymClassQueryService = gymClassQueryService;
     }
 
     public async Task<Result<GymClassInfoResponse>> CreateAsync(GymClassAddRequest request)
@@ -66,9 +70,8 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<IEnumerable<GymClassResponse>>> GetAllAsync(bool? isActive)
     {
-        IEnumerable<GymClass> gymCLasses = await _gymClassRepo.GetAllAsync(isActive);
-        IEnumerable<GymClassResponse> response = gymCLasses.Select(item => item.ToGymResponse());
-        return Result<IEnumerable<GymClassResponse>>.Success(response, StatusCodeEnum.Ok);
+        IEnumerable<GymClassResponse> gymClass = await _gymClassQueryService.GetGymClassesResponseAsync(isActive);
+        return Result<IEnumerable<GymClassResponse>>.Success(gymClass, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync()
