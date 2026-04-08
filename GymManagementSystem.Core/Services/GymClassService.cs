@@ -93,11 +93,8 @@ public class GymClassService : IGymClassService
 
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
         _scheduledClassRepo.DeleteScheduledClassList(scheduledClasses);
-
         List<ScheduledClass> scheduledClass = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
-
         _scheduledClassRepo.AddRange(scheduledClass);
-
 
         await _unitOfWork.SaveChangesAsync();
         return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
@@ -105,21 +102,14 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
     {
-        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
-        if (gymClass == null)
+        GymClassForEditResponse? gymClassForEditResponse = await _gymClassQueryService.GetGymClassForEditAsync(gymClassId);
+
+        if (gymClassForEditResponse == null)
         {
             return Result<GymClassForEditResponse>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
-        GymClassForEditResponse response = new GymClassForEditResponse()
-        {
-            DaysOfWeek = gymClass.DaysOfWeek,
-            MaxPeople = gymClass.MaxPeople,
-            Name = gymClass.Name,
-            StartHour = gymClass.StartHour,
-            TrainerContractId = gymClass.TrainerContractId
-        };
 
-        return Result<GymClassForEditResponse>.Success(response, StatusCodeEnum.Ok);
+        return Result<GymClassForEditResponse>.Success(gymClassForEditResponse, StatusCodeEnum.Ok);
     }
 
     public async Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId)

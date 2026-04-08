@@ -54,4 +54,20 @@ public class GymClassQueryService : IGymClassQueryService
             CanActivate = !item.IsActive
         }).ToList();
     }
+
+    public async Task<GymClassForEditResponse?> GetGymClassForEditAsync(Guid gymClassId)
+    {
+         return await _dbContext.GymClasses
+            .AsNoTracking()
+            .Where(item => item.Id == gymClassId)
+            .Select(item => new GymClassForEditResponse()
+            {
+                DaysOfWeek = item.DaysOfWeek,
+                MaxPeople = item.MaxPeople,
+                Name = item.Name,
+                StartHour   = item.StartHour,
+                TrainerContractId = item.TrainerContractId
+            })
+            .FirstOrDefaultAsync();
+    }
 }
