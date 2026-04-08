@@ -92,12 +92,12 @@ public class GymClassService : IGymClassService
         gymClass.Update(entity.Name, entity.DaysOfWeek, entity.StartHour, entity.TrainerId, entity.MaxPeople);
 
         IEnumerable<ScheduledClass> scheduledClasses = await _scheduledClassRepo.GetFutureUnbookedByGymClassId(entity.GymClassId);
-        _scheduledClassRepo.DeleteScheduledClassList(scheduledClasses);
+        await _scheduledClassRepo.DeleteScheduledClassByGymClassIdAsync(entity.GymClassId);
         List<ScheduledClass> scheduledClass = _scheduleGeneratorService.GenerateScheduledClasses(gymClass);
         _scheduledClassRepo.AddRange(scheduledClass);
 
         await _unitOfWork.SaveChangesAsync();
-        return Result<Unit>.Success(new Unit(), StatusCodeEnum.NoContent);
+        return Result<Unit>.Success(Unit.Value, StatusCodeEnum.NoContent);
     }
 
     public async Task<Result<GymClassForEditResponse>> GetGymClassForEditAsync(Guid gymClassId)
@@ -114,20 +114,15 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<Unit>> DeleteGymClassAsync(Guid gymClassId)
     {
-        GymClass? gymClass = await _gymClassRepo.GetGymClassWithScheduledClassesAsync(gymClassId);
+        GymClass? gymClass = await _gymClassRepo.GetByIdAsync(gymClassId);
 
         if (gymClass == null)
         {
             return Result<Unit>.Failure("Gym class not found", StatusCodeEnum.NotFound);
         }
 
-
-        _scheduledClassRepo.DeleteScheduledClassList(gymClass.ScheduledClasses);
-
-        foreach (ScheduledClass scheduledClass in gymClass.ScheduledClasses)
-        {
-            _classBookingRepository.DeleteClassBookingList(scheduledClass.ClassBookings);
-        }
+        await _classBookingRepository.DeleteClassBookingsByGymClassIdAsync(gymClassId);
+        await _scheduledClassRepo.DeleteScheduledClassByGymClassIdAsync(gymClassId);
 
         gymClass.Deactivate();
 

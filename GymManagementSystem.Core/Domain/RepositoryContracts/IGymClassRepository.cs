@@ -7,7 +7,6 @@ namespace GymManagementSystem.Core.Domain.RepositoryContracts;
 public interface IGymClassRepository : IRepository<GymClassResponse, GymClass>
 {
     Task<IEnumerable<GymClass>> GetAllAsync(bool? isActive);
-    Task<GymClass?> GetGymClassWithScheduledClassesAsync(Guid gymClassId);
     Task<List<GymClassDto>> GetByTrainerPersonIdAsync(Guid personId);
     Task<bool> ExistsOverlapAsync(GymClass gymClass);
 }

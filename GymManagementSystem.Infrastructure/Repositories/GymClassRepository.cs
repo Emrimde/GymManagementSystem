@@ -35,10 +35,6 @@ public class GymClassRepository : IGymClassRepository
     {
         return await _dbContext.GymClasses.FirstOrDefaultAsync(item => item.Id == id);
     }
-    public async Task<GymClass?> GetGymClassWithScheduledClassesAsync(Guid id)
-    {
-        return await _dbContext.GymClasses.Include(item => item.ScheduledClasses).ThenInclude(item => item.ClassBookings).FirstOrDefaultAsync(item => item.Id == id);
-    }
 
     public Task<GymClass?> UpdateAsync(Guid id, GymClass entity)
     {

@@ -26,9 +26,9 @@ public class ScheduledClassRepository : IScheduledClassRepository
         throw new NotImplementedException();
     }
 
-    public void DeleteScheduledClassList(IEnumerable<ScheduledClass> entity)
+    public async Task DeleteScheduledClassByGymClassIdAsync(Guid gymClassId)
     {
-        _dbContext.ScheduledClasses.RemoveRange(entity);
+        await _dbContext.ScheduledClasses.Where(item => item.GymClassId == gymClassId).ExecuteDeleteAsync();
     }
 
     public async Task<PageResult<ScheduledClassResponse>> GetAllAsync(int pageSize = 50, int page = 1, string? searchText = null)

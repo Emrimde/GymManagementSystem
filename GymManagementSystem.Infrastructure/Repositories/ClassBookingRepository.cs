@@ -18,9 +18,9 @@ public class ClassBookingRepository : IClassBookingRepository
         _dbContext.Add(entity);
     }
 
-    public void DeleteClassBookingList(IEnumerable<ClassBooking> entity)
+    public async Task DeleteClassBookingsByGymClassIdAsync(Guid gymClassId)
     {
-        _dbContext.ClassBookings.RemoveRange(entity);
+       await _dbContext.ClassBookings.Where(item => item.ScheduledClass.GymClassId == gymClassId).ExecuteDeleteAsync();
     }
 
     public async Task<bool> DeleteClassBookingAsync(Guid classBookingId)

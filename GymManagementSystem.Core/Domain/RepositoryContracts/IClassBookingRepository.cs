@@ -7,5 +7,5 @@ public interface IClassBookingRepository : IRepository<ClassBookingResponse, Cla
 {
     Task<bool> DeleteClassBookingAsync(Guid classBookingId);
     Task<IEnumerable<ClassBookingResponse>> GetAllClassBookingsByClientId(Guid clientId);
-    void DeleteClassBookingList(IEnumerable<ClassBooking> entity);
+    Task DeleteClassBookingsByGymClassIdAsync(Guid gymClassId);
 }
