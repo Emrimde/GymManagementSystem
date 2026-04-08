@@ -4,4 +4,5 @@ namespace GymManagementSystem.Core.QueryContracts;
 public interface IGymClassQueryService
 {
     Task<IEnumerable<GymClassResponse>> GetGymClassesResponseAsync(bool? isActive);
+    Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassComboBoxResponseAsync();
 }

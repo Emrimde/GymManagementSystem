@@ -11,6 +11,16 @@ public class GymClassQueryService : IGymClassQueryService
     {
         _dbContext = dbContext;
     }
+
+    public async Task<IEnumerable<GymClassComboBoxResponse>> GetGymClassComboBoxResponseAsync()
+    {
+        return await _dbContext.GymClasses.Where(item => item.IsActive).Select(item => new GymClassComboBoxResponse()
+        {
+            GymClassId = item.Id,
+            Name = item.Name
+        }).ToListAsync();
+    }
+
     public async Task<IEnumerable<GymClassResponse>> GetGymClassesResponseAsync(bool? isActive)
     {
         var data = await _dbContext.GymClasses

@@ -76,7 +76,7 @@ public class GymClassService : IGymClassService
 
     public async Task<Result<IEnumerable<GymClassComboBoxResponse>>> GetGymClassesForSelectAsync()
     {
-        IEnumerable<GymClassComboBoxResponse> dto = await _gymClassRepo.GetGymClassesForSelectAsync();
+        IEnumerable<GymClassComboBoxResponse> dto = await _gymClassQueryService.GetGymClassComboBoxResponseAsync();
         return Result<IEnumerable<GymClassComboBoxResponse>>.Success(dto, StatusCodeEnum.Ok);
     }
 
